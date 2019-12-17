@@ -1,0 +1,128 @@
+# Casino Plugin Version 2.3 by chrisimi
+# Copyright: chrisi050403@gmail.com
+
+# this plugin is using bStats!!!
+# to disable it go into the bStats config.yml in your plugins folder
+# after any changes please restart your server
+#
+
+# please don't change the version!!!
+version: 2.3
+
+# prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
+# default one: §9[§6Casino§9] §a
+prefix: 
+
+
+# change the high of the possible bet's
+bet:
+# plusBlock is the Block which the player press in the GUI to higher his bet
+   plusBlock: 'GREEN_WOOL'
+   
+# plus 1-6 are the different possibilites in the GUI
+   plus1: 1
+   plus2: 5
+   plus3: 10
+   plus4: 50
+   plus5: 100
+   plus6: 500
+   
+   
+# minusblock is the Block which the player press in the GUI to lower his bet
+   minusBlock: 'RED_WOOL'
+   minus1: 1
+   minus2: 5
+   minus3: 10
+   minus4: 50
+   minus5: 100
+   minus6: 500
+   
+# informationBlock is the Block in the middle of the GUI within the plusBlocks and minusBlocks
+   informationBlock: 'DIAMOND_BLOCK'
+
+# material left and right of the GUI
+   inventoryMaterial: 'PINK_STAINED_GLASS_PANE'
+
+animation:  
+# the material to fill empty gaps in the animation GUI
+   inventoryMaterial: 'BLUE_STAINED_GLASS_PANE'   
+  
+   
+# Block*-Type: Minecraft name of the block, representing possibility *
+   block1-Type: 'REDSTONE_BLOCK'
+   
+# Multiplicator: bet * multiplicator = win amount for player with 3 of the same block
+   block1-Multiplicator: 3.0
+   
+# Chance: Value which represent the chance in percent
+#    !!!Important: all Chance-Values together have to be 100!!!
+   block1-Chance: 50
+   
+   block2-Type: 'DIAMOND_BLOCK'
+   block2-Multiplicator: 6.0
+   block2-Chance: 30
+   
+   block3-Type: 'EMERALD_BLOCK'
+   block3-Multiplicator: 9.0
+   block3-Chance: 20
+   
+# value in ticks (20 ticks = 1 second) for how long the animation should run (random number between these two values!)
+#    set both the same value to deactivate randomness
+   min-duration: 60
+   max-duration: 180
+   
+# waiting time, in ticks, between one "roll" animation. 
+#    1 is very fast and realistic but can make laggs on bigger servers
+#    2-5 is some kind of realistic, better for servers with performance problems
+   animation-cooldown: 5
+   
+##########################################
+# configuration for the roll command!
+##########################################
+
+# set the range for the roll command, where players get a message what the player rolled
+rollcommand-range: 30
+   
+   
+##########################################   
+# configurations for the Casino-Signs!
+##########################################
+sign:
+
+# value in ticks (20 ticks = 1 second) for how long the sign should roll
+   min-duration: 30
+   max-duration: 50
+   
+# the possibilities to get on the sign   
+   possibilities: [R, D, E]
+   
+# multiplicator of the bet if the player wins
+   multiplicator: [3.0, 5.0, 7.0]
+   
+# the maximum amount which the bet can be
+   max-bet: 1000
+   
+##########################################
+# configurations for PlayerSigns
+##########################################
+playersigns:
+
+##################################
+# dice configurations
+##################################
+   dice:
+      
+# set the maximum bet for dice signs!
+      max-bet: 250.0
+
+#################################
+# blackjack configurations
+#################################
+   blackjack:
+      
+# set the maximum bet for blackjack signs!
+      max-bet: 250.0
+   
+   
+
+

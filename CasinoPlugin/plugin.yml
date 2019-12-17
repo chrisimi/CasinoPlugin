@@ -1,0 +1,40 @@
+name: CasinoPlugin
+author: chrisimi
+main: com.chrisimi.casino.main.Main
+version: 2.3
+api-version: 1.13
+depend: [Vault]
+commands:
+  casino:
+    description: opens the casino GUI
+    usage: /casino
+  casino updateconfig:
+    description: updates the config
+    usage: /casino updateconfig
+  casino reloadconfig:
+    description: reloads the config
+    usage: /casino reloadconfig
+  casino help:
+    description: get help for this plugin
+    usage: /casino help
+  casino admin: 
+    description: get help as an admin for this plugin
+    usage: /casino admin
+  casino help dice:
+    description: get the help for dice signs
+    usage: /casino help dice
+  casino help blackjack:
+    description: get help for blackjack signs
+    usage: /casino help blackjack
+  casino sign enable:
+    description: enable your playersign
+    usage: /casino sign enable
+  casino sign disable:
+    description: disable your playersign
+    usage: /casino sign disable
+  casino roll:
+    description: roll a random number
+    usage: /casino roll [minimum] [maximum] [player (not needed)]
+  casino createchest:
+    description: create a new SlotChest while lookign onto it
+    usage: /casino createchest
