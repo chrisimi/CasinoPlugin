@@ -173,7 +173,6 @@ public class WinningsMenu implements Listener {
 		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
 			if(entry.getKey().equals(event.getCurrentItem())) {
 				removeItemToWin(entry.getKey());
-				System.out.println(slotChest.itemsToWin.remove(entry.getKey()));
 				inventory.setItem(event.getSlot(), new ItemStack(Material.AIR));
 				event.setCancelled(true);
 			} else
@@ -211,7 +210,6 @@ public class WinningsMenu implements Listener {
 			}
 		}
 		slotChest.lager.removeAll(itemLagerToRemove);
-		System.out.println("length of itemsLagertoRemove: " + itemLagerToRemove.size());
 		while(itemsInWarehouse > 0) {
 			if(itemsInWarehouse >= 64) {
 				int slot = owner.getInventory().first(Material.AIR);
@@ -312,6 +310,7 @@ public class WinningsMenu implements Listener {
 			
 			index++;
 		}
+		CasinoManager.slotChestManager.save();
 	}
 }
 

@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,20 +40,28 @@ public class Main extends JavaPlugin {
 	public static File slotChestsYml;
 	@Override
 	public void onEnable() {
+		
 		configYmlActivate();
 		signsYmlActivate();
 		playerSignsYmlActivate();
 		slotChestsYmlActivate();
-		activateEconomySystem();
-		activatePermissionSystem();
+		
+		
+		
+		
 		UpdateManager.reloadConfig(); //equals .getConfigData
 		
-		new CasinoManager(this);
+		
 		//new ConfigurationManager(this);
+		new CasinoManager(this);
 		versionManager();
 		VersionManager.CheckForNewVersion(pluginVersion, this);
 		
 		//getLogger().info("Minecraft Server version: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
+		
+		activateEconomySystem();
+		activatePermissionSystem();
+		
 		Metrics metric = new Metrics(this); //Stats plugin
 		configurateMetrics(metric);
 		
@@ -111,9 +120,9 @@ public class Main extends JavaPlugin {
 	private void versionManager() {
 		String versionLocal = UpdateManager.getValue("version").toString();
 		
-		getLogger().info(String.format("config version installed: %s - config version in jar: %s", versionLocal, configVersion));
+		CasinoManager.LogWithColor(ChatColor.YELLOW + String.format("config version installed: %s - config version in jar: %s", versionLocal, configVersion));
 		if(!(configVersion.equals(versionLocal))) {
-			getLogger().info(String.format("There is a new version for the CasinoPlugin config.yml. Please follow ingame instructions! /casino updateconfig"));
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "There is a new version for the CasinoPlugin config.yml. Please follow ingame instructions! /casino updateconfig");
 			isConfigUpdated = false;
 		}
 	}
@@ -134,7 +143,7 @@ public class Main extends JavaPlugin {
 			try {
 				signsYml.createNewFile();
 			} catch (IOException e) {
-				getLogger().info("Error in creating signs.json!");
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while creating signs.json!");
 				e.printStackTrace();
 			}
 		}
@@ -145,7 +154,7 @@ public class Main extends JavaPlugin {
 			try {
 				playerSignsYml.createNewFile();
 			} catch(IOException e) {
-				getLogger().info("Error in creating playersigns.json!");
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while creating playersigns.json!");
 				e.printStackTrace();
 			}
 		}
@@ -156,7 +165,7 @@ public class Main extends JavaPlugin {
 			try {
 				slotChestsYml.createNewFile();
 			} catch(IOException e) {
-				getLogger().info("Error while trying to create slotchests.json!");
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while creating slotchests.json!");
 				e.printStackTrace();
 			}
 		}
@@ -165,16 +174,16 @@ public class Main extends JavaPlugin {
 
 	private void activateEconomySystem() {
 		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-			getLogger().info("cannot find Vault");
+			CasinoManager.LogWithColor(ChatColor.RED + "Can't find vault!");
 			Bukkit.shutdown();
 		} else {
 			RegisteredServiceProvider<Economy> esp = getServer().getServicesManager().getRegistration(Economy.class);
 			if (esp == null) {
-				getLogger().info("Error while finding Service");
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to connect to vault, try restarting server and check vault!");
 			}
 			else {
 				econ = esp.getProvider();
-				getLogger().info("found Vault");
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Connected successfully to vault!");
 			}
 		}
 	}
@@ -183,7 +192,7 @@ public class Main extends JavaPlugin {
 		if(permProvider != null) {
 			perm = permProvider.getProvider();
 		} else {
-			getLogger().info("cannot activate Permission system!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Unable to activate vault's permission system! Try restarting server and check vault!");
 		}
 	}
 	

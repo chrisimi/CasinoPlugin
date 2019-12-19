@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.chrisimi.casino.main.Main;
@@ -33,7 +34,7 @@ public class UpdateManager {
 			
 			InputStream iStream = main.getResource("config.yml");
 			if(iStream == null) {
-				Bukkit.getLogger().info("can't read config.yml from jar");
+				CasinoManager.LogWithColor(ChatColor.RED + "can't read config.yml from jar");
 				return;
 			}
 			byte[] buffer = new byte[iStream.available()];
@@ -44,7 +45,7 @@ public class UpdateManager {
 			
 			oStream.close();
 			iStream.close();
-			Bukkit.getLogger().info("successfully created config.yml");
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully created config.yml!");
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

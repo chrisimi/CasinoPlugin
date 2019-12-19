@@ -9,6 +9,7 @@ import net.minecraft.server.v1_14_R1.Items;
 import scripts.CasinoManager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class NormalRightToLeftAnimation implements IRollAnimation {
 		
 		
 		if(inventory == null) {
-			System.out.println("inventory is null");
+			CasinoManager.LogWithColor(ChatColor.RED + "Inventory is null!");
 			return;
 		}
 		for(int i = 0; i < 9*3; i++)
@@ -67,33 +68,24 @@ public class NormalRightToLeftAnimation implements IRollAnimation {
 		if(rollsToSkip >= rollSkipMaximum && rollSkipMaximum != 0) {
 			rollsToSkip = 0;
 			
-			player.sendMessage("skip");
 			return false;
 			
 		} else {
-			player.sendMessage("normal");
 			//get items
-			System.out.println("a");
 			for(int i = 11; i < 16; i++)
 				currentItems[i-11] = inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR ? new ItemStack(Material.AIR) : inventory.getItem(i);
-				System.out.println("b");
 			for(int i = 0; i < 4; i++) //move items one further
 				currentItems[i] = currentItems[i+1];
-			System.out.println("c");
 			currentItems[4] = slotChest.getRandomItem();
-			System.out.println("d");
 			for(int i = 0; i < 5; i++)
 				inventory.setItem(i+11, currentItems[i]);
-			System.out.println("e");
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, org.bukkit.SoundCategory.AMBIENT, 4, 3);
 			
 			if(rollsLeft <= 10) {
 				rollSkipMaximum = 2;
-				player.sendMessage("10");
 			}
 			else if(rollsLeft <= 15) {
 				rollSkipMaximum = 3;
-				player.sendMessage("15");
 			
 			}
 			

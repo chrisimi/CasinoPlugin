@@ -87,7 +87,7 @@ public class SlotChestsManager implements Listener{
 		try {
 			reader = new BufferedReader(new FileReader(Main.slotChestsYml));
 		} catch (FileNotFoundException e) {
-			main.getLogger().info("Error while trying to find slotchests.json for importing!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to find slotchests.json for importing!");
 			
 			e.printStackTrace();
 			return;
@@ -103,7 +103,6 @@ public class SlotChestsManager implements Listener{
 		//TODO: implement function to check if chest is valid!
 		SlotChestsJson slotChestsJson = gson.fromJson(json, SlotChestsJson.class);
 		if(slotChestsJson.slotChests.size() == 0) {
-			main.getLogger().info("no slotChests to import!");
 			return;
 		}
 		for(SlotChest chest : slotChestsJson.slotChests) {
@@ -112,7 +111,7 @@ public class SlotChestsManager implements Listener{
 		}
 		
 	}
-	private void exportChests()  throws IOException {
+	private synchronized void exportChests()  throws IOException {
 		slotChests.forEach((a, b) -> b.save());
 		
 		
@@ -129,7 +128,7 @@ public class SlotChestsManager implements Listener{
 		String json = gson.toJson(jsonObject, SlotChestsJson.class);
 		writer.write(json);
 		writer.close();
-		main.getLogger().info("Successfully exported SlotChests!");
+		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully saved SlotChests!");
 		
 	}
 	public void reload() {
@@ -160,11 +159,9 @@ public class SlotChestsManager implements Listener{
 		
 		Chest chest = (Chest) event.getClickedBlock().getState(); 
 		if(chest == null) {
-			Bukkit.getLogger().info("clicked chest is null");
 			return;
 		}
 		if(!(slotChests.containsKey(chest.getLocation()))) {
-			Bukkit.getLogger().info("that chest is not a SlotChest!");
 			return;
 		}
 		if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -176,6 +173,8 @@ public class SlotChestsManager implements Listener{
 			clickOnChest(event);
 			return;
 		}
+		
+		if(!(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()))) return;
 		
 		if(event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			openOwnerInterface(event);

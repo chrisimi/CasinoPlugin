@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -97,7 +98,7 @@ public class PlayerSignsManager implements Listener {
 		try {
 			maxBetDice = Double.parseDouble(UpdateManager.getValue("playersigns.dice.max-bet").toString());
 		} catch(NumberFormatException nfe) {
-			main.getLogger().info("ERROR: dice max-bet is not a valid number!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max-bet: dice max-bet is not a valid number!");
 		} finally {
 			if(maxBetDice == null)
 				maxBetDice = 200.0;
@@ -105,7 +106,7 @@ public class PlayerSignsManager implements Listener {
 		try {
 			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("playersigns.blackjack.max-bet").toString());
 		} catch(NumberFormatException e) {
-			main.getLogger().info("ERROR: blackjack max-bet is not a valid number!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max-bet: blackjack max-bet is not a valid number!");
 		} finally {
 			if(maxBetBlackjack == null)
 				maxBetBlackjack = 200.0;
@@ -123,17 +124,17 @@ public class PlayerSignsManager implements Listener {
 			}
 			reader.close();
 		} catch(IOException e) {
-			main.getLogger().info("ERROR: Can't get playersigns from playerSigns.json!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: Can't get playersigns from playerSigns.json!");
 			e.printStackTrace();
 		}
 		if(jsonString.length() < 25) {
-			main.getLogger().info("No playersigns to import!");
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
 			return;
 		}
 		
 		ArrayList<PlayerSignsConfiguration> signs = gson.fromJson(jsonString, PlayerSigns.class).playerSigns;
 		if(signs == null) {
-			main.getLogger().info("Error in getting playersigns from playersigns.json!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns from json file: sign is null?");
 			return;
 		}
 		for(PlayerSignsConfiguration cnf : signs) {
@@ -156,7 +157,7 @@ public class PlayerSignsManager implements Listener {
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
 					this.diceNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState());
 				} else {
-					main.getLogger().info("1 Sign is not valid: " + entry.getKey().toString());
+					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
 					signsToDelete.put(entry.getKey(), entry.getValue());
 				}
 				
@@ -164,7 +165,7 @@ public class PlayerSignsManager implements Listener {
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
 					this.blackjackNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState());
 				} else {
-					main.getLogger().info("1 Sign is not valid: " + entry.getKey().toString());
+					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
 					signsToDelete.put(entry.getKey(), entry.getValue());
 				}
 			}
@@ -174,7 +175,7 @@ public class PlayerSignsManager implements Listener {
 		}
 		if(signsToDelete.size() > 1)
 			exportSigns();
-		main.getLogger().info("Successfully imported " + playerSigns.size() + " playersigns from playersigns.json");
+		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + playerSigns.size() + " playersigns from playersigns.json");
 	}
 	public void exportSigns() {
 		BufferedWriter writer;
@@ -192,7 +193,7 @@ public class PlayerSignsManager implements Listener {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		main.getLogger().info("Successfully exported " + signs.playerSigns.size() + " playersigns to playersigns.json");
+		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.playerSigns.size() + " playersigns to playersigns.json");
 	}
 	
 	@EventHandler

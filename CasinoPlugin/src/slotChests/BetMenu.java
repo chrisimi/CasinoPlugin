@@ -101,6 +101,8 @@ public class BetMenu implements Listener{
 		currentBetsign.setItemMeta(meta);
 		inventory.setItem(4, currentBetsign);
 		managePlusMinusBlocks();
+		
+		CasinoManager.slotChestManager.save();
 	}
 	private void managePlusMinusBlocks() {
 		double playerbalance = Main.econ.getBalance(owner) - slotChest.bet;

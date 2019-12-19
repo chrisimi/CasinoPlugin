@@ -84,13 +84,11 @@ public class WarehouseMenu implements Listener{
 			if(i == 49) continue;
 			warehouseMenu.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
 		}
-		Bukkit.getLogger().info("lager size: " + slotChest.lager.size());
 		for(int i = 0; i < 9*5 ; i++) {
 			if(i >= slotChest.lager.size()) {
 				warehouseMenu.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
 			} else {
 				warehouseMenu.setItem(i, slotChest.lager.get(i));
-				Bukkit.getLogger().info("inventory: " + slotChest.lager.get(i).getType().toString());
 			}
 			
 			
@@ -165,8 +163,8 @@ public class WarehouseMenu implements Listener{
 			Bukkit.getServer().getScheduler().cancelTask(tasks.get(event.getInventory()));
 			tasks.remove(event.getInventory());
 		}
-		Bukkit.getLogger().info("close inv, current tasks: " + tasks.size());
 		updateLager();
+		CasinoManager.slotChestManager.save();
 	}
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
@@ -188,7 +186,6 @@ public class WarehouseMenu implements Listener{
 		} else if(event.getCurrentItem().equals(sortButton)) {
 			updateLager();
 			sortLager();
-			Bukkit.getLogger().info("sort");
 			event.setCancelled(true);
 		}
 			
@@ -209,21 +206,17 @@ public class WarehouseMenu implements Listener{
 		updateLager();
 	}
 	private void sortLagerID() {
-		Bukkit.getLogger().info("sortLagerID");
 		HashMap<Material, Integer> items = slotChest.getLagerWithNumbers();
-		System.out.println("items");
 		for(Entry<Material, Integer> entry : items.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		
 		TreeMap<Material, Integer> sortedList = new TreeMap<>(items);
 		
-		System.out.println("sortedList");
 		for(Entry<Material, Integer> entry : sortedList.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		Comparator<Entry<Material, Integer>> valueComperator = new Comparator<Map.Entry<Material,Integer>>() {
 			@Override
 			public int compare(Entry<Material, Integer> e1, Entry<Material, Integer> e2) {
-				System.out.println(e1.getKey().toString() + ">" + e2.getKey().toString() + " " + String.valueOf(e2.getKey().compareTo(e1.getKey())));
 				return e2.getKey().compareTo(e1.getKey());
 			}
 		};
@@ -231,7 +224,6 @@ public class WarehouseMenu implements Listener{
 		ArrayList<Entry<Material, Integer>> listOfEntries = new ArrayList<Entry<Material, Integer>>(sortedList.entrySet());
 		Collections.sort(listOfEntries, valueComperator);
 		
-		System.out.println("listOfentries");
 		for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		

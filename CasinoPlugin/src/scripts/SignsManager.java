@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -104,7 +105,7 @@ public class SignsManager implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		main.getLogger().info("successfully exported " + signs.signs.size() + " signs to signs.json");
+		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.signs.size() + " signs to signs.json");
 		
 		
 		
@@ -127,14 +128,14 @@ public class SignsManager implements Listener {
 			e.printStackTrace();
 		}
 		if(jsonString.length() < 25) {
-			main.getLogger().info("no signs to import!");
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "No signs to import!");
 			return;
 		}
 		
 		ArrayList<SignConfiguration> signs = gson.fromJson(jsonString, Signs.class).signs;
 		
 		if(signs == null) {
-			main.getLogger().info("error in getting signs from Signs.json");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs from yml: sign is null?");
 		} else {
 				
 			for(SignConfiguration cnf : signs) {
@@ -146,7 +147,7 @@ public class SignsManager implements Listener {
 				}
 			}
 			
-			main.getLogger().info("imported " + signs.size() + " signs from signs.json");
+			CasinoManager.LogWithColor(ChatColor.RED + "imported " + signs.size() + " signs from signs.json");
 		}
 	}
 	
@@ -221,7 +222,7 @@ public class SignsManager implements Listener {
 			}
 			//is a sign from the list
 			signValues.remove(event.getBlock().getLocation());
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "successfully deleted a Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Successfully deleted Casino-Sign!");
 			this.updateSignsYml();
 		}
 		
@@ -243,7 +244,7 @@ public class SignsManager implements Listener {
 		
 		
 		if(signTasks.containsKey(sign)) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4this Slot is currently ongoing");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This Slot is currently ongoing!");
 			return;
 		}
 		

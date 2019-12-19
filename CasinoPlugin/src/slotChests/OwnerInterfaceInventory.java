@@ -135,12 +135,10 @@ public class OwnerInterfaceInventory implements Listener{
 	private void openWarehouseMenu() {
 		owner.closeInventory();
 		new WarehouseMenu(main, slotChest, owner);
-		Bukkit.getLogger().info("warehouse");
 	}
 	private void openWinningsMenu() {
 		owner.closeInventory();
 		new WinningsMenu(main, owner, slotChest);
-		Bukkit.getLogger().info("winningsmenu");
 	}
 	private void openBetMenu() {
 		owner.closeInventory();
@@ -155,6 +153,7 @@ public class OwnerInterfaceInventory implements Listener{
 	private void disableChest() {
 		this.slotChest.enabled = false;
 		ownerInterface.setItem(8, enableItem);
+		CasinoManager.slotChestManager.save();
 	}
 	private void enableChest() {
 		Boolean breakOp = false;
@@ -169,6 +168,7 @@ public class OwnerInterfaceInventory implements Listener{
 		
 		this.slotChest.enabled = true;
 		ownerInterface.setItem(8, disableItem);
+		CasinoManager.slotChestManager.save();
 	}
 	
 

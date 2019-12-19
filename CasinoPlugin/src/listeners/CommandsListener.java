@@ -33,7 +33,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(CasinoManager.getPrefix() + "you need to be a player!");
+			sender.sendMessage(CasinoManager.getPrefix() + "You need to be a player!");
 		}
 		
 		Player player = (Player)sender;
@@ -46,7 +46,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 					UpdateManager.updateConfigYml(main);
 					player.sendMessage(CasinoManager.getPrefix() + "You successfully updated the config!");
 				} else {
-					player.sendMessage(CasinoManager.getPrefix()+ "§4you don't have permission for that action!");
+					player.sendMessage(CasinoManager.getPrefix()+ "§4You don't have permission for that action!");
 				}
 		
 			} else if(args[0].equalsIgnoreCase("reloadconfig")) {
@@ -54,9 +54,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 					
 					UpdateManager.reloadConfig();
 					CasinoManager.reload();
-					player.sendMessage(CasinoManager.getPrefix()+ "config reloaded!");
+					player.sendMessage(CasinoManager.getPrefix() + "Config.yml reloaded!");
 				} else {
-					player.sendMessage(CasinoManager.getPrefix()+"§4you don't have permission for that action!");
+					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission for that action!");
 				}
 				
 			} else if(args[0].equalsIgnoreCase("help")) {
@@ -235,7 +235,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 
 	private void openCasinoGui(Player sender) {
 		if(Main.perm.has(sender, "casino.gui") || Main.perm.has(sender, "casino.admin")) {
-			sender.sendMessage(CasinoManager.getPrefix()+"open Casino GUI");
+			sender.sendMessage(CasinoManager.getPrefix() + "open Casino GUI");
 			new CasinoGUI(main, sender);
 		} else {
 			sender.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to play slots!");

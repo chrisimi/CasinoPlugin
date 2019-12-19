@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -256,7 +257,7 @@ public class CasinoGUI {
 		
 		
 		if(amount <= 0) {
-			Bukkit.getLogger().info(CasinoManager.getPrefix()+"not allowed operation: addEinsatz: " + amount);
+			CasinoManager.LogWithColor(ChatColor.RED + "not allowed operation: addEinsatz: " + amount);
 		} else
 		gui.einsatz += amount;
 		

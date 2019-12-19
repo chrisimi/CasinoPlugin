@@ -98,17 +98,14 @@ public class SlotChest {
 	}
 	
 	public void initialize() {
-		Bukkit.getLogger().info("_lager size " + _lager.size());
 		if(_lager != null && _lager.size() != 0)
 			lager = getLagerFromData();
 		if(!(_itemsToWin == null || _itemsToWin.size() == 0))
 			itemsToWin = getItemsToWinFromData();
 		
-		Bukkit.getLogger().info("lager size: " + lager.size());
 	}
 	public void save() {
 		if(itemsToWin != null && itemsToWin.size() != 0) {
-			Bukkit.getLogger().info("Size of itemsToWin: " + itemsToWin.size());
 			_itemsToWin = new HashMap<String, Double>();
 			for(Entry<ItemStack, Double> entry : itemsToWin.entrySet()) {
 				String inputString = entry.getKey().getType().toString() + "&" + entry.getKey().getAmount();
@@ -164,7 +161,6 @@ public class SlotChest {
 		
 		for(ItemStack item : lager) {
 			if(item == null) continue;
-			System.out.println(item.getType().toString() + " " + item.getAmount());
 			
 			if(returnValue.containsKey(item.getType())) {
 				returnValue.compute(item.getType(), (key, val) -> val + item.getAmount() );
@@ -182,7 +178,6 @@ public class SlotChest {
 			
 			if(entry.getKey() == null) continue;
 			if(entry.getKey().getType() == null) {
-				System.out.println("no type found");
 				continue;
 			}
 			if(!warehouseValues.containsKey(entry.getKey().getType())) return false;
@@ -195,7 +190,6 @@ public class SlotChest {
 	}
 	
 	private ArrayList<ItemStack> getLagerFromData() {
-		Bukkit.getLogger().info("getlagerFromData");
 		ArrayList<ItemStack> returnValue = new ArrayList<ItemStack>();
 		for(Entry<String, Integer> entries : _lager.entrySet()) {
 			ItemStack item = new ItemStack(Enum.valueOf(Material.class, entries.getKey()), entries.getValue());
@@ -222,8 +216,6 @@ public class SlotChest {
 		Random random = new Random();
 		
 		double gesamtGewicht = getGesamtGewicht();
-		System.out.println(1);
-		System.out.println(2);
 		Comparator<Entry<ItemStack, Double>> comparator = new Comparator<Entry<ItemStack, Double>>() {
 
 			@Override
@@ -232,19 +224,14 @@ public class SlotChest {
 				return o1.getValue().compareTo(o2.getValue());
 			}
 		};
-		System.out.println(3);
 		ArrayList<Entry<ItemStack, Double>> sortedList = new ArrayList<Entry<ItemStack, Double>>(itemsToWin.entrySet());
-		System.out.println(4);
 		Collections.sort(sortedList, comparator);
-		System.out.println(5);
 		LinkedHashMap<ItemStack, Double> linkedList = new LinkedHashMap<>();
 		for(Entry<ItemStack, Double> entry : sortedList) {
 			linkedList.put(entry.getKey(), entry.getValue());
-			System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		}
 		
 		double randomValue = random.nextDouble()*gesamtGewicht;
-		System.out.println("roll: " + randomValue);
 		Map.Entry<ItemStack, Double> latest = null; 
 		for(Entry<ItemStack, Double> entry : linkedList.entrySet()) {
 			if(latest == null) {

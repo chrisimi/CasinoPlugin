@@ -45,7 +45,7 @@ public class VersionManager {
 				data += a;
 			}
 			if(data == "") {
-				main.getLogger().info("Error while trying to get version!");
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get plugin-version!");
 				return;
 			}
 			newestVersion = data;

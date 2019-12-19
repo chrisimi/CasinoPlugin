@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 
 import com.chrisimi.casino.main.Main;
 
+@Deprecated
 public class SlotChestAnimation implements Listener{
 
 	private final Main main;

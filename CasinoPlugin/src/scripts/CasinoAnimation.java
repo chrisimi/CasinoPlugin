@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -108,12 +109,12 @@ public class CasinoAnimation {
 		
 		final int minDuration = (int) UpdateManager.getValue("animation.min-duration");
 		if(minDuration <= 0) {
-			Bukkit.getLogger().info("configexception: min-duration is lower or equal 0 !!!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get min-duration: min-duration is lower or equal 0 !!!");
 			Bukkit.getPluginManager().disablePlugin(main);
 		}
 		final int maxDuration = (int) UpdateManager.getValue("animation.max-duration");
 		if(maxDuration < minDuration) {
-			Bukkit.getLogger().info("configexception: max-duration is lower than min-duration!!!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-duration: max-duration is lower than min-duration!!!");
 			Bukkit.getPluginManager().disablePlugin(main);
 		}
 		

@@ -84,6 +84,11 @@ public class RollAnimationManager implements Runnable, Listener{
 			player.sendMessage(CasinoManager.getPrefix() + "§4This Slotchest doesn't have enough items!");
 			return;
 		}
+		if(slotChest.itemsToWin.size() < 2) {
+			player.sendMessage(CasinoManager.getPrefix() + "§4This SlotChest doesn't have enough winnings!");
+			return;
+		}
+		
 		
 		/*
 		for(int i = 0; i < 9*3; i++)
