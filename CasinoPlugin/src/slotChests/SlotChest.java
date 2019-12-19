@@ -19,6 +19,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 import org.apache.commons.lang.math.DoubleRange;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -29,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import com.google.gson.annotations.Expose;
 
 import net.minecraft.server.v1_14_R1.EnumAnimation;
+import net.minecraft.server.v1_14_R1.AdvancementProgress.a;
 import scripts.CasinoManager;
 import scripts.UpdateManager;
 
@@ -250,6 +252,35 @@ public class SlotChest {
 		}
 		return latest.getKey();
 	}
+	public void RemoveItemsFromWarehouse(ItemStack itemStack) {
+		HashMap<Material, Integer> lagerBestand = getLagerWithNumbers();
+		
+		if(!lagerBestand.containsKey(itemStack.getType())) {
+			CasinoManager.LogWithColor(ChatColor.RED + "SlotChest does not contain item!");
+			return;
+		}
+		lagerBestand.compute(itemStack.getType(), (a, b) -> b - itemStack.getAmount());
+		
+		ArrayList<ItemStack> newLager = new ArrayList<>();
+		for(Entry<Material, Integer> entry : lagerBestand.entrySet()) {
+			int amount = entry.getValue();
+			
+			while(amount != 0) {
+				if(amount > 64) {
+					newLager.add(new ItemStack(entry.getKey(), 64));
+					amount-= 64;
+				} else {
+					newLager.add(new ItemStack(entry.getKey(), amount));
+					amount = 0;
+				}
+			}
+			
+			
+		}
+		lager = newLager;
+		CasinoManager.slotChestManager.save();
+	}
+	
 	
 	@SuppressWarnings("unchecked") 
 	public boolean itemIsOnForbiddenList(Material itemStack) {

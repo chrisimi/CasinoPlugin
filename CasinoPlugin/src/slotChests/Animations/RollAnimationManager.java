@@ -28,6 +28,8 @@ import slotChests.SlotChest;
 
 public class RollAnimationManager implements Runnable, Listener{
 
+	public static int rollsGlobal = 0;
+	
 	private final OfflinePlayer owner;
 	private final Player player;
 	private final SlotChest slotChest;
@@ -88,7 +90,9 @@ public class RollAnimationManager implements Runnable, Listener{
 			player.sendMessage(CasinoManager.getPrefix() + "§4This SlotChest doesn't have enough winnings!");
 			return;
 		}
-		
+		if(!(Main.econ.has(player, slotChest.bet))) {
+			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have enough money!");
+		}
 		
 		/*
 		for(int i = 0; i < 9*3; i++)
@@ -101,9 +105,13 @@ public class RollAnimationManager implements Runnable, Listener{
 		startRollingAnimation();
 	}
 	private void startRollingAnimation() {
+		
 		slotChest.running = true;
 		Random random = new Random();
 		rolls = random.nextInt(30) + 20;
+		
+		Main.econ.withdrawPlayer(player, slotChest.bet);
+		Main.econ.depositPlayer(owner, slotChest.bet);
 		
 		main.getServer().getScheduler().runTask(main, new Runnable() {
 			int rollsToSkip = 0;
@@ -164,6 +172,7 @@ public class RollAnimationManager implements Runnable, Listener{
 				
 			}
 		});
+		rolls++;
 	}
 	private void simulateEnding() {
 		/*for(int rollsLeft = rolls; rollsLeft > 0; rollsLeft--) {
@@ -190,7 +199,7 @@ public class RollAnimationManager implements Runnable, Listener{
 		slotChest.running = false;
 		
 		player.sendMessage(CasinoManager.getPrefix() + "You won: " + wonItem.getAmount()+"x " + wonItem.getType().toString());
-		
+		slotChest.RemoveItemsFromWarehouse(wonItem);
 		
 		player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation(), 5);
 	}

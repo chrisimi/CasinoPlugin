@@ -18,6 +18,7 @@ import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.SignsManager;
 import scripts.UpdateManager;
+import slotChests.Animations.RollAnimationManager;
 
 public class Main extends JavaPlugin {
 
@@ -111,6 +112,16 @@ public class Main extends JavaPlugin {
 				RollCommand.rollAmount = 0;
 				return amount;
 			}
+		}));
+		metric.addCustomChart(new Metrics.SingleLineChart("use_of_slotchest", new Callable<Integer>() {
+
+			@Override
+			public Integer call() throws Exception {
+				int amount = RollAnimationManager.rollsGlobal;
+				RollAnimationManager.rollsGlobal = 0;
+				return amount;
+			}
+			
 		}));
 	}
 	
