@@ -1,6 +1,7 @@
 package slotChests;
 
 
+import java.io.InvalidClassException;
 import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,8 +23,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.chrisimi.casino.main.Main;
 import com.google.common.util.concurrent.CycleDetectingLockFactory.WithExplicitOrdering;
 
+import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
 import scripts.CasinoManager;
+import scripts.UpdateManager;
 
 
 public class WinningsMenu implements Listener {
@@ -104,6 +107,16 @@ public class WinningsMenu implements Listener {
 								owner.getInventory().setItem(slot, check);
 							}
 							
+						} else if(slotChest.itemIsOnForbiddenList(itemStack)) {
+							owner.sendMessage(CasinoManager.getPrefix() + "§4This item is forbidden on this server!");
+							inventory.setItem(40, new ItemStack(Material.AIR));
+							int slot = owner.getInventory().first(Material.AIR);
+							if(slot == -1)
+								owner.getWorld().dropItem(owner.getLocation(), check);
+							else
+								owner.getInventory().setItem(slot, check);
+							
+							
 						} else {
 							//ein Spieler hat ein Item reingelegt
 							main.getServer().getScheduler().cancelTask(inventoryReadingTasks.get(instance));
@@ -123,10 +136,12 @@ public class WinningsMenu implements Listener {
 				}
 				
 			}
+
+			
 		}, 10, 10);
 		inventoryReadingTasks.put(this, taskNumber);
 	}
-	
+
 	
 	//
 	//EventHandler

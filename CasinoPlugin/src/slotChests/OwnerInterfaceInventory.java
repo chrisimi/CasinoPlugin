@@ -1,6 +1,10 @@
 package slotChests;
 
 
+import static org.junit.Assert.assertFalse;
+
+import java.util.Map.Entry;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -16,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.chrisimi.casino.main.Main;
 
 import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
+import scripts.CasinoManager;
 
 public class OwnerInterfaceInventory implements Listener{
 	/*
@@ -152,6 +157,16 @@ public class OwnerInterfaceInventory implements Listener{
 		ownerInterface.setItem(8, enableItem);
 	}
 	private void enableChest() {
+		Boolean breakOp = false;
+		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
+			if(slotChest.itemIsOnForbiddenList(entry.getKey().getType())) {
+				owner.sendMessage(CasinoManager.getPrefix() + "§4Can't activate SlotChest! " + entry.getKey().getType().toString() + " is forbidden on this server!");
+				breakOp = true;
+			}
+		}
+		
+		if(breakOp) return;
+		
 		this.slotChest.enabled = true;
 		ownerInterface.setItem(8, disableItem);
 	}

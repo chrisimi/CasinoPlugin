@@ -29,6 +29,8 @@ import org.bukkit.inventory.ItemStack;
 import com.google.gson.annotations.Expose;
 
 import net.minecraft.server.v1_14_R1.EnumAnimation;
+import scripts.CasinoManager;
+import scripts.UpdateManager;
 
 
 public class SlotChest {
@@ -261,6 +263,29 @@ public class SlotChest {
 		}
 		return latest.getKey();
 	}
-
+	
+	@SuppressWarnings("unchecked") 
+	public boolean itemIsOnForbiddenList(Material itemStack) {
+		ArrayList<String> inputList = new ArrayList<>();
+		try {
+			inputList = (ArrayList<String>) UpdateManager.getValue("slotchest.list-of-banned-items", new ArrayList<String>());
+		} catch(Exception e) {
+			CasinoManager.LogWithColor(org.bukkit.ChatColor.RED + "Error occured while trying to get list of banned items: values are invalid!");
+			e.printStackTrace();
+		}
+		
+		ArrayList<Material> bannedList = new ArrayList<>();
+		for(String string : inputList) {
+			try {
+				bannedList.add(Enum.valueOf(Material.class, string));
+			} catch (IllegalArgumentException e) {
+				CasinoManager.LogWithColor(org.bukkit.ChatColor.RED + string + " is not a valid Minecraft-Block!");
+				continue;
+			}
+			
+		}
+		return bannedList.contains(itemStack);
+		
+	}
 	
 }

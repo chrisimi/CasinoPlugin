@@ -3,6 +3,7 @@ package com.chrisimi.casino.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -25,10 +26,10 @@ public class Main extends JavaPlugin {
 	/**
 	 * config version in jar
 	 */
-	public static String configVersion = "2.3"; //version in jar
+	public static String configVersion = "3.0"; //version in jar
 	public static Boolean isConfigUpdated = true;
 	
-	public static String pluginVersion = "2.3";
+	public static String pluginVersion = "3.0";
 	public static Boolean isPluginUpdated = true;
 	public static File configYml;
 	
@@ -54,6 +55,8 @@ public class Main extends JavaPlugin {
 		//getLogger().info("Minecraft Server version: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
 		Metrics metric = new Metrics(this); //Stats plugin
 		configurateMetrics(metric);
+		
+		
 	}
 
 	private void configurateMetrics(Metrics metric) {

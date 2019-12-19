@@ -8,6 +8,7 @@ import listeners.ChatListener;
 import listeners.CommandsListener;
 import listeners.InventoryClickListener;
 import listeners.PlayerJoinListener;
+import net.md_5.bungee.api.ChatColor;
 import slotChests.SlotChestsManager;
 
 public class CasinoManager {
@@ -53,4 +54,7 @@ public class CasinoManager {
 	}
 	public static String getPrefix() {return prefix;}
 	
+	public static void LogWithColor(String message) {
+		main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
+	}
 }

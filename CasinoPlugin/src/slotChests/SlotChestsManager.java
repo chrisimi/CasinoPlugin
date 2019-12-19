@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -29,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import scripts.CasinoManager;
+import scripts.UpdateManager;
 import slotChests.Animations.RollAnimationManager;
 
 public class SlotChestsManager implements Listener{
@@ -41,6 +43,8 @@ public class SlotChestsManager implements Listener{
 	private static HashMap<Location, SlotChest> slotChests = new HashMap<Location, SlotChest>();
 	
 	
+	private static int configMaxAmount;
+	private static Boolean configOpUnlimited;
 	
 	private Main main;
 	private GsonBuilder builder;
@@ -56,8 +60,27 @@ public class SlotChestsManager implements Listener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		updateConfigValues();
+	}
+	
+	private void updateConfigValues() {
+		try {
+			configMaxAmount = Integer.valueOf(UpdateManager.getValue("slotchest.max-amount").toString());
+		} catch(NumberFormatException e) {
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-amount for SlotChest: value is not a valid number!");
+			//main.getLogger().info("CONFIG-ERROR: While trying to configure );
+			configMaxAmount = 5;
+		}
+		try {
+			configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest.op-unlimited").toString());
+		} catch(NumberFormatException e) {
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get op-unlimited for SlotChest: value is not a valid boolean!");
+			configOpUnlimited = false;
+		}
+		
 	}
 	private void importChests() throws IOException {
+		slotChests.clear();
 		String json = "";
 		String line = "";
 		BufferedReader reader = null;
@@ -116,6 +139,9 @@ public class SlotChestsManager implements Listener{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		updateConfigValues();
+		
 	}
 	public void save() {
 		try {
@@ -178,7 +204,7 @@ public class SlotChestsManager implements Listener{
 			return;
 		}
 		
-		slotChests.remove(slotChest);
+		slotChests.remove(slotChest.getLocation());
 		event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully removed your Slotchest!");
 		reload();
 		
@@ -218,11 +244,25 @@ public class SlotChestsManager implements Listener{
 		new OwnerInterfaceInventory(event.getPlayer(), main, chest);
 	}
 	
-	
+	private static int getAmountForPlayer(Player player) {
+		int returnValue = 0;
+		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {
+			if(entry.getValue().getOwner().equals(player))
+				returnValue++;
+		}
+		return returnValue;
+	}
 	public static void createSlotChest(Location lrc, Player owner) {
 		if(slotChests.containsKey(lrc)) {
 			owner.sendMessage(CasinoManager.getPrefix() + "§4This is a SlotChest");
 			return;
+		}
+		if(getAmountForPlayer(owner) >= configMaxAmount) {
+			
+			if(!(owner.isOp() && configOpUnlimited)) {
+				owner.sendMessage(CasinoManager.getPrefix() + "§4You exceed the limit of " + configMaxAmount + " SlotChests per Player!");
+				return;
+			}
 		}
 		slotChests.put(lrc, new SlotChest(owner, lrc));
 		try {

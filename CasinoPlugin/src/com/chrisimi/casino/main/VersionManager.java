@@ -8,9 +8,12 @@ import java.net.URL;
 import javax.net.ssl.HttpsURLConnection;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import scripts.CasinoManager;
 
 public class VersionManager {
 
@@ -51,16 +54,16 @@ public class VersionManager {
 			Main.isPluginUpdated = isPluginUpdated;
 			
 			if(isPluginUpdated) {
-				main.getLogger().info("Newest Version: " + data + ", current version: " + currentVersion + " - Plugin is updated!");
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Newest Version: " + data + ", current version: " + currentVersion + " - Plugin is updated!");
 			} else {
-				main.getLogger().info("Newest Version: " + data + ", current version: " + currentVersion);
-				main.getLogger().info("There is a newer version for this plugin ! ");
-				main.getLogger().info("https://www.spigotmc.org/resources/casino-plugin.71898/");
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "Newest Version: " + data + ", current version: " + currentVersion);
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "There is a newer version for this plugin!");
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "https://www.spigotmc.org/resources/casino-plugin.71898/");
 			}
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			main.getLogger().info("Error while trying to get version from spigot:");
+			CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to get version!");
 			e.printStackTrace();
 		}
 		

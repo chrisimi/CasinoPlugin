@@ -1,4 +1,4 @@
-# Casino Plugin Version 2.3 by chrisimi
+# Casino Plugin Version 3.0 by chrisimi
 # Copyright: chrisi050403@gmail.com
 
 # this plugin is using bStats!!!
@@ -7,7 +7,7 @@
 #
 
 # please don't change the version!!!
-version: 2.3
+version: 3.0
 
 # prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
 # default one: §9[§6Casino§9] §a
@@ -122,6 +122,23 @@ playersigns:
       
 # set the maximum bet for blackjack signs!
       max-bet: 250.0
+      
+      
+##########################################
+# SlotChest configurations
+##########################################
+slotchest:
+
+# the maximum amount of chests a player can have 
+   max-amount: 5
+   
+# does everyone with op can have unlimited 
+   op-unlimited: true
+
+# banned items 
+   list-of-banned-items:
+   - 'DIAMOND_BLOCK'
+
    
    
 
