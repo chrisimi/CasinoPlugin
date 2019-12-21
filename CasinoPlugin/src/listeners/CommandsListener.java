@@ -1,5 +1,9 @@
 package listeners;
 
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -18,6 +22,7 @@ import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.UpdateManager;
 import serializeableClass.PlayerSignsConfiguration;
+import slotChests.SlotChest;
 import slotChests.SlotChestsManager;
 
 public class CommandsListener implements Listener, CommandExecutor {
@@ -65,9 +70,15 @@ public class CommandsListener implements Listener, CommandExecutor {
 			else if(args[0].equalsIgnoreCase("admin") && Main.perm.has(sender, "casino.admin")) {
 				showHelpToAdmin(player);
 			} else if(args[0].equalsIgnoreCase("createchest")) {
+				if(!Main.perm.has(sender, "casino.slotchest.create")) {
+					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions for that action!");
+					
+				} else
 				createSlotChest(player);
 			} else if(args[0].equalsIgnoreCase("save")) {
 				CasinoManager.slotChestManager.save();
+			} else if(args[0].equalsIgnoreCase("chestlocations")) {
+				showChestLocations(player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -110,11 +121,30 @@ public class CommandsListener implements Listener, CommandExecutor {
 		Block block = player.getTargetBlockExact(10);
 		if(block == null)
 			return;
-		Chest chest = (Chest) block.getState();
+		
+		Chest chest = null;
+		try {
+			chest = (Chest) block.getState();
+		} catch(ClassCastException e) {
+			player.sendMessage(CasinoManager.getPrefix() + "§4This is not a valid Chest!");
+		}
+		
 		if(chest == null)
 			return;
+	
+		if(!(chestEmpty(chest))) {
+			player.sendMessage(CasinoManager.getPrefix() + "§4This chest contains items! You have to remove them first, before you can create a SlotChest out of it!");
+			return;
+		}
 		SlotChestsManager.createSlotChest(chest.getLocation(), player);
 		
+	}
+	private Boolean chestEmpty(Chest chest) {
+		for(int i = 0; i < chest.getInventory().getSize(); i++) {
+			if(chest.getInventory().getItem(i) != null)
+				return false;
+		}
+		return true;
 	}
 
 	private void rollCommand(Player player, String[] args) {
@@ -231,8 +261,26 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino sign disable §8- disable your own player sign while looking onto it!");
 		player.sendMessage("§6/casino sign enable §8- enable your own player sign while looking onto it!");
 		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8 - roll a random number which will be sent to nearby players or mentioned player!");
+		player.sendMessage("§6/casino createchest §8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
+		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
 	}
 
+	private void showChestLocations(Player player) {
+		ArrayList<SlotChest> list = SlotChestsManager.getSlotChestsFromPlayer(player);
+		if(list.size() == 0) {
+			player.sendMessage(CasinoManager.getPrefix() + "You don't have any SlotChests!");
+			return;
+		}
+		player.sendMessage("\n\n");
+		player.sendMessage(CasinoManager.getPrefix() + "§6§lYour SlotChests:");
+		
+		int index = 1;
+		for(SlotChest chest : list) {
+			player.sendMessage(String.format("§6%s: x: %s, y: %s, z: %s", index, (int)chest.getLocation().getX(), (int)chest.getLocation().getY(), (int)chest.getLocation().getZ()));
+			index++;
+		}
+	}
+	
 	private void openCasinoGui(Player sender) {
 		if(Main.perm.has(sender, "casino.gui") || Main.perm.has(sender, "casino.admin")) {
 			sender.sendMessage(CasinoManager.getPrefix() + "open Casino GUI");

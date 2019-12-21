@@ -56,11 +56,9 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 		if(rollsToSkip >= rollSkipMaximum && rollSkipMaximum != 0) {
 			rollsToSkip = 0;
 			
-			player.sendMessage("skip");
 			return false;
 			
 		} else {
-			player.sendMessage("normal");
 			//get items
 			for(int i = 11; i < 16; i++)
 				currentItems[i-11] = inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR ? new ItemStack(Material.AIR) : inventory.getItem(i);

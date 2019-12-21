@@ -36,5 +36,8 @@ commands:
     description: roll a random number
     usage: /casino roll [minimum] [maximum] [player (not needed)]
   casino createchest:
-    description: create a new SlotChest while lookign onto it
+    description: create a new SlotChest while looking onto it
     usage: /casino createchest
+  casino chestlocations:
+    description: get the locations from all SlotChest you made
+    usage: /casino chestlocations

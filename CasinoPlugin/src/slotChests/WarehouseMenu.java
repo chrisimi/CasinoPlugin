@@ -68,7 +68,7 @@ public class WarehouseMenu implements Listener{
 		changeSortModeSign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = changeSortModeSign.getItemMeta();
 		ArrayList<String> loreList = new ArrayList<>();
-		loreList.add("§click to change!");
+		loreList.add("§6click to change!");
 		meta.setLore(loreList);
 		meta.setDisplayName("§asort by ID");
 		changeSortModeSign.setItemMeta(meta);
@@ -170,6 +170,11 @@ public class WarehouseMenu implements Listener{
 	public void onInventoryClick(InventoryClickEvent event) {
 		if(event.getCurrentItem() == null) return;
 		if(!(event.getInventory().equals(warehouseMenu))) return;
+		
+		if(event.getCurrentItem().equals(new ItemStack(Material.PINK_STAINED_GLASS_PANE))) {
+			event.setCancelled(true);
+			return;
+		}
 		
 		if(event.getCurrentItem().equals(changeSortModeSign)) {
 			

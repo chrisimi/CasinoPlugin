@@ -168,6 +168,11 @@ public class WinningsMenu implements Listener {
 		if(event.getCurrentItem() == null) return;
 		if(!(event.getInventory().equals(inventory))) return;
 		
+		if(event.getCurrentItem().equals(new ItemStack(Material.PINK_STAINED_GLASS_PANE))) {
+			event.setCancelled(true);
+			return;
+		}
+		
 		HashMap<ItemStack, Double> newHashMap = new HashMap<>(); 
 		
 		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
@@ -310,6 +315,7 @@ public class WinningsMenu implements Listener {
 			
 			index++;
 		}
+		for(int i = index; i < 9*4; i++) inventory.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
 		CasinoManager.slotChestManager.save();
 	}
 }

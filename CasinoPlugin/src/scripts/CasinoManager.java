@@ -55,6 +55,11 @@ public class CasinoManager {
 	public static String getPrefix() {return prefix;}
 	
 	public static void LogWithColor(String message) {
-		main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
+		try {
+			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
+		} catch(NullPointerException e) {
+			
+		}
+		
 	}
 }

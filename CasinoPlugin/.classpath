@@ -12,7 +12,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/MinecraftServers/minecraft 1.14.4 version Spigot/spigot-1.14.4.jar" sourcepath="C:/Users/chris/Downloads/Spigot-API-master.zip">
+	<classpathentry kind="lib" path="C:/GCC/spigot-1.14.4.jar" sourcepath="C:/GCC/Spigot-API-master.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/Users/chris/Desktop/"/>
 		</attributes>

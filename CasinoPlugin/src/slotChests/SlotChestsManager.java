@@ -174,7 +174,11 @@ public class SlotChestsManager implements Listener{
 			return;
 		}
 		
-		if(!(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()))) return;
+		if(!(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()))) {
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This is not your SlotChest!");
+			event.setCancelled(true);
+			return;
+		}
 		
 		if(event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			openOwnerInterface(event);
@@ -275,5 +279,13 @@ public class SlotChestsManager implements Listener{
 			owner.sendMessage(CasinoManager.getPrefix() + "§4An error occured while trying to create your Slotchest! Please contact the server administrator!");
 		}
 		
+	}
+	public static ArrayList<SlotChest> getSlotChestsFromPlayer(Player player){
+		ArrayList<SlotChest> chestList = new ArrayList<SlotChest>();
+		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {
+			if(entry.getValue().getOwner().equals(player))
+				chestList.add(entry.getValue());
+		}
+		return chestList;
 	}
 }
