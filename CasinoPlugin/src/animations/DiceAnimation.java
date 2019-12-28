@@ -2,6 +2,7 @@ package animations;
 
 import java.util.Random;
 
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -41,23 +42,27 @@ public class DiceAnimation implements Runnable {
 		}
 		
 		prepareSign();
-		tasknumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			int animationCount = 0;
-			@Override
-			public void run() {
-				animate();
-				
-				if(animationCount >= 40)  {
-					endAnimation();
-					
-					return;
-				}
-				sign.update(true);
-
-				animationCount++;
-			}
-		}, 5, 2);
+			try {
+				tasknumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+					int animationCount = 0;
+					@Override
+					public void run() {
+						animate();
+						
+						if(animationCount >= 40)  {
+							endAnimation();
+							
+							return;
+						}
+						sign.update(true);
 		
+						animationCount++;
+					}
+				}, 5, 2);
+			} catch(Exception e) {
+				e.printStackTrace();
+				CasinoManager.LogWithColor(ChatColor.RED + "An error occured, try to restart the server! If the problems stays, contact the owner of the plugin!");
+			}
 	} //main run
 	
 	

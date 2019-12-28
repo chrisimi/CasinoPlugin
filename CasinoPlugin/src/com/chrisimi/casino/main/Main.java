@@ -33,15 +33,26 @@ public class Main extends JavaPlugin {
 	
 	public static String pluginVersion = "3.0";
 	public static Boolean isPluginUpdated = true;
+	
+	
 	public static File configYml;
 	
 	public static File signsYml;
 	public static File playerSignsYml;
 	
 	public static File slotChestsYml;
+	
+	private static String pathToFolderOfPlugin; //.../plugins/CasinoPlugin/
+	
+	public static String fileSeparator;
+	
 	@Override
 	public void onEnable() {
+		fileSeparator = System.getProperty("file.separator");
 		
+		CasinoManager casinoManager = new CasinoManager(this);
+		
+		getPathToFolderOfPlugin();
 		configYmlActivate();
 		signsYmlActivate();
 		playerSignsYmlActivate();
@@ -52,9 +63,9 @@ public class Main extends JavaPlugin {
 		
 		UpdateManager.reloadConfig(); //equals .getConfigData
 		
-		
 		//new ConfigurationManager(this);
-		new CasinoManager(this);
+		casinoManager.prefixYml();
+		casinoManager.initialize();
 		versionManager();
 		VersionManager.CheckForNewVersion(pluginVersion, this);
 		
@@ -138,17 +149,47 @@ public class Main extends JavaPlugin {
 		}
 	}
 
+	
+	
+	private void getPathToFolderOfPlugin() {
+		File toCasinoPluginFolder = getDataFolder();
+		if(!toCasinoPluginFolder.exists()) {
+			try {
+				toCasinoPluginFolder.mkdir();
+				toCasinoPluginFolder.createNewFile();
+			} catch(IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create CasinoPlugin folder!");
+				e.printStackTrace();
+			}
+		} else {
+			CasinoManager.LogWithColor(ChatColor.GREEN + "CasinoPlugin folder exists :)!");
+		}
+		pathToFolderOfPlugin = toCasinoPluginFolder.getAbsolutePath();
+	}
 	private void configYmlActivate() {
 		
-		
+		/*
 		configYml = new File(getDataFolder().getAbsolutePath() + "\\config.yml");
 		//getLogger().info(getDataFolder().getAbsolutePath()+ "\\config.yml");
 		if(!(configYml.exists())) {
 			new File(getDataFolder().getAbsolutePath()).mkdir();
 			UpdateManager.createConfigYml(this);
 		}
+		*/
+		configYml = new File(pathToFolderOfPlugin + fileSeparator +"config.yml");
+		if(!configYml.exists()) {
+			try {
+				configYml.createNewFile();
+				UpdateManager.createConfigYml(this);
+			} catch (IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create config.yml:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "config.yml exists!");
+		
 	}
 	private void signsYmlActivate() {
+		/*
 		signsYml = new File(getDataFolder().getAbsolutePath() + "\\signs.json");
 		if(!(signsYml.exists())) {
 			try {
@@ -158,8 +199,19 @@ public class Main extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		*/
+		signsYml = new File(pathToFolderOfPlugin + fileSeparator + "signs.json");
+		if(!signsYml.exists()) {
+			try {
+				signsYml.createNewFile();
+			} catch (IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create signs.json:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "signs.json exists!");
 	}
 	private void playerSignsYmlActivate() {
+		/*
 		playerSignsYml = new File(getDataFolder().getAbsolutePath() + "\\playersigns.json");
 		if(!(playerSignsYml.exists())) {
 			try {
@@ -169,8 +221,19 @@ public class Main extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		*/
+		playerSignsYml = new File(pathToFolderOfPlugin + fileSeparator + "playersigns.json");
+		if(!playerSignsYml.exists()) {
+			try {
+				playerSignsYml.createNewFile();
+			} catch (IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create playersigns.json:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "playersigns.json exists!");
 	}
 	private void slotChestsYmlActivate() {
+		/*
 		slotChestsYml = new File(getDataFolder().getAbsolutePath() + "\\slotchests.json");
 		if(!(slotChestsYml.exists())) {
 			try {
@@ -180,6 +243,16 @@ public class Main extends JavaPlugin {
 				e.printStackTrace();
 			}
 		}
+		*/
+		slotChestsYml = new File(pathToFolderOfPlugin + fileSeparator + "slotchests.json");
+		if(!slotChestsYml.exists()) {
+			try {
+				slotChestsYml.createNewFile();
+			} catch (IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create slotchests.json:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "slotchests.json exists!");
 	}
 	
 

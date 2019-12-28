@@ -77,10 +77,16 @@ public class UpdateManager {
 	public static void reloadConfig() {
 		YamlConfiguration configYml = YamlConfiguration.loadConfiguration(Main.configYml);
 		configValues = configYml.getValues(true);
-		
+		CasinoManager.LogWithColor(ChatColor.GREEN + "config.yml successfully imported!");
 	}
 	
 	public static Object getValue(String path) {
+		
+		if(configValues == null || configValues.size() <= 1) {
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get values from config.yml... recreating config.yml!");
+			createConfigYml(CasinoManager.main);
+		}
+		
 		Object o = configValues.get(path);
 		if(o == null) return "0.0";
 		else

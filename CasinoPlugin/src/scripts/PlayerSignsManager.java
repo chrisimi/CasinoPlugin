@@ -487,7 +487,7 @@ public class PlayerSignsManager implements Listener {
 		if(updateTasks.containsKey(playerSigns.get(sign.getLocation()))) {
 			return;
 		}
-		
+		try {
 		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
 			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
 			
@@ -556,12 +556,16 @@ public class PlayerSignsManager implements Listener {
 				//Bukkit.getLogger().info(sign.getLine(0));
 			}
 		}, 20);
+		} catch(Exception e) {
+			e.printStackTrace();
+			CasinoManager.LogWithColor(ChatColor.RED + "Try to restart the server or/and recreate the sign! If the problem stays, contact the owner of the plugin!");
+		}
 	}
 	private void blackjackNormalSign(Sign sign) {
 		if(updateTasks.containsKey(playerSigns.get(sign.getLocation()))) {
 			return;
 		}
-		
+		try {
 		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
 			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
 			@Override
@@ -615,7 +619,10 @@ public class PlayerSignsManager implements Listener {
 			}
 			
 		}, 20);
-		
+		} catch(Exception e) {
+			e.printStackTrace();
+			CasinoManager.LogWithColor(ChatColor.RED + "Try to restart the server or/and recreate the sign! If the problem stays, contact the owner of the plugin!");
+		}
 	}
 	
 	public static PlayerSignsConfiguration getPlayerSign(Location location) {
