@@ -28,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.chrisimi.casino.main.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import animations.BlackjackAnimation;
 import animations.DiceAnimation;
@@ -131,14 +132,26 @@ public class PlayerSignsManager implements Listener {
 			CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
 			return;
 		}
+		ArrayList<PlayerSignsConfiguration> signs = null;
+		try {
+			signs = gson.fromJson(jsonString, PlayerSigns.class).playerSigns;
+		} catch(JsonSyntaxException jse) {
+			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import PlayerSigns from json: Invalid Json file!");
+			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
+			
+			CasinoManager.LogWithColor(ChatColor.RED + "Closing Server because of an fatal error!");
+			Bukkit.shutdown();
+			return;
+		}
 		
-		ArrayList<PlayerSignsConfiguration> signs = gson.fromJson(jsonString, PlayerSigns.class).playerSigns;
 		if(signs == null) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns from json file: sign is null?");
 			return;
 		}
 		for(PlayerSignsConfiguration cnf : signs) {
 			try {
+				if(cnf == null) throw new NullPointerException();
+				
 				playerSigns.put(cnf.getLocation(), cnf);
 				if(cnf.plusinformations.contains("disabled")) {
 					String[] values = cnf.plusinformations.split(";");
@@ -146,8 +159,11 @@ public class PlayerSignsManager implements Listener {
 					cnf.disabled = true;
 				} else if(cnf.disabled == null) cnf.disabled = false;
 				
+			} catch(NullPointerException npe) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: NullPointerException");
 			} catch(Exception e) {
-				e.printStackTrace();
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: Unknown");
+				
 			}
 		}
 		

@@ -154,13 +154,7 @@ public class Main extends JavaPlugin {
 	private void getPathToFolderOfPlugin() {
 		File toCasinoPluginFolder = getDataFolder();
 		if(!toCasinoPluginFolder.exists()) {
-			try {
-				toCasinoPluginFolder.mkdir();
-				toCasinoPluginFolder.createNewFile();
-			} catch(IOException e) {
-				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create CasinoPlugin folder!");
-				e.printStackTrace();
-			}
+			toCasinoPluginFolder.mkdir();
 		} else {
 			CasinoManager.LogWithColor(ChatColor.GREEN + "CasinoPlugin folder exists :)!");
 		}
@@ -176,7 +170,8 @@ public class Main extends JavaPlugin {
 			UpdateManager.createConfigYml(this);
 		}
 		*/
-		configYml = new File(pathToFolderOfPlugin + fileSeparator +"config.yml");
+		getLogger().info(pathToFolderOfPlugin);
+		configYml = new File(pathToFolderOfPlugin, "config.yml");
 		if(!configYml.exists()) {
 			try {
 				configYml.createNewFile();

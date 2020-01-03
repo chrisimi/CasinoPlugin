@@ -31,6 +31,7 @@ import org.bukkit.scheduler.BukkitTask;
 import com.chrisimi.casino.main.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 import serializeableClass.SignConfiguration;
@@ -111,7 +112,7 @@ public class SignsManager implements Listener {
 		
 	}
 	
-	private void importSignsYml() { //import all sign configurations from signs yml file
+	private void importSignsYml() { //import all sign configurations from signs json file
 		
 		//input string from file
 		String line = "";
@@ -128,22 +129,37 @@ public class SignsManager implements Listener {
 			e.printStackTrace();
 		}
 		if(jsonString.length() < 25) {
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "No signs to import!");
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "No CasinoSigns to import!");
 			return;
 		}
-		
-		ArrayList<SignConfiguration> signs = gson.fromJson(jsonString, Signs.class).signs;
-		
+		ArrayList<SignConfiguration> signs = null;
+		try {
+			 signs = gson.fromJson(jsonString, Signs.class).signs;
+		} catch(JsonSyntaxException jse) {
+			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import CasinoSigns from json: Invalid Json file!");
+			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Closing Server because of an fatal error!");
+			Bukkit.shutdown();
+			return;
+		}
 		if(signs == null) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs from yml: sign is null?");
 		} else {
 				
 			for(SignConfiguration cnf : signs) {
 				try {
+					if(cnf == null) throw new NullPointerException();
+					
 					signValues.put(cnf.getLocation(), cnf.bet);
 					
-				} catch(Exception e) {
+				} catch(NullPointerException npe) {
+					CasinoManager.LogWithColor(ChatColor.RED + "Damaged CasinoSign found! Data will be deleted! Code: NullPointerException!");
+					signs.remove(cnf);
+				}
+				catch(Exception e) {
+					CasinoManager.LogWithColor(ChatColor.RED + "Damaged CasinoSign found! Data will be deleted! Code: Unknown Exception!");
 					e.printStackTrace();
+					signs.remove(cnf);
 				}
 			}
 			

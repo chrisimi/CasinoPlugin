@@ -28,6 +28,7 @@ import org.bukkit.inventory.ItemStack;
 import com.chrisimi.casino.main.Main;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
 
 import scripts.CasinoManager;
 import scripts.UpdateManager;
@@ -101,15 +102,36 @@ public class SlotChestsManager implements Listener{
 			return;
 		
 		//TODO: implement function to check if chest is valid!
-		SlotChestsJson slotChestsJson = gson.fromJson(json, SlotChestsJson.class);
+		SlotChestsJson slotChestsJson = null;
+		try {
+			slotChestsJson = gson.fromJson(json, SlotChestsJson.class);
+		} catch(JsonSyntaxException jse) {
+			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import SlotChests from json: Invalid Json file!");
+			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Closing Server because of an fatal error!");
+			Bukkit.shutdown();
+			
+			return;
+		}
 		if(slotChestsJson.slotChests.size() == 0) {
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "No SlotChests to import!");
 			return;
 		}
 		for(SlotChest chest : slotChestsJson.slotChests) {
+			if(chest == null) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged SlotChest in json data... Data will be deleted!");
+				continue;
+			} else if(chest.getLocation() == null) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged SlotChest in json data...  Data will be deleted!");
+				continue;
+			}
 			slotChests.put(chest.getLocation(), chest);
 			chest.initialize(); //- initialize the virtual warehouse
+			
 		}
-		
+		if(slotChestsJson.slotChests.size() >= 1) {
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + slotChests.size() + " SlotChests from slotchests.json!");
+		}
 	}
 	private synchronized void exportChests()  throws IOException {
 		slotChests.forEach((a, b) -> b.save());

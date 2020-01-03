@@ -96,7 +96,6 @@ public class BlackjackAnimation implements Runnable {
 		}, 20*60*10).getTaskId();
 	}
 	public void userBetInput(Double input) { //amount what the player want to bet at start
-		Main.econ.withdrawPlayer(player, input);
 		cards.add(Card.newCard());
 		cards.add(Card.newCard());
 		
@@ -223,6 +222,7 @@ public class BlackjackAnimation implements Runnable {
 		}
 		player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
 		contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
+		
 		Main.econ.depositPlayer(player, winamount);
 		if(owner.isOnline())
 			Main.econ.withdrawPlayer(owner, winamount);
