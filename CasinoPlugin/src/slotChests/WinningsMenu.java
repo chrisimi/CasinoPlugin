@@ -301,7 +301,11 @@ public class WinningsMenu implements Listener {
 		for(int i = 0; i < 9*4; i++) inventory.setItem(i, new ItemStack(Material.AIR));
 		
 		int index = 0;
-		if(slotChest.itemsToWin.size() == 0) return;
+		if(slotChest.itemsToWin.size() == 0) {
+			for(int i = 0; i < 4*9; i++) inventory.setItem(i, fillMaterial);
+			
+			return;
+		}
 		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
 			
 			if(index >= 9*4) return;

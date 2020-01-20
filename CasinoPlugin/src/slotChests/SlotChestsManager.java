@@ -150,7 +150,7 @@ public class SlotChestsManager implements Listener{
 		String json = gson.toJson(jsonObject, SlotChestsJson.class);
 		writer.write(json);
 		writer.close();
-		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully saved SlotChests!");
+		//CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully saved SlotChests!");
 		
 	}
 	public void reload() {

@@ -2,6 +2,8 @@ package slotChests.Animations;
 
 import java.util.Random;
 
+import javax.management.modelmbean.ModelMBeanAttributeInfo;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -101,6 +103,16 @@ public class RollAnimationManager implements Runnable, Listener{
 			inventory.setItem(i, new ItemStack(Material.AIR));
 			
 			*/
+		
+		player.sendMessage(CasinoManager.getPrefix() + "§6You paid " + Main.econ.format(slotChest.bet));
+		
+		Main.econ.withdrawPlayer(player, slotChest.bet);
+		Main.econ.depositPlayer(owner, slotChest.bet);
+		
+		if(owner.isOnline()) {
+			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
+		}
+		
 		rollAnimation.initialize();
 		startRollingAnimation();
 	}
@@ -201,7 +213,16 @@ public class RollAnimationManager implements Runnable, Listener{
 		player.sendMessage(CasinoManager.getPrefix() + "You won: " + wonItem.getAmount()+"x " + wonItem.getType().toString());
 		slotChest.RemoveItemsFromWarehouse(wonItem);
 		
+		int slot = player.getInventory().first(Material.AIR);
+		if(slot == -1) {
+			player.getLocation().getWorld().dropItem(player.getLocation(), wonItem);
+		} else {
+			player.getInventory().setItem(slot, wonItem);
+		}
+		
+		
 		player.spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation(), 5);
+		rollsGlobal++;
 	}
 	
 	@EventHandler
