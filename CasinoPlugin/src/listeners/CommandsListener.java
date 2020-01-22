@@ -39,6 +39,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		
 		if(!(sender instanceof Player)) {
 			sender.sendMessage(CasinoManager.getPrefix() + "You need to be a player!");
+			return false;
 		}
 		
 		Player player = (Player)sender;
