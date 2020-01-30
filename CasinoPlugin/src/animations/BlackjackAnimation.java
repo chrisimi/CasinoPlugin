@@ -103,9 +103,12 @@ public class BlackjackAnimation implements Runnable {
 		this.playerBet = input;
 		
 		Main.econ.withdrawPlayer(player, playerBet);
+		main.getLogger().info("spieler veliert: " + playerBet);
 		contactOwner(String.format("%s is playing on a blackjack sign with %s", player.getPlayerListName(), Main.econ.format(playerBet)));
 		if(owner.isOnline()) {
 			Main.econ.depositPlayer(owner, playerBet);
+			main.getLogger().info("owner bekommt: " + playerBet);
+			
 		} else {
 			this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
 		}
@@ -224,8 +227,11 @@ public class BlackjackAnimation implements Runnable {
 		contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
 		
 		Main.econ.depositPlayer(player, winamount);
-		if(owner.isOnline())
+		main.getLogger().info("spieler bekommt: " + winamount);
+		if(owner.isOnline()) {
 			Main.econ.withdrawPlayer(owner, winamount);
+			main.getLogger().info("owner verliert: " + winamount);
+		}
 		else
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
 		
