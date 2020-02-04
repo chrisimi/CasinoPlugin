@@ -40,7 +40,7 @@ public class WarehouseMenu implements Listener{
 	 * 
 	 * beim schließen inventar durchschauen! ob spieler etwas rausgenommen hat - fertig
 	 * 
-	 * TODO: bei inventar close task löschen!
+	 * 
 	 */
 	public static HashMap<Inventory, Integer> tasks = new HashMap<>();
 	
@@ -238,7 +238,6 @@ public class WarehouseMenu implements Listener{
 		int slot = 0;
 		
 		for(Entry<Material, Integer> entry : sortedByList.entrySet()) {
-			System.out.println(entry.getKey().toString() + " " + entry.getValue());
 			if(entry.getValue() <= 0) continue;
 			
 			int amountOfItems = entry.getValue();
