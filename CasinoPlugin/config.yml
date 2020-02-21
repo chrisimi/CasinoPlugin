@@ -123,6 +123,16 @@ playersigns:
 # set the maximum bet for blackjack signs!
       max-bet: 250.0
       
+#################################     
+# leaderboard signs configurations
+#################################      
+   leaderboard-signs:
+   
+# enable the leaderboard signs
+      enable: true
+      
+# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks
+      reload-time: 20
       
 ##########################################
 # SlotChest configurations

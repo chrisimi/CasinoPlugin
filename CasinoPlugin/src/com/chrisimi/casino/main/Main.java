@@ -39,6 +39,8 @@ public class Main extends JavaPlugin {
 	
 	public static File signsYml;
 	public static File playerSignsYml;
+	public static File dataYml;
+	public static File leaderboardSignsYml;
 	
 	public static File slotChestsYml;
 	
@@ -226,6 +228,27 @@ public class Main extends JavaPlugin {
 				e.printStackTrace();
 			}
 		} else CasinoManager.LogWithColor(ChatColor.GREEN + "playersigns.json exists!");
+		
+		dataYml = new File(pathToFolderOfPlugin, "data.yml");
+		if(!dataYml.exists()) {
+			try {
+				dataYml.createNewFile();
+			} catch(IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create data.yml:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "data.yml exists!");
+		
+		
+		leaderboardSignsYml = new File(pathToFolderOfPlugin, "leaderboardsigns.yml");
+		if(!leaderboardSignsYml.exists()) {
+			try {
+				leaderboardSignsYml.createNewFile();
+			} catch(IOException e) {
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to create leaderboardsigns.yml:");
+				e.printStackTrace();
+			}
+		} else CasinoManager.LogWithColor(ChatColor.GREEN + "leaderboardsigns.yml exists!");
 	}
 	private void slotChestsYmlActivate() {
 		/*
