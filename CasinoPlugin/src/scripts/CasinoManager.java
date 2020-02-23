@@ -21,6 +21,7 @@ public class CasinoManager {
 	public static PlayerSignsManager playerSignsManager;
 	private static RollCommand rollCommand;
 	public static SlotChestsManager slotChestManager;
+	public static LeaderboardsignsManager leaderboardManager;
 	public CasinoManager(Main main) {
 		this.main = main;
 	}
@@ -43,6 +44,7 @@ public class CasinoManager {
 		playerSignsManager = new PlayerSignsManager(main);
 		rollCommand = new RollCommand(main);
 		slotChestManager = new SlotChestsManager(main);
+		leaderboardManager = new LeaderboardsignsManager(main);
 	}
 	
 	public static void reload() {

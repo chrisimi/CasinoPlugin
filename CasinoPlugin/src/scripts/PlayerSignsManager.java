@@ -646,6 +646,18 @@ public class PlayerSignsManager implements Listener {
 		
 		return playerSigns.get(location);
 	}
+	public static ArrayList<Location> getLocationsFromAllPlayerSigns(OfflinePlayer player)
+	{
+		ArrayList<Location> locations = new ArrayList<>();
+		synchronized (playerSigns)
+		{
+			for(Map.Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
+				
+				if(entry.getValue().getOwner().equals(player)) locations.add(entry.getKey());
+			}
+		}
+		return locations;
+	}
 	
 	private void error(String message, Player player) {
 		player.sendMessage(CasinoManager.getPrefix() + "§4"+message);
