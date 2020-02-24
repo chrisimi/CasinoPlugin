@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.chrisimi.casino.main.Main;
 
 import scripts.CasinoManager;
+import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import serializeableClass.Card;
 import serializeableClass.PlayerSignsConfiguration;
@@ -103,11 +104,9 @@ public class BlackjackAnimation implements Runnable {
 		this.playerBet = input;
 		
 		Main.econ.withdrawPlayer(player, playerBet);
-		main.getLogger().info("spieler veliert: " + playerBet);
 		contactOwner(String.format("%s is playing on a blackjack sign with %s", player.getPlayerListName(), Main.econ.format(playerBet)));
 		if(owner.isOnline()) {
 			Main.econ.depositPlayer(owner, playerBet);
-			main.getLogger().info("owner bekommt: " + playerBet);
 			
 		} else {
 			this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
@@ -215,7 +214,7 @@ public class BlackjackAnimation implements Runnable {
 	private void playerLost() {
 		player.sendMessage(CasinoManager.getPrefix() + "§4You lost!");
 		contactOwner(String.format("%s lost at your blackjack sign!", player.getPlayerListName()));
-		
+		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, 0);
 		finish();
 	}
 	private void dealerLost() {
@@ -225,12 +224,10 @@ public class BlackjackAnimation implements Runnable {
 		}
 		player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
 		contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
-		
+		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, winamount);
 		Main.econ.depositPlayer(player, winamount);
-		main.getLogger().info("spieler bekommt: " + winamount);
 		if(owner.isOnline()) {
 			Main.econ.withdrawPlayer(owner, winamount);
-			main.getLogger().info("owner verliert: " + winamount);
 		}
 		else
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);

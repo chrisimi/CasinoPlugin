@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
 import com.chrisimi.casino.main.Main;
 import com.google.gson.Gson;
@@ -33,6 +34,8 @@ import com.google.gson.annotations.Expose;
 import animations.LeaderboardsignAnimation;
 import serializeableClass.Leaderboardsign;
 import serializeableClass.Leaderboardsign.Mode;
+import serializeableClass.PlayData;
+import serializeableClass.PlayerSignsConfiguration;
 
 public class LeaderboardsignsManager implements Listener {
 		
@@ -88,31 +91,21 @@ public class LeaderboardsignsManager implements Listener {
 	// export / import
 	//
 	
-	//format of data.yml:
-	//<UUID>;<world>;<location splited by ','>; <playAmount>;<wonAmount>;<timestamp>
-	//bsp:
-	//1892-8172817-38738;world;12,13,14;25;50;154272772
 	
-	public class PlayData {
-		
-		public OfflinePlayer Player;
-		public World World;
-		public Location Location;
-		public double PlayAmount;
-		public double WonAmount;
-		public long Timestamp;
-	}
 	
 	private synchronized void importData() {
 		
 		BufferedReader reader = null;
+		int row = 0;
 		try {
 			reader = new BufferedReader(new FileReader(Main.dataYml));
 			String line = "";
 			while((line = reader.readLine()) != null) {
+				row++;
+				
 				String[] splited = line.split(";");
 				if(splited.length != 6) {
-					CasinoManager.LogWithColor(ChatColor.RED + "data value is invalid! length is not 6! line will be deleted!");
+					CasinoManager.LogWithColor(ChatColor.RED + "data value is invalid! length is not 6! line will be deleted! Row: " + row);
 					continue;
 				} else if(splited[2].split(",").length != 3) {
 					CasinoManager.LogWithColor(ChatColor.RED + "location is invalid!");
@@ -145,7 +138,7 @@ public class LeaderboardsignsManager implements Listener {
 			writer = new BufferedWriter(new FileWriter(Main.dataYml));
 			writer.write("");
 			for(PlayData data : playdatas) {
-				writer.append(getStringFromPlayData(data));
+				writer.append(getStringFromPlayData(data) + "\n");
 			}
 			
 		} catch(Exception e) {
@@ -208,7 +201,7 @@ public class LeaderboardsignsManager implements Listener {
 				jsonString.append(line);
 			}
 			
-			
+			if(jsonString.length() < 9) return;
 			LeaderboardList leaderboardsigns = gson.fromJson(jsonString.toString(), LeaderboardList.class);
 			if(leaderboardsigns == null || leaderboardsigns.list == null) {
 				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import all leaderboardsigns!");
@@ -216,6 +209,11 @@ public class LeaderboardsignsManager implements Listener {
 			}
 			for(Leaderboardsign sign : leaderboardsigns.list) {
 				LeaderboardsignsManager.leaderboardsigns.put(sign.getLocation(), sign);
+				try {
+					addSignAnimation(sign);
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported all leaderboard signs!");
 			
@@ -281,6 +279,8 @@ public class LeaderboardsignsManager implements Listener {
 		leaderboardsign.position = position;
 		leaderboardsigns.put(leaderboardsign.getLocation(), leaderboardsign);
 		addSignAnimation(leaderboardsign);
+		player.sendMessage(CasinoManager.getPrefix() + "You successfully created a leaderboard sign!");
+		exportLeaderboardsigns();
 	}
 	public void addSignAnimation(Leaderboardsign sign) 
 	{
@@ -312,12 +312,10 @@ public class LeaderboardsignsManager implements Listener {
 //	EventHandler and methods
 //
 	@EventHandler
-	public void onSignPlace(BlockPlaceEvent event) 
+	public void onSignPlace(SignChangeEvent event) 
 	{
-		if(event.getBlock() instanceof Sign) 
-		{
-			checkIfSignIsLeaderboardSign(event);
-		}
+		Bukkit.getLogger().info("Block place event");
+		checkIfSignIsLeaderboardSign(event);
 	}
 	@EventHandler
 	public void onSignBreak(BlockBreakEvent event)
@@ -327,8 +325,9 @@ public class LeaderboardsignsManager implements Listener {
 		}
 	}
 	
-	private void checkIfSignIsLeaderboardSign(BlockPlaceEvent event) 
+	private void checkIfSignIsLeaderboardSign(SignChangeEvent event) 
 	{
+		Bukkit.getLogger().info("checkIfSignIsLeaderboard");
 		Sign sign = null;
 		Mode mode = null;
 		int position = 0;
@@ -339,7 +338,7 @@ public class LeaderboardsignsManager implements Listener {
 		} catch(Exception e) {
 			 return;
 		}
-		String[] lines = sign.getLines();
+		String[] lines = event.getLines();
 		if(!(lines[0].equalsIgnoreCase("leaderboard"))) {
 			return;
 		}
@@ -397,6 +396,19 @@ public class LeaderboardsignsManager implements Listener {
 	public static void save()
 	{
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();
+		CasinoManager.leaderboardManager.exportData();
+	}
+	public static void addData(Player player, PlayerSignsConfiguration manager, double playAmount, double winAmount)
+	{
+		PlayData data = new PlayData();
+		data.Player = player;
+		data.World = manager.getLocation().getWorld();
+		data.Location = manager.getLocation();
+		data.PlayAmount = playAmount;
+		data.WonAmount = winAmount;
+		data.Timestamp = System.currentTimeMillis();
+		
+		playdatas.add(data);
 		CasinoManager.leaderboardManager.exportData();
 	}
 	/**
