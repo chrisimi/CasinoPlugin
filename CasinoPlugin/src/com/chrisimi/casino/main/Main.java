@@ -14,6 +14,7 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import scripts.CasinoAnimation;
 import scripts.CasinoManager;
+import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.SignsManager;
@@ -135,6 +136,15 @@ public class Main extends JavaPlugin {
 				return amount;
 			}
 			
+		}));
+		metric.addCustomChart(new Metrics.SingleLineChart("currently_running_leaderboardsigns", new Callable<Integer>()
+		{
+
+			@Override
+			public Integer call() throws Exception
+			{
+				return LeaderboardsignsManager.leaderboardsignRunnableTaskID.size();
+			}
 		}));
 	}
 	

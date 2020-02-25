@@ -17,6 +17,7 @@ import com.chrisimi.casino.main.Main;
 import scripts.LeaderboardsignsManager;
 import serializeableClass.Leaderboardsign;
 import serializeableClass.PlayData;
+import serializeableClass.Leaderboardsign.Mode;
 
 
 public class LeaderboardsignAnimation implements Runnable
@@ -44,6 +45,10 @@ public class LeaderboardsignAnimation implements Runnable
 		//will be called every frame
 		if(!(signBlock.isPlaced())) return;
 		
+		signBlock.setLine(1, "§4updating...");
+		signBlock.setLine(2, "§4updating...");
+		signBlock.update(true);
+		
 		getData();
 		analyseData();
 		writeSign();
@@ -52,15 +57,23 @@ public class LeaderboardsignAnimation implements Runnable
 	private void getData()
 	{
 		currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer());
-		Bukkit.getLogger().info("current size of data: " + currentData.size());
+		
+		if(!(sign.modeIsAll())) 
+		{
+			int range = sign.getRange();
+			ArrayList<PlayData> dataToRemove = new ArrayList<>();
+			for(PlayData data : currentData) {
+				if(data.Location.distance(signBlock.getLocation()) > range) {
+					dataToRemove.add(data);
+				}
+			}
+			currentData.removeAll(dataToRemove);
+		}
 	}
 	private void analyseData()
 	{
 		
 		//cool sign animations
-		signBlock.setLine(1, "§4updating...");
-		signBlock.setLine(2, "§4updating...");
-		signBlock.update(true);
 		
 		switch(sign.getMode()) {
 		case COUNT:
@@ -76,6 +89,7 @@ public class LeaderboardsignAnimation implements Runnable
 	}
 	private void analyseDataCount() 
 	{
+	
 		//count data
 		HashMap<OfflinePlayer, Integer> map = new HashMap<>();
 		for(PlayData data : currentData) {
@@ -101,35 +115,132 @@ public class LeaderboardsignAnimation implements Runnable
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
 		
-		Bukkit.getLogger().info("sorted count list:");
 		int index = 1;
 		for(Entry<OfflinePlayer, Integer> entry : sortedMap.entrySet()) {
-			Bukkit.getLogger().info(entry.getKey().getName() + "-" + entry.getValue());
 			if(index == sign.position) 
 			{
 				currentPlayer = entry.getKey();
 				currentValue = entry.getValue();
 				
-				Bukkit.getLogger().info("wichtig für sign");
 				break;
 				
 			} else
 			index++;
 		}
+		if(sortedMap.size() == 0) 
+		{
+			currentPlayer = null;
+			currentValue = 0.0;
+		}
 	}
 	private void analyseDataHighestAmount() 
 	{
+		HashMap<OfflinePlayer, Double> map = new HashMap<>();
+		for(PlayData data : currentData) {
+			if(data.WonAmount <= 0) continue;
+			
+			if(map.containsKey(data.Player)) {
+				
+				//check if the current wonAmount is higher than the one in the list!
+				if(map.get(data.Player) < data.WonAmount)
+					map.put(data.Player, data.WonAmount);
+
+			} else {
+				map.put(data.Player, data.WonAmount);
+			}
+		}
 		
+		Comparator<Entry<OfflinePlayer, Double>> valueComperator = new Comparator<Entry<OfflinePlayer, Double>>()
+		{
+			@Override
+			public int compare(Entry<OfflinePlayer, Double> v1, Entry<OfflinePlayer, Double> v2)
+			{
+				return (int) (v2.getValue() - v1.getValue());
+			}
+		};
+		List<Entry<OfflinePlayer, Double>> listOfEntries = new ArrayList<>(map.entrySet());
+		Collections.sort(listOfEntries, valueComperator);
+		
+		LinkedHashMap<OfflinePlayer, Double> sortedMap = new LinkedHashMap<OfflinePlayer, Double>(listOfEntries.size());
+		
+		for(Entry<OfflinePlayer, Double> entry : listOfEntries) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		
+		int index = 1;
+		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet()) {
+			if(index == sign.position) 
+			{
+				currentPlayer = entry.getKey();
+				currentValue = entry.getValue();
+				
+				break;
+				
+			} else
+			index++;
+		}
+		if(sortedMap.size() == 0) 
+		{
+			currentPlayer = null;
+			currentValue = 0.0;
+		}
 	}
 	private void analyseDataSumAmount()
 	{
+		HashMap<OfflinePlayer, Double> map = new HashMap<>();
+		for(PlayData data : currentData) {
+			if(data.WonAmount <= 0) continue;
+			
+			if(map.containsKey(data.Player)) {
+				map.compute(data.Player, (a, b) -> b + data.WonAmount);
+			} else {
+				map.put(data.Player, data.WonAmount);
+			}
+		}
 		
+		Comparator<Entry<OfflinePlayer, Double>> valueComperator = new Comparator<Entry<OfflinePlayer, Double>>()
+		{
+			@Override
+			public int compare(Entry<OfflinePlayer, Double> v1, Entry<OfflinePlayer, Double> v2)
+			{
+				return (int) (v2.getValue() - v1.getValue());
+			}
+		};
+		List<Entry<OfflinePlayer, Double>> listOfEntries = new ArrayList<>(map.entrySet());
+		Collections.sort(listOfEntries, valueComperator);
+		
+		LinkedHashMap<OfflinePlayer, Double> sortedMap = new LinkedHashMap<OfflinePlayer, Double>(listOfEntries.size());
+		
+		for(Entry<OfflinePlayer, Double> entry : listOfEntries) {
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		
+		int index = 1;
+		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet()) {
+			if(index == sign.position) 
+			{
+				currentPlayer = entry.getKey();
+				currentValue = entry.getValue();
+				
+				break;
+				
+			} else
+			index++;
+		}
+		if(sortedMap.size() == 0) 
+		{
+			currentPlayer = null;
+			currentValue = 0.0;
+		}
 	}
 	private void writeSign() 
 	{
-		signBlock.setLine(0, String.valueOf(sign.position)+".");
+		signBlock.setLine(0, "§6§l"+String.valueOf(sign.position)+". Place");
 		signBlock.setLine(1, (currentPlayer == null) ? "§4---" : currentPlayer.getName());
-		signBlock.setLine(2, (currentValue == 0.0) ? "§4---" : String.valueOf(currentValue));
+		if(sign.getMode() != Mode.COUNT)
+			signBlock.setLine(2, (currentValue == 0.0) ? "§4---" : Main.econ.format(currentValue));
+		else
+			signBlock.setLine(2, (currentValue == 0.0) ? "§4---" : String.valueOf(currentValue));
 		signBlock.setLine(3, "----------------");
 		signBlock.update(true);
 	}

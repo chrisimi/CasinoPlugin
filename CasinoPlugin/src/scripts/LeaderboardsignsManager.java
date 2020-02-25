@@ -42,7 +42,7 @@ public class LeaderboardsignsManager implements Listener {
 	private static ArrayList<PlayData> playdatas = new ArrayList<>();
 	
 	private static HashMap<Location, Leaderboardsign> leaderboardsigns = new HashMap<>();
-	private static HashMap<Leaderboardsign, Integer> leaderboardsignRunnableTaskID = new HashMap<>();
+	public static HashMap<Leaderboardsign, Integer> leaderboardsignRunnableTaskID = new HashMap<>();
 	
 	private static Gson gson;
 	
@@ -85,6 +85,16 @@ public class LeaderboardsignsManager implements Listener {
 			importData();
 		} else 
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Leaderboard signs are disabled!");
+		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				exportData();
+				exportLeaderboardsigns();
+			}
+		}, 20*60*5, 20*60*15);
 	}
 	
 	//
@@ -289,7 +299,8 @@ public class LeaderboardsignsManager implements Listener {
 		{
 			signBlock = (Sign) sign.getLocation().getBlock().getState();
 		} catch(Exception e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Leaderboardsign is not valid! (Block is not a sign!");
+			CasinoManager.LogWithColor(ChatColor.RED + "Leaderboardsign is not valid! (Block is not a sign)!");
+			leaderboardsigns.remove(sign.getLocation());
 			return;
 		}
 		addSignAnimation(sign, signBlock);
@@ -314,7 +325,6 @@ public class LeaderboardsignsManager implements Listener {
 	@EventHandler
 	public void onSignPlace(SignChangeEvent event) 
 	{
-		Bukkit.getLogger().info("Block place event");
 		checkIfSignIsLeaderboardSign(event);
 	}
 	@EventHandler
@@ -327,7 +337,6 @@ public class LeaderboardsignsManager implements Listener {
 	
 	private void checkIfSignIsLeaderboardSign(SignChangeEvent event) 
 	{
-		Bukkit.getLogger().info("checkIfSignIsLeaderboard");
 		Sign sign = null;
 		Mode mode = null;
 		int position = 0;
@@ -369,6 +378,12 @@ public class LeaderboardsignsManager implements Listener {
 				return;
 			}
 		}
+		if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create")))
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to create a leaderboardsign!");
+			event.setCancelled(true);
+			return;
+		}
 		createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position);
 	}
 	
@@ -397,6 +412,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();
 		CasinoManager.leaderboardManager.exportData();
+		CasinoManager.leaderboardManager.reload();
 	}
 	public static void addData(Player player, PlayerSignsConfiguration manager, double playAmount, double winAmount)
 	{
@@ -427,5 +443,11 @@ public class LeaderboardsignsManager implements Listener {
 					.collect(Collectors.toList());
 		}
 		return dataList;
+	}
+	public static void resetData() 
+	{
+		LeaderboardsignsManager.playdatas = new ArrayList<>();
+		CasinoManager.leaderboardManager.exportData();
+		CasinoManager.LogWithColor(ChatColor.GREEN + "You successfully reset data.yml!");
 	}
 }

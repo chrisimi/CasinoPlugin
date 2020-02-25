@@ -26,6 +26,9 @@ commands:
   casino help blackjack:
     description: get help for blackjack signs
     usage: /casino help blackjack
+  casino help leaderboard:
+    description: get help for leaderboard signs
+    usage: /casino help leaderboardk
   casino sign enable:
     description: enable your playersign
     usage: /casino sign enable
@@ -41,3 +44,6 @@ commands:
   casino chestlocations:
     description: get the locations from all SlotChest you made
     usage: /casino chestlocations
+  casion resetdata:
+    description: reset the data file
+    usage: /casino resetdata

@@ -18,6 +18,7 @@ import com.chrisimi.casino.main.Main;
 
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
+import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.UpdateManager;
@@ -80,6 +81,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 				CasinoManager.slotChestManager.save();
 			} else if(args[0].equalsIgnoreCase("chestlocations")) {
 				showChestLocations(player);
+			} else if(args[0].equalsIgnoreCase("resetdata")) {
+				resetData(player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -87,6 +90,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 				showDiceHelpToPlayer(player);
 			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("blackjack")) {
 				showBlackjackHelpToPlayer(player);
+			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("leaderboard")) {
+				showLeaderboardSignHelpToPlayer(player);
 			} else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("enable")) {
 				enablePlayerManagedSign(player);
 			} else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("disable")) {
@@ -242,12 +247,28 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("     §6line 3: minbet;maxbet like 20;30");
 		player.sendMessage("     §6line 4: multiplicator if players draws a blackjack (21)");
 	}
+	private void showLeaderboardSignHelpToPlayer(Player player)
+	{
+		player.sendMessage("");
+		player.sendMessage("");
+		player.sendMessage("§f§lLeaderboardsign help");
+		if(Main.perm.has(player, "casino.leaderboardsign.create")) player.sendMessage("§2permissions: §4true");
+		else player.sendMessage("§2permissions: §4false");
+		
+		player.sendMessage("");
+		player.sendMessage("§6§n§lFormat of a leaderboardsign:");
+		player.sendMessage("");
+		player.sendMessage("     §6line 1: leaderboard");
+		player.sendMessage("     §6line 2: position for the sign like 1 for first place");
+		player.sendMessage("     §6line 3: mode (count, sumamount, highestamount)");
+		player.sendMessage("     §6line 4: range (all for all your signs, number of blocks (3 as example) for using signs in this block range");
+	}
 	private void showHelpToAdmin(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage("§4Admin page");
 		player.sendMessage("§6/casino reloadconfig §8- reloads the config.yml");
-		
+		player.sendMessage("§6/casino resetdata §8- deletes all roll-data from playermanagedsigns (data.yml");
 	}
 
 	private void showHelpToPlayer(Player player) {
@@ -259,6 +280,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino admin §8- admin help command"); 
 		player.sendMessage("§6/casino help dice §8- show help for placing a dice signs!");
 		player.sendMessage("§6/casino help blackjack §8- show help for placing blackjack signs!");
+		player.sendMessage("§6/casino help leaderboard §8- show help for placing leaderboard signs!");
 		player.sendMessage("§6/casino sign disable §8- disable your own player sign while looking onto it!");
 		player.sendMessage("§6/casino sign enable §8- enable your own player sign while looking onto it!");
 		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8 - roll a random number which will be sent to nearby players or mentioned player!");
@@ -289,10 +311,16 @@ public class CommandsListener implements Listener, CommandExecutor {
 		} else {
 			sender.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to play slots!");
 		}
-		
-		
-		
-		
-	}
 
+	}
+	private void resetData(Player player)
+	{
+		if(Main.perm.has(player, "casino.admin"))
+		{
+			LeaderboardsignsManager.resetData();
+		} else
+		{
+			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
+		}
+	}
 }

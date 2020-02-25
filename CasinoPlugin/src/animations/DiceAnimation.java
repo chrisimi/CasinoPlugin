@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import com.chrisimi.casino.main.Main;
 
 import scripts.CasinoManager;
+import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -76,6 +77,7 @@ public class DiceAnimation implements Runnable {
 			
 			sign.setLine(2, "§aYOU WON!");
 			player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
+			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, wonamount);
 			Main.econ.depositPlayer(player, wonamount);
 			Main.econ.withdrawPlayer(owner, wonamount);
 			if(owner.isOnline()) {
@@ -88,6 +90,7 @@ public class DiceAnimation implements Runnable {
 		} else {
 			sign.setLine(2, "§4YOU LOST!");
 			player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
+			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
 			if(owner.isOnline()) {
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
 			} else {

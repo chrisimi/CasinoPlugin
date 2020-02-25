@@ -69,4 +69,22 @@ public class Leaderboardsign {
 	public OfflinePlayer getPlayer() {
 		return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
 	}
+	
+	public Boolean modeIsAll() {
+		try {
+			int a = Integer.valueOf(this.range);
+			return false;
+		} catch(Exception e) {
+			return true;
+		}
+	}
+	public Integer getRange() {
+		try {
+			
+		
+		return Integer.valueOf(this.range);
+		} catch(Exception e) {
+			return null;
+		}
+	}
 }
