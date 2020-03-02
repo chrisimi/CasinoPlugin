@@ -83,6 +83,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 				showChestLocations(player);
 			} else if(args[0].equalsIgnoreCase("resetdata")) {
 				resetData(player);
+			} else if(args[0].equalsIgnoreCase("reloaddata")) {
+				reloadData(player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -119,6 +121,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 	
 	
 	
+
+
 	private void createSlotChest(Player player) {
 		if(!(Main.perm.has(player, "casino.slotchest.create") || Main.perm.has(player, "casino.admin"))) {
 			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to create a SlotChest!");
@@ -268,7 +272,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("§4Admin page");
 		player.sendMessage("§6/casino reloadconfig §8- reloads the config.yml");
-		player.sendMessage("§6/casino resetdata §8- deletes all roll-data from playermanagedsigns (data.yml");
+		player.sendMessage("§6/casino resetdata §8- deletes all roll-data from playermanagedsigns (data.yml)");
+		player.sendMessage("§6/casino reloaddata §8- reload all leaderboard signs and data.yml. Could lag a bit!");
 	}
 
 	private void showHelpToPlayer(Player player) {
@@ -318,7 +323,19 @@ public class CommandsListener implements Listener, CommandExecutor {
 		if(Main.perm.has(player, "casino.admin"))
 		{
 			LeaderboardsignsManager.resetData();
+			player.sendMessage(CasinoManager.getPrefix() + "You successfully reset the data!");
 		} else
+		{
+			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
+		}
+	}
+	private void reloadData(Player player)
+	{
+		if(Main.perm.has(player, "casino.admin")) 
+		{
+			LeaderboardsignsManager.reloadData(main);
+			player.sendMessage(CasinoManager.getPrefix() + "You successfully reloaded the data!");
+		} else 
 		{
 			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
 		}

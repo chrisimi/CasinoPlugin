@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -74,7 +75,6 @@ public class LeaderboardsignAnimation implements Runnable
 	{
 		
 		//cool sign animations
-		
 		switch(sign.getMode()) {
 		case COUNT:
 			analyseDataCount();
@@ -197,6 +197,9 @@ public class LeaderboardsignAnimation implements Runnable
 				map.put(data.Player, data.WonAmount);
 			}
 		}
+		
+		
+		
 		
 		Comparator<Entry<OfflinePlayer, Double>> valueComperator = new Comparator<Entry<OfflinePlayer, Double>>()
 		{

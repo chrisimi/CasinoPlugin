@@ -67,8 +67,8 @@ public class LeaderboardsignsManager implements Listener {
 		try {
 			reloadTime = Integer.valueOf(UpdateManager.getValue("playersigns.leaderboard-signs.reload-time").toString());
 		} catch(Exception e) {
-			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get leaderboardsign reloadtime! You have to use a valid integer value! Set to default value: 1200 (1 Minute)");
-			reloadTime = 1200;
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get leaderboardsign reloadtime! You have to use a valid integer value! Set to default value: 12000 (10 Minute)");
+			reloadTime = 12000;
 		}
 		try 
 		{
@@ -225,7 +225,7 @@ public class LeaderboardsignsManager implements Listener {
 					e.printStackTrace();
 				}
 			}
-			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported all leaderboard signs!");
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported all leaderboard signs! (" + leaderboardsigns.list.size() + ")");
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -449,5 +449,28 @@ public class LeaderboardsignsManager implements Listener {
 		LeaderboardsignsManager.playdatas = new ArrayList<>();
 		CasinoManager.leaderboardManager.exportData();
 		CasinoManager.LogWithColor(ChatColor.GREEN + "You successfully reset data.yml!");
+	}
+	public static void reloadData(Main main)
+	{
+		//1. stop all runnables
+		//2. reload data
+		//3. start all leaderboardsigns
+	
+		//1. stop all runnables
+		for(int taskID : leaderboardsignRunnableTaskID.values()) 
+		{
+			main.getServer().getScheduler().cancelTask(taskID);
+		}
+		leaderboardsignRunnableTaskID.clear();
+		
+		//2. reload data
+		playdatas.clear();
+		CasinoManager.leaderboardManager.importData();
+		
+		//3. start all leaderboardsigns
+		for(Leaderboardsign sign : leaderboardsigns.values()) 
+		{
+			CasinoManager.leaderboardManager.addSignAnimation(sign);
+		}
 	}
 }

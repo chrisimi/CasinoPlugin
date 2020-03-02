@@ -10,7 +10,7 @@
 version: 3.3
 
 # prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
-# default one: §9[§6Casino§9] §a
+# default one: ï¿½9[ï¿½6Casinoï¿½9] ï¿½a
 prefix: 
 
 
@@ -131,8 +131,8 @@ playersigns:
 # enable the leaderboard signs
       enable: true
       
-# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks, 1 Minute = 20*60 = 1200 Ticks
-      reload-time: 1200
+# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks, 1 Minute = 20*60*10 = 12000 Ticks
+      reload-time: 12000
       
 ##########################################
 # SlotChest configurations

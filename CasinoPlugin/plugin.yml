@@ -44,6 +44,9 @@ commands:
   casino chestlocations:
     description: get the locations from all SlotChest you made
     usage: /casino chestlocations
-  casion resetdata:
+  casino resetdata:
     description: reset the data file
     usage: /casino resetdata
+  casino reloaddata:
+    description: reload all datas and leaderboardsigns
+    usage: /casino reloaddata

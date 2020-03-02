@@ -307,6 +307,5 @@ public class Main extends JavaPlugin {
 			CasinoManager.LogWithColor(ChatColor.RED + "Unable to activate vault's permission system! Try restarting server and check vault!");
 		}
 	}
-	
 
 }
