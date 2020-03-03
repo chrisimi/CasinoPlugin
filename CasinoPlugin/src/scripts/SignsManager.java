@@ -163,7 +163,7 @@ public class SignsManager implements Listener {
 				}
 			}
 			
-			CasinoManager.LogWithColor(ChatColor.RED + "imported " + signs.size() + " signs from signs.json");
+			CasinoManager.LogWithColor(ChatColor.GREEN + "imported " + signs.size() + " signs from signs.json");
 		}
 	}
 	
