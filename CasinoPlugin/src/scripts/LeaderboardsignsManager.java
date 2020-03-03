@@ -378,7 +378,7 @@ public class LeaderboardsignsManager implements Listener {
 				return;
 			}
 		}
-		if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create")))
+		if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
 		{
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to create a leaderboardsign!");
 			event.setCancelled(true);
