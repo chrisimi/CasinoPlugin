@@ -256,7 +256,9 @@ public class LeaderboardsignsManager implements Listener {
 			list.list.addAll(leaderboardsigns.values());
 			
 			writer.write(gson.toJson(list));
-			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported leaderboardsigns!");
+			
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported leaderboardsigns!");
 		} catch(Exception e)
 		{
 			e.printStackTrace();
