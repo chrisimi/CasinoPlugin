@@ -23,7 +23,7 @@ public class CasinoManager {
 	public static SlotChestsManager slotChestManager;
 	public static LeaderboardsignsManager leaderboardManager;
 	
-	public static Boolean configEnableConsoleMessages;
+	public static Boolean configEnableConsoleMessages = true;
 	public CasinoManager(Main main) {
 		this.main = main;
 	}

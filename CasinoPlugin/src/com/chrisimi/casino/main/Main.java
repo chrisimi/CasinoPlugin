@@ -143,7 +143,6 @@ public class Main extends JavaPlugin {
 			@Override
 			public Integer call() throws Exception
 			{
-				Bukkit.getLogger().info("send leaderboardsigns number: " + LeaderboardsignsManager.leaderboardsignRunnableTaskID.size());
 				return LeaderboardsignsManager.leaderboardsignRunnableTaskID.size();
 			}
 		}));
