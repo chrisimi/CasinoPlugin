@@ -29,10 +29,10 @@ public class Main extends JavaPlugin {
 	/**
 	 * config version in jar
 	 */
-	public static String configVersion = "3.3"; //version in jar
+	public static String configVersion = "3.4"; //version in jar
 	public static Boolean isConfigUpdated = true;
 	
-	public static String pluginVersion = "3.3";
+	public static String pluginVersion = "3.4";
 	public static Boolean isPluginUpdated = true;
 	
 	
@@ -143,6 +143,7 @@ public class Main extends JavaPlugin {
 			@Override
 			public Integer call() throws Exception
 			{
+				Bukkit.getLogger().info("send leaderboardsigns number: " + LeaderboardsignsManager.leaderboardsignRunnableTaskID.size());
 				return LeaderboardsignsManager.leaderboardsignRunnableTaskID.size();
 			}
 		}));

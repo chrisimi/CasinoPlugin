@@ -1,4 +1,4 @@
-# Casino Plugin Version 3.3 by chrisimi
+# Casino Plugin Version 3.4 by chrisimi
 # Copyright: chrisi050403@gmail.com
 
 # this plugin is using bStats!!!
@@ -7,7 +7,10 @@
 #
 
 # please don't change the version!!!
-version: 3.3
+version: 3.4
+
+# enable Console messages from plugin like: exported x signs from signs.yml. Does not effect errors!
+enable-console-messages: false
 
 # prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
 # default one: �9[�6Casino�9] �a
@@ -100,7 +103,7 @@ sign:
    multiplicator: [3.0, 5.0, 7.0]
    
 # the maximum amount which the bet can be
-   max-bet: 1000
+   max-bet: 1000.0
    
 ##########################################
 # configurations for PlayerSigns

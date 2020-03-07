@@ -46,6 +46,7 @@ public class SlotChestsManager implements Listener{
 	
 	private static int configMaxAmount;
 	private static Boolean configOpUnlimited;
+	private static Boolean configEnableChatMessages;
 	
 	private Main main;
 	private GsonBuilder builder;
@@ -55,30 +56,32 @@ public class SlotChestsManager implements Listener{
 		main.getServer().getPluginManager().registerEvents(this, main);
 		builder = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting();
 		gson = builder.create();
+		
+		updateConfigValues();
+		
 		try {
 			importChests();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		updateConfigValues();
+		
 	}
 	
 	private void updateConfigValues() {
 		try {
 			configMaxAmount = Integer.valueOf(UpdateManager.getValue("slotchest.max-amount").toString());
 		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-amount for SlotChest: value is not a valid number!");
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-amount for SlotChest! Value is not a valid number! Set to default value: 5");
 			//main.getLogger().info("CONFIG-ERROR: While trying to configure );
 			configMaxAmount = 5;
 		}
 		try {
 			configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest.op-unlimited").toString());
 		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get op-unlimited for SlotChest: value is not a valid boolean!");
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get op-unlimited for SlotChest! Value is not a valid boolean (true/false)! Set to default value: false");
 			configOpUnlimited = false;
 		}
-		
 	}
 	private void importChests() throws IOException {
 		slotChests.clear();
@@ -114,7 +117,9 @@ public class SlotChestsManager implements Listener{
 			return;
 		}
 		if(slotChestsJson.slotChests.size() == 0) {
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "No SlotChests to import!");
+			
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "No SlotChests to import!");
 			return;
 		}
 		for(SlotChest chest : slotChestsJson.slotChests) {
@@ -130,7 +135,9 @@ public class SlotChestsManager implements Listener{
 			
 		}
 		if(slotChestsJson.slotChests.size() >= 1) {
-			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + slotChests.size() + " SlotChests from slotchests.json!");
+			
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + slotChests.size() + " SlotChests from slotchests.json!");
 		}
 	}
 	private synchronized void exportChests()  throws IOException {

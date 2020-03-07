@@ -22,6 +22,8 @@ public class CasinoManager {
 	private static RollCommand rollCommand;
 	public static SlotChestsManager slotChestManager;
 	public static LeaderboardsignsManager leaderboardManager;
+	
+	public static Boolean configEnableConsoleMessages;
 	public CasinoManager(Main main) {
 		this.main = main;
 	}
@@ -45,6 +47,15 @@ public class CasinoManager {
 		rollCommand = new RollCommand(main);
 		slotChestManager = new SlotChestsManager(main);
 		leaderboardManager = new LeaderboardsignsManager(main);
+		
+		try 
+		{
+			configEnableConsoleMessages = Boolean.valueOf(UpdateManager.getValue("enable-console-messages").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get enable-console-messages! You have to use a valid boolean value (true/false)! Set to default value: false");
+			configEnableConsoleMessages = false;
+		}
 	}
 	
 	public static void reload() {

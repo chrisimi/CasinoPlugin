@@ -52,12 +52,11 @@ public class SignsManager implements Listener {
 	private GsonBuilder builder;
 	private Gson gson;
 	
-	private Integer minDuration;
-	private Integer maxDuration;
-	private ArrayList<String> possibilities;
-	private ArrayList<Double> multiplicators;
-	private double maxBet;
-	
+	private static Integer minDuration;
+	private static Integer maxDuration;
+	private static ArrayList<String> possibilities;
+	private static ArrayList<Double> multiplicators;
+	private static double maxBet;
 
 	public SignsManager(Main main) {
 		this.main = main;
@@ -74,11 +73,53 @@ public class SignsManager implements Listener {
 	
 	@SuppressWarnings("unchecked")
 	private void updateVariables() {
-		minDuration = Integer.parseInt(UpdateManager.getValue("sign.min-duration").toString());
-		maxDuration = Integer.parseInt(UpdateManager.getValue("sign.max-duration").toString());
-		possibilities = (ArrayList<String>) UpdateManager.getValue("sign.possibilities", new ArrayList<String>());
-		multiplicators = (ArrayList<Double>) UpdateManager.getValue("sign.multiplicator", new ArrayList<Double>());
-		maxBet = Double.parseDouble(UpdateManager.getValue("sign.max-bet").toString());
+		try {
+			minDuration = Integer.parseInt(UpdateManager.getValue("sign.min-duration").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get min-duration for Casino-Signs! Value have to be a valid integer! Set to default value: 30");
+			minDuration = 30;
+		}
+		
+		try {
+			maxDuration = Integer.parseInt(UpdateManager.getValue("sign.max-duration").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-duration for Casino-Signs! Value have to be a valid integer! Set to default value: 50");
+			maxDuration = 50;
+		}
+		
+		try {
+			possibilities = (ArrayList<String>) UpdateManager.getValue("sign.possibilities", new ArrayList<String>());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get possibilities for Casino-Signs! Value have to be a valid list of 3 elements like [R, D, E]! Set to default value: [R, D, E]");
+			ArrayList<String> list = new ArrayList<>();
+			list.add("R");
+			list.add("D");
+			list.add("E");
+			possibilities = list;
+		}
+			
+		try {
+			multiplicators = (ArrayList<Double>) UpdateManager.getValue("sign.multiplicator", new ArrayList<Double>());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get multiplicator for Casino-Signs! Value have to be a list with 3 valid decimal values! Set to default value: [3.0, 5.0, 7.0]!");
+			ArrayList<Double> list = new ArrayList<>();
+			list.add(3.0);
+			list.add(5.0);
+			list.add(7.0);
+		}
+		
+		try {
+			maxBet = Double.parseDouble(UpdateManager.getValue("sign.max-bet").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-bet for Casino-Signs! Value have to be a valid decimal value! Set to default value: 1000.0!");
+			maxBet = 1000.0;
+		}
+		
 		
 	}
 	
@@ -106,7 +147,9 @@ public class SignsManager implements Listener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.signs.size() + " signs to signs.json");
+		
+		if(CasinoManager.configEnableConsoleMessages)
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.signs.size() + " signs to signs.json");
 		
 		
 		
@@ -129,7 +172,9 @@ public class SignsManager implements Listener {
 			e.printStackTrace();
 		}
 		if(jsonString.length() < 25) {
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "No CasinoSigns to import!");
+			
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "No CasinoSigns to import!");
 			return;
 		}
 		ArrayList<SignConfiguration> signs = null;
@@ -163,7 +208,9 @@ public class SignsManager implements Listener {
 				}
 			}
 			
-			CasinoManager.LogWithColor(ChatColor.GREEN + "imported " + signs.size() + " signs from signs.json");
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.GREEN + "imported " + signs.size() + " signs from signs.json");
+			
 		}
 	}
 	

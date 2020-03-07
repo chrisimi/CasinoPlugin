@@ -129,7 +129,9 @@ public class PlayerSignsManager implements Listener {
 			e.printStackTrace();
 		}
 		if(jsonString.length() < 25) {
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
+			
+			if(CasinoManager.configEnableConsoleMessages)
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
 			return;
 		}
 		ArrayList<PlayerSignsConfiguration> signs = null;
@@ -191,7 +193,8 @@ public class PlayerSignsManager implements Listener {
 		}
 		if(signsToDelete.size() > 1)
 			exportSigns();
-		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + playerSigns.size() + " playersigns from playersigns.json");
+		if(CasinoManager.configEnableConsoleMessages)
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + playerSigns.size() + " playersigns from playersigns.json");
 	}
 	public void exportSigns() {
 		BufferedWriter writer;
@@ -209,7 +212,9 @@ public class PlayerSignsManager implements Listener {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
-		CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.playerSigns.size() + " playersigns to playersigns.json");
+		
+		if(CasinoManager.configEnableConsoleMessages)
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully exported " + signs.playerSigns.size() + " playersigns to playersigns.json");
 	}
 	
 	@EventHandler
