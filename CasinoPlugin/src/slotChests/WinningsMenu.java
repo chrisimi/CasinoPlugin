@@ -199,7 +199,7 @@ public class WinningsMenu implements Listener {
 		}
 		*/
 		slotChest.itemsToWin = newHashMap;
-		
+		updateInventory();
 		
 	}
 	

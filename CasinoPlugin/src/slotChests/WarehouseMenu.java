@@ -212,12 +212,12 @@ public class WarehouseMenu implements Listener{
 	}
 	private void sortLagerID() {
 		HashMap<Material, Integer> items = slotChest.getLagerWithNumbers();
-		for(Entry<Material, Integer> entry : items.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+//		for(Entry<Material, Integer> entry : items.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		
 		TreeMap<Material, Integer> sortedList = new TreeMap<>(items);
 		
-		for(Entry<Material, Integer> entry : sortedList.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		//for(Entry<Material, Integer> entry : sortedList.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		Comparator<Entry<Material, Integer>> valueComperator = new Comparator<Map.Entry<Material,Integer>>() {
 			@Override
@@ -229,7 +229,7 @@ public class WarehouseMenu implements Listener{
 		ArrayList<Entry<Material, Integer>> listOfEntries = new ArrayList<Entry<Material, Integer>>(sortedList.entrySet());
 		Collections.sort(listOfEntries, valueComperator);
 		
-		for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		//for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		
 		LinkedHashMap<Material, Integer> sortedByList = new LinkedHashMap<Material, Integer>(listOfEntries.size());

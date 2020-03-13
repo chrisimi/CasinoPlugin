@@ -186,7 +186,14 @@ public class SlotChestsManager implements Listener{
 		if(event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) return;
 		if(!(event.getClickedBlock().getType().toString().contains("CHEST"))) return;
 		
-		Chest chest = (Chest) event.getClickedBlock().getState(); 
+		Chest chest = null;
+		try 
+		{
+			chest = (Chest) event.getClickedBlock().getState(); 
+		} catch(Exception e) {
+			return;
+		}
+		
 		if(chest == null) {
 			return;
 		}

@@ -26,6 +26,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.google.gson.annotations.Expose;
 
@@ -250,6 +251,11 @@ public class SlotChest {
 				return latest.getKey();
 			latest = entry;
 		}
+		
+		//remove displayname
+		ItemMeta meta = latest.getKey().getItemMeta();
+		meta.setDisplayName(latest.getKey().getItemMeta().getDisplayName());
+		
 		return latest.getKey();
 	}
 	public void RemoveItemsFromWarehouse(ItemStack itemStack) {
