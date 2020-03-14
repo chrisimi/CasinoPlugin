@@ -1,4 +1,4 @@
-# Casino Plugin Version 3.4 by chrisimi
+# Casino Plugin Version 3.5 by chrisimi
 # Copyright: chrisi050403@gmail.com
 
 # this plugin is using bStats!!!
@@ -7,7 +7,7 @@
 #
 
 # please don't change the version!!!
-version: 3.4
+version: 3.5
 
 # enable Console messages from plugin like: exported x signs from signs.yml. Does not effect errors!
 enable-console-messages: false
@@ -101,6 +101,9 @@ sign:
    
 # multiplicator of the bet if the player wins
    multiplicator: [3.0, 5.0, 7.0]
+   
+# chance for the possibilities
+   chance: [50.0, 30.0, 20.0]
    
 # the maximum amount which the bet can be
    max-bet: 1000.0

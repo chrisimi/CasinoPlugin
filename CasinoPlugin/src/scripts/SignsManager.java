@@ -56,6 +56,7 @@ public class SignsManager implements Listener {
 	private static Integer maxDuration;
 	private static ArrayList<String> possibilities;
 	private static ArrayList<Double> multiplicators;
+	private static ArrayList<Double> chances;
 	private static double maxBet;
 
 	public SignsManager(Main main) {
@@ -91,9 +92,12 @@ public class SignsManager implements Listener {
 		
 		try {
 			possibilities = (ArrayList<String>) UpdateManager.getValue("sign.possibilities", new ArrayList<String>());
+			
+			if(possibilities.size() != 3) throw new Exception("The size of the list isn't 3!");
+			
 		} catch(Exception e)
 		{
-			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get possibilities for Casino-Signs! Value have to be a valid list of 3 elements like [R, D, E]! Set to default value: [R, D, E]");
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get possibilities for Casino-Signs (" + e.getMessage() + ")! Value have to be a valid list of 3 elements like [R, D, E]! Set to default value: [R, D, E]");
 			ArrayList<String> list = new ArrayList<>();
 			list.add("R");
 			list.add("D");
@@ -103,14 +107,38 @@ public class SignsManager implements Listener {
 			
 		try {
 			multiplicators = (ArrayList<Double>) UpdateManager.getValue("sign.multiplicator", new ArrayList<Double>());
+			
+			if(multiplicators.size() != 3) throw new Exception("The size of the list isn't 3!");
+			
 		} catch(Exception e)
 		{
-			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get multiplicator for Casino-Signs! Value have to be a list with 3 valid decimal values! Set to default value: [3.0, 5.0, 7.0]!");
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get multiplicator for Casino-Signs (" + e.getMessage() + ") ! Value have to be a list with 3 valid decimal values! Set to default value: [3.0, 5.0, 7.0]!");
 			ArrayList<Double> list = new ArrayList<>();
 			list.add(3.0);
 			list.add(5.0);
 			list.add(7.0);
+			multiplicators = list;
 		}
+		
+		try 
+		{
+			chances = (ArrayList<Double>) UpdateManager.getValue("sign.chance", new ArrayList<Double>());
+			if(chances.size() == 0) throw new Exception("You probably forgot to update config.yml! Try /casino updateoconfig to fix this problem!");
+			
+			if(chances.size() != 3) throw new Exception("The size of the list isn't 3!");
+			
+			if(chances.get(0) + chances.get(1) + chances.get(2) != 100) throw new Exception("Sum of all 3 values isn't 3!");
+			
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get chance for Casino-signs (" + e.getMessage() + ") ! Value have to be a list with 3 valid decimal values and should be together 100! Set to default value: [50.0, 30.0, 20.0]!");
+			ArrayList<Double> list = new ArrayList<>();
+			list.add(50.0);
+			list.add(30.0);
+			list.add(20.0);
+			chances = list;
+		}
+		
 		
 		try {
 			maxBet = Double.parseDouble(UpdateManager.getValue("sign.max-bet").toString());
@@ -419,10 +447,10 @@ public class SignsManager implements Listener {
 									wonamount *= multiplicators.get(0);
 									break;
 								case 1:
-									wonamount *= multiplicators.get(0);
+									wonamount *= multiplicators.get(1);
 									break;
 								case 2:
-									wonamount *= multiplicators.get(0);
+									wonamount *= multiplicators.get(2);
 									break;
 								}
 								sign.setLine(3, "§3You won: " + wonamount);
