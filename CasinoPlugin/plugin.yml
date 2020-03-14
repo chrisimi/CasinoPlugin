@@ -20,6 +20,9 @@ commands:
   casino admin: 
     description: get help as an admin for this plugin
     usage: /casino admin
+  casino help slot:
+    description: get the help for Slot-Chests
+    usage: /casion help slot
   casino help dice:
     description: get the help for dice signs
     usage: /casino help dice

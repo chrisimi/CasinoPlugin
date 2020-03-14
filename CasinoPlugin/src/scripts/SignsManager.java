@@ -294,9 +294,6 @@ public class SignsManager implements Listener {
 			if(sign == null) {
 				return;
 			}
-			if(!(sign.getLine(0).equals(CasinoManager.getPrefix()))) {
-				return;
-			}
 		} else {
 			return;
 		}
@@ -313,7 +310,7 @@ public class SignsManager implements Listener {
 			}
 			//is a sign from the list
 			signValues.remove(event.getBlock().getLocation());
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Successfully deleted Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Successfully deleted a Casino-Sign!");
 			this.updateSignsYml();
 		}
 		
@@ -384,7 +381,14 @@ public class SignsManager implements Listener {
 						
 						String lineText = "";
 						for(int r = 0; r < 3; r++) {
-							int randomZahl = rnd.nextInt(3);
+							
+							int randomZahl = rnd.nextInt(99) + 1;
+							
+							if(randomZahl < chances.get(0)) randomZahl = 0;
+							else if(randomZahl < chances.get(0) + chances.get(1)) randomZahl = 1;
+							else randomZahl = 2;
+							
+							
 							lineText += possibilities.get(randomZahl) + " ";
 						}
 						

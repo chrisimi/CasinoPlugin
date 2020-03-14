@@ -94,7 +94,11 @@ public class CommandsListener implements Listener, CommandExecutor {
 				showBlackjackHelpToPlayer(player);
 			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("leaderboard")) {
 				showLeaderboardSignHelpToPlayer(player);
-			} else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("enable")) {
+			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("slot")) {
+				showSlotsSignHelpToPlayer(player);
+			}
+			
+			else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("enable")) {
 				enablePlayerManagedSign(player);
 			} else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("disable")) {
 				disablePlayerManagedSign(player);
@@ -121,6 +125,8 @@ public class CommandsListener implements Listener, CommandExecutor {
 	
 	
 	
+
+
 
 
 	private void createSlotChest(Player player) {
@@ -267,6 +273,23 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("     §6line 3: mode (count, sumamount, highestamount)");
 		player.sendMessage("     §6line 4: range (all for all your signs, number of blocks (3 as example) for using signs in this block range");
 	}
+	private void showSlotsSignHelpToPlayer(Player player)
+	{
+		player.sendMessage("");
+		player.sendMessage("");
+		player.sendMessage("");
+		player.sendMessage("§f§lCasino-Slots sign help");
+		if(Main.perm.has(player, "casino.sign.create")) player.sendMessage("§2permissions: §4true");
+		else player.sendMessage("§2permissions: §4false");
+		
+		player.sendMessage("");
+		player.sendMessage("§6§n§lFormat of a Casino-Slots sign:");
+		player.sendMessage("");
+		player.sendMessage("    §6line 1: casino");
+		player.sendMessage("    §6line 2: bet amount in decimal like 10.0");
+		
+	}
+	
 	private void showHelpToAdmin(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
@@ -283,6 +306,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
 		player.sendMessage("§6/casino §8- open the casino GUI");
 		player.sendMessage("§6/casino admin §8- admin help command"); 
+		player.sendMessage("§6/casino help slot §8- show help for placing Casino-Slots signs!");
 		player.sendMessage("§6/casino help dice §8- show help for placing a dice signs!");
 		player.sendMessage("§6/casino help blackjack §8- show help for placing blackjack signs!");
 		player.sendMessage("§6/casino help leaderboard §8- show help for placing leaderboard signs!");
