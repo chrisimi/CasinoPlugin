@@ -11,10 +11,10 @@ import com.chrisimi.casino.main.Main;
 
 import animations.BlackjackAnimation;
 
-public class ChatListener implements Listener {
+public class CasinoChatListener implements Listener {
 
 	private Main main;
-	public ChatListener(Main main) {
+	public CasinoChatListener(Main main) {
 		this.main = main;
 		Bukkit.getPluginManager().registerEvents(this, main);
 	}

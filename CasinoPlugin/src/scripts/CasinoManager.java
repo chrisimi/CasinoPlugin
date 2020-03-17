@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.chrisimi.casino.main.Main;
 
-import listeners.ChatListener;
+import listeners.CasinoChatListener;
 import listeners.CommandsListener;
 import listeners.InventoryClickListener;
 import listeners.PlayerJoinListener;
@@ -41,7 +41,7 @@ public class CasinoManager {
 		new CommandsListener(main);
 		new InventoryClickListener(main);
 		new PlayerJoinListener(main);
-		new ChatListener(main);
+		new CasinoChatListener(main);
 		signsManager = new SignsManager(main);
 		playerSignsManager = new PlayerSignsManager(main);
 		rollCommand = new RollCommand(main);
