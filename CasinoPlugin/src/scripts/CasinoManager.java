@@ -1,5 +1,12 @@
 package scripts;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -24,7 +31,11 @@ public class CasinoManager {
 	public static LeaderboardsignsManager leaderboardManager;
 	
 	public static Boolean configEnableConsoleMessages = true;
+	
+	public static File debugfile;
+	
 	public CasinoManager(Main main) {
+		debugfile = new File(main.getDataFolder(), "debug.log");
 		this.main = main;
 	}
 	public void prefixYml() {
@@ -38,6 +49,7 @@ public class CasinoManager {
 		
 	}
 	public void initialize() {
+		
 		new CommandsListener(main);
 		new InventoryClickListener(main);
 		new PlayerJoinListener(main);
@@ -74,5 +86,32 @@ public class CasinoManager {
 			Bukkit.getLogger().info(message);
 		}
 		
+	}
+	public static <T> void Debug(Class<T> className, String debugMessage)
+	{
+		if(!(UpdateManager.getValue("enable-debug").toString().equalsIgnoreCase("true"))) return;
+		
+		String message = String.format("[%s] %s: %s" , new Date().toString(), className.toString(), debugMessage);
+		
+		
+		synchronized (debugfile)
+		{
+			PrintWriter writer = null;
+			try
+			{
+				if(!(debugfile.exists()))
+					debugfile.createNewFile();
+				
+				writer = new PrintWriter(new BufferedWriter(new FileWriter(debugfile, true)));
+				writer.println(message);
+			} catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				writer.close();
+			}
+		}
 	}
 }

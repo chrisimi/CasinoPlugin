@@ -9,6 +9,11 @@
 # please don't change the version!!!
 version: 3.5
 
+# enable debugging
+# before you report a bug, enable this and try it again. Then send me the file "latest.log" from the logs folder and the file "debug.log" from the CasinoPlugin folder
+
+enable-debug: true
+
 # enable Console messages from plugin like: exported x signs from signs.yml. Does not effect errors!
 enable-console-messages: false
 

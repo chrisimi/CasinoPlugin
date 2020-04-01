@@ -84,7 +84,7 @@ public class BlackjackAnimation implements Runnable {
 				if(waitingForInputs.containsKey(player)) {
 					waitingForInputs.remove(player);
 					resetSign();
-					main.getLogger().info("1 Minute over and no player back message!");
+					CasinoManager.Debug(this.getClass(), "no message from player after 1 Minute, all actions canceled!");
 				}
 			}
 		}, 60*20).getTaskId();
@@ -104,12 +104,15 @@ public class BlackjackAnimation implements Runnable {
 		this.playerBet = input;
 		
 		Main.econ.withdrawPlayer(player, playerBet);
+		CasinoManager.Debug(this.getClass(), player.getName() + " - " + Main.econ.format(playerBet) + " because of the bet!");
 		contactOwner(String.format("%s is playing on a blackjack sign with %s", player.getPlayerListName(), Main.econ.format(playerBet)));
 		if(owner.isOnline()) {
 			Main.econ.depositPlayer(owner, playerBet);
+			CasinoManager.Debug(this.getClass(), owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
 			
 		} else {
 			this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
+			CasinoManager.Debug(this.getClass(), "[OFFLINE] " + owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
 		}
 		
 		
@@ -167,6 +170,7 @@ public class BlackjackAnimation implements Runnable {
 			String sendString = String.format(CasinoManager.getPrefix() + "Your next possibilities: \n Skip: skip \n Leave: leave \n Card: card");
 			player.sendMessage(sendString);
 			player.sendMessage(CasinoManager.getPrefix() + "Your cards: " + cardsString);
+			CasinoManager.Debug(this.getClass(), player.getName() + " cards: " + cardsString);
 			waitingForInputs.put(player, this);
 			this.waitingForGameDecision = true;
 		}
@@ -215,6 +219,7 @@ public class BlackjackAnimation implements Runnable {
 		player.sendMessage(CasinoManager.getPrefix() + "§4You lost!");
 		contactOwner(String.format("%s lost at your blackjack sign!", player.getPlayerListName()));
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, 0);
+		CasinoManager.Debug(this.getClass(), player.getName() + " lost!");
 		finish();
 	}
 	private void dealerLost() {
@@ -223,11 +228,14 @@ public class BlackjackAnimation implements Runnable {
 			player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
 		}
 		player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
+		CasinoManager.Debug(this.getClass(), "won!");
 		contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, winamount);
 		Main.econ.depositPlayer(player, winamount);
+		CasinoManager.Debug(this.getClass(), player.getName() + " +" + Main.econ.format(winamount) + " because of win!");
 		if(owner.isOnline()) {
 			Main.econ.withdrawPlayer(owner, winamount);
+			CasinoManager.Debug(this.getClass(), owner.getName() + " -" + Main.econ.format(winamount) + " because of lose!");
 		}
 		else
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
@@ -284,7 +292,9 @@ public class BlackjackAnimation implements Runnable {
 			//stop for leaving sign
 			if(message.equalsIgnoreCase("leave")) {
 				thisAnimation.resetSign();
-	
+				player.sendMessage(CasinoManager.getPrefix() + "You left the current Blackjack sign! You won't get your money back!");
+				CasinoManager.Debug(thisAnimation.getClass(), player.getName() + " left!");
+				
 			} else if(message.equalsIgnoreCase("skip")) {
 				thisAnimation.playerWantToSkip = true;
 				thisAnimation.nextRound();
