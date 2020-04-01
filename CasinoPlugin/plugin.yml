@@ -8,18 +8,22 @@ commands:
   casino:
     description: opens the casino GUI
     usage: /casino
+    permission: casino.gui
   casino updateconfig:
     description: updates the config
     usage: /casino updateconfig
+    permission: casino.admin
   casino reloadconfig:
     description: reloads the config
     usage: /casino reloadconfig
+    permission: casino.admin
   casino help:
     description: get help for this plugin
     usage: /casino help
   casino admin: 
     description: get help as an admin for this plugin
     usage: /casino admin
+    permission: casino.admin
   casino help slot:
     description: get the help for Slot-Chests
     usage: /casion help slot
@@ -35,21 +39,28 @@ commands:
   casino sign enable:
     description: enable your playersign
     usage: /casino sign enable
+    permission: [casino.dice.create, casino.blackjack.create]
   casino sign disable:
     description: disable your playersign
     usage: /casino sign disable
+    permission: [casino.dice.create, casino.blackjack.create]
   casino roll:
     description: roll a random number
     usage: /casino roll [minimum] [maximum] [player (not needed)]
+    permission: casino.roll
   casino createchest:
     description: create a new SlotChest while looking onto it
     usage: /casino createchest
+    permission: casino.slotchest.create
   casino chestlocations:
     description: get the locations from all SlotChest you made
     usage: /casino chestlocations
+    permission: casino.slotchest.create
   casino resetdata:
     description: reset the data file
     usage: /casino resetdata
+    permission: casino.admin
   casino reloaddata:
     description: reload all datas and leaderboardsigns
     usage: /casino reloaddata
+    permission: casino.admin
