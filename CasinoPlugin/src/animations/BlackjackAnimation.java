@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Sound;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -155,7 +156,7 @@ public class BlackjackAnimation implements Runnable {
 			//player lost
 			
 			
-		} else {
+		} else if(!finished) {
 			
 			changeSign();
 			int gesamtValue = Card.getValue(cards);
@@ -179,10 +180,12 @@ public class BlackjackAnimation implements Runnable {
 	}
 	private void simulateDealer() { //on the next Round the dealer should made this action! (simulated) return if dealer wons/lose
 		int valueOfDealer = Card.getValue(dealer);
-		while(valueOfDealer < 17) {
-			dealer.add(Card.newCard());
-			valueOfDealer = Card.getValue(dealer);
-		}
+		
+		if(!(Card.getValue(cards) > 21)) //only calc dealer values when the player could possible win
+			while(valueOfDealer < 17) {
+				dealer.add(Card.newCard());
+				valueOfDealer = Card.getValue(dealer);
+			}
 		
 	}
 	private Boolean checkIfSomeoneWon() { //before the next round started check if the dealer or the player could win the game!
@@ -220,6 +223,7 @@ public class BlackjackAnimation implements Runnable {
 		contactOwner(String.format("%s lost at your blackjack sign!", player.getPlayerListName()));
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, 0);
 		CasinoManager.Debug(this.getClass(), player.getName() + " lost!");
+		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 4f, 2.5f);
 		finish();
 	}
 	private void dealerLost() {
@@ -240,6 +244,11 @@ public class BlackjackAnimation implements Runnable {
 		else
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
 		
+		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 4f, 2.5f);
+		if(Card.getValue(cards) == 21)
+		{
+			
+		}
 		finish();
 	}
 	private void changeSign() { //change the sign to the new values
