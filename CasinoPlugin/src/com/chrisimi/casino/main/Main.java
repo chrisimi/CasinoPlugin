@@ -49,11 +49,21 @@ public class Main extends JavaPlugin {
 	
 	public static String fileSeparator;
 	
+	private static Main instance;
+	
+	
 	@Override
 	public void onEnable() {
+		
+		instance = this;
+		
+		//configYml = new File(getDataFolder(), "config.yml");
 		fileSeparator = System.getProperty("file.separator");
 		
 		CasinoManager casinoManager = new CasinoManager(this);
+		
+		
+		
 		
 		getPathToFolderOfPlugin();
 		configYmlActivate();
@@ -61,10 +71,10 @@ public class Main extends JavaPlugin {
 		playerSignsYmlActivate();
 		slotChestsYmlActivate();
 		
+		UpdateManager.reloadConfig();
 		
 		
-		
-		UpdateManager.reloadConfig(); //equals .getConfigData
+		 //equals .getConfigData
 		new MessageManager(this);
 		
 		//new ConfigurationManager(this);
@@ -82,6 +92,7 @@ public class Main extends JavaPlugin {
 		configurateMetrics(metric);
 		
 		CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
+		
 	}
 
 	private void configurateMetrics(Metrics metric) {
@@ -169,7 +180,7 @@ public class Main extends JavaPlugin {
 		if(!toCasinoPluginFolder.exists()) {
 			toCasinoPluginFolder.mkdir();
 		} else {
-			CasinoManager.LogWithColor(ChatColor.GREEN + "CasinoPlugin folder exists :)!");
+		
 		}
 		pathToFolderOfPlugin = toCasinoPluginFolder.getAbsolutePath();
 	}
@@ -309,4 +320,8 @@ public class Main extends JavaPlugin {
 		}
 	}
 
+	public static Main getInstance()
+	{
+		return instance;
+	}
 }

@@ -81,17 +81,32 @@ public class CasinoManager {
 	public static void LogWithColor(String message) {
 		try {
 			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
-			Debug(Main.class, message);
+			
 		} catch(NullPointerException e) {
 			if(message == null) return;
+			e.printStackTrace();
 			Bukkit.getLogger().info(message);
+			return;
 		}
-		
+		try
+		{
+			Debug(Main.class, message);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	public static <T> void Debug(Class<T> className, String debugMessage)
 	{
-		if(!(UpdateManager.getValue("enable-debug").toString().equalsIgnoreCase("true"))) return;
+		if(UpdateManager.configValues.size() == 0) return;
 		
+		try {
+			
+			if(!(UpdateManager.getValue("enable-debug").toString().equalsIgnoreCase("true"))) return;
+		} catch(Exception e)
+		{
+			
+		}
 		String message = String.format("[%s] %s: %s" , new Date().toString(), className.toString(), debugMessage);
 		
 		

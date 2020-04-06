@@ -133,7 +133,9 @@ public class MessageManager
 		}
 		else if(defaultLanguageFilePack.containsKey(messageName))
 		{
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "Language file does not have message: " + early + "!");
+			if(chosenLanguageFilePack != null) //only show messages if owner set a language file
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "Language file does not have message: " + early + "!");
+			
 			return defaultLanguageFilePack.get(messageName);
 		}
 		else {

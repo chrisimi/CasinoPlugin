@@ -23,7 +23,7 @@ import com.chrisimi.casino.main.Main;
  */
 public class UpdateManager {
 
-	private static Map<String, Object> configValues = new HashMap<String, Object>();
+	public static Map<String, Object> configValues = new HashMap<String, Object>();
 	
 	
 	
@@ -83,6 +83,9 @@ public class UpdateManager {
 	public static Object getValue(String path) {
 		
 		if(configValues == null || configValues.size() <= 1) {
+			
+			
+			
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get values from config.yml... recreating config.yml!");
 			createConfigYml(CasinoManager.main);
 		}
@@ -95,6 +98,7 @@ public class UpdateManager {
 	public static Object getValue(String path, Object obj) {
 		Object o = configValues.get(path);
 		if(o == null) {
+			Main.getInstance().getLogger().info(ChatColor.RED + path + " is not valid using default value! Try to update the config!");
 			return obj;
 		} else
 			return o;
