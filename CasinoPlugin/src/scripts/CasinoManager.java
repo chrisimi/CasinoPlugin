@@ -81,6 +81,7 @@ public class CasinoManager {
 	public static void LogWithColor(String message) {
 		try {
 			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
+			Debug(Main.class, message);
 		} catch(NullPointerException e) {
 			if(message == null) return;
 			Bukkit.getLogger().info(message);
@@ -112,6 +113,18 @@ public class CasinoManager {
 			{
 				writer.close();
 			}
+		}
+	}
+	public static PrintWriter getPrintWriterForDebug()
+	{
+		try
+		{
+			return new PrintWriter(new BufferedWriter(new FileWriter(debugfile, true)));
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

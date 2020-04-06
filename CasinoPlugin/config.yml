@@ -21,6 +21,12 @@ enable-console-messages: false
 # default one: �9[�6Casino�9] �a
 prefix: 
 
+# language
+# set which language file the plugin should load from the messages folder!
+# use the name of the file for example jp when the filename is jp.yml (case insensitive)
+# use default for the default language file
+language: default
+
 
 # change the high of the possible bet's
 bet:

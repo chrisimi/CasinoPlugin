@@ -65,6 +65,7 @@ public class Main extends JavaPlugin {
 		
 		
 		UpdateManager.reloadConfig(); //equals .getConfigData
+		new MessageManager(this);
 		
 		//new ConfigurationManager(this);
 		casinoManager.prefixYml();
@@ -80,7 +81,7 @@ public class Main extends JavaPlugin {
 		Metrics metric = new Metrics(this); //Stats plugin
 		configurateMetrics(metric);
 		
-		
+		CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 	}
 
 	private void configurateMetrics(Metrics metric) {

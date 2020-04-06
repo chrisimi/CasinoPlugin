@@ -1,0 +1,11 @@
+# messages for the Casino Plugin!
+# Tips:
+# -If you want to use a linebreak use '\n'
+# -If you want to use colors use http://rjwattenhofer.com/articles/gaming/colors/
+#
+# How to create a new language file?
+# Simply, duplicate this file and rename it to your language like JP.yml or jp.yml (you'll use the name in the config to determine which language file the plugin should use)
+author: Chrisi
+plugin-version: 3.6
+messages:
+   test: "§4Hallo das ist ein Test"
