@@ -623,11 +623,19 @@ public class PlayerSignsManager implements Listener {
 							if(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackMultiplicator())) {
 								if(current == 0) {
 									sign.setLine(2, "§l§6min bet: " + Main.econ.format(thisSign.bet));
-									sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.bet));
+									
+									if(thisSign.plusinformations.contains("to"))
+										sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
+									else
+										sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.bet));
 									
 								} else {
 									sign.setLine(2, "§l§6max bet: " + Main.econ.format(thisSign.blackjackGetMaxBet()));
-									sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.blackjackGetMaxBet()));
+									
+									if(thisSign.plusinformations.contains("to"))
+										sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
+									else
+										sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.blackjackGetMaxBet()));
 								}
 							} else {
 								if(current == 1) {

@@ -168,7 +168,7 @@ public class BlackjackAnimation implements Runnable {
 					cardsString += cards.get(i).toString() + " + ";
 			}
 			
-			String sendString = String.format(CasinoManager.getPrefix() + "Your next possibilities: \n Skip: skip \n Leave: leave \n Card: card");
+			String sendString = String.format(CasinoManager.getPrefix() + "Your next possibilities: \n Hit: hit \n Stand: stand \n Cancel: cancel");
 			player.sendMessage(sendString);
 			player.sendMessage(CasinoManager.getPrefix() + "Your cards: " + cardsString);
 			CasinoManager.Debug(this.getClass(), player.getName() + " cards: " + cardsString);
@@ -227,7 +227,7 @@ public class BlackjackAnimation implements Runnable {
 		finish();
 	}
 	private void dealerLost() {
-		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() : this.playerBet;
+		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() : this.playerBet * 2;
 		if(Card.getValue(cards) == 21) {
 			player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
 		}
@@ -245,16 +245,14 @@ public class BlackjackAnimation implements Runnable {
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
 		
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 4f, 2.5f);
-		if(Card.getValue(cards) == 21)
-		{
-			
-		}
+
 		finish();
 	}
 	private void changeSign() { //change the sign to the new values
 		String a = "";
 		for(Card card : cards)
 			a += card.toString() + ", ";
+		
 		this.sign.setLine(0, "§4§ldealer: " + Card.getValue(dealer));
 		this.sign.setLine(1, "§6§lbet: " + Main.econ.format(this.playerBet));
 		this.sign.setLine(2, a);
@@ -299,16 +297,16 @@ public class BlackjackAnimation implements Runnable {
 		} else if(thisAnimation.waitingForGameDecision) {
 			//test the possibilities for the playr
 			//stop for leaving sign
-			if(message.equalsIgnoreCase("leave")) {
+			if(message.equalsIgnoreCase("cancel")) {
 				thisAnimation.resetSign();
 				player.sendMessage(CasinoManager.getPrefix() + "You left the current Blackjack sign! You won't get your money back!");
 				CasinoManager.Debug(thisAnimation.getClass(), player.getName() + " left!");
 				
-			} else if(message.equalsIgnoreCase("skip")) {
+			} else if(message.equalsIgnoreCase("stand")) {
 				thisAnimation.playerWantToSkip = true;
 				thisAnimation.nextRound();
 				thisAnimation.finish();
-			} else if(message.equalsIgnoreCase("card")) {
+			} else if(message.equalsIgnoreCase("hit")) {
 				waitingForInputs.remove(player);
 				thisAnimation.nextCard();
 				return; //causes error if not return here
