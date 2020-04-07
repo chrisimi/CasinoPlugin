@@ -83,14 +83,15 @@ public class MessageManager
 		 try
 		 {
 			File[] files = messagesFolder.listFiles();
-			for(File file : files)
-			{
-				if(file.getName().equalsIgnoreCase(configString))
+			if(configString.equals("default"))
+				for(File file : files)
 				{
-					exists = true;
-					chosenLanguageFile = file;
+					if(file.getName().equalsIgnoreCase(configString))
+					{
+						exists = true;
+						chosenLanguageFile = file;
+					}
 				}
-			}
 			loadLanguageFile(defaultLanguageFile, true);
 			if(exists)
 				loadLanguageFile(chosenLanguageFile, false);

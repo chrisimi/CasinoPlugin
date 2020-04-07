@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
@@ -54,7 +55,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 					player.sendMessage(CasinoManager.getPrefix() + "You successfully updated the config!");
 				} else {
 					player.sendMessage(CasinoManager.getPrefix()+ "§4You don't have permission for that action!");
-				}
+				} 
 		
 			} else if(args[0].equalsIgnoreCase("reloadconfig")) {
 				if(Main.perm.has(player, "casino.admin") || player.isOp()) {
@@ -85,6 +86,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 				resetData(player);
 			} else if(args[0].equalsIgnoreCase("reloaddata")) {
 				reloadData(player);
+			} else if(args[0].equalsIgnoreCase("test"))
+			{
+				player.sendMessage(MessageManager.get("test-message"));
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {

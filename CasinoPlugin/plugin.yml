@@ -3,7 +3,8 @@ author: chrisimi
 main: com.chrisimi.casino.main.Main
 version: 3.5
 api-version: 1.13
-depend: [Vault]
+depend: [Vault, Ultimate_Economy]
+
 commands:
   casino:
     description: opens the casino GUI
