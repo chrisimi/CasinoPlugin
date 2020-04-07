@@ -259,7 +259,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("     §6line 1: casino");
 		player.sendMessage("     §6line 2: blackjack");
 		player.sendMessage("     §6line 3: minbet;maxbet like 20;30");
-		player.sendMessage("     §6line 4: multiplicator if players draws a blackjack (21)");
+		player.sendMessage("     §6line 4: multiplicator if players draws a blackjack (21) in to writing like 3 to 2");
 	}
 	private void showLeaderboardSignHelpToPlayer(Player player)
 	{

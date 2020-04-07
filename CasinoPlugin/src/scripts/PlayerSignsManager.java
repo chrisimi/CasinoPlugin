@@ -454,7 +454,7 @@ public class PlayerSignsManager implements Listener {
 		//gewinnMultiplicator
 		Double minBet = null;
 		Double maxBet = null;
-		Double winMultiplicator = null;
+		String plusinf = "";
 		String plusInformations = "";
 		if(event.getLine(2).contains(";")) {
 			String[] values = event.getLine(2).split(";");
@@ -487,14 +487,32 @@ public class PlayerSignsManager implements Listener {
 			event.setCancelled(true);
 			return;
 		}
+		
+		if(event.getLine(3).contains("to"))
+		{
+			String[] values = event.getLine(3).trim().split("to");
+			try 
+			{
+				if(values.length != 2) throw new Exception("invalid winning (3 to 2)!");
+				Double left = Double.parseDouble(values[0]);
+				Double right = Double.parseDouble(values[1]);
+				plusinf = event.getLine(3);
+			} catch(Exception e)
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid Winning: " + e.getMessage());
+				event.setCancelled(true);
+				return;
+			}
+		}
 		try {
-			winMultiplicator = Double.parseDouble(event.getLine(3));
+			Double winMultiplicator = Double.parseDouble(event.getLine(3));
+			plusinf = winMultiplicator.toString();
 		} catch(NumberFormatException e) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid win multiplicator!");
 			event.setCancelled(true);
 			return;
 		}
-		plusInformations = maxBet.toString()+";"+winMultiplicator.toString();
+		plusInformations = maxBet.toString()+";"+plusinf;
 		PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
 		playerSigns.put(newSign.getLocation(), newSign);
 		

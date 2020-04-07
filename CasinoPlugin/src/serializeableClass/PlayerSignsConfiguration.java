@@ -104,6 +104,14 @@ public class PlayerSignsConfiguration {
 		return Double.valueOf(values[0]);
 	}
 	public Double blackjackMultiplicator() {
+		if(this.plusinformations.contains("to"))
+		{
+			String[] values = this.plusinformations.split(";");
+			String[] blackjackValues = values[1].split("to");
+			Double left = Double.parseDouble(blackjackValues[0]);
+			Double right = Double.parseDouble(blackjackValues[1]);
+			return left/right;
+		}
 		String[] values = this.plusinformations.split(";");
 		return Double.valueOf(values[1]);
 	}
