@@ -110,7 +110,7 @@ public class PlayerSignsConfiguration {
 			String[] blackjackValues = values[1].split("to");
 			Double left = Double.parseDouble(blackjackValues[0]);
 			Double right = Double.parseDouble(blackjackValues[1]);
-			return left/right;
+			return (double)left/(double)right;
 		}
 		String[] values = this.plusinformations.split(";");
 		return Double.valueOf(values[1]);

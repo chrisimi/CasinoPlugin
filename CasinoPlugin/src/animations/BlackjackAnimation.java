@@ -168,12 +168,17 @@ public class BlackjackAnimation implements Runnable {
 					cardsString += cards.get(i).toString() + " + ";
 			}
 			
+			if(Card.getValue(cards) == 21)
+				dealerLost();
+			else
+			{
 			String sendString = String.format(CasinoManager.getPrefix() + "Your next possibilities: \n Hit: hit \n Stand: stand \n Cancel: cancel");
 			player.sendMessage(sendString);
 			player.sendMessage(CasinoManager.getPrefix() + "Your cards: " + cardsString);
 			CasinoManager.Debug(this.getClass(), player.getName() + " cards: " + cardsString);
 			waitingForInputs.put(player, this);
 			this.waitingForGameDecision = true;
+			}
 		}
 		
 		
@@ -227,7 +232,13 @@ public class BlackjackAnimation implements Runnable {
 		finish();
 	}
 	private void dealerLost() {
-		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() : this.playerBet * 2;
+		if(Card.getValue(dealer) == 21 && Card.getValue(cards) != 21)
+		{
+			playerLost(); //when dealer has 21 and the player not
+			return;
+		}
+		
+		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() + this.playerBet : this.playerBet * 2;
 		if(Card.getValue(cards) == 21) {
 			player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
 		}

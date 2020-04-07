@@ -503,14 +503,16 @@ public class PlayerSignsManager implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		}
-		try {
-			Double winMultiplicator = Double.parseDouble(event.getLine(3));
-			plusinf = winMultiplicator.toString();
-		} catch(NumberFormatException e) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid win multiplicator!");
-			event.setCancelled(true);
-			return;
+		} else
+		{
+			try {
+				Double winMultiplicator = Double.parseDouble(event.getLine(3));
+				plusinf = winMultiplicator.toString();
+			} catch(NumberFormatException e) {
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid win multiplicator!");
+				event.setCancelled(true);
+				return;
+			}
 		}
 		plusInformations = maxBet.toString()+";"+plusinf;
 		PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
