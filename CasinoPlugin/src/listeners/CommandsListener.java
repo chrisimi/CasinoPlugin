@@ -273,7 +273,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6§n§lFormat of a leaderboardsign:");
 		player.sendMessage("");
 		player.sendMessage("     §6line 1: leaderboard");
-		player.sendMessage("     §6line 2: position for the sign like 1 for first place");
+		player.sendMessage("     §6line 2: position;cycle   position like 1 for first place, cycle is optional like month data will be only taken from this month, (year, month, week, day, hour)");
 		player.sendMessage("     §6line 3: mode (count, sumamount, highestamount)");
 		player.sendMessage("     §6line 4: range (all for all your signs, number of blocks (3 as example) for using signs in this block range");
 	}

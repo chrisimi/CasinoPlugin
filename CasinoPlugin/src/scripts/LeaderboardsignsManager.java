@@ -33,6 +33,7 @@ import com.google.gson.annotations.Expose;
 
 import animations.LeaderboardsignAnimation;
 import serializeableClass.Leaderboardsign;
+import serializeableClass.Leaderboardsign.Cycle;
 import serializeableClass.Leaderboardsign.Mode;
 import serializeableClass.PlayData;
 import serializeableClass.PlayerSignsConfiguration;
@@ -347,6 +348,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		Sign sign = null;
 		Mode mode = null;
+		Cycle cycle = null;
 		int position = 0;
 		Boolean all = false;
 		int count = 0;
@@ -360,14 +362,38 @@ public class LeaderboardsignsManager implements Listener {
 			return;
 		}
 	
-		try {
-			position = Integer.valueOf(lines[1]);
-		} catch(Exception e) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Position must be an Integer value!");
-			event.setCancelled(true);
-			return;
+		if(lines[1].contains(";"))
+		{
+			String[] values = lines[1].split(";");
+			try
+			{
+				position = Integer.valueOf(values[0]);
+				
+				for(Cycle cycle2 : Cycle.values())
+				{
+					if(cycle2.toString().equalsIgnoreCase(values[1]))
+						cycle = cycle2;
+				}
+				
+			} catch (Exception e)
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Cycle must be year, month, week, day or hour!");
+				event.setCancelled(true);
+				return;
+			}
+			
 		}
-		
+		else
+		{
+			try {
+				position = Integer.valueOf(lines[1]);
+				cycle = Cycle.NaN;
+			} catch(Exception e) {
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Position must be an Integer value!");
+				event.setCancelled(true);
+				return;
+			}
+		}
 		for(Mode modeV : Mode.values()) {
 			if(lines[2].equalsIgnoreCase(modeV.toString())) mode = modeV;
 		}

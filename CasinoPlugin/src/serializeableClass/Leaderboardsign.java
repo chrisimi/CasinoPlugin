@@ -16,7 +16,15 @@ public class Leaderboardsign {
 		COUNT,
 		SUMAMOUNT
 	}
-	
+	public enum Cycle
+	{
+		YEAR,
+		MONTH,
+		WEEK,
+		DAY,
+		HOUR,
+		NaN
+	}
 	
 	@Expose
 	public String ownerUUID;
@@ -26,6 +34,11 @@ public class Leaderboardsign {
 	public String mode; //mode like highestAmount, count, sumAmount, 
 	@Expose
 	public int position; //position like 1 for first, 2 for second
+	
+	@Expose
+	public Cycle cycleMode;
+	@Expose
+	public int lastManualReset; //last manual reset from player
 	
 	
 	//for location
