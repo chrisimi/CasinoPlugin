@@ -136,12 +136,13 @@ public class BlackjackAnimation implements Runnable {
 		if(finished) return;
 		simulateDealer();
 		changeSign();
+			
 		main.getServer().getScheduler().runTaskLater(main, new Runnable() {
 			@Override
 			public void run() {
 				resetSign();
 			}
-		}, 60L);
+		}, 60L); //60L default
 		finished = true;
 		main.getServer().getScheduler().cancelTask(resetTask);
 	}
@@ -191,32 +192,59 @@ public class BlackjackAnimation implements Runnable {
 				dealer.add(Card.newCard());
 				valueOfDealer = Card.getValue(dealer);
 			}
-		
 	}
 	private Boolean checkIfSomeoneWon() { //before the next round started check if the dealer or the player could win the game!
 		int valueOfDealer = Card.getValue(dealer);
 		int valueOfPlayer = Card.getValue(cards);
-		
 		if(valueOfPlayer > 21) {
 			playerLost();
 			return true;
 		}
 		if(playerWantToSkip) {
-			if(valueOfPlayer == 21 && valueOfPlayer == valueOfDealer) {
-				if(cards.size() < dealer.size()) {
-					dealerLost();
-					return true;
-				}
+			if(valueOfDealer < 17)
+			{
+				simulateDealer();
+				valueOfDealer = Card.getValue(dealer);
 			}
-			if(valueOfDealer > 21) {
-				dealerLost();
-				return true;
-			}
-			if(valueOfPlayer > valueOfDealer) {
-				dealerLost();
-				return true;
-			} else {
+			
+			if(valueOfDealer == 21 && valueOfPlayer != 21) //dealer got a blackjack and player not
+			{
 				playerLost();
+				return true;
+			}
+			if(valueOfPlayer == 21 && valueOfDealer != 21) //player got a blackjack and dealer not
+			{
+				dealerLost();
+				return true;
+			}
+			if(valueOfDealer == 21 && valueOfPlayer == 21)
+			{
+				if(dealer.size() > cards.size())
+					dealerLost(); //dealer lose because player has less cards
+				else
+					playerLost(); //player lose because dealer has less cards
+				return true;
+			}
+			
+			if(valueOfDealer > 21) //dealer loses because his cards does have a value more than 21
+			{
+				dealerLost();
+				return true;
+			}
+			if(valueOfPlayer > 21) //player loses because his cards does have a value more than 21
+			{
+				playerLost();
+				return true;
+			}
+			
+			if(valueOfDealer > valueOfPlayer)
+			{
+				playerLost(); //dealer is more near to 21 than the player
+				return true;
+			} 
+			else 
+			{
+				dealerLost(); //player is more near to 21 than the dealer
 				return true;
 			}
 		}

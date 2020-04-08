@@ -14,9 +14,19 @@ public class Card {
 	}
 	public static Integer getValue(List<Card> cards) {
 		int sum = 0;
+		int numberOfAss = 0;
 		for(Card card : cards) {
 			sum += card.getValue();
+			if(card.toString().equals("A"))
+				numberOfAss++;
+			
 		}
+		for(int i = 0; i < numberOfAss; i++)
+		{
+			if(sum > 21)
+				sum-= 10; //from 11 value to 1 value ass
+		}
+		
 		return sum;
 	}
 	public Integer getValue() {
