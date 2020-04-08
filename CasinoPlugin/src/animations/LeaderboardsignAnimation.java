@@ -1,8 +1,12 @@
 package animations;
 
+import java.text.DateFormat;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,6 +35,7 @@ public class LeaderboardsignAnimation implements Runnable
 	
 	private double currentValue = 0.0;
 	private OfflinePlayer currentPlayer = null;
+
 	
 	public LeaderboardsignAnimation(Main main, Leaderboardsign sign, Sign signBlock)
 	{
@@ -43,6 +48,7 @@ public class LeaderboardsignAnimation implements Runnable
 	@Override
 	public void run() 
 	{
+		System.out.println("run");
 		//will be called every frame
 		if(!(signBlock.isPlaced())) return;
 		
@@ -57,7 +63,8 @@ public class LeaderboardsignAnimation implements Runnable
 	
 	private void getData()
 	{
-		currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer());
+		currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), getStartDateOfSign(), getEndDateOfSign());
+		System.out.println("from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
 		
 		if(!(sign.modeIsAll())) 
 		{
@@ -244,7 +251,104 @@ public class LeaderboardsignAnimation implements Runnable
 			signBlock.setLine(2, (currentValue == 0.0) ? "§4---" : Main.econ.format(currentValue));
 		else
 			signBlock.setLine(2, (currentValue == 0.0) ? "§4---" : String.valueOf(currentValue));
-		signBlock.setLine(3, "----------------");
+		
+		if(sign.animationCount == 0)
+		{
+			signBlock.setLine(3, getFromDateSignString());
+			sign.animationCount = 1;
+		}
+		else
+		{
+			signBlock.setLine(3, getTodateSignString());
+			sign.animationCount = 0;
+		}
 		signBlock.update(true);
+	}
+	//get calendar for data filter
+	private Calendar getStartDateOfSign()
+	{
+		Calendar now = new GregorianCalendar();
+		switch (this.sign.cycleMode)
+		{
+		case YEAR:
+			
+			return new GregorianCalendar(now.get(Calendar.YEAR), 0, 1, 0, 0, 1);
+		case MONTH:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 0);
+		case WEEK:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_WEEK_IN_MONTH), 0, 0, 1);
+		case DAY:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		case HOUR:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), 0, 0);
+		default:
+			return new GregorianCalendar(2000, 1, 0);
+		}
+	}
+	//string for the sign
+	private String getFromDateSignString()
+	{
+		switch (this.sign.cycleMode)
+		{
+		case YEAR:
+		case MONTH:
+		case WEEK:
+		case DAY:
+			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			return "§a" + df.format(getStartDateOfSign().getTime());
+			
+		case HOUR:
+			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			
+			return "§a" + dfa.format(getStartDateOfSign().getTime());
+
+		default:
+			return "§6------";
+		}
+		
+	}
+	
+	//get calendar for data filter
+	private Calendar getEndDateOfSign()
+	{
+		Calendar now = new GregorianCalendar();
+		switch (this.sign.cycleMode)
+		{
+		case YEAR:
+			
+			return new GregorianCalendar(now.get(Calendar.YEAR), 11, 30, 23, 59, 59);
+		case MONTH:
+			Calendar nowMonth = new GregorianCalendar();
+			nowMonth.set(Calendar.MONTH, nowMonth.get(Calendar.MONTH) + 1);
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, nowMonth.getActualMinimum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+		case WEEK:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH) + (7 - now.get(Calendar.DAY_OF_WEEK_IN_MONTH)) - 1, 23, 59, 59);
+		case DAY:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+		case HOUR:
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), 59, 59);
+		default:
+			return new GregorianCalendar(2100, 1, 0);
+		}
+	}
+	//string for the sign
+	private String getTodateSignString()
+	{
+		switch (this.sign.cycleMode)
+		{
+		case YEAR:
+		case MONTH:
+		case WEEK:
+		case DAY:
+			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			return "§c" + df.format(getEndDateOfSign().getTime());
+			
+		case HOUR:
+			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			return "§c" + dfa.format(getEndDateOfSign().getTime());
+
+		default:
+			return "§6------";
+		}
 	}
 }

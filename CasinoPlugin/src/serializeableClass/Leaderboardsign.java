@@ -39,6 +39,8 @@ public class Leaderboardsign {
 	public Cycle cycleMode;
 	@Expose
 	public int lastManualReset; //last manual reset from player
+	@Expose
+	public int validUntil; //how long the duration of the sign should work like for a event to sunday etc.
 	
 	
 	//for location
@@ -51,6 +53,7 @@ public class Leaderboardsign {
 	@Expose
 	public String world;
 	
+	public int animationCount = 0;
 	
 	public void setLocation(Location lrc) {
 		this.x = lrc.getX();

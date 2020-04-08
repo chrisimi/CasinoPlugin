@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -223,6 +224,8 @@ public class LeaderboardsignsManager implements Listener {
 				throw new Exception("leaderboard signs is null!");
 			}
 			for(Leaderboardsign sign : leaderboardsigns.list) {
+				if(sign.cycleMode == null)
+					sign.cycleMode = Cycle.NaN;
 				LeaderboardsignsManager.leaderboardsigns.put(sign.getLocation(), sign);
 				try {
 					addSignAnimation(sign);
@@ -287,7 +290,7 @@ public class LeaderboardsignsManager implements Listener {
 			return leaderboardsigns.remove(sign.getLocation()) != null;
 		}
 	}
-	public void createLeaderboardSign(Player player, Sign sign, Mode mode, Boolean all, int count, int position)
+	public void createLeaderboardSign(Player player, Sign sign, Mode mode, Boolean all, int count, int position, Cycle cycle)
 	{
 		Leaderboardsign leaderboardsign = new Leaderboardsign();
 		leaderboardsign.setLocation(sign.getLocation());
@@ -296,6 +299,7 @@ public class LeaderboardsignsManager implements Listener {
 		leaderboardsign.setRange(all);
 		leaderboardsign.setRange(count);
 		leaderboardsign.position = position;
+		leaderboardsign.cycleMode = cycle;
 		leaderboardsigns.put(leaderboardsign.getLocation(), leaderboardsign);
 		addSignAnimation(leaderboardsign);
 		player.sendMessage(CasinoManager.getPrefix() + "You successfully created a leaderboard sign!");
@@ -418,7 +422,7 @@ public class LeaderboardsignsManager implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position);
+		createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
 	}
 	
 	private void checkIfSignIsLeaderboardSign(BlockBreakEvent event) 
@@ -474,6 +478,19 @@ public class LeaderboardsignsManager implements Listener {
 		{
 			dataList = playdatas.stream()
 					.filter(a -> locationOfSignsFromPlayer.contains(a.Location))
+					.collect(Collectors.toList());
+		}
+		return dataList;
+	}
+	public static List<PlayData> getPlayData(OfflinePlayer player, Calendar fromDate, Calendar toDate)
+	{
+		List<PlayData> dataList = new ArrayList<>();
+		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+		
+		synchronized (playdatas)
+		{
+			dataList = playdatas.stream()
+					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromDate.getTimeInMillis() && a.Timestamp < toDate.getTimeInMillis())
 					.collect(Collectors.toList());
 		}
 		return dataList;
