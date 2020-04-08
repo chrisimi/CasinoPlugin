@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,6 +23,7 @@ import com.chrisimi.casino.main.Main;
 import scripts.LeaderboardsignsManager;
 import serializeableClass.Leaderboardsign;
 import serializeableClass.PlayData;
+import serializeableClass.Leaderboardsign.Cycle;
 import serializeableClass.Leaderboardsign.Mode;
 
 
@@ -262,6 +264,12 @@ public class LeaderboardsignAnimation implements Runnable
 			signBlock.setLine(3, getTodateSignString());
 			sign.animationCount = 0;
 		}
+		if(this.sign.cycleMode == Cycle.NaN)
+		{
+			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			signBlock.setLine(3, "§ar: " + dfa.format(new Date(this.sign.lastManualReset)));
+		}
+		
 		signBlock.update(true);
 	}
 	//get calendar for data filter

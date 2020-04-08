@@ -38,7 +38,7 @@ public class Leaderboardsign {
 	@Expose
 	public Cycle cycleMode;
 	@Expose
-	public int lastManualReset; //last manual reset from player
+	public long lastManualReset; //last manual reset from player
 	@Expose
 	public int validUntil; //how long the duration of the sign should work like for a event to sunday etc.
 	

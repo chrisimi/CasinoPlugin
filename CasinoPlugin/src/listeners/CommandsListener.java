@@ -23,6 +23,7 @@ import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.UpdateManager;
+import serializeableClass.Leaderboardsign.Mode;
 import serializeableClass.PlayerSignsConfiguration;
 import slotChests.SlotChest;
 import slotChests.SlotChestsManager;
@@ -106,7 +107,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 				enablePlayerManagedSign(player);
 			} else if(args[0].equalsIgnoreCase("sign") && args[1].equalsIgnoreCase("disable")) {
 				disablePlayerManagedSign(player);
-			} 
+			} else if(args[0].equalsIgnoreCase("resetleaderboard"))
+			{
+				resetLeaderboard(player, args[1], "");
+			}
 		} else if(args.length == 3) {
 			if(args[0].equalsIgnoreCase("roll")) {
 				if(Main.perm.has(player, "casino.roll")) {
@@ -114,6 +118,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 				} else {
 					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do that!");
 				}
+			} else if(args[0].equalsIgnoreCase("resetleaderboard"))
+			{
+				resetLeaderboard(player, args[1], args[2]);
 			}
 		} else if(args.length == 4) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -319,8 +326,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8 - roll a random number which will be sent to nearby players or mentioned player!");
 		player.sendMessage("§6/casino createchest §8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
 		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
+		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
+	
 	}
-
+	
 	private void showChestLocations(Player player) {
 		ArrayList<SlotChest> list = SlotChestsManager.getSlotChestsFromPlayer(player);
 		if(list.size() == 0) {
@@ -367,5 +376,37 @@ public class CommandsListener implements Listener, CommandExecutor {
 		{
 			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
 		}
+	}
+	private void resetLeaderboard(Player player, String range, String mode)
+	{
+		int rangeBlocks = 0;
+		Boolean allModes = false;
+		Mode chosenMode = null;
+		if(range.contains("all"))
+			rangeBlocks = 0;
+		else
+		{
+			try
+			{
+				rangeBlocks = Integer.valueOf(range);
+			} catch (Exception e)
+			{
+				player.sendMessage(CasinoManager.getPrefix() + "§4You have to use a valid range or 'all' to use it for every leaderboard sign you have!");
+				return;
+			}
+		}
+		
+		if(mode == "")
+			allModes = true;
+		else
+		{
+			for(Mode mode2 : Mode.values())
+			{
+				if(mode2.toString().equalsIgnoreCase(mode))
+					chosenMode = mode2;
+			}
+		}
+		
+		LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
 	}
 }

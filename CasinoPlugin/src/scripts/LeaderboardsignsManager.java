@@ -524,4 +524,39 @@ public class LeaderboardsignsManager implements Listener {
 			CasinoManager.leaderboardManager.addSignAnimation(sign);
 		}
 	}
+	public static void resetLeaderboard(Player player, Boolean allSigns, int range, Boolean allModes, Mode mode)
+	{
+		synchronized (leaderboardsigns)
+		{
+			if(allSigns)
+			{
+				for(Leaderboardsign leaderboardsign : leaderboardsigns.values())
+				{
+					if(leaderboardsign.getPlayer().equals(player))
+					{
+						if(allModes)
+							leaderboardsign.lastManualReset = System.currentTimeMillis();
+						else if(leaderboardsign.getMode() == mode)
+							leaderboardsign.lastManualReset = System.currentTimeMillis();
+					}
+				}
+			} 
+			else
+			{
+				for(Leaderboardsign leaderboardsign : leaderboardsigns.values())
+				{
+					if(leaderboardsign.getPlayer().equals(player))
+					{
+						if(player.getWorld().equals(leaderboardsign.getLocation().getWorld()) && (double)range > player.getLocation().distance(leaderboardsign.getLocation()))
+						{
+							if(allModes)
+								leaderboardsign.lastManualReset = System.currentTimeMillis();
+							else if(leaderboardsign.getMode() == mode)
+								leaderboardsign.lastManualReset = System.currentTimeMillis();
+						}
+					}
+				}
+			}
+		}
+	}
 }
