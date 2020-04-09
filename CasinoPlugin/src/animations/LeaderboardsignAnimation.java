@@ -65,7 +65,17 @@ public class LeaderboardsignAnimation implements Runnable
 	
 	private void getData()
 	{
-		currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), getStartDateOfSign(), getEndDateOfSign());
+		if(this.sign.cycleMode == Cycle.NaN && this.sign.lastManualReset != 0)
+		{
+			Calendar calendar = new GregorianCalendar();
+			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
+			currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());
+			System.out.println("get a" + calendar.getTime().toString());
+			
+		}
+		else
+			currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), getStartDateOfSign(), getEndDateOfSign());
+		
 		System.out.println("from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
 		
 		if(!(sign.modeIsAll())) 
@@ -264,7 +274,7 @@ public class LeaderboardsignAnimation implements Runnable
 			signBlock.setLine(3, getTodateSignString());
 			sign.animationCount = 0;
 		}
-		if(this.sign.cycleMode == Cycle.NaN)
+		if(this.sign.cycleMode == Cycle.NaN && this.sign.lastManualReset != 0)
 		{
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 			signBlock.setLine(3, "§ar: " + dfa.format(new Date(this.sign.lastManualReset)));

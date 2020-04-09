@@ -495,6 +495,20 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		return dataList;
 	}
+	public static List<PlayData> getPlayData(OfflinePlayer player, long fromMilis, long toMilis)
+	{
+		List<PlayData> dataList = new ArrayList<>();
+		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+		
+		synchronized (playdatas)
+		{
+			dataList = playdatas.stream()
+					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromMilis && a.Timestamp < toMilis)
+					.collect(Collectors.toList());
+		}
+		return dataList;
+	}
+	
 	public static void resetData() 
 	{
 		LeaderboardsignsManager.playdatas = new ArrayList<>();
