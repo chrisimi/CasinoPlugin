@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -20,8 +21,8 @@ public class MessageManager
 	
 	
 	public File messagesFolder = null;
-	public File defaultLanguageFile = null;
-	public File chosenLanguageFile = null;
+	public static File defaultLanguageFile = null;
+	public static File chosenLanguageFile = null;
 	private Main main;
 	public MessageManager(Main main)
 	{
@@ -34,7 +35,7 @@ public class MessageManager
 		
 	}
 	
-	//create the messages folder and en_US.yml
+	//create the messages folder and EN_default.yml
 	private void initializeFiles()
 	{
 		messagesFolder = new File(main.getDataFolder(), "messages");
@@ -54,6 +55,7 @@ public class MessageManager
 			if(!(defaultLanguageFile.exists()))
 			{
 				InputStream inputStream = main.getResource("EN_default.yml");
+			
 				if(inputStream == null)
 				{
 					CasinoManager.LogWithColor(ChatColor.RED + "Can't read EN_default.yml from jar");
@@ -83,7 +85,7 @@ public class MessageManager
 		 try
 		 {
 			File[] files = messagesFolder.listFiles();
-			if(configString.equals("default"))
+			if(!(configString.equals("default")))
 				for(File file : files)
 				{
 					if(file.getName().equalsIgnoreCase(configString))
@@ -134,12 +136,13 @@ public class MessageManager
 		}
 		else if(defaultLanguageFilePack.containsKey(messageName))
 		{
-			if(chosenLanguageFilePack != null) //only show messages if owner set a language file
+			if(chosenLanguageFile != null) //only show messages if owner set a language file
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "Language file does not have message: " + early + "!");
 			
 			return defaultLanguageFilePack.get(messageName);
 		}
-		else {
+		else 
+		{
 			CasinoManager.LogWithColor(ChatColor.RED + "MESSAGE: " + early + " does not exists!");
 			return "§4There is an error with messages! Tell it your administrator!";
 			
