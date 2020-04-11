@@ -27,6 +27,9 @@ messages:
    no-permissions-using-blackjacksigns: "§4You don't have permissions to use blackjack signs!"
    playersigns-blackjack-sign_is_ingame: "§4This Blackjack game is currently ingame!"
    playersigns-player_lacks_money: "§4You don't have enough money to play with the minimum bet!"
+   playersigns-creation-blackjack-successful: "You successfully created your own Blackjack sign!"
+   playersigns-creation-blackjack-server-successful: "You successfully created a Server-Blackjack sign!"
+   
    
    playersigns-sign_is_running: "§4You can't break this sign because it is running currently!"
    playersigns-player_is_not_owner: "§4You are not the owner of this playersign!"

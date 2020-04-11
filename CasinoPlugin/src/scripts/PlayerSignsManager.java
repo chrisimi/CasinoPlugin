@@ -447,7 +447,7 @@ public class PlayerSignsManager implements Listener {
 		
 		if(event.getLine(0).contains(";server"))
 		{
-			if(Main.perm.has(event.getPlayer(), "casino.Serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", bet, event.getLine(3));
 				playerSigns.put(newSign.getLocation(), newSign);
@@ -540,11 +540,29 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 		}
+		if(event.getLine(0).contains(";server"))
+		{
+			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			{
+				plusInformations = maxBet.toString()+";"+plusinf;
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", minBet, plusInformations);
+				playerSigns.put(newSign.getLocation(), newSign);
+				
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-server-successful"));
+				blackjackNormalSign((Sign) event.getBlock().getState());
+				exportSigns();
+			}
+			else
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
+			}
+		}
+		
 		plusInformations = maxBet.toString()+";"+plusinf;
 		PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
 		playerSigns.put(newSign.getLocation(), newSign);
 		
-		event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully created your own blackjack sign!");
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
 		blackjackNormalSign((Sign) event.getBlock().getState());
 		exportSigns();
 		
