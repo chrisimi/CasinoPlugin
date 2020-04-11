@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
@@ -32,7 +33,7 @@ public class MessageManager
 		
 		initializeFiles();
 		getLanguageFiles();
-		
+		checkForDefaultUpdate();
 	}
 	
 	//create the messages folder and EN_default.yml
@@ -123,6 +124,63 @@ public class MessageManager
 		{
 			CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to parse messages: " + e.getMessage());
 			e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+		}
+	}
+	private void checkForDefaultUpdate()
+	{
+		File tempFile = new File(messagesFolder, "temp.yml");
+		try
+		{
+			InputStream inputStream = main.getResource("EN_default.yml");
+			
+			if(inputStream == null)
+			{
+				CasinoManager.LogWithColor(ChatColor.RED + "Can't read EN_default.yml from jar");
+				return;
+			}
+			byte[] data = new byte[inputStream.available()];
+			inputStream.read(data);
+			OutputStream outputStream = new FileOutputStream(tempFile);
+			outputStream.write(data);
+			
+			inputStream.close();
+			outputStream.close();
+			
+			YamlConfiguration jarConfiguration = YamlConfiguration.loadConfiguration(tempFile);
+			YamlConfiguration serverConfiguration = YamlConfiguration.loadConfiguration(defaultLanguageFile);
+			
+			Map<String, Object> jarMap = jarConfiguration.getValues(true);
+			Map<String, Object> serverMap = serverConfiguration.getValues(true);
+			Map<String, Object> difference = new HashMap<>();
+			
+			for(Entry<String, Object> entry : jarMap.entrySet())
+			{
+				if(!serverMap.containsKey(entry.getKey()))
+				{
+					difference.put(entry.getKey(), entry.getValue());
+				}
+			}
+			if(difference.size() >= 1)
+			{
+				//overwrite language file and replace things xd
+				
+				if(defaultLanguageFile.delete())
+				{
+					tempFile.renameTo(defaultLanguageFile);
+					serverConfiguration = YamlConfiguration.loadConfiguration(defaultLanguageFile);
+					
+					for(Entry<String, Object> entry : serverMap.entrySet())
+					{
+						serverConfiguration.set(entry.getKey(), entry.getValue());
+					}
+					CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully upgraded default language file!");
+					loadLanguageFile(defaultLanguageFile, true);
+				}	
+			}
+			
+		} catch (Exception e)
+		{
+			// TODO: handle exception
 		}
 	}
 	public static String get(String messageName)

@@ -557,15 +557,16 @@ public class PlayerSignsManager implements Listener {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
 			}
 		}
-		
-		plusInformations = maxBet.toString()+";"+plusinf;
-		PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
-		playerSigns.put(newSign.getLocation(), newSign);
-		
-		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
-		blackjackNormalSign((Sign) event.getBlock().getState());
-		exportSigns();
-		
+		else
+		{
+			plusInformations = maxBet.toString()+";"+plusinf;
+			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
+			playerSigns.put(newSign.getLocation(), newSign);
+			
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
+			blackjackNormalSign((Sign) event.getBlock().getState());
+			exportSigns();
+		}
 	}
 	
 	private void diceNormalSign(Sign sign) {
