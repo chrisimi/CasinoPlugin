@@ -69,12 +69,29 @@ public class LeaderboardsignAnimation implements Runnable
 		{
 			Calendar calendar = new GregorianCalendar();
 			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
-			currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());
+			if(sign.isServerSign())
+			{
+				currentData = LeaderboardsignsManager.getPlayData(this.sign.lastManualReset, System.currentTimeMillis());
+			}
+			else
+			{
+				currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());				
+			}
 			System.out.println("get a" + calendar.getTime().toString());
 			
 		}
 		else
-			currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), getStartDateOfSign(), getEndDateOfSign());
+		{
+			if(sign.isServerSign())
+			{
+				currentData = LeaderboardsignsManager.getPlayData(getStartDateOfSign(), getEndDateOfSign());
+			}
+			else
+			{
+				currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), getStartDateOfSign(), getEndDateOfSign());				
+			}
+		}
+			
 		
 		System.out.println("from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
 		

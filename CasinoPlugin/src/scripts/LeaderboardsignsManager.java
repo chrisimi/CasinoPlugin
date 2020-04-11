@@ -28,6 +28,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
@@ -295,14 +296,18 @@ public class LeaderboardsignsManager implements Listener {
 		Leaderboardsign leaderboardsign = new Leaderboardsign();
 		leaderboardsign.setLocation(sign.getLocation());
 		leaderboardsign.setMode(mode);
-		leaderboardsign.setPlayer(player);
+		
+		if(player == null) //if leaderboard sign should be server leaderboard sign
+			leaderboardsign.ownerUUID = "server";
+		else
+			leaderboardsign.setPlayer(player);
 		leaderboardsign.setRange(all);
 		leaderboardsign.setRange(count);
 		leaderboardsign.position = position;
 		leaderboardsign.cycleMode = cycle;
 		leaderboardsigns.put(leaderboardsign.getLocation(), leaderboardsign);
 		addSignAnimation(leaderboardsign);
-		player.sendMessage(CasinoManager.getPrefix() + "You successfully created a leaderboard sign!");
+		
 		exportLeaderboardsigns();
 	}
 	public void addSignAnimation(Leaderboardsign sign) 
@@ -362,7 +367,7 @@ public class LeaderboardsignsManager implements Listener {
 			 return;
 		}
 		String[] lines = event.getLines();
-		if(!(lines[0].equalsIgnoreCase("leaderboard"))) {
+		if(!(lines[0].contains("leaderboard"))) {
 			return;
 		}
 	
@@ -422,7 +427,21 @@ public class LeaderboardsignsManager implements Listener {
 			event.setCancelled(true);
 			return;
 		}
-		createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
+		
+		if(event.getLine(0).contains(";s"))
+		{
+			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			{
+				createLeaderboardSign(null, sign, mode, all, count, position, cycle);
+			}
+			else 
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-leaderboard"));
+			}
+		}
+		else
+			createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully created a leaderboard sign!");
 	}
 	
 	private void checkIfSignIsLeaderboardSign(BlockBreakEvent event) 
@@ -508,6 +527,47 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		return dataList;
 	}
+	
+	//--server side
+	public static List<PlayData> getPlayData() {
+		List<PlayData> dataList = new ArrayList<>();
+		ArrayList<Location> locationOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
+		
+		synchronized (playdatas)
+		{
+			dataList = playdatas.stream()
+					.filter(a -> locationOfSignsFromPlayer.contains(a.Location))
+					.collect(Collectors.toList());
+		}
+		return dataList;
+	}
+	public static List<PlayData> getPlayData(Calendar fromDate, Calendar toDate)
+	{
+		List<PlayData> dataList = new ArrayList<>();
+		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
+		
+		synchronized (playdatas)
+		{
+			dataList = playdatas.stream()
+					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromDate.getTimeInMillis() && a.Timestamp < toDate.getTimeInMillis())
+					.collect(Collectors.toList());
+		}
+		return dataList;
+	}
+	public static List<PlayData> getPlayData(long fromMilis, long toMilis)
+	{
+		List<PlayData> dataList = new ArrayList<>();
+		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
+		
+		synchronized (playdatas)
+		{
+			dataList = playdatas.stream()
+					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromMilis && a.Timestamp < toMilis)
+					.collect(Collectors.toList());
+		}
+		return dataList;
+	}
+	
 	
 	public static void resetData() 
 	{

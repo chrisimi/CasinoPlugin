@@ -36,3 +36,6 @@ messages:
    playersigns-owner_destroyed_sign: "You successfully broke your %gamemode% sign!"
    playersigns-sign_is_disabled: "§4This sign is currently disabled!"
    playersigns-owner_lacks_money: "§4The Owner doesn't have enough money!"
+   
+   no-permissions-creating-leaderboard: "§4You don't have permissions to create a leaderboard sign!"
+   

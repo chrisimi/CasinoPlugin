@@ -83,7 +83,14 @@ public class Leaderboardsign {
 		return Enum.valueOf(Mode.class, this.mode);
 	}
 	public OfflinePlayer getPlayer() {
+		if(isServerSign()) return null;
 		return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
+	}
+	public String getPlayerName()
+	{
+		if(isServerSign())
+			return "§6Server";
+		return getPlayer().getName();
 	}
 	
 	public Boolean modeIsAll() {
@@ -102,5 +109,9 @@ public class Leaderboardsign {
 		} catch(Exception e) {
 			return null;
 		}
+	}
+	public Boolean isServerSign()
+	{
+		return ownerUUID.equalsIgnoreCase("server");
 	}
 }
