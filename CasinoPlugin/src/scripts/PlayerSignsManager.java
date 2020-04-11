@@ -268,7 +268,11 @@ public class PlayerSignsManager implements Listener {
 			
 			
 			if(Main.perm.has(event.getPlayer(), "casino.admin") || event.getPlayer().isOp()) {
-				
+			
+			}
+			else if(thisSign.isServerOwner())
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
 			} else if(event.getPlayer().equals(thisSign.getOwner().getPlayer())) {
 				
 			} else {
@@ -441,13 +445,32 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		//validation finished
-		PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", event.getPlayer(), bet, event.getLine(3));
-		playerSigns.put(newSign.getLocation(), newSign);
-		
-		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
-		diceNormalSign((Sign) event.getBlock().getState());
-		exportSigns();
+		if(event.getLine(0).contains(";server"))
+		{
+			if(Main.perm.has(event.getPlayer(), "casino.Serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			{
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", bet, event.getLine(3));
+				playerSigns.put(newSign.getLocation(), newSign);
+				
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-server-successful"));
+				diceNormalSign((Sign) event.getBlock().getState());
+				exportSigns();
+			}
+			else
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
+			}
+		}
+		else
+		{
+			//validation finished
+			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", event.getPlayer(), bet, event.getLine(3));
+			playerSigns.put(newSign.getLocation(), newSign);
+			
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
+			diceNormalSign((Sign) event.getBlock().getState());
+			exportSigns();
+		}
 	}
 	private void createBlackjackSign(SignChangeEvent event) {
 		
@@ -550,7 +573,7 @@ public class PlayerSignsManager implements Listener {
 					public void run() {
 						
 						sign.setLine(0, "§fDice");
-						sign.setLine(1, thisSign.getOwner().getName());
+						sign.setLine(1, thisSign.getOwnerName());
 						
 						if(thisSign.isSignDisabled()) {
 							sign.setLine(2, "§4DISABLED!");
@@ -619,7 +642,7 @@ public class PlayerSignsManager implements Listener {
 					@Override
 					public void run() {
 						sign.setLine(0, "§fBlackjack");
-						sign.setLine(1, thisSign.getOwner().getName());
+						sign.setLine(1, thisSign.getOwnerName());
 						
 						if(thisSign.isSignDisabled()) {
 							sign.setLine(2, "§4DISABLED!");
@@ -687,12 +710,24 @@ public class PlayerSignsManager implements Listener {
 		ArrayList<Location> locations = new ArrayList<>();
 		synchronized (playerSigns)
 		{
-			for(Map.Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
-				
+			for(Map.Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) 
+			{
+				if(entry.getValue().isServerOwner()) continue;
 				if(entry.getValue().getOwner().equals(player)) locations.add(entry.getKey());
 			}
 		}
 		return locations;
 	}
-	
+	public static ArrayList<Location> getLocationsFromAllServerSigns()
+	{
+		ArrayList<Location> locations = new ArrayList<>();
+		synchronized (playerSigns)
+		{
+			for(Map.Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet())
+			{
+				if(entry.getValue().ownerUUID.equalsIgnoreCase("server")) locations.add(entry.getKey());
+			}
+		}
+		return locations;
+	}
 }

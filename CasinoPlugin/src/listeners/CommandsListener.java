@@ -214,7 +214,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		}
 		if(Main.perm.has(player, "casino.admin")) {
 			
-		} else if(!(cnf.getOwner().getPlayer().equals(player))) {
+		} else if(cnf.isServerOwner() || (!(cnf.getOwner().getPlayer().equals(player)))) {
 			player.sendMessage(CasinoManager.getPrefix() + "§4You are not the owner of this sign!");
 			return null;
 		}

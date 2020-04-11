@@ -108,12 +108,18 @@ public class BlackjackAnimation implements Runnable {
 		CasinoManager.Debug(this.getClass(), player.getName() + " - " + Main.econ.format(playerBet) + " because of the bet!");
 		contactOwner(String.format("%s is playing on a blackjack sign with %s", player.getPlayerListName(), Main.econ.format(playerBet)));
 		if(owner.isOnline()) {
-			Main.econ.depositPlayer(owner, playerBet);
+			//Main.econ.depositPlayer(owner, playerBet);
+			thisSign.depositOwner(playerBet);
+			
+			if(!thisSign.isServerOwner())
 			CasinoManager.Debug(this.getClass(), owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
 			
 		} else {
-			this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
-			CasinoManager.Debug(this.getClass(), "[OFFLINE] " + owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
+			if(!thisSign.isServerOwner())
+			{
+				this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
+				CasinoManager.Debug(this.getClass(), "[OFFLINE] " + owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
+			}
 		}
 		
 		
@@ -277,10 +283,13 @@ public class BlackjackAnimation implements Runnable {
 		Main.econ.depositPlayer(player, winamount);
 		CasinoManager.Debug(this.getClass(), player.getName() + " +" + Main.econ.format(winamount) + " because of win!");
 		if(owner.isOnline()) {
-			Main.econ.withdrawPlayer(owner, winamount);
-			CasinoManager.Debug(this.getClass(), owner.getName() + " -" + Main.econ.format(winamount) + " because of lose!");
+			//Main.econ.withdrawPlayer(owner, winamount);
+			thisSign.withdrawOwner(winamount);
+			
+			if(!thisSign.isServerOwner())
+				CasinoManager.Debug(this.getClass(), owner.getName() + " -" + Main.econ.format(winamount) + " because of lose!");
 		}
-		else
+		else if(!thisSign.isServerOwner())
 			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
 		
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 4f, 2.5f);
@@ -359,7 +368,7 @@ public class BlackjackAnimation implements Runnable {
 		
 	}
 	private void contactOwner(String message) {
-		if(this.owner.isOnline()) {
+		if(this.owner.isOnline() && !thisSign.isServerOwner()) {
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + message);
 		}
 	}

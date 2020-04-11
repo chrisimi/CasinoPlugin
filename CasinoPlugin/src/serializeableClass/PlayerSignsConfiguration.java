@@ -39,6 +39,9 @@ public class PlayerSignsConfiguration {
 	@Expose
 	public double z;
 	
+	
+	
+	
 	public PlayerSignsConfiguration() {}
 	
 	public PlayerSignsConfiguration(Location lrc, String gamemode, Player player, Double bet, String plusInformations) {
@@ -52,7 +55,17 @@ public class PlayerSignsConfiguration {
 		this.z = lrc.getZ();
 		this.disabled = false;
 	}
-	
+	public PlayerSignsConfiguration(Location lrc, String gamemode, Double bet, String plusInformations) {
+		this.gamemode = gamemode;
+		this.ownerUUID = "server";
+		this.bet = bet;
+		this.plusinformations = plusInformations;
+		this.worldname = lrc.getWorld().getName();
+		this.x = lrc.getX();
+		this.y = lrc.getY();
+		this.z = lrc.getZ();
+		this.disabled = false;
+	}
 	
 	public Location getLocation() {
 		return new Location(Bukkit.getWorld(worldname), x, y, z);
@@ -71,14 +84,27 @@ public class PlayerSignsConfiguration {
 		Double value = Double.parseDouble(informations[1].trim());
 		return value;
 	}
-	
+	/**
+	 * Get the owner of the sign
+	 * @return offlineplayer instance of player, null is owner is server
+	 */
 	public OfflinePlayer getOwner() {
+		if(isServerOwner()) return null;
 		return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
 	}
+	public String getOwnerName()
+	{
+		if(isServerOwner()) return "§6Server";
+		else {
+			return getOwner().getName();
+		}
+	}
 	public Boolean hasOwnerEnoughMoney() {
+		if(isServerOwner()) return true;
 		return Main.econ.has(getOwner(), this.winMultiplicatorDice() * this.bet);
 	}
 	public Boolean hasOwnerEnoughMoney(double amount) {
+		if(isServerOwner()) return true;
 		return Main.econ.has(getOwner(), amount);
 	}
 	public Sign getSign() {
@@ -118,4 +144,32 @@ public class PlayerSignsConfiguration {
 	public Double blackjackGetWin(Double bet) {
 		return blackjackMultiplicator()*bet;
 	}
+	
+	public Boolean isServerOwner()
+	{
+		return this.ownerUUID.equalsIgnoreCase("server");
+	}
+	/**
+	 * Take money from owner
+	 * @param amount amount
+	 */
+	public void withdrawOwner(double amount)
+	{
+		if(!isServerOwner())
+		{
+			Main.econ.withdrawPlayer(getOwner(), amount);
+		}
+	}
+	/**
+	 * Give owner money
+	 * @param amount amount
+	 */
+	public void depositOwner(double amount) 
+	{
+		if(!isServerOwner())
+		{
+			Main.econ.depositPlayer(getOwner(), amount);
+		}
+	}
+	
 }
