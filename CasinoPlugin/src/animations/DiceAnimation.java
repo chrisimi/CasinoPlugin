@@ -36,7 +36,8 @@ public class DiceAnimation implements Runnable {
 	@Override
 	public void run() {
 		Main.econ.withdrawPlayer(player, thisSign.bet);
-		Main.econ.depositPlayer(owner, thisSign.bet);
+		//Main.econ.depositPlayer(owner, thisSign.bet);
+		thisSign.depositOwner(thisSign.bet);
 		if(sign == null) {
 			main.getLogger().info("Error while trying to start diceanimation! (Sign is null)");
 			return;
@@ -79,11 +80,12 @@ public class DiceAnimation implements Runnable {
 			player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, wonamount);
 			Main.econ.depositPlayer(player, wonamount);
-			Main.econ.withdrawPlayer(owner, wonamount);
-			if(owner.isOnline()) {
+			//Main.econ.withdrawPlayer(owner, wonamount);
+			thisSign.withdrawOwner(wonamount);
+			if(!thisSign.isServerOwner() && owner.isOnline()) {
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
 				
-			} else {
+			} else if(!thisSign.isServerOwner()) {
 				signsManager.addOfflinePlayerWinOrLose(wonamount * -1, owner);
 			}
 			
@@ -91,9 +93,9 @@ public class DiceAnimation implements Runnable {
 			sign.setLine(2, "§4YOU LOST!");
 			player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
-			if(owner.isOnline()) {
+			if(!thisSign.isServerOwner() && owner.isOnline()) {
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
-			} else {
+			} else if(!thisSign.isServerOwner()){
 				signsManager.addOfflinePlayerWinOrLose(thisSign.bet, owner);
 			}
 		}
