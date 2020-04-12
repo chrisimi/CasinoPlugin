@@ -148,8 +148,8 @@ playersigns:
 # enable the leaderboard signs
       enable: true
       
-# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks, 1 Minute = 20*60*10 = 12000 Ticks
-      reload-time: 12000
+# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks, 1 Minute = 20*60*10 = 1200 Ticks
+      reload-time: 1200
       
 ##########################################
 # SlotChest configurations

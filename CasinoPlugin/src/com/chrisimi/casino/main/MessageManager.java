@@ -168,13 +168,25 @@ public class MessageManager
 				{
 					tempFile.renameTo(defaultLanguageFile);
 					serverConfiguration = YamlConfiguration.loadConfiguration(defaultLanguageFile);
+					for(Entry<String, Object> entry : serverConfiguration.getValues(true).entrySet())
+					{
+						//System.out.println(entry.getKey() + " - " + entry.getValue());
+					}
+					
 					
 					for(Entry<String, Object> entry : serverMap.entrySet())
 					{
 						serverConfiguration.set(entry.getKey(), entry.getValue());
+						
+						//System.out.println(entry.getKey() + " - " + entry.getValue().toString());
 					}
+					
+					//serverConfiguration.save(defaultLanguageFile);
+					
+					
 					CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully upgraded default language file!");
 					loadLanguageFile(defaultLanguageFile, true);
+					tempFile.delete();
 				}	
 			}
 			

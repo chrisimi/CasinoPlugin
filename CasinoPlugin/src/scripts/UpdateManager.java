@@ -1,5 +1,6 @@
 package scripts;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +12,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.FileConfigurationOptions;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.chrisimi.casino.main.Main;
@@ -64,13 +67,25 @@ public class UpdateManager {
 		ArrayList<String> valuesToNotChange = new ArrayList<String>();
 		valuesToNotChange.add("version");
 		
+		int index = 0;
 		for(Entry<String, Object> entry : values.entrySet()) {
+			
+			if(index >= 5) continue;
+			index++;
 			
 			if(!(valuesToNotChange.contains(entry.getKey()))) {
 				configYml.set(entry.getKey(), entry.getValue());
+				System.out.println(entry.getValue().getClass().toString());
 			}
 		}
-		
+		try
+		{
+			configYml.save(Main.configYml);
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		reloadConfig();
 	}
 
@@ -103,5 +118,7 @@ public class UpdateManager {
 		} else
 			return o;
 	}
-	
+	public static void changeSettings(File file, Map<String, Object> oldData, Map<String, Object> newData) {
+		
+	}
 }
