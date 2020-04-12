@@ -30,6 +30,7 @@ import com.chrisimi.casino.main.MessageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import animations.BlackjackAnimation;
 import animations.DiceAnimation;
@@ -51,6 +52,7 @@ public class PlayerSignsManager implements Listener {
 	private Main main;
 	private Double maxBetDice = 200.0;
 	private Double maxBetBlackjack = 200.0;
+	private Double maxBetSlots = 200.0;
 	
 	private int updateTask = 0;
 	public PlayerSignsManager(Main main) {
@@ -112,6 +114,17 @@ public class PlayerSignsManager implements Listener {
 		} finally {
 			if(maxBetBlackjack == null)
 				maxBetBlackjack = 200.0;
+		}
+		try
+		{
+			maxBetSlots = Double.parseDouble(UpdateManager.getValue("playersigns.slots.max-bet").toString());
+		} catch (NumberFormatException e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max-bet: slots max-bet is not a valid number!");
+			
+		} finally {
+			if(maxBetSlots == null)
+				maxBetSlots = 200.0;
 		}
 	}
 	
@@ -229,7 +242,7 @@ public class PlayerSignsManager implements Listener {
 		 */
 		
 		String[] lines = event.getLines();
-		if(!(lines[0].contains("casino"))) return;
+		if(!(lines[0].contains("casino") || lines[0].contains("slots"))) return;
 		if(lines[1].length() == 0) return;
 		if(lines[2].length() == 0) return;
 		if(lines[3].length() == 0) return;
@@ -246,6 +259,14 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 			createBlackjackSign(event);
+		} else if(lines[0].contains("slots"))
+		{
+			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
+				return;
+			}
+			createSlotsSign(event);
 		}
 		
 	}
@@ -568,6 +589,107 @@ public class PlayerSignsManager implements Listener {
 			exportSigns();
 		}
 	}
+	private void createSlotsSign(SignChangeEvent event)
+	{
+		Double bet = 0.0;
+		String[] symbols = new String[3];
+		double[] multiplicators = new double[3];
+		double[] chance = new double[3];
+
+		try
+		{
+			bet = Double.parseDouble(event.getLine(1));
+		} catch (Exception e)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-bet_invalid"));
+			event.setCancelled(true);
+			return;
+		}
+		if(bet > maxBetSlots)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-bet_higher_than_max_bet").replace("%max_bet%", Main.econ.format(maxBetSlots)));
+			event.setCancelled(true);
+			return;
+		}
+		
+		symbols = event.getLine(2).split(";");
+		if(symbols.length != 3)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-not-enough-symbols"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		String[] values = event.getLine(3).split(";");
+		if(values.length != 2)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-forgot_chance_or_multiplicator"));
+			event.setCancelled(true);
+			return;
+		}
+		for(int i = 0; i < 2; i++)
+		{
+			String[] valueElement = values[i].split("-");
+			if(valueElement.length != 3)
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-not_3_elements"));
+				event.setCancelled(true);
+				return;
+			}
+			try
+			{
+				if(i == 0)
+				{
+					for(int j = 0; j < 3; j++)
+					{
+						chance[j] = Double.parseDouble(valueElement[j]);
+					}
+				} else
+				{
+					for(int j = 0; j < 3; j++)
+					{
+						multiplicators[j] = Double.parseDouble(valueElement[j]);
+					}
+				}
+			} catch (NumberFormatException e)
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-value_is_not_valid"));
+				event.setCancelled(true);
+				return;
+			}
+		}
+		String plusinformations = String.format(
+				"%s-%s-%s;%s-%s-%s;%s-%s-%s", symbols[0], multiplicators[0], chance[0], symbols[1], multiplicators[1], chance[1], symbols[2], multiplicators[2], chance[2]);
+	
+		if(event.getLine(0).contains(";server"))
+		{
+			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			{
+				
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Slots", bet, plusinformations);
+				playerSigns.put(newSign.getLocation(), newSign);
+				
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-server-successful"));
+				slotsNormalSign((Sign) event.getBlock().getState());
+				exportSigns();
+			}
+			else
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
+			}
+		}
+		else
+		{
+	
+			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Slots", event.getPlayer(), bet, plusinformations);
+			playerSigns.put(newSign.getLocation(), newSign);
+			
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-successful"));
+			slotsNormalSign((Sign) event.getBlock().getState());
+			exportSigns();
+		}
+	}
+	
 	
 	private void diceNormalSign(Sign sign) {
 		if(updateTasks.containsKey(playerSigns.get(sign.getLocation()))) {
@@ -718,6 +840,11 @@ public class PlayerSignsManager implements Listener {
 			CasinoManager.LogWithColor(ChatColor.RED + "Try to restart the server or/and recreate the sign! If the problem stays, contact the owner of the plugin!");
 		}
 	}
+	public void slotsNormalSign(Sign sign)
+	{
+		
+	}
+	
 	
 	public static PlayerSignsConfiguration getPlayerSign(Location location) {
 		if(!(playerSigns.containsKey(location))) return null;

@@ -171,5 +171,38 @@ public class PlayerSignsConfiguration {
 			Main.econ.depositPlayer(getOwner(), amount);
 		}
 	}
-	
+	//A-10-2.5;B-50-3.5;C-40-3.8
+	public String[] getSlotsSymbols()
+	{
+		String[] symbols = this.plusinformations.split(";");
+		String[] values = new String[3];
+		for(int i = 0; i < 3; i++)
+		{
+			String[] splited = symbols[i].split("-");
+			values[i] = splited[0];
+		}
+		return values;
+	}
+	public double[] getSlotsMultiplicators()
+	{
+		String[] symbols = this.plusinformations.split(";");
+		double[] values = new double[3];
+		for(int i = 0; i < 3; i++)
+		{
+			String[] splited = symbols[i].split("-");
+			values[i] = Double.parseDouble(splited[2]);
+		}
+		return values;
+	}
+	public double[] getSlotsWeight()
+	{
+		String[] symbols = this.plusinformations.split(";");
+		double[] values = new double[3];
+		for(int i = 0; i < 3; i++)
+		{
+			String[] splited = symbols[i].split("-");
+			values[i] = Double.parseDouble(splited[1]);
+		}
+		return values;
+	}
 }

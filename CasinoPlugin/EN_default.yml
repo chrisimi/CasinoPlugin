@@ -30,6 +30,17 @@ messages:
    playersigns-creation-blackjack-successful: "You successfully created your own Blackjack sign!"
    playersigns-creation-blackjack-server-successful: "You successfully created a Server-Blackjack sign!"
    
+   no-permissions-creating-slotssign: "§4You don't have permissions to create a slots sign!"
+   playersigns-creation-slots-bet_invalid: "§4Your bet is not a valid number!"
+   playersigns-creation-slots-bet_higher_than_max_bet: "§4Your bet is higher than the maximum bet. The maximum bet allowed on this server is: %max_bet%!"
+   playersigns-creation-slots-not-enough-symbols: "§4You need 3 Symbols for your slots sign! Do it like (A1;B2;C3)."
+   playersigns-creation-slots-forgot_chance_or_multiplicator: "§4You forgot to add the chance values or the multiplicators! Do it like (chance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3)."
+   playersigns-creation-slots-not_3_elements: "§4You need 3 values for both chances and multiplicators! (c1-c2-c3;m1-m2-m3)"
+   playersigns-creation-slots-value_is_not_valid: "§4One of the values is invalid!"
+   playersigns-creation-slots-successful: "You successfully created a slots sign!"
+   playersigns-creation-slots-server-successful: "You successfully created a Server-Slots sign!"
+   playersigns-slots-owner_message_player_is_playing: "%playername% is playing on your slots sign with %money%"
+   
    
    playersigns-sign_is_running: "§4You can't break this sign because it is running currently!"
    playersigns-player_is_not_owner: "§4You are not the owner of this playersign!"

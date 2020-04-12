@@ -140,6 +140,14 @@ playersigns:
 # set the maximum bet for blackjack signs!
       max-bet: 250.0
       
+#################################
+# slots configurations
+#################################
+   slots:
+      
+# set the maximum bet for slots signs!
+      max-bet: 250.0
+      
 #################################     
 # leaderboard signs configurations
 #################################      
