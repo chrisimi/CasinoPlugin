@@ -190,7 +190,7 @@ public class PlayerSignsConfiguration {
 		for(int i = 0; i < 3; i++)
 		{
 			String[] splited = symbols[i].split("-");
-			values[i] = Double.parseDouble(splited[2]);
+			values[i] = Double.parseDouble(splited[1]);
 		}
 		return values;
 	}
@@ -201,8 +201,19 @@ public class PlayerSignsConfiguration {
 		for(int i = 0; i < 3; i++)
 		{
 			String[] splited = symbols[i].split("-");
-			values[i] = Double.parseDouble(splited[1]);
+			values[i] = Double.parseDouble(splited[2]);
 		}
 		return values;
+	}
+	public double getSlotsHighestPayout()
+	{
+		double[] multiplicators = getSlotsMultiplicators();
+		double highestMulti = 0.0;
+		for(int i = 0; i < 3; i++)
+		{
+			if(highestMulti < multiplicators[0])
+				highestMulti = multiplicators[0];
+		}
+		return this.bet * highestMulti + bet;
 	}
 }
