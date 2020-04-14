@@ -923,7 +923,7 @@ public class PlayerSignsManager implements Listener {
 								{
 									//owner has enough money
 									sign.setLine(2, Main.econ.format(thisSign.bet));
-									sign.setLine(3, "3x " + thisSign.getSlotsSymbols()[current] + " : " + Main.econ.format((thisSign.bet * thisSign.getSlotsMultiplicators()[current]) + thisSign.bet));
+									sign.setLine(3, "3x " + thisSign.getSlotsSymbols()[current] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[current]));
 								} 
 								else
 								{

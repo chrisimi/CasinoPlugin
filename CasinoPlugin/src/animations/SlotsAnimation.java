@@ -10,6 +10,7 @@ import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoManager;
+import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -70,7 +71,7 @@ public class SlotsAnimation implements Runnable
 		
 		for(int i = 0; i < 4; i++)
 		{
-			sign.setLine(i, generateNewLine());
+			sign.setLine(i, "");
 		}
 		sign.update(true);
 		
@@ -85,16 +86,18 @@ public class SlotsAnimation implements Runnable
 		{
 			String[] lines = sign.getLines();
 			
-			for(int i = 0; i < 4; i++)
+			for(int i = 2; i >= 0; i--)
 			{
-				if(i == 3)
-					sign.setLine(0, lines[3]);
-				else
-					sign.setLine(i+1, lines[i]);
+				lines[i+1] = lines[i];
 			}
 			
+			String newLine = generateNewLine();
+			lines[0] = newLine;
 			
-			
+			for(int i = 0; i < 4; i++)
+			{
+				sign.setLine(i, lines[i]);
+			}
 			
 			sign.update(true);
 			//
@@ -170,23 +173,21 @@ public class SlotsAnimation implements Runnable
 				newLine += " " + newCharacter;
 		}
 		
-		for(int i = 0; i < 4; i++)
-		{
-			sign.setLine(i, "");
-		}
-		sign.update(true);
 		
 		return newLine;
 	}
 	private Boolean checkIfPlayerWon(String line)
 	{
-		winAmount = 0;
+		
 		String[] symbStrings = line.split(" ");
-		if(symbStrings[0].equals(symbStrings[1]) && symbStrings[0].equals(symbStrings[2]))
+		for(int i = 0; i < symbStrings.length; i++)
+			System.out.println(symbStrings[i]);
+		
+		if(symbStrings[1].equals(symbStrings[2]) && symbStrings[1].equals(symbStrings[3]))
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				if(symbStrings[0].equals(symbols[i]))
+				if(symbStrings[1].equals(symbols[i]))
 				{
 					winAmount = thisSign.bet * multiplicators[i] + thisSign.bet;
 					break;
@@ -198,14 +199,16 @@ public class SlotsAnimation implements Runnable
 	
 	private void playerLost()
 	{
+		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
 		if(!thisSign.isServerOwner() && owner.isOnline())
-			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_lost"));
+			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_lost").replace("%playername%", player.getDisplayName()));
 		finish();
 	}
 	private void playerWon()
 	{
+		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
 		if(!thisSign.isServerOwner() && owner.isOnline())
-			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won"));
+			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won").replace("%playername%", player.getDisplayName()));
 		Main.econ.depositPlayer(player, winAmount);
 		thisSign.withdrawOwner(winAmount);
 		finish();
