@@ -109,7 +109,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 				disablePlayerManagedSign(player);
 			} else if(args[0].equalsIgnoreCase("resetleaderboard"))
 			{
-				resetLeaderboard(player, args[1], "");
+				resetLeaderboard(player, args[1], "", false);
+			} else if(args[0].equalsIgnoreCase("resetserverleaderboard"))
+			{
+				resetLeaderboard(player, args[1], "", true);
 			}
 		} else if(args.length == 3) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -120,7 +123,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 				}
 			} else if(args[0].equalsIgnoreCase("resetleaderboard"))
 			{
-				resetLeaderboard(player, args[1], args[2]);
+				resetLeaderboard(player, args[1], args[2], false);
+			} else if(args[0].equalsIgnoreCase("resetserverleaderboard"))
+			{
+				resetLeaderboard(player, args[1], args[2], true);
 			}
 		} else if(args.length == 4) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -327,7 +333,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino createchest §8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
 		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
 		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
-	
+		player.sendMessage("§6/casino resetserverleaderboard [range/all] [mode (optional)] §6- same as resetleaderboard but for serversigns!");
 	}
 	
 	private void showChestLocations(Player player) {
@@ -377,7 +383,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
 		}
 	}
-	private void resetLeaderboard(Player player, String range, String mode)
+	private void resetLeaderboard(Player player, String range, String mode, Boolean serverSigns)
 	{
 		int rangeBlocks = 0;
 		Boolean allModes = false;
@@ -407,6 +413,14 @@ public class CommandsListener implements Listener, CommandExecutor {
 			}
 		}
 		
-		LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
+		if(serverSigns && !(Main.perm.has(player, "casino.serversigns")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do this!");
+			return;
+		} 
+		if(serverSigns)
+			LeaderboardsignsManager.resetServerLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
+		else
+			LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
 	}
 }

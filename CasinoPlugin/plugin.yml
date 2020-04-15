@@ -65,3 +65,9 @@ commands:
     description: reload all datas and leaderboardsigns
     usage: /casino reloaddata
     permission: casino.admin
+  casino resetleaderboard:
+    description: reset leaderboard signs in range
+    usage: /casino resetleaderboard
+  casino resetserverleaderboard:
+    description: reset serverleaderboard signs in range
+    usage: /casino resetserverleaderboard
