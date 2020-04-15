@@ -94,6 +94,12 @@ public class Main extends JavaPlugin {
 		CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
 	}
+	
+	@Override
+	public void onDisable()
+	{
+		LeaderboardsignsManager.clearAllTasks();
+	}
 
 	private void configurateMetrics(Metrics metric) {
 		

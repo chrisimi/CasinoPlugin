@@ -180,8 +180,6 @@ public class SlotsAnimation implements Runnable
 	{
 		
 		String[] symbStrings = line.split(" ");
-		for(int i = 0; i < symbStrings.length; i++)
-			System.out.println(symbStrings[i]);
 		
 		if(symbStrings[1].equals(symbStrings[2]) && symbStrings[1].equals(symbStrings[3]))
 		{
@@ -189,7 +187,7 @@ public class SlotsAnimation implements Runnable
 			{
 				if(symbStrings[1].equals(symbols[i]))
 				{
-					winAmount = thisSign.bet * multiplicators[i] + thisSign.bet;
+					winAmount = thisSign.bet * multiplicators[i];
 					break;
 				}
 			}
@@ -206,11 +204,11 @@ public class SlotsAnimation implements Runnable
 	}
 	private void playerWon()
 	{
-		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
+		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, winAmount);
 		if(!thisSign.isServerOwner() && owner.isOnline())
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won").replace("%playername%", player.getDisplayName()));
-		Main.econ.depositPlayer(player, winAmount);
-		thisSign.withdrawOwner(winAmount);
+		Main.econ.depositPlayer(player, winAmount + thisSign.bet);
+		thisSign.withdrawOwner(winAmount + thisSign.bet);
 		finish();
 	}
 	private void finish()

@@ -606,7 +606,9 @@ public class LeaderboardsignsManager implements Listener {
 			{
 				for(Leaderboardsign leaderboardsign : leaderboardsigns.values())
 				{
-					if(leaderboardsign.getPlayer().equals(player))
+					if(leaderboardsign == null) continue;
+					
+					if(!leaderboardsign.isServerSign() && leaderboardsign.getPlayer().equals(player))
 					{
 						if(allModes)
 							leaderboardsign.lastManualReset = System.currentTimeMillis();
@@ -619,7 +621,10 @@ public class LeaderboardsignsManager implements Listener {
 			{
 				for(Leaderboardsign leaderboardsign : leaderboardsigns.values())
 				{
-					if(leaderboardsign.getPlayer().equals(player))
+					if(leaderboardsign == null) continue;
+					
+					if(!leaderboardsign.isServerSign() && 
+							leaderboardsign.getPlayer().equals(player))
 					{
 						if(player.getWorld().equals(leaderboardsign.getLocation().getWorld()) && (double)range > player.getLocation().distance(leaderboardsign.getLocation()))
 						{
@@ -631,6 +636,15 @@ public class LeaderboardsignsManager implements Listener {
 					}
 				}
 			}
+		}
+		//save changes
+		CasinoManager.leaderboardManager.exportLeaderboardsigns();	
+	}
+	public static void clearAllTasks()
+	{
+		for(int taskID : leaderboardsignRunnableTaskID.values())
+		{
+			Main.getInstance().getServer().getScheduler().cancelTask(taskID);
 		}
 	}
 }
