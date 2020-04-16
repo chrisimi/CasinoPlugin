@@ -247,15 +247,37 @@ public class BlackjackAnimation implements Runnable {
 				playerLost(); //dealer is more near to 21 than the player
 				return true;
 			} 
-			else 
+			else  if(valueOfDealer < valueOfPlayer)
 			{
 				dealerLost(); //player is more near to 21 than the dealer
+				return true;
+			}
+			if(valueOfDealer == valueOfPlayer)
+			{
+				draw();
 				return true;
 			}
 		}
 		return false;
 		
 	}
+	private void draw()
+	{
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-draw"));
+		contactOwner(MessageManager.get("blackjack-owner-draw"));
+		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, this.playerBet);
+		
+		CasinoManager.Debug(this.getClass(), "Draw!");
+		
+		Main.econ.depositPlayer(player, this.playerBet);
+		thisSign.withdrawOwner(this.playerBet);
+		
+		player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT, 4f, 2.5f);
+		
+		finish();
+		
+	}
+	
 	private void playerLost() {
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_lost"));
 		
