@@ -23,6 +23,10 @@ messages:
    playersigns-creation-dice-successful: "You successfully created your own Dice sign!"
    playersigns-creation-dice-server-successful: "You successfully created a Server-Dice sign!"
    
+   dice-player_won: "§aYou won %amount%"
+   dice-player_lost: "§4You lost %amount%"
+   dice-owner-player_won: "§4%playername% won %amount% while playing on your Dice sign"
+   dice-owner-player_lost: "§a%playername% lost %amount% while playing Dice sign."
    
    no-permissions-creating-blackjacksign: "§4You don't have permissions to create a blackjack sign!"
    no-permissions-using-blackjacksigns: "§4You don't have permissions to use blackjack signs!"

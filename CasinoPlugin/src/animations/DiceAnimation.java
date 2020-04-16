@@ -8,6 +8,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -77,13 +78,16 @@ public class DiceAnimation implements Runnable {
 		if(ergebnis >= values[0] && ergebnis <= values[1]) {
 			
 			sign.setLine(2, "§aYOU WON!");
-			player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
+			//player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won").replace("%amount%", Main.econ.format(wonamount)));
+			
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, wonamount);
 			Main.econ.depositPlayer(player, wonamount);
 			//Main.econ.withdrawPlayer(owner, wonamount);
 			thisSign.withdrawOwner(wonamount);
 			if(!thisSign.isServerOwner() && owner.isOnline()) {
-				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
+				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
+				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(wonamount)));
 				
 			} else if(!thisSign.isServerOwner()) {
 				signsManager.addOfflinePlayerWinOrLose(wonamount * -1, owner);
@@ -91,10 +95,13 @@ public class DiceAnimation implements Runnable {
 			
 		} else {
 			sign.setLine(2, "§4YOU LOST!");
-			player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
+			//player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_lost").replace("%amount%", Main.econ.format(thisSign.bet)));
+			
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
 			if(!thisSign.isServerOwner() && owner.isOnline()) {
-				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
+				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
+				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_lost").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(thisSign.bet)));
 			} else if(!thisSign.isServerOwner()){
 				signsManager.addOfflinePlayerWinOrLose(thisSign.bet, owner);
 			}
