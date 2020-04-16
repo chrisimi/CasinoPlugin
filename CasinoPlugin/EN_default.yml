@@ -115,3 +115,29 @@ messages:
    casiongui-player_won_nothing: "You won nothing. Current Balance: %balance%"
    
    player-join-message: "While you were offline, your Casino-Signs brought you %amount%"
+   
+   roll-min_value_invalid: "§4The minimum value is not valid!"
+   roll-max_value_invalid: "§4The maximum value is not valid!"
+   roll-min_max_diff: "§4The maximum value must be higher than the minimum value!"
+   roll-rolled_message: "%playername% rolled from %min% to %max% and got §f%result%"
+   roll-player_doesnt_exist: "§4This player has never joined this server or he is not online!"
+   roll-player_roll: "You rolled §e%l %result%"
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   

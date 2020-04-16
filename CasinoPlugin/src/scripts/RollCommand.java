@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 //initialized by CasinoManager
 public class RollCommand {
@@ -32,17 +33,17 @@ public class RollCommand {
 		try {
 			minimum = Integer.parseInt(args[1]);
 		} catch(NumberFormatException e) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4The minimum value is not valid!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-min_value_invalid"));
 			return;
 		}
 		try {
 			maximum = Integer.parseInt(args[2]);
 		} catch(NumberFormatException e) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4The maximum value is not valid!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-max_value_invalid"));
 			return;
 		}
 		if(minimum > maximum) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4The minium value have to be higher than the maximum value!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-min-max_diff"));
 			return;
 		}
 		Random rnd = new Random();
@@ -53,7 +54,7 @@ public class RollCommand {
 			for(Player p : currentPlayer) {
 				if(p.getWorld().equals(player.getWorld())) {
 					if(p.getLocation().distance(player.getLocation()) < (double)playerRange) {
-						p.sendMessage(CasinoManager.getPrefix() + String.format("%s rolled from %s to %s and got: §0%s", player.getName(), minimum, maximum, randomZahl));
+						p.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-rolled_message").replace("%playername%", player.getName()).replace("%min%", String.valueOf(minimum)).replace("%max%", String.valueOf(maximum)).replace("%result%", String.valueOf(randomZahl)));
 					}
 				}
 			}
@@ -61,13 +62,13 @@ public class RollCommand {
 		} else { //er hat einen Spieler angegeben
 			Player angegebenerSpieler = Bukkit.getPlayer(args[3]);
 			if(angegebenerSpieler == null) {
-				player.sendMessage(CasinoManager.getPrefix() + "§4This player does not exist on this server or he is not online!");
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-player_doesnt_exist"));
 				return;
 			} else {
-				angegebenerSpieler.sendMessage(CasinoManager.getPrefix() + String.format("%s rolled from %s to %s and got: §e§l%s", player.getName(), minimum, maximum, randomZahl));
+				angegebenerSpieler.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-rolled_message").replace("%playername%", player.getName()).replace("%min%", String.valueOf(minimum)).replace("%max%", String.valueOf(maximum)).replace("%result%", String.valueOf(randomZahl)));
 			}
 		}
-		player.sendMessage(CasinoManager.getPrefix() + "You rolled §e§l" + randomZahl);
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-player_roll").replace("%result%", String.valueOf(randomZahl)));
 	}
 	
 	
