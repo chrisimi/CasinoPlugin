@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.chrisimi.casino.main.VersionManager;
 
 import scripts.CasinoManager;
@@ -35,7 +36,7 @@ public class PlayerJoinListener implements Listener {
 		
 		
 		if(PlayerSignsManager.playerWonWhileOffline.containsKey(event.getPlayer())) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("While you were offline, your Casino-Signs brought you in: %s", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("player-joins-message").replace("%amount%", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
 			PlayerSignsManager.playerWonWhileOffline.remove(event.getPlayer());
 		}
 	}

@@ -96,3 +96,6 @@ messages:
    commands-admin_successfully_reset_data: "You successfully reset the data!"
    commands-admin_successfully_reload_data: "You successfully reloaded the data!"
    
+   casinogui-player_not_enough_money: "§4You don't have enough money!"
+   
+   player-join-message: "While you were offline, your Casino-Signs brought you %amount%"

@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoAnimation;
 import scripts.CasinoGUI;
@@ -83,7 +84,7 @@ public class InventoryClickListener implements Listener{
 					if(Main.econ.getBalance((OfflinePlayer) event.getWhoClicked()) >= a.einsatz) {
 						a.startRoll();
 					} else {
-						event.getWhoClicked().sendMessage(CasinoManager.getPrefix()+ " You don't have enough money");
+						event.getWhoClicked().sendMessage(CasinoManager.getPrefix()+ MessageManager.get("casinogui-player_not_enough_money"));
 						CasinoAnimation.playerExit((Player) event.getWhoClicked());
 						event.getWhoClicked().closeInventory();
 					}
