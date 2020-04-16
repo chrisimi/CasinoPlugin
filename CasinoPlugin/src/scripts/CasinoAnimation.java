@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 
 public class CasinoAnimation {
@@ -66,7 +67,7 @@ public class CasinoAnimation {
 		block3Chance = Double.parseDouble(UpdateManager.getValue("animation.block3-Chance").toString());
 		
 		if(!(block1Chance+block2Chance+block3Chance == 100)) {
-			Bukkit.getLogger().info("blockchanceexception: the value of all 3 values isn't 100! (" + (block1Chance+block2Chance+block3Chance) + ")");
+			CasinoManager.LogWithColor(ChatColor.RED + "blockchanceexception: the value of all 3 values isn't 100! (" + (block1Chance+block2Chance+block3Chance) + ")");
 		}
 		
 		inventoryMaterial = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation.inventoryMaterial"));
@@ -98,7 +99,7 @@ public class CasinoAnimation {
 		rollCount++;
 		
 		Main.econ.withdrawPlayer(player, einsatz);
-		player.sendMessage(CasinoManager.getPrefix()+"You are rolling with " + Main.econ.format(einsatz));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_bet_message").replace("%amount%", Main.econ.format(einsatz)));
 		
 		
 		placeRandomizeBlocks();
@@ -203,7 +204,7 @@ public class CasinoAnimation {
 				}
 			}
 		}
-		player.sendMessage(CasinoManager.getPrefix() + "You won nothing. Current balance: " + Main.econ.format(Main.econ.getBalance(player)));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_won_nothing").replace("%balance%", Main.econ.format(Main.econ.getBalance(player))));
 		
 	}
 	private void placeRandomizeBlocks() {

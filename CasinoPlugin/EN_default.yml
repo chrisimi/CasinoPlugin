@@ -97,5 +97,7 @@ messages:
    commands-admin_successfully_reload_data: "You successfully reloaded the data!"
    
    casinogui-player_not_enough_money: "§4You don't have enough money!"
+   casinogui-player_bet_message: "You are rolling with %amount%"
+   casiongui-player_won_nothing: "You won nothing. Current Balance: %balance%"
    
    player-join-message: "While you were offline, your Casino-Signs brought you %amount%"
