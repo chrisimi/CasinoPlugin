@@ -386,7 +386,7 @@ public class LeaderboardsignsManager implements Listener {
 				
 			} catch (Exception e)
 			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Cycle must be year, month, week, day or hour!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation-cycle_invalid"));
 				event.setCancelled(true);
 				return;
 			}
@@ -398,7 +398,7 @@ public class LeaderboardsignsManager implements Listener {
 				position = Integer.valueOf(lines[1]);
 				cycle = Cycle.NaN;
 			} catch(Exception e) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Position must be an Integer value!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation-position_invalid"));
 				event.setCancelled(true);
 				return;
 			}
@@ -407,7 +407,7 @@ public class LeaderboardsignsManager implements Listener {
 			if(lines[2].equalsIgnoreCase(modeV.toString())) mode = modeV;
 		}
 		if(mode == null) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You have to use a valid mode! (highestamount, count, sumamount");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation-mode_invalid"));
 			event.setCancelled(true);
 			return;
 		}
@@ -416,14 +416,14 @@ public class LeaderboardsignsManager implements Listener {
 			try {
 				count = Integer.valueOf(lines[3]);
 			} catch(Exception e) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You have to use a valid range! (all or range in blocks)!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation-range_invalid"));
 				event.setCancelled(true);
 				return;
 			}
 		}
 		if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
 		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to create a leaderboardsign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-leaderboard"));
 			event.setCancelled(true);
 			return;
 		}
@@ -441,7 +441,7 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		else
 			createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
-		event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully created a leaderboard sign!");
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation_successful"));
 	}
 	
 	private void checkIfSignIsLeaderboardSign(BlockBreakEvent event) 
@@ -453,16 +453,16 @@ public class LeaderboardsignsManager implements Listener {
 			
 			//check if player is NOT admin
 			if(!(Main.perm.has(event.getPlayer(), "casino.admin") || event.getPlayer().isOp())) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have enough permission to break this leaderboardsign!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				event.setCancelled(true);
 				return;
 			}
 		}
 		
 		if(deleteLeaderbordsign(sign)) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully deleted this leaderboardsign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-delete_successful"));
 		} else {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4An error occured while trying to break the leaderboardsign! Retry it in a moment or relog!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaaderboard-error_when_break"));
 		}
 	}
 	public static void save()
