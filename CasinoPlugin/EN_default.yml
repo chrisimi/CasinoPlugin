@@ -34,6 +34,13 @@ messages:
    playersigns-player_lacks_money: "§4You don't have enough money to play with the minimum bet!"
    playersigns-creation-blackjack-successful: "You successfully created your own Blackjack sign!"
    playersigns-creation-blackjack-server-successful: "You successfully created a Server-Blackjack sign!"
+   playersigns-creation-blackjack-bet_invalid: "§4Min bet or max bet is invalid!"
+   playersigns-creation-blackjack-max_bet_invalid: "§4Max bet is lower than min bet!"
+   playersigns-creation-blackjack-over_max_server_bet: "§4The maximum bet allowed on this server is: §f %max_amount_server%"
+   playersigns-creation-blackjack-max_bet_missing: "§4You forgot to set the maximum bet on this sign!"
+   playersigns-creation-blackjack-bet_invalid_format: "§4Invalid format! (min bet; max bet)"
+   playersigns-creation-blackjack-invalid_winning: "§4Invalid winning: %error%"
+   playersigns-creation-blackjack-invalid_win_multiplicator: "§4Your provided win multiplicator is invalid!"
    
    blackjack-welcome_message: "Welcome to Blackjack! \nTo begin please typ in your bet between %min_bet% and %max_bet%"
    blackjack-owner-player_playing: "%playername% is playing on a blackjack sign with %money%"

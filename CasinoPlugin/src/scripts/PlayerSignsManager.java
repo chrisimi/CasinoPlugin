@@ -559,27 +559,27 @@ public class PlayerSignsManager implements Listener {
 					minBet = Double.parseDouble(values[0]);
 					maxBet = Double.parseDouble(values[1]);
 				} catch(NumberFormatException e) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invald bets!");
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-bet_invalid"));
 					event.setCancelled(true);
 					return;
 				}
 				if(maxBet < minBet) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Maxbet is lower than minbet!");
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-max_bet_invalid"));
 					event.setCancelled(true);
 					return;
 				}
 				if(maxBet > maxBetBlackjack) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4The maximum bet allowed on this server is: §f" + Main.econ.format(maxBetBlackjack));
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-over_max_server_bet").replace("%max_amount_server%", Main.econ.format(maxBetBlackjack)));
 					event.setCancelled(true);
 					return;
 				}
 			} else {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4No maxbet!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-max_bet_missing"));
 				event.setCancelled(true);
 				return;
 			}
 		} else {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid format! (minbet;maxbet)");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-bet_invalid_format"));
 			event.setCancelled(true);
 			return;
 		}
@@ -595,7 +595,7 @@ public class PlayerSignsManager implements Listener {
 				plusinf = event.getLine(3);
 			} catch(Exception e)
 			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid Winning: " + e.getMessage());
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-invalid_winning").replace("%error%", e.getMessage()));
 				event.setCancelled(true);
 				return;
 			}
@@ -605,7 +605,7 @@ public class PlayerSignsManager implements Listener {
 				Double winMultiplicator = Double.parseDouble(event.getLine(3));
 				plusinf = winMultiplicator.toString();
 			} catch(NumberFormatException e) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Invalid win multiplicator!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-invalid_win_multiplicator"));
 				event.setCancelled(true);
 				return;
 			}
