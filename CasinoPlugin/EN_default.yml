@@ -123,6 +123,18 @@ messages:
    roll-player_doesnt_exist: "§4This player has never joined this server or he is not online!"
    roll-player_roll: "You rolled §e%l %result%"
    
+   casinosigns-creation_no_bet: "§4You have to set a bet for this Casino-Sign!"
+   casinosigns-creation_bet_not_valid: "§4The bet is not a valid number!"
+   casinosigns-creation_bet_higher_than_max_bet: "§4The bet is higher than the max amount on this server!"
+   
+   casinosigns-creation-success: "You successfully placed a Casino-Sign!"
+   casinosigns-break-success: "You successsfully deleted a Casino-Sign!"
+   casinosigns-no_permission-break: "§4You don't have permission to break a Casino-Sign!"
+   casinosigns-sign_ingame: "§4This Slot is currently ongoing!"
+   casinosigns-playing: "You are playing with %amount%!"
+   casinosigns-not_enough_money: "§4You don't have enough money to play on this Casino-Sign!"   
+   casinosigns-player_won: "You won %amount% and now your balance is %balance%"
+   
    
    
    

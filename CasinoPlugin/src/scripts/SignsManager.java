@@ -29,6 +29,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -36,6 +37,7 @@ import com.google.gson.JsonSyntaxException;
 import net.milkbowl.vault.economy.EconomyResponse;
 import serializeableClass.SignConfiguration;
 import serializeableClass.Signs;
+
 
 public class SignsManager implements Listener {
 
@@ -123,7 +125,7 @@ public class SignsManager implements Listener {
 		try 
 		{
 			chances = (ArrayList<Double>) UpdateManager.getValue("sign.chance", new ArrayList<Double>());
-			if(chances.size() == 0) throw new Exception("You probably forgot to update config.yml! Try /casino updateoconfig to fix this problem!");
+			if(chances.size() == 0) throw new Exception("You probably forgot to update config.yml! Try /casino updateconfig to fix this problem!");
 			
 			if(chances.size() != 3) throw new Exception("The size of the list isn't 3!");
 			
@@ -256,31 +258,31 @@ public class SignsManager implements Listener {
 			return;
 		}
 		if(!(Main.perm.has(event.getPlayer(), "casino.sign.create") || event.getPlayer().isOp() || Main.perm.has(event.getPlayer(), "casino.admin"))) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to place a Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
 		
 		
 		if(event.getLine(1) == null || event.getLine(1).equals("")) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You have to set the bet for this Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-creation_no_bet"));
 			return;
 		}
 		Double bet;
 		try {
 			 bet = Double.parseDouble(event.getLine(1).trim());
 		} catch(NumberFormatException e) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Can't place Casino-Sign because the bet is not valid!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-creation_bet_not_valid"));
 			return;
 		}
 		
 		if(bet > maxBet) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "The bet is higher than the value set in config!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-creation_bet_higher_than_max_bet"));
 			return;
 		}
 		
 		Boolean success = registerNewSign((Sign) event.getBlock().getState(), bet);
 		if(success) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You've placed a Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-creation-success"));
 			Sign sign = (Sign) event.getBlock().getState();
 			signToNormal(sign, bet);
 		} 
@@ -304,13 +306,13 @@ public class SignsManager implements Listener {
 		
 		if(signValues.containsKey(event.getBlock().getLocation())) {
 			if(!(Main.perm.has(event.getPlayer(), "casino.sign.break") || event.getPlayer().isOp() || Main.perm.has(event.getPlayer(), "casino.admin"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You don't have permissions to break a Casino-Sign!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-no_permission-break"));
 				event.setCancelled(true);
 				return;
 			}
 			//is a sign from the list
 			signValues.remove(event.getBlock().getLocation());
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Successfully deleted a Casino-Sign!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-break-success"));
 			this.updateSignsYml();
 		}
 		
@@ -332,7 +334,7 @@ public class SignsManager implements Listener {
 		
 		
 		if(signTasks.containsKey(sign)) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This Slot is currently ongoing!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-sign_ingame"));
 			return;
 		}
 		
@@ -344,12 +346,12 @@ public class SignsManager implements Listener {
 			}
 			
 			if(Main.econ.has(event.getPlayer(), signValues.get(sign.getLocation()))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You are playing with " + Main.econ.format(signValues.get(sign.getLocation())));
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-playing").replace("%amount%", Main.econ.format(signValues.get(sign.getLocation()))));
 				Main.econ.withdrawPlayer(event.getPlayer(), signValues.get(sign.getLocation()));
 				playAnimationServerSigns(sign, signValues.get(sign.getLocation()), event.getPlayer());
 				
 			} else {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have enough money!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-not_enough_money"));
 			}
 		} 
 			
@@ -460,7 +462,7 @@ public class SignsManager implements Listener {
 								sign.setLine(3, "§3You won: " + wonamount);
 								EconomyResponse r = Main.econ.depositPlayer(player, wonamount);
 								if(r.transactionSuccess()) {
-									player.sendMessage(String.format(CasinoManager.getPrefix() + "You have won %s and now have %s", Main.econ.format(wonamount), Main.econ.format(Main.econ.getBalance(player))));
+									player.sendMessage(String.format(CasinoManager.getPrefix() + MessageManager.get("casinosigns-player_won").replace("%amount%", Main.econ.format(wonamount)).replace("%balance%",Main.econ.format(Main.econ.getBalance(player)))));
 								} else {
 									player.sendMessage(String.format(CasinoManager.getPrefix() + "An error occured: %s", r.errorMessage));
 								}
