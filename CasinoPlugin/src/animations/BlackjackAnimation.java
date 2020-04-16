@@ -11,6 +11,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
+import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -76,7 +78,7 @@ public class BlackjackAnimation implements Runnable {
 		minBet = thisSign.bet;
 		maxBet = thisSign.blackjackGetMaxBet();
 		waitingForInputs.put(player, this);
-		player.sendMessage(String.format("\n\n"+CasinoManager.getPrefix() + "Welcome to Blackjack! \nTo begin please typ in your bet, between %s and %s", Main.econ.format(minBet), Main.econ.format(maxBet)));
+		player.sendMessage(String.format("\n\n"+CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message").replace("%min_bet%", Main.econ.format(minBet).replace("%max_bet%", Main.econ.format(maxBet)))));
 		this.waitingForBet = true;
 		//check after 1 minute if player put nothing in reset sign!
 		currentWaitingTask = main.getServer().getScheduler().runTaskLater(main, new Runnable() {
@@ -106,7 +108,8 @@ public class BlackjackAnimation implements Runnable {
 		
 		Main.econ.withdrawPlayer(player, playerBet);
 		CasinoManager.Debug(this.getClass(), player.getName() + " - " + Main.econ.format(playerBet) + " because of the bet!");
-		contactOwner(String.format("%s is playing on a blackjack sign with %s", player.getPlayerListName(), Main.econ.format(playerBet)));
+		
+		contactOwner(MessageManager.get("blackjack-owner-playing_playing").replace("%playername%", player.getPlayerListName()).replace("%money%", Main.econ.format(playerBet)));
 		//Main.econ.depositPlayer(owner, playerBet);
 		thisSign.depositOwner(playerBet);
 		
@@ -176,9 +179,8 @@ public class BlackjackAnimation implements Runnable {
 				dealerLost();
 			else
 			{
-			String sendString = String.format(CasinoManager.getPrefix() + "Your next possibilities: \n Hit: hit \n Stand: stand \n Cancel: cancel");
-			player.sendMessage(sendString);
-			player.sendMessage(CasinoManager.getPrefix() + "Your cards: " + cardsString);
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-next-possibilities"));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-next-possibilities-cards").replace("%cards", cardsString));
 			CasinoManager.Debug(this.getClass(), player.getName() + " cards: " + cardsString);
 			waitingForInputs.put(player, this);
 			this.waitingForGameDecision = true;
@@ -255,8 +257,10 @@ public class BlackjackAnimation implements Runnable {
 		
 	}
 	private void playerLost() {
-		player.sendMessage(CasinoManager.getPrefix() + "§4You lost!");
-		contactOwner(String.format("%s lost at your blackjack sign!", player.getPlayerListName()));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_lost"));
+		
+		contactOwner(MessageManager.get("blackjack-owner-player_lost").replace("%playername%", player.getPlayerListName()));
+	
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, 0);
 		CasinoManager.Debug(this.getClass(), player.getName() + " lost!");
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 4f, 2.5f);
@@ -271,11 +275,16 @@ public class BlackjackAnimation implements Runnable {
 		
 		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() + this.playerBet : this.playerBet * 2;
 		if(Card.getValue(cards) == 21) {
-			player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
+			//player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_blackjack"));
 		}
-		player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
+		//player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_won").replace("%amount%", Main.econ.format(winamount)));
+		
 		CasinoManager.Debug(this.getClass(), "won!");
-		contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
+		//contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
+		contactOwner(MessageManager.get("blackjack-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(winamount)));
+		
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, winamount);
 		Main.econ.depositPlayer(player, winamount);
 		CasinoManager.Debug(this.getClass(), player.getName() + " +" + Main.econ.format(winamount) + " because of win!");
@@ -319,19 +328,21 @@ public class BlackjackAnimation implements Runnable {
 			try {
 				eingabe = Double.parseDouble(message);
 			} catch(NumberFormatException e) {
-				player.sendMessage(CasinoManager.getPrefix() + "§4That's incorrect!");
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-incorrect"));
 				return;
 			}
 			if(eingabe < thisAnimation.minBet) {
-				player.sendMessage(CasinoManager.getPrefix() + "§Your number is smaller than " + Main.econ.format(thisAnimation.minBet));
+				//player.sendMessage(CasinoManager.getPrefix() + "§4Your number is smaller than " + Main.econ.format(thisAnimation.minBet));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-bet_is_too_low").replace("%min_bet%", Main.econ.format(thisAnimation.minBet)));
 				return;
 			}
 			if(eingabe > thisAnimation.maxBet) {
-				player.sendMessage(CasinoManager.getPrefix() + "§4Your number is higher than " + Main.econ.format(thisAnimation.maxBet));
+				//player.sendMessage(CasinoManager.getPrefix() + "§4Your number is higher than " + Main.econ.format(thisAnimation.maxBet));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-bet_is_too_high").replace("%max_bet%", Main.econ.format(thisAnimation.maxBet)));
 				return;
 			}
 			if(!(Main.econ.has(player, eingabe))) {
-				player.sendMessage(CasinoManager.getPrefix() + "§4You don't have enough money for that!");
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-not_enough_money"));
 				return;
 			}
 			thisAnimation.main.getServer().getScheduler().cancelTask(thisAnimation.currentWaitingTask);
@@ -343,7 +354,7 @@ public class BlackjackAnimation implements Runnable {
 			//stop for leaving sign
 			if(message.equalsIgnoreCase("cancel")) {
 				thisAnimation.resetSign();
-				player.sendMessage(CasinoManager.getPrefix() + "You left the current Blackjack sign! You won't get your money back!");
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_left"));
 				CasinoManager.Debug(thisAnimation.getClass(), player.getName() + " left!");
 				
 			} else if(message.equalsIgnoreCase("stand")) {

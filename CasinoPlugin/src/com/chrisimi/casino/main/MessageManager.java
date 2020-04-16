@@ -192,7 +192,8 @@ public class MessageManager
 			
 		} catch (Exception e)
 		{
-			// TODO: handle exception
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to update messages: " + e.getMessage());
+			e.printStackTrace(CasinoManager.getPrintWriterForDebug());
 		}
 	}
 	public static String get(String messageName)
