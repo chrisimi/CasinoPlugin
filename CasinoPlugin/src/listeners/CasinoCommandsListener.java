@@ -28,11 +28,11 @@ import serializeableClass.PlayerSignsConfiguration;
 import slotChests.SlotChest;
 import slotChests.SlotChestsManager;
 
-public class CommandsListener implements Listener, CommandExecutor {
+public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 	private Main main;
 	
-	public CommandsListener(Main main) {
+	public CasinoCommandsListener(Main main) {
 		this.main = main;
 		Bukkit.getServer().getPluginCommand("casino").setExecutor(this);
 	}
@@ -41,7 +41,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if(!(sender instanceof Player)) {
-			sender.sendMessage(CasinoManager.getPrefix() + "You need to be a player!");
+			sender.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-sender-not_player"));
 			return false;
 		}
 		
@@ -53,9 +53,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 			if(args[0].equalsIgnoreCase("updateconfig")) {
 				if(Main.perm.has(player, "casino.admin") || player.isOp()) {
 					UpdateManager.updateConfigYml(main);
-					player.sendMessage(CasinoManager.getPrefix() + "You successfully updated the config!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin-successfully_updated_config"));
 				} else {
-					player.sendMessage(CasinoManager.getPrefix()+ "§4You don't have permission for that action!");
+					player.sendMessage(CasinoManager.getPrefix()+ MessageManager.get("commands-player_no_permission"));
 				} 
 		
 			} else if(args[0].equalsIgnoreCase("reloadconfig")) {
@@ -63,9 +63,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 					
 					UpdateManager.reloadConfig();
 					CasinoManager.reload();
-					player.sendMessage(CasinoManager.getPrefix() + "Config.yml reloaded!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin-successfully_reloaded_config"));
 				} else {
-					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission for that action!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				}
 				
 			} else if(args[0].equalsIgnoreCase("help")) {
@@ -75,7 +75,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 				showHelpToAdmin(player);
 			} else if(args[0].equalsIgnoreCase("createchest")) {
 				if(!Main.perm.has(sender, "casino.slotchest.create")) {
-					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions for that action!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commaneds-player_no_permission"));
 					
 				} else
 				createSlotChest(player);
@@ -119,7 +119,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 				if(Main.perm.has(player, "casino.roll")) {
 					rollCommand(player, args);
 				} else {
-					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do that!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				}
 			} else if(args[0].equalsIgnoreCase("resetleaderboard"))
 			{
@@ -133,7 +133,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 				if(Main.perm.has(player, "casino.roll")) {
 					rollCommand(player, args);
 				} else {
-					player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do that!");
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				}
 			}
 		}
@@ -148,7 +148,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 
 	private void createSlotChest(Player player) {
 		if(!(Main.perm.has(player, "casino.slotchest.create") || Main.perm.has(player, "casino.admin"))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to create a SlotChest!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
 		Block block = player.getTargetBlockExact(10);
@@ -159,14 +159,14 @@ public class CommandsListener implements Listener, CommandExecutor {
 		try {
 			chest = (Chest) block.getState();
 		} catch(ClassCastException e) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4This is not a valid Chest!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_invalid"));
 		}
 		
 		if(chest == null)
 			return;
 	
 		if(!(chestEmpty(chest))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4This chest contains items! You have to remove them first, before you can create a SlotChest out of it!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_chest_not_empty"));
 			return;
 		}
 		SlotChestsManager.createSlotChest(chest.getLocation(), player);
@@ -186,7 +186,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 	
 	private void enablePlayerManagedSign(Player player) {
 		if(!(Main.perm.has(player, "casino.dice.create") || Main.perm.has(player, "casino.admin"))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do that!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
 		
@@ -196,32 +196,32 @@ public class CommandsListener implements Listener, CommandExecutor {
 		
 		if(cnf.isSignDisabled()) {
 			cnf.enableSign();
-			player.sendMessage(CasinoManager.getPrefix() + "Successfully enabled your sign!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_enable").replace("%sign%", cnf.gamemode));
 		} else {
-			player.sendMessage(CasinoManager.getPrefix() + "§4Your sign is currently enabled!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_enabled"));
 		}
 	}
 
 	private PlayerSignsConfiguration checkForSign(Player player) {
 		Block block = player.getTargetBlockExact(10);
 		if(block == null) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4Invalid target!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_invalid_target"));
 			return null;
 		}
 		if(!(block.getType().toString().contains("SIGN"))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4That is not a sign!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_not_a_sign"));
 			return null;
 		}
 		Sign signLookingAt = (Sign) block.getState();
 		PlayerSignsConfiguration cnf = PlayerSignsManager.getPlayerSign(signLookingAt.getLocation());
 		if(cnf == null) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4That is not a valid player sign!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_not_a_playersign"));
 			return null;
 		}
 		if(Main.perm.has(player, "casino.admin")) {
 			
 		} else if(cnf.isServerOwner() || (!(cnf.getOwner().getPlayer().equals(player)))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4You are not the owner of this sign!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_not_owner"));
 			return null;
 		}
 		
@@ -231,17 +231,17 @@ public class CommandsListener implements Listener, CommandExecutor {
 
 	private void disablePlayerManagedSign(Player player) {
 		if(!(Main.perm.has(player, "casino.dice.create") || Main.perm.has(player, "casino.admin"))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do that!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
 		PlayerSignsConfiguration cnf = checkForSign(player);
 		if(cnf == null) return;
 		
 		if(cnf.isSignDisabled()) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4Your sign is currently disabled!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_disabled"));
 		} else {
 			cnf.disableSign();
-			player.sendMessage(CasinoManager.getPrefix() + "Successfully disabled your sign!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_disable"));
 		}
 		
 	}
@@ -339,7 +339,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 	private void showChestLocations(Player player) {
 		ArrayList<SlotChest> list = SlotChestsManager.getSlotChestsFromPlayer(player);
 		if(list.size() == 0) {
-			player.sendMessage(CasinoManager.getPrefix() + "You don't have any SlotChests!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_no_slotchests"));
 			return;
 		}
 		player.sendMessage("\n\n");
@@ -354,10 +354,9 @@ public class CommandsListener implements Listener, CommandExecutor {
 	
 	private void openCasinoGui(Player sender) {
 		if(Main.perm.has(sender, "casino.gui") || Main.perm.has(sender, "casino.admin")) {
-			sender.sendMessage(CasinoManager.getPrefix() + "open Casino GUI");
 			new CasinoGUI(main, sender);
 		} else {
-			sender.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to play slots!");
+			sender.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 		}
 
 	}
@@ -366,10 +365,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 		if(Main.perm.has(player, "casino.admin"))
 		{
 			LeaderboardsignsManager.resetData();
-			player.sendMessage(CasinoManager.getPrefix() + "You successfully reset the data!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reset_data"));
 		} else
 		{
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 		}
 	}
 	private void reloadData(Player player)
@@ -377,10 +376,10 @@ public class CommandsListener implements Listener, CommandExecutor {
 		if(Main.perm.has(player, "casino.admin")) 
 		{
 			LeaderboardsignsManager.reloadData(main);
-			player.sendMessage(CasinoManager.getPrefix() + "You successfully reloaded the data!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reload_data"));
 		} else 
 		{
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permission to do that!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 		}
 	}
 	private void resetLeaderboard(Player player, String range, String mode, Boolean serverSigns)
@@ -397,7 +396,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 				rangeBlocks = Integer.valueOf(range);
 			} catch (Exception e)
 			{
-				player.sendMessage(CasinoManager.getPrefix() + "§4You have to use a valid range or 'all' to use it for every leaderboard sign you have!");
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_reset_leaderboard_invalid"));
 				return;
 			}
 		}
@@ -415,7 +414,7 @@ public class CommandsListener implements Listener, CommandExecutor {
 		
 		if(serverSigns && !(Main.perm.has(player, "casino.serversigns")))
 		{
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to do this!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		} 
 		if(serverSigns)

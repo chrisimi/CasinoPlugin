@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import com.chrisimi.casino.main.Main;
 
 import listeners.CasinoChatListener;
-import listeners.CommandsListener;
+import listeners.CasinoCommandsListener;
 import listeners.InventoryClickListener;
 import listeners.PlayerJoinListener;
 import net.md_5.bungee.api.ChatColor;
@@ -50,7 +50,7 @@ public class CasinoManager {
 	}
 	public void initialize() {
 		
-		new CommandsListener(main);
+		new CasinoCommandsListener(main);
 		new InventoryClickListener(main);
 		new PlayerJoinListener(main);
 		new CasinoChatListener(main);

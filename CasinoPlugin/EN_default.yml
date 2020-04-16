@@ -53,6 +53,7 @@ messages:
    blackjack-input-not_enough_money: "§4You don't have enough money to play with!"
    
    
+   
    no-permissions-creating-slotssign: "§4You don't have permissions to create a slots sign!"
    no-permissions-using-slotssigns: "§4You don't have permissions to use slots signs!"
    playersigns-slots-sign_is_ingame: "§4This Slots game is currently ingame!"
@@ -75,4 +76,23 @@ messages:
    playersigns-owner_lacks_money: "§4The Owner doesn't have enough money!"
    
    no-permissions-creating-leaderboard: "§4You don't have permissions to create a leaderboard sign!"
+   
+   commands-player_no_permission: "§4You don't have permission for that action!"
+   commands-player-slotchest_chest_invalid: "§4This is not a valid chest!"
+   commands-player-slotchest_chest_not_empty: "§4This chest contains items! You have to remove them first, before you can create a SlotChest out of it!"
+   commands-player-slotchest_no_slotchests: "§4You don't have any SlotChests!"
+   commands-player-playersigns_enable: "You successfully enabled your %sign% sign!"
+   commands-player-playersigns_is_enabled: "§4Your sign is currently enabled!"
+   commands-player-playersigns_disable: "You successfully disabled your %sign% sign!"
+   commands-player-playersigns_is_disabled: "§4Your sign is currently disabled!"
+   commands-player-playersigns_invalid_target: "§4You don't look at a valid target!"
+   commands-player-playersigns_not_a_sign: "§4This is not a sign!"
+   commands-player-playersigns_not_a_playersign: "§4This is not a valid player sign!"
+   commands-player-playersigns_not_owner: "§4You are not the owner of this sign!"
+   commands-player_reset_leaderboard_invalid: "§4You have to use a valid range or 'all' to use it for every leaderboard sign you have!"
+   commands-sender-not_player: "You need to be a player to use casino commands!"
+   commands-admin_successfully_updated_config: "You successfully updated the config!" 
+   commands-admin_successfully_reloaded_config: "Config successfully reloaded!"
+   commands-admin_successfully_reset_data: "You successfully reset the data!"
+   commands-admin_successfully_reload_data: "You successfully reloaded the data!"
    
