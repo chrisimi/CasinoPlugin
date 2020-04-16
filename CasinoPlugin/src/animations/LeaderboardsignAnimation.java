@@ -20,6 +20,7 @@ import org.bukkit.block.Sign;
 
 import com.chrisimi.casino.main.Main;
 
+import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
 import serializeableClass.Leaderboardsign;
 import serializeableClass.PlayData;
@@ -77,7 +78,7 @@ public class LeaderboardsignAnimation implements Runnable
 			{
 				currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());				
 			}
-			System.out.println("get a" + calendar.getTime().toString());
+			//System.out.println("get a" + calendar.getTime().toString());
 			
 		}
 		else
@@ -93,7 +94,7 @@ public class LeaderboardsignAnimation implements Runnable
 		}
 			
 		
-		System.out.println("from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
+		CasinoManager.Debug(this.getClass(), "from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
 		
 		if(!(sign.modeIsAll())) 
 		{
