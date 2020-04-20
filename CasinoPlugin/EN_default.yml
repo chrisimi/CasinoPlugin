@@ -158,7 +158,9 @@ messages:
    slotchest-creation_error: "§4An error occured while trying to create your SlotChest! Please contact the server administrator!"
    slotchest-break_inventory_not_empty: "§4Before you can break your SlotChest, you have to empty all winnings and the warehouse!"
    slotchest-break_successful: "§4You successfully removed your SlotChest!"
-   
+   slotchest-warehouse_successful: "You successfully added %item% to the warehouse!"
+   slotchest-warehouse_is_full: "§4The warehouse is full!"
+   slotchest-warehouse_item_no_win: "§4You can't add a item to the warehouse which you can't win!"
    
    
    

@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.yaml.snakeyaml.Yaml;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.mojang.authlib.minecraft.InsecureTextureException.WrongTextureOwnerException;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.datafixers.types.templates.List;
@@ -127,17 +128,17 @@ public class WarehouseMenu implements Listener{
 							}
 							
 							updateLager();
-							owner.sendMessage(CasinoManager.getPrefix() + "Successfully added " + itemStack.getType().toString() + " to the warehouse");
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_successful"));
 							
 						} else {
-							owner.sendMessage(CasinoManager.getPrefix() + "§4The warehouse is full!");
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_is_full"));
 							warehouseMenu.setItem(49, new ItemStack(Material.AIR));
 							putItemInInventory(itemStack);
 						}
 						
 						
 					} else {
-						owner.sendMessage(CasinoManager.getPrefix() + "§4This item is not in the list to win!");
+						owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_item_no_win"));
 						warehouseMenu.setItem(49, new ItemStack(Material.AIR));
 						putItemInInventory(itemStack);
 					}
