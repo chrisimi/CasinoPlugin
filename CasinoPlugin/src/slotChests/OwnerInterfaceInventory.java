@@ -1,7 +1,6 @@
 package slotChests;
 
 
-import static org.junit.Assert.assertFalse;
 
 import java.util.Map.Entry;
 
@@ -94,7 +93,7 @@ public class OwnerInterfaceInventory implements Listener{
 		meta.addEnchant(Enchantment.LUCK, 2, true);
 		meta.setDisplayName("§2enable");
 		enableItem.setItemMeta(meta);
-		ownerInterface.setItem(8, enableItem);
+		
 		
 		betItem = new ItemStack(Material.GOLD_INGOT, 1);
 		meta = betItem.getItemMeta();
@@ -103,6 +102,10 @@ public class OwnerInterfaceInventory implements Listener{
 		betItem.setItemMeta(meta);
 		ownerInterface.setItem(4, betItem);
 		
+		if(slotChest.enabled)
+			ownerInterface.setItem(8, disableItem);
+		else
+			ownerInterface.setItem(8, enableItem);
 		
 	}
 
