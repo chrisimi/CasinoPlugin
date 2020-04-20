@@ -492,6 +492,7 @@ public class LeaderboardsignsManager implements Listener {
 	public static List<PlayData> getPlayData(OfflinePlayer player) {
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		
 		synchronized (playdatas)
 		{
@@ -505,6 +506,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		
 		synchronized (playdatas)
 		{
@@ -518,6 +520,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		
 		synchronized (playdatas)
 		{
@@ -532,6 +535,7 @@ public class LeaderboardsignsManager implements Listener {
 	public static List<PlayData> getPlayData() {
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		
 		synchronized (playdatas)
 		{
@@ -545,7 +549,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
-		
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		synchronized (playdatas)
 		{
 			dataList = playdatas.stream()
@@ -558,6 +562,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		List<PlayData> dataList = new ArrayList<>();
 		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
+		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
 		
 		synchronized (playdatas)
 		{
