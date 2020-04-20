@@ -51,14 +51,14 @@ public class LeaderboardsignAnimation implements Runnable
 	@Override
 	public void run() 
 	{
-		System.out.println("run");
+		
 		//will be called every frame
 		if(!(signBlock.isPlaced())) return;
 		
 		signBlock.setLine(1, "§4updating...");
 		signBlock.setLine(2, "§4updating...");
 		signBlock.update(true);
-		
+		CasinoManager.Debug(this.getClass(), sign.getLocation().toString() + " run ");
 		getData();
 		analyseData();
 		writeSign();
@@ -93,7 +93,7 @@ public class LeaderboardsignAnimation implements Runnable
 			}
 		}
 			
-		
+		CasinoManager.Debug(this.getClass(), "found datasets: " +  currentData.size());
 		CasinoManager.Debug(this.getClass(), "from: " + getStartDateOfSign().getTime().toString() + " to: " + getEndDateOfSign().getTime().toString() + " - " + this.sign.cycleMode.toString());
 		
 		if(!(sign.modeIsAll())) 
@@ -107,6 +107,7 @@ public class LeaderboardsignAnimation implements Runnable
 			}
 			currentData.removeAll(dataToRemove);
 		}
+		CasinoManager.Debug(this.getClass(), "after sorting out, datasets: " + currentData.size());
 	}
 	private void analyseData()
 	{
@@ -153,7 +154,9 @@ public class LeaderboardsignAnimation implements Runnable
 		}
 		
 		int index = 1;
+		CasinoManager.Debug(this.getClass(), "Result of analyse count: ");
 		for(Entry<OfflinePlayer, Integer> entry : sortedMap.entrySet()) {
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " - " + entry.getValue());
 			if(index == sign.position) 
 			{
 				currentPlayer = entry.getKey();
@@ -205,7 +208,9 @@ public class LeaderboardsignAnimation implements Runnable
 		}
 		
 		int index = 1;
+		CasinoManager.Debug(this.getClass(), "result of analyse highestamount: ");
 		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet()) {
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " - " + entry.getValue());
 			if(index == sign.position) 
 			{
 				currentPlayer = entry.getKey();
@@ -256,7 +261,9 @@ public class LeaderboardsignAnimation implements Runnable
 		}
 		
 		int index = 1;
+		CasinoManager.Debug(this.getClass(), "result of analyse sumamount");
 		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet()) {
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " - " + entry.getValue());
 			if(index == sign.position) 
 			{
 				currentPlayer = entry.getKey();

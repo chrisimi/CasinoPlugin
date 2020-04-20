@@ -99,7 +99,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 				showBlackjackHelpToPlayer(player);
 			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("leaderboard")) {
 				showLeaderboardSignHelpToPlayer(player);
-			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("slot")) {
+			} else if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("slots")) {
 				showSlotsSignHelpToPlayer(player);
 			}
 			
@@ -241,7 +241,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_disabled"));
 		} else {
 			cnf.disableSign();
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_disable"));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_disable").replace("%sign%", cnf.gamemode));
 		}
 		
 	}
@@ -255,7 +255,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		player.sendMessage("§6§n§lFormat of a dice sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: casino");
+		player.sendMessage("     §6line 1: casino (casino;server for using it as a server dice sign)");
 		player.sendMessage("     §6line 2: dice");
 		player.sendMessage("     §6line 3: the bet like 30 or 20.5");
 		player.sendMessage("     §6line 4: the win chance and the multiplicator like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
@@ -269,7 +269,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		player.sendMessage("§6§n§lFormat of a blackjack sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: casino");
+		player.sendMessage("     §6line 1: casino (casino;server for using it as a server blackjack sign)");
 		player.sendMessage("     §6line 2: blackjack");
 		player.sendMessage("     §6line 3: minbet;maxbet like 20;30");
 		player.sendMessage("     §6line 4: multiplicator if players draws a blackjack (21) in to writing like 3 to 2");
@@ -285,7 +285,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("§6§n§lFormat of a leaderboardsign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: leaderboard");
+		player.sendMessage("     §6line 1: leaderboard (leaderboard;s for using it as a server leaderboardsign) ");
 		player.sendMessage("     §6line 2: position;cycle   position like 1 for first place, cycle is optional like month data will be only taken from this month, (year, month, week, day, hour)");
 		player.sendMessage("     §6line 3: mode (count, sumamount, highestamount)");
 		player.sendMessage("     §6line 4: range (all for all your signs, number of blocks (3 as example) for using signs in this block range");
@@ -296,14 +296,17 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage("§f§lCasino-Slots sign help");
-		if(Main.perm.has(player, "casino.sign.create")) player.sendMessage("§2permissions: §4true");
-		else player.sendMessage("§2permissions: §4false");
+
 		
 		player.sendMessage("");
 		player.sendMessage("§6§n§lFormat of a Casino-Slots sign:");
 		player.sendMessage("");
-		player.sendMessage("    §6line 1: casino");
+		player.sendMessage("    §6line 1: slots or slots;server for server sign");
 		player.sendMessage("    §6line 2: bet amount in decimal like 10.0");
+		player.sendMessage("    §6line 3: 3 symbols splited by ';' a semicolon like A;B;C");
+		player.sendMessage("    §6line 4: chances and multiplicators in that format: ");
+		player.sendMessage("    §6        chance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 (1 is for A, 2 is for B and 3 is for C in that example)");
+		player.sendMessage("    §6example:   50-30-20;2-3-5");
 		
 	}
 	
@@ -323,7 +326,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
 		player.sendMessage("§6/casino §8- open the casino GUI");
 		player.sendMessage("§6/casino admin §8- admin help command"); 
-		player.sendMessage("§6/casino help slot §8- show help for placing Casino-Slots signs!");
+		player.sendMessage("§6/casino help slots §8- show help for placing slots signs!");
 		player.sendMessage("§6/casino help dice §8- show help for placing a dice signs!");
 		player.sendMessage("§6/casino help blackjack §8- show help for placing blackjack signs!");
 		player.sendMessage("§6/casino help leaderboard §8- show help for placing leaderboard signs!");

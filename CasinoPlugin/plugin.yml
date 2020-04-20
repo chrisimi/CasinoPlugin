@@ -25,8 +25,8 @@ commands:
     description: get help as an admin for this plugin
     usage: /casino admin
     permission: casino.admin
-  casino help slot:
-    description: get the help for Slot-Chests
+  casino help slots:
+    description: get the help for slots signs
     usage: /casion help slot
   casino help dice:
     description: get the help for dice signs
