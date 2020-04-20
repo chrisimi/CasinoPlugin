@@ -143,6 +143,12 @@ messages:
    slotchest-player_pay_message: "§6You paid %amount% to play this SlotChest!"
    slotchest-owner_pay_message: "§6Somebody played on your Slotchest. You have earned: %amount%"
    slotchest-player_won: "You won %item_count%x %item_type%"
+   slotchest-bet_message: "§6Write your bet in the chat!"
+   slotchest-bet_decrease: "You decreased your bet by %amount%"
+   slotchest-bet_increase: "You increased your bet by %amount%"
+   slotchest-bet_input_invalid: "§4Your bet is not a number!"
+   slotchest-bet_input_lower_than_0: "§4Your bet can't be lower or equals to zero!"
+   slotchest-bet_new_bet_message: "§6%amount% is the new bet!"
    
    
    

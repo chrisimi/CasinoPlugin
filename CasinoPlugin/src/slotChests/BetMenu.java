@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 import net.minecraft.server.v1_14_R1.Item;
 import scripts.CasinoManager;
@@ -48,12 +49,12 @@ public class BetMenu implements Listener{
 	private Material plusBlockMaterial = Material.GREEN_WOOL;
 	
 	private final Main main;
-	private final Player owner;
+	private final Player player;
 	private final SlotChest slotChest;
 	private final OwnerInterfaceInventory ownerInterfaceInventory;
 	public BetMenu(Main main, Player owner, SlotChest slotchest, OwnerInterfaceInventory oii) {
 		this.main = main;
-		this.owner = owner;
+		this.player = owner;
 		this.slotChest = slotchest;
 		this.ownerInterfaceInventory = oii;
 		main.getServer().getPluginManager().registerEvents(this, main);
@@ -69,11 +70,11 @@ public class BetMenu implements Listener{
 		plusBet3 = new ItemStack(plusBlockMaterial);
 		plusBet4 = new ItemStack(plusBlockMaterial);
 		
-		inventory = Bukkit.createInventory(owner, 9*3, "setup your bet!");
+		inventory = Bukkit.createInventory(player, 9*3, "setup your bet!");
 		
 		inputsign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = inputsign.getItemMeta();
-		meta.setDisplayName("Write in the chat to set up your bet!");
+		meta.setDisplayName("Write bet in chat");
 		inputsign.setItemMeta(meta);
 		inventory.setItem(22, inputsign);
 		
@@ -90,14 +91,14 @@ public class BetMenu implements Listener{
 		inventory.setItem(4, currentBetsign);
 		//TODO
 		
-		owner.openInventory(inventory);
+		player.openInventory(inventory);
 		
 		managePlusMinusBlocks();
 	}
 	public void updateInventory() {
 		currentBetsign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = currentBetsign.getItemMeta();
-		meta.setDisplayName("§6Current bet: " + Main.econ.format(slotChest.bet));
+		meta.setDisplayName("§6current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);
 		inventory.setItem(4, currentBetsign);
 		managePlusMinusBlocks();
@@ -105,7 +106,7 @@ public class BetMenu implements Listener{
 		CasinoManager.slotChestManager.save();
 	}
 	private void managePlusMinusBlocks() {
-		double playerbalance = Main.econ.getBalance(owner) - slotChest.bet;
+		double playerbalance = Main.econ.getBalance(player) - slotChest.bet;
 		
 		/* Slot: 1	2	3	4	5	6	7	8	9
 		 * 		 m4	m3	m2	m1	sign p1	p2	p3	p4 
@@ -193,22 +194,22 @@ public class BetMenu implements Listener{
 		ownerInterfaceInventory.openInventory();
 	}
 	private void inputWithChat() {
-		waitingForChatInputTasks.put(owner, this);
-		owner.sendMessage("\n\n"+CasinoManager.getPrefix() + "§6Write your bet in chat!");
+		waitingForChatInputTasks.put(player, this);
+		player.sendMessage("\n\n"+CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_message"));
 		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
 			
 			
 			@Override
 			public void run() {
-				if(waitingForChatInputTasks.containsKey(owner)) {
-					owner.sendMessage(CasinoManager.getPrefix() + "§4Time for writing the input expired! Try it again!");
-					waitingForChatInputTasks.remove(owner);
+				if(waitingForChatInputTasks.containsKey(player)) {
+					player.sendMessage(CasinoManager.getPrefix() + "§4Time for writing the input expired! Try it again!");
+					waitingForChatInputTasks.remove(player);
 				}
 				
 			}
 		}, 20*120);
 		
-		owner.closeInventory();
+		player.closeInventory();
 	}
 	
 	private void clickedOnMinusBlock(InventoryClickEvent event) {
@@ -217,7 +218,8 @@ public class BetMenu implements Listener{
 		for(int i = 0; i < 4; i++) {
 			if(clickedOn.equals(blocks[i])) {
 				slotChest.bet -= minusBetValues[i];
-				owner.sendMessage(CasinoManager.getPrefix() + "You decreased your bet by " + Main.econ.format(minusBetValues[i]));
+//				player.sendMessage(CasinoManager.getPrefix() + "You decreased your bet by " + Main.econ.format(minusBetValues[i]));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchet-bet_decrease").replace("%amount%", Main.econ.format(minusBetValues[i])));
 				return;
 			}
 		}
@@ -228,28 +230,30 @@ public class BetMenu implements Listener{
 		for(int i = 0; i < 4; i++) {
 			if(clickedOn.equals(blocks[i])) {
 				slotChest.bet += plusBetValues[i];
-				owner.sendMessage(CasinoManager.getPrefix() + "You increased your bet by " + Main.econ.format(plusBetValues[i]));
+//				player.sendMessage(CasinoManager.getPrefix() + "You increased your bet by " + Main.econ.format(plusBetValues[i]));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amonut%", Main.econ.format(plusBetValues[i])));
 				Bukkit.getLogger().info("bet: " + plusBetValues[i]);
 				return;
 			}
 		}
 	}
 	private void input(String message) {
-		if(!(waitingForChatInputTasks.containsKey(owner))) return;
+		if(!(waitingForChatInputTasks.containsKey(player))) return;
 		Double input = null;
 		try {
 			input = Double.parseDouble(message);
 		} catch (NumberFormatException e) {
-			owner.sendMessage(CasinoManager.getPrefix() + "§4That is not a number!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_input_invalid"));
 			return;
 		}
 		if(input <= 0) {
-			owner.sendMessage(CasinoManager.getPrefix() + "§4Bet can't be lower or equal to 0!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_input_lower_than_0"));
 			return;
 		}
 		
-		owner.sendMessage(CasinoManager.getPrefix() + "§6" + Main.econ.format(input) + " is the new bet!");
-		waitingForChatInputTasks.remove(owner);
+//		player.sendMessage(CasinoManager.getPrefix() + "§6" + Main.econ.format(input) + " is the new bet!");
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_new_bet_message").replace("%amount%", Main.econ.format(input)));
+		waitingForChatInputTasks.remove(player);
 		slotChest.bet = input;
 		slotChest.save();
 		this.updateInventory();
