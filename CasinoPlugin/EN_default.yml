@@ -149,6 +149,7 @@ messages:
    slotchest-bet_input_invalid: "§4Your bet is not a number!"
    slotchest-bet_input_lower_than_0: "§4Your bet can't be lower or equals to zero!"
    slotchest-bet_new_bet_message: "§6%amount% is the new bet!"
+   slotchest-ownerinterface-cant_activate_forbidden_item: "§4Can't activate SlotChest! %item% is forbidden on this server!"
    
    
    
