@@ -119,7 +119,38 @@ public class WarehouseMenu implements Listener{
 							slotChest.lager.add(itemStack);
 							warehouseMenu.setItem(49, new ItemStack(Material.AIR));
 							for(int i = 0; i < 9*5; i++) {
-								if(warehouseMenu.getItem(i) == null || warehouseMenu.getItem(i).getType() == Material.PINK_STAINED_GLASS_PANE) {
+								
+								if(itemStack.getAmount() == 0)
+									break;
+								
+								if(warehouseMenu.getItem(i).getType().equals(itemStack.getType()) && warehouseMenu.getItem(i).getAmount() != itemStack.getType().getMaxStackSize())
+								{
+									if(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount() <= itemStack.getType().getMaxStackSize())
+									{
+										//kann item zur gänze hinzufügen
+										warehouseMenu.getItem(i).setAmount(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount());
+										itemStack.setAmount(0);
+										break;
+									} 
+									else
+									{
+										int amountToAddInStack = itemStack.getType().getMaxStackSize() - warehouseMenu.getItem(i).getAmount();
+										if(amountToAddInStack > itemStack.getAmount())
+										{
+											//man könnte noch mehr dazutun wia eig. max
+											warehouseMenu.getItem(i).setAmount(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount());
+											itemStack.setAmount(0);
+											break;
+										} else 
+										{
+											warehouseMenu.getItem(i).setAmount(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount());
+											itemStack.setAmount(itemStack.getAmount() - amountToAddInStack);
+											
+										}
+									}
+								}
+								
+								if((warehouseMenu.getItem(i) == null || warehouseMenu.getItem(i).getType() == Material.PINK_STAINED_GLASS_PANE) && itemStack.getAmount() >= 1) {
 									warehouseMenu.setItem(i, itemStack);
 									break;
 								}
@@ -199,42 +230,67 @@ public class WarehouseMenu implements Listener{
 	}
 	
 	
-	
+	public enum SortType
+	{
+		ID,
+		NAME
+	}
 	private void sortLager() {
 		updateLager();
 		
 		if(sortByID)
-			sortLagerID();
+			sortLager(SortType.ID);
 		else
-			sortLagerName();
+			sortLager(SortType.NAME);
 		
 		
 		updateLager();
 	}
-	private void sortLagerID() {
+	private void sortLager(SortType type) {
 		HashMap<Material, Integer> items = slotChest.getLagerWithNumbers();
-//		for(Entry<Material, Integer> entry : items.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
+		for(Entry<Material, Integer> entry : items.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		System.out.println("---");
 		
 		TreeMap<Material, Integer> sortedList = new TreeMap<>(items);
 		
-		//for(Entry<Material, Integer> entry : sortedList.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		for(Entry<Material, Integer> entry : sortedList.entrySet()) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		System.out.println("---");
 		
 		Comparator<Entry<Material, Integer>> valueComperator = new Comparator<Map.Entry<Material,Integer>>() {
 			@Override
 			public int compare(Entry<Material, Integer> e1, Entry<Material, Integer> e2) {
-				return e2.getKey().compareTo(e1.getKey());
+				switch (type)
+				{
+				case ID:
+					return e2.getKey().compareTo(e1.getKey());
+					
+				case NAME:
+					return e2.getKey().toString().compareTo(e1.getKey().toString());
+
+				default:
+					return 0;
+				}
+				
 			}
 		};
 		
 		ArrayList<Entry<Material, Integer>> listOfEntries = new ArrayList<Entry<Material, Integer>>(sortedList.entrySet());
 		Collections.sort(listOfEntries, valueComperator);
 		
-		//for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		
 		LinkedHashMap<Material, Integer> sortedByList = new LinkedHashMap<Material, Integer>(listOfEntries.size());
 		for(Entry<Material, Integer> entry : listOfEntries) sortedByList.put(entry.getKey(), entry.getValue());
+		
+		//clear inv
+		for(int i = 0; i < warehouseMenu.getSize(); i++)
+		{
+			if(i == 49 || i == 52 || i == 53) continue;
+			warehouseMenu.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
+		}
+		
 		
 		int slot = 0;
 		
@@ -244,7 +300,7 @@ public class WarehouseMenu implements Listener{
 			int amountOfItems = entry.getValue();
 			
 			while(amountOfItems >= 1) {
-				
+				System.out.println(slot + " " + entry.getKey().toString() + " " + amountOfItems);
 				if(amountOfItems > 64) {
 					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), 64));
 					slot++;
@@ -260,10 +316,13 @@ public class WarehouseMenu implements Listener{
 			}
 			
 		}
+		ArrayList<ItemStack> stock = new ArrayList<>();
+		for(ItemStack item : warehouseMenu.getContents())
+			if(item != null)
+				stock.add(item);
 		
-	}
-	private void sortLagerName() {
-		
+		slotChest.lager = stock;
+		slotChest.save();
 	}
 	
 	
