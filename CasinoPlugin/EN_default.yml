@@ -161,8 +161,16 @@ messages:
    slotchest-warehouse_successful: "You successfully added %item% to the warehouse!"
    slotchest-warehouse_is_full: "§4The warehouse is full!"
    slotchest-warehouse_item_no_win: "§4You can't add a item to the warehouse which you can't win!"
-   
-   
+   slotchest-winnings_reached_limit: "§4You have reached the limit of winnings!"
+   slotchest-winnings_exists: "§4This item exists in the list!"
+   slotchest-winnings_forbidden_item: "§4This item is forbidden on this server!"
+   slotchest-winnings_amount_message: "Adding information to your winning-item: \nType in the amount of %item% the player should win!"
+   slotchest-winnings_successful_remove: "You successfully removed %item% from your winnings list!"   
+   slotchest-winnings-amount_not_number: "§4Amount have to be a number!"
+   slotchest-winnings-amount_lower_0: "§4Amount have to be higher than 0!"
+   slotchest-winnings_weight_message: "Type in the weight of this win! Total weight: %total_weight%!"
+   slotchest-winnings-weight_not_number: "§4The weight have to be a number!"
+   slotchest-winnings-weight_lower_0: "§4The weight have to be higher than 0!"
    
    
    

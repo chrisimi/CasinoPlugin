@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.google.common.util.concurrent.CycleDetectingLockFactory.WithExplicitOrdering;
 
 import net.md_5.bungee.api.ChatColor;
@@ -88,7 +89,7 @@ public class WinningsMenu implements Listener {
 					if(itemStack != Material.AIR && itemStack != fillMaterial.getType()) {
 						
 						if(slotChest.lager.size() >= 9*5) {
-							owner.sendMessage(CasinoManager.getPrefix() + "§4You reached the limit");
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_reached_limit"));
 							inventory.setItem(40, new ItemStack(Material.AIR));
 							int slot = owner.getInventory().first(Material.AIR);
 							if(slot == -1)
@@ -98,7 +99,7 @@ public class WinningsMenu implements Listener {
 						}
 						
 						if(slotChest.itemstoWinContains(itemStack)) {
-							owner.sendMessage(CasinoManager.getPrefix() + "§4This item is in the list!");
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_exists"));
 							inventory.setItem(40, new ItemStack(Material.AIR));
 							int slot = owner.getInventory().first(Material.AIR);
 							if(slot == -1) {
@@ -108,7 +109,7 @@ public class WinningsMenu implements Listener {
 							}
 							
 						} else if(slotChest.itemIsOnForbiddenList(itemStack)) {
-							owner.sendMessage(CasinoManager.getPrefix() + "§4This item is forbidden on this server!");
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_forbidden_item"));
 							inventory.setItem(40, new ItemStack(Material.AIR));
 							int slot = owner.getInventory().first(Material.AIR);
 							if(slot == -1)
@@ -126,7 +127,8 @@ public class WinningsMenu implements Listener {
 							waitingForAmount = true;
 							waitingForWeight = true;
 							
-							owner.sendMessage(String.format(CasinoManager.getPrefix() + "Adding Informations to your winning: \nType in the amount of %s the player should win", itemStack.toString()));
+//							owner.sendMessage(String.format(CasinoManager.getPrefix() + "Adding Informations to your winning: \nType in the amount of %s the player should win", itemStack.toString()));
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_amount_message").replace("%item%", itemStack.toString()));
 							newItemMaterial = itemStack;
 							owner.closeInventory();
 						}
@@ -236,8 +238,8 @@ public class WinningsMenu implements Listener {
 		
 		slotChest.save();
 		updateInventory();
-		owner.sendMessage(CasinoManager.getPrefix() + "You successfully removed " + item.getType().toString() + " from your winnings list");
-		
+//		owner.sendMessage(CasinoManager.getPrefix() + "You successfully removed " + item.getType().toString() + " from your winnings list");
+		owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_successful_remove").replace("%item%", item.getType().toString()));
 	}
 	
 	private void playerEingabe(String message) {
@@ -246,26 +248,27 @@ public class WinningsMenu implements Listener {
 			try {
 				amount = Integer.parseInt(message);
 			} catch (NumberFormatException e) {
-				owner.sendMessage(CasinoManager.getPrefix() + "§4Amount have to be a number!");
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-amount_not_number"));
 				return;
 			}
-			if(amount == 0) {
-				owner.sendMessage(CasinoManager.getPrefix() + "§4Amount have to be higher than 1!");
+			if(amount <= 0) {
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_amount_lower_0"));
 				return;
 			}
 			waitingForAmount = false;
 			newItemAmount = amount;
-			owner.sendMessage(String.format(CasinoManager.getPrefix() + "Type in the weight of this win! Total weight: %.1f",slotChest.getGesamtGewicht()));
+//			owner.sendMessage(String.format(CasinoManager.getPrefix() + "Type in the weight of this win! Total weight: %.1f",slotChest.getGesamtGewicht()));
+			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_message").replace("%total_weight", String.format("%.1f", slotChest.getGesamtGewicht())));
 		} else if(waitingForWeight) {
 			double amount = 0.0;
 			try {
 				amount = Double.parseDouble(message);
 			} catch (NumberFormatException e) {
-				owner.sendMessage(CasinoManager.getPrefix() + "§4The weight have to be a number!");
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_not_number"));
 				return;
 			}
 			if(amount == 0.0) {
-				owner.sendMessage(CasinoManager.getPrefix() + "§4Weight have to be higher than 0!");
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_lower_0"));
 				return;
 			}
 			waitingForWeight = false;
