@@ -30,7 +30,7 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 		this.main = main;
 		this.slotChest = slotChest;
 		this.player = player;
-		this.inventory = Bukkit.createInventory(player, inventorySize, "RollAnimation"); //TODO besserer nahme
+		this.inventory = Bukkit.createInventory(player, inventorySize, "roll animation"); //TODO besserer name
 		
 		fillmaterial = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
 	}

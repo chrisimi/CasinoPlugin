@@ -35,7 +35,7 @@ public class NormalRightToLeftAnimation implements IRollAnimation {
 		this.player = player;
 		
 		
-		inventory = Bukkit.createInventory(player, inventorysize, "RollAnimation");
+		inventory = Bukkit.createInventory(player, inventorysize, "roll animation");
 		fillmaterial = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
 	}
 	

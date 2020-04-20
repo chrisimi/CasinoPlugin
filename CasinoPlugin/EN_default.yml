@@ -136,7 +136,13 @@ messages:
    casinosigns-player_won: "You won %amount% and now your balance is %balance%"
    
    
-   
+   slotchest-is_currently_running: "§4This SlotChest is currently running!"
+   slotchest-not_enough_items: "§4This SlotChest doesn't have enough items!"
+   slotchest-not_enough_winnings: "§4This SlotChest doesn't have enough winnings!"
+   slotchest-player_not_enough_money: "§4You don't have enough money!"
+   slotchest-player_pay_message: "§6You paid %amount% to play this SlotChest!"
+   slotchest-owner_pay_message: "§6Somebody played on your Slotchest. You have earned: %amount%"
+   slotchest-player_won: "You won %item_count%x %item_type%"
    
    
    

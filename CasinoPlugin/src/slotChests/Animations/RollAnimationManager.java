@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.experimental.theories.Theories;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 
 import net.minecraft.server.v1_14_R1.SoundCategory;
 import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
@@ -80,20 +81,21 @@ public class RollAnimationManager implements Runnable, Listener{
 	}
 	private void startBeginAnimation() { //TODO: make it more beautiful
 		if(slotChest.running) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4This Slotchest is currently running!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-is_currently_running"));
 			return;
 		}
 		
 		if(!slotChest.hasChestEnough()) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4This Slotchest doesn't have enough items!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-not_enough_items"));
 			return;
 		}
 		if(slotChest.itemsToWin.size() < 2) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4This SlotChest doesn't have enough winnings!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-not_enough_winnings"));
 			return;
 		}
 		if(!(Main.econ.has(player, slotChest.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + "§4You don't have enough money!");
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_not_enough_money"));
+			return;
 		}
 		
 		/*
@@ -104,14 +106,17 @@ public class RollAnimationManager implements Runnable, Listener{
 			
 			*/
 		
-		player.sendMessage(CasinoManager.getPrefix() + "§6You paid " + Main.econ.format(slotChest.bet));
+		//player.sendMessage(CasinoManager.getPrefix() + "§6You paid " + Main.econ.format(slotChest.bet));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		
 		Main.econ.withdrawPlayer(player, slotChest.bet);
 		Main.econ.depositPlayer(owner, slotChest.bet);
 		
 		if(owner.isOnline()) {
-			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
+			//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
+			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest_owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		}
+		
 		
 		rollAnimation.initialize();
 		startRollingAnimation();
@@ -210,7 +215,8 @@ public class RollAnimationManager implements Runnable, Listener{
 		ItemStack wonItem = rollAnimation.finish();
 		slotChest.running = false;
 		
-		player.sendMessage(CasinoManager.getPrefix() + "You won: " + wonItem.getAmount()+"x " + wonItem.getType().toString());
+		//player.sendMessage(CasinoManager.getPrefix() + "You won: " + wonItem.getAmount()+"x " + wonItem.getType().toString());
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_won").replace("%item_count%", String.valueOf(wonItem.getAmount()).replace("%item_type%", wonItem.getType().toString())));
 		slotChest.RemoveItemsFromWarehouse(wonItem);
 		
 		int slot = player.getInventory().first(Material.AIR);
