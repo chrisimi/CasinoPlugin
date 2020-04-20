@@ -232,7 +232,7 @@ public class BetMenu implements Listener{
 				slotChest.bet += plusBetValues[i];
 //				player.sendMessage(CasinoManager.getPrefix() + "You increased your bet by " + Main.econ.format(plusBetValues[i]));
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amonut%", Main.econ.format(plusBetValues[i])));
-				Bukkit.getLogger().info("bet: " + plusBetValues[i]);
+				CasinoManager.Debug(this.getClass(), "bet: " + plusBetValues[i]);
 				return;
 			}
 		}
@@ -257,5 +257,6 @@ public class BetMenu implements Listener{
 		slotChest.bet = input;
 		slotChest.save();
 		this.updateInventory();
+		player.openInventory(inventory);
 	}
 }

@@ -258,7 +258,7 @@ public class WinningsMenu implements Listener {
 			waitingForAmount = false;
 			newItemAmount = amount;
 //			owner.sendMessage(String.format(CasinoManager.getPrefix() + "Type in the weight of this win! Total weight: %.1f",slotChest.getGesamtGewicht()));
-			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_message").replace("%total_weight", String.format("%.1f", slotChest.getGesamtGewicht())));
+			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_message").replace("%total_weight%", String.format("%.1f", slotChest.getGesamtGewicht())));
 		} else if(waitingForWeight) {
 			double amount = 0.0;
 			try {

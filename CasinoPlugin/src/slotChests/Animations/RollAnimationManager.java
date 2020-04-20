@@ -114,7 +114,7 @@ public class RollAnimationManager implements Runnable, Listener{
 		
 		if(owner.isOnline()) {
 			//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
-			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest_owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
+			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		}
 		
 		
@@ -216,7 +216,7 @@ public class RollAnimationManager implements Runnable, Listener{
 		slotChest.running = false;
 		
 		//player.sendMessage(CasinoManager.getPrefix() + "You won: " + wonItem.getAmount()+"x " + wonItem.getType().toString());
-		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_won").replace("%item_count%", String.valueOf(wonItem.getAmount()).replace("%item_type%", wonItem.getType().toString())));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_won").replace("%item_count%", String.valueOf(wonItem.getAmount())).replace("%item_type%", wonItem.getType().toString()));
 		slotChest.RemoveItemsFromWarehouse(wonItem);
 		
 		int slot = player.getInventory().first(Material.AIR);

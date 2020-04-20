@@ -128,7 +128,7 @@ public class WarehouseMenu implements Listener{
 							}
 							
 							updateLager();
-							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_successful"));
+							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_successful").replace("%item%", itemStack.getType().toString()));
 							
 						} else {
 							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-warehouse_is_full"));
