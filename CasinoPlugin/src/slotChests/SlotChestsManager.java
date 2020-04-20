@@ -26,6 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.casino.main.MessageManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -211,7 +212,7 @@ public class SlotChestsManager implements Listener{
 		}
 		
 		if(!(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()))) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This is not your SlotChest!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation-not_your_chest"));
 			event.setCancelled(true);
 			return;
 		}
@@ -233,18 +234,18 @@ public class SlotChestsManager implements Listener{
 		
 		SlotChest slotChest = slotChests.get(event.getBlock().getLocation());
 		if(!(event.getPlayer().equals(slotChest.getOwner().getPlayer()))) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This is not your Slotchest, so you can't break it!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_not_your_chest"));
 			event.setCancelled(true);
 			return;
 		}
 		if(slotChest.lager.size() >= 1) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4Before you can break your Slotchest, you have to clear it's inventory!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-break_inventory_not_empty"));
 			event.setCancelled(true);
 			return;
 		}
 		
 		slotChests.remove(slotChest.getLocation());
-		event.getPlayer().sendMessage(CasinoManager.getPrefix() + "You successfully removed your Slotchest!");
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-break_successful"));
 		reload();
 		
 	}
@@ -254,12 +255,12 @@ public class SlotChestsManager implements Listener{
 	private void clickOnChest(PlayerInteractEvent event) {
 		SlotChest slotChest = slotChests.get(event.getClickedBlock().getLocation());
 		if(!(slotChest.enabled)) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4This Slotchest is currently disabled!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest_is_disabled"));
 			event.setCancelled(true);
 			return;
 		}
 		if(slotChest.maintenance) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4The owner is currently editing this Slotchest!");
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest_owner_editing"));
 			event.setCancelled(true);
 			return;
 		}
@@ -299,20 +300,20 @@ public class SlotChestsManager implements Listener{
 		if(getAmountForPlayer(owner) >= configMaxAmount) {
 			
 			if(!(owner.isOp() && configOpUnlimited)) {
-				owner.sendMessage(CasinoManager.getPrefix() + "§4You exceed the limit of " + configMaxAmount + " SlotChests per Player!");
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_exceed_limit").replace("%limit%", String.valueOf(configMaxAmount)));
 				return;
 			}
 		}
 		slotChests.put(lrc, new SlotChest(owner, lrc));
 		try {
 			CasinoManager.slotChestManager.exportChests();
-			owner.sendMessage(CasinoManager.getPrefix() + "You successfully created your own Slotchest!");
+			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation-successful"));
 			for(int i = 0; i < 50; i++)
 				lrc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, lrc, 5, null);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			owner.sendMessage(CasinoManager.getPrefix() + "§4An error occured while trying to create your Slotchest! Please contact the server administrator!");
+			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_error"));
 		}
 		
 	}

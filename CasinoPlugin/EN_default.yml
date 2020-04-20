@@ -137,6 +137,8 @@ messages:
    
    
    slotchest-is_currently_running: "§4This SlotChest is currently running!"
+   slotchest_is_disabled: "§4This SlotChest is currently disabled!"
+   slotchest_owner_editing: "§4The owner is currently editing this SlotChest!"
    slotchest-not_enough_items: "§4This SlotChest doesn't have enough items!"
    slotchest-not_enough_winnings: "§4This SlotChest doesn't have enough winnings!"
    slotchest-player_not_enough_money: "§4You don't have enough money!"
@@ -150,6 +152,14 @@ messages:
    slotchest-bet_input_lower_than_0: "§4Your bet can't be lower or equals to zero!"
    slotchest-bet_new_bet_message: "§6%amount% is the new bet!"
    slotchest-ownerinterface-cant_activate_forbidden_item: "§4Can't activate SlotChest! %item% is forbidden on this server!"
+   slotchest-creation-not_your_chest: "§4This is not your SlotChest!"
+   slotchest-creation_exceed_limit: "§4You have exceed the limit of %limit% SlotChests player!"
+   slotchest-creation_successful: "You successfully created your own SlotChest!"
+   slotchest-creation_error: "§4An error occured while trying to create your SlotChest! Please contact the server administrator!"
+   slotchest-break_inventory_not_empty: "§4Before you can break your SlotChest, you have to empty all winnings and the warehouse!"
+   slotchest-break_successful: "§4You successfully removed your SlotChest!"
+   
+   
    
    
    
