@@ -529,10 +529,18 @@ public class PlayerSignsManager implements Listener {
 			else
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
+				event.setCancelled(true);
+				return;
 			}
 		}
 		else
 		{
+			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create")) || !(Main.perm.has(event.getPlayer(), "casino.admin"))) {
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
+				event.setCancelled(true);
+				return;
+			}
+			
 			//validation finished
 			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", event.getPlayer(), bet, event.getLine(3));
 			playerSigns.put(newSign.getLocation(), newSign);
@@ -625,10 +633,20 @@ public class PlayerSignsManager implements Listener {
 			else
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
+				event.setCancelled(true);
+				return;
 			}
 		}
 		else
 		{
+			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create")) || !(Main.perm.has(event.getPlayer(), "casino.admin")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
+				event.setCancelled(true);
+				return;
+			}
+			
+			
 			plusInformations = maxBet.toString()+";"+plusinf;
 			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
 			playerSigns.put(newSign.getLocation(), newSign);
@@ -725,11 +743,20 @@ public class PlayerSignsManager implements Listener {
 			else
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
+				event.setCancelled(true);
+				return;
 			}
 		}
 		else
 		{
-	
+			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || !(Main.perm.has(event.getPlayer(), "casino.admin"))))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
+				event.setCancelled(true);
+				return;
+			}
+			
+			
 			PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Slots", event.getPlayer(), bet, plusinformations);
 			playerSigns.put(newSign.getLocation(), newSign);
 			
