@@ -91,7 +91,7 @@ public class Main extends JavaPlugin {
 		Metrics metric = new Metrics(this); //Stats plugin
 		configurateMetrics(metric);
 		
-		CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
+		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
 	}
 	

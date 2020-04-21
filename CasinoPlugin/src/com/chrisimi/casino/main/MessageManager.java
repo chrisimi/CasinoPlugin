@@ -87,7 +87,7 @@ public class MessageManager
 	private void getLanguageFiles()
 	{
 		 String configString = UpdateManager.getValue("language").toString();
-		 System.out.println("using: " + configString + ".yml");
+		 CasinoManager.Debug(this.getClass(), "using: " + configString + ".yml");
 		 
 		 Boolean exists = false;
 		 try
@@ -100,7 +100,7 @@ public class MessageManager
 					{
 						exists = true;
 						chosenLanguageFile = file;
-						System.out.println("found file: " + configString);
+						CasinoManager.Debug(this.getClass(), "found file: " + configString);
 					}
 				}
 			loadLanguageFile(defaultLanguageFile, true);
