@@ -90,6 +90,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("test"))
 			{
 				player.sendMessage(MessageManager.get("test-message"));
+			} else if(args[0].equalsIgnoreCase("reloadmessages"))
+			{
+				reloadMessages(player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -424,5 +427,15 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			LeaderboardsignsManager.resetServerLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
 		else
 			LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == 0, rangeBlocks, allModes, chosenMode);
+	}
+	private void reloadMessages(Player player)
+	{
+		if(!(Main.perm.has(player, "casino.admin")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
+		MessageManager.ReloadMessages();
 	}
 }

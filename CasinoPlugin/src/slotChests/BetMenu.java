@@ -231,7 +231,7 @@ public class BetMenu implements Listener{
 			if(clickedOn.equals(blocks[i])) {
 				slotChest.bet += plusBetValues[i];
 //				player.sendMessage(CasinoManager.getPrefix() + "You increased your bet by " + Main.econ.format(plusBetValues[i]));
-				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amonut%", Main.econ.format(plusBetValues[i])));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amount%", Main.econ.format(plusBetValues[i])));
 				CasinoManager.Debug(this.getClass(), "bet: " + plusBetValues[i]);
 				return;
 			}

@@ -50,7 +50,7 @@ public class Main extends JavaPlugin {
 	public static String fileSeparator;
 	
 	private static Main instance;
-	
+	public static MessageManager msgManager;
 	
 	@Override
 	public void onEnable() {
@@ -75,7 +75,7 @@ public class Main extends JavaPlugin {
 		
 		
 		 //equals .getConfigData
-		new MessageManager(this);
+		msgManager = new MessageManager(this);
 		
 		//new ConfigurationManager(this);
 		casinoManager.prefixYml();

@@ -36,6 +36,12 @@ public class MessageManager
 		checkForDefaultUpdate();
 	}
 	
+	public static void ReloadMessages()
+	{
+		Main.msgManager.initializeFiles();
+		Main.msgManager.getLanguageFiles();
+	}
+	
 	//create the messages folder and EN_default.yml
 	private void initializeFiles()
 	{

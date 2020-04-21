@@ -462,7 +462,7 @@ public class SignsManager implements Listener {
 								sign.setLine(3, "§3You won: " + wonamount);
 								EconomyResponse r = Main.econ.depositPlayer(player, wonamount);
 								if(r.transactionSuccess()) {
-									player.sendMessage(String.format(CasinoManager.getPrefix() + MessageManager.get("casinosigns-player_won").replace("%amount%", Main.econ.format(wonamount)).replace("%balance%",Main.econ.format(Main.econ.getBalance(player)))));
+									player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-player_won").replace("%amount%", Main.econ.format(wonamount)).replace("%balance%",Main.econ.format(Main.econ.getBalance(player))));
 								} else {
 									player.sendMessage(String.format(CasinoManager.getPrefix() + "An error occured: %s", r.errorMessage));
 								}

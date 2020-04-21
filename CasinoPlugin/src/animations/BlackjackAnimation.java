@@ -47,7 +47,7 @@ public class BlackjackAnimation implements Runnable {
 	private List<Card> cards;
 	private List<Card> dealer;
 	
-	private int currentWaitingTask = 0;
+	private int currentWaitingTask = 0; //Id of the task which is waiting for chat input
 	private int resetTask = 0;
 	
 	public Boolean waitingForBet = true;
@@ -78,7 +78,7 @@ public class BlackjackAnimation implements Runnable {
 		minBet = thisSign.bet;
 		maxBet = thisSign.blackjackGetMaxBet();
 		waitingForInputs.put(player, this);
-		player.sendMessage(String.format("\n\n"+CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message").replace("%min_bet%", Main.econ.format(minBet).replace("%max_bet%", Main.econ.format(maxBet)))));
+		player.sendMessage("\n\n"+CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message").replace("%min_bet%", Main.econ.format(minBet)).replace("%max_bet%", Main.econ.format(maxBet)));
 		this.waitingForBet = true;
 		//check after 1 minute if player put nothing in reset sign!
 		currentWaitingTask = main.getServer().getScheduler().runTaskLater(main, new Runnable() {
@@ -180,7 +180,7 @@ public class BlackjackAnimation implements Runnable {
 			else
 			{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-next-possibilities"));
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-next-possibilities-cards").replace("%cards", cardsString));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-next-possibilities-cards").replace("%cards%", cardsString));
 			CasinoManager.Debug(this.getClass(), player.getName() + " cards: " + cardsString);
 			waitingForInputs.put(player, this);
 			this.waitingForGameDecision = true;
@@ -387,6 +387,10 @@ public class BlackjackAnimation implements Runnable {
 				waitingForInputs.remove(player);
 				thisAnimation.nextCard();
 				return; //causes error if not return here
+			} else 
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-incorrect"));
+				return;
 			}
 			thisAnimation.main.getServer().getScheduler().cancelTask(thisAnimation.currentWaitingTask);
 			thisAnimation.waitingForGameDecision = false;
