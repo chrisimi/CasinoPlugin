@@ -36,7 +36,7 @@ public class PlayerJoinListener implements Listener {
 		
 		
 		if(PlayerSignsManager.playerWonWhileOffline.containsKey(event.getPlayer())) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("player-joins-message").replace("%amount%", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("player-join-message").replace("%amount%", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
 			PlayerSignsManager.playerWonWhileOffline.remove(event.getPlayer());
 		}
 	}

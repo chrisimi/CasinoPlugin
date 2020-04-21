@@ -75,16 +75,8 @@ public class UpdateManager {
 			
 			if(!(valuesToNotChange.contains(entry.getKey()))) {
 				configYml.set(entry.getKey(), entry.getValue());
-				System.out.println(entry.getValue().getClass().toString());
+				
 			}
-		}
-		try
-		{
-			configYml.save(Main.configYml);
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		reloadConfig();
 	}

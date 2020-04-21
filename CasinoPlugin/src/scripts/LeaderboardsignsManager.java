@@ -462,7 +462,7 @@ public class LeaderboardsignsManager implements Listener {
 		if(deleteLeaderbordsign(sign)) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-delete_successful"));
 		} else {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaaderboard-error_when_break"));
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-error_when_break"));
 		}
 	}
 	public static void save()

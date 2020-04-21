@@ -109,7 +109,7 @@ public class BlackjackAnimation implements Runnable {
 		Main.econ.withdrawPlayer(player, playerBet);
 		CasinoManager.Debug(this.getClass(), player.getName() + " - " + Main.econ.format(playerBet) + " because of the bet!");
 		
-		contactOwner(MessageManager.get("blackjack-owner-playing_playing").replace("%playername%", player.getPlayerListName()).replace("%money%", Main.econ.format(playerBet)));
+		contactOwner(MessageManager.get("blackjack-owner-player_playing").replace("%playername%", player.getPlayerListName()).replace("%money%", Main.econ.format(playerBet)));
 		//Main.econ.depositPlayer(owner, playerBet);
 		thisSign.depositOwner(playerBet);
 		

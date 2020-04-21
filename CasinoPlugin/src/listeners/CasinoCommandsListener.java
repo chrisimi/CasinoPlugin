@@ -53,7 +53,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			if(args[0].equalsIgnoreCase("updateconfig")) {
 				if(Main.perm.has(player, "casino.admin") || player.isOp()) {
 					UpdateManager.updateConfigYml(main);
-					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin-successfully_updated_config"));
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_updated_config"));
 				} else {
 					player.sendMessage(CasinoManager.getPrefix()+ MessageManager.get("commands-player_no_permission"));
 				} 
@@ -63,7 +63,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 					
 					UpdateManager.reloadConfig();
 					CasinoManager.reload();
-					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin-successfully_reloaded_config"));
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reloaded_config"));
 				} else {
 					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				}
@@ -159,7 +159,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		try {
 			chest = (Chest) block.getState();
 		} catch(ClassCastException e) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_invalid"));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_chest_invalid"));
 		}
 		
 		if(chest == null)

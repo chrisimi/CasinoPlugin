@@ -252,7 +252,7 @@ public class WinningsMenu implements Listener {
 				return;
 			}
 			if(amount <= 0) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_amount_lower_0"));
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-amount_lower_0"));
 				return;
 			}
 			waitingForAmount = false;
@@ -268,7 +268,7 @@ public class WinningsMenu implements Listener {
 				return;
 			}
 			if(amount == 0.0) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_lower_0"));
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_lower_0"));
 				return;
 			}
 			waitingForWeight = false;

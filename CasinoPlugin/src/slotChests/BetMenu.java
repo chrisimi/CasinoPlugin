@@ -219,7 +219,7 @@ public class BetMenu implements Listener{
 			if(clickedOn.equals(blocks[i])) {
 				slotChest.bet -= minusBetValues[i];
 //				player.sendMessage(CasinoManager.getPrefix() + "You decreased your bet by " + Main.econ.format(minusBetValues[i]));
-				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchet-bet_decrease").replace("%amount%", Main.econ.format(minusBetValues[i])));
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_decrease").replace("%amount%", Main.econ.format(minusBetValues[i])));
 				return;
 			}
 		}

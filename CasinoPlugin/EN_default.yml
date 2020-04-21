@@ -88,7 +88,7 @@ messages:
    leaderboard-creation-mode_invalid: "§4You must use a valid mode! options (highestamount, count, sumamount)"
    leaderboard-creation-range_invalid: "§4You must use a valid range! options (all or range in blocks as a Integer)"
    leaderboard-creation_successful: "You successfully created a leaderboardsign!"
-   leaderboard-delete_succcessful: "You successfully deleted this leaderboardsign!"
+   leaderboard-delete_successful: "You successfully deleted this leaderboardsign!"
    leaderboard-error_when_break: "§4An error occured while trying to break the leaderboardsign! Retry it in a moment or relog!"
    
    commands-player_no_permission: "§4You don't have permission for that action!"

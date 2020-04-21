@@ -43,7 +43,7 @@ public class RollCommand {
 			return;
 		}
 		if(minimum > maximum) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-min-max_diff"));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-min_max_diff"));
 			return;
 		}
 		Random rnd = new Random();
