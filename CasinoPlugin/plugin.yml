@@ -68,6 +68,12 @@ commands:
   casino resetleaderboard:
     description: reset leaderboard signs in range
     usage: /casino resetleaderboard
+    permission: [casino.admin, casino.serversigns]
   casino resetserverleaderboard:
     description: reset serverleaderboard signs in range
     usage: /casino resetserverleaderboard
+    permission: [casino.admin, casino.serversigns]
+  casino reloadmessages:
+    description: reload message-system
+    usage: /casino reloadmessages
+    permission: casino.admin

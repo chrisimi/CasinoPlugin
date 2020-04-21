@@ -87,6 +87,7 @@ public class MessageManager
 	private void getLanguageFiles()
 	{
 		 String configString = UpdateManager.getValue("language").toString();
+		 System.out.println("using: " + configString + ".yml");
 		 
 		 Boolean exists = false;
 		 try
@@ -95,10 +96,11 @@ public class MessageManager
 			if(!(configString.equals("default")))
 				for(File file : files)
 				{
-					if(file.getName().equalsIgnoreCase(configString))
+					if(file.getName().equalsIgnoreCase(configString + ".yml"))
 					{
 						exists = true;
 						chosenLanguageFile = file;
+						System.out.println("found file: " + configString);
 					}
 				}
 			loadLanguageFile(defaultLanguageFile, true);
@@ -192,7 +194,7 @@ public class MessageManager
 					
 					CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully upgraded default language file!");
 					loadLanguageFile(defaultLanguageFile, true);
-					tempFile.delete();
+					
 				}	
 			}
 			
@@ -201,6 +203,7 @@ public class MessageManager
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to update messages: " + e.getMessage());
 			e.printStackTrace(CasinoManager.getPrintWriterForDebug());
 		}
+		tempFile.delete();
 	}
 	public static String get(String messageName)
 	{

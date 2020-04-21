@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
+import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
@@ -437,5 +438,6 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		}
 		
 		MessageManager.ReloadMessages();
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-reload_messages_successful"));
 	}
 }

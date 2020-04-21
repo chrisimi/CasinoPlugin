@@ -109,6 +109,7 @@ messages:
    commands-admin_successfully_reloaded_config: "Config successfully reloaded!"
    commands-admin_successfully_reset_data: "You successfully reset the data!"
    commands-admin_successfully_reload_data: "You successfully reloaded the data!"
+   commands-reload_messages_successful: "You successfully reloaded all messages!"
    
    casinogui-player_not_enough_money: "§4You don't have enough money!"
    casinogui-player_bet_message: "You are rolling with %amount%"
