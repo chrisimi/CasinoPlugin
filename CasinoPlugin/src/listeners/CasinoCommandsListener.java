@@ -76,7 +76,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 				showHelpToAdmin(player);
 			} else if(args[0].equalsIgnoreCase("createchest")) {
 				if(!Main.perm.has(sender, "casino.slotchest.create")) {
-					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commaneds-player_no_permission"));
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 					
 				} else
 				createSlotChest(player);
