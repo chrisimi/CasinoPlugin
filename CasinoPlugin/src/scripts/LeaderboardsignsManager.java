@@ -464,6 +464,8 @@ public class LeaderboardsignsManager implements Listener {
 		} else {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-error_when_break"));
 		}
+		
+		exportLeaderboardsigns();
 	}
 	public static void save()
 	{
@@ -595,13 +597,11 @@ public class LeaderboardsignsManager implements Listener {
 		
 		//2. reload data
 		playdatas.clear();
+		leaderboardsigns.clear();
+		CasinoManager.leaderboardManager.importLeaderboardsigns();
 		CasinoManager.leaderboardManager.importData();
 		
-		//3. start all leaderboardsigns
-		for(Leaderboardsign sign : leaderboardsigns.values()) 
-		{
-			CasinoManager.leaderboardManager.addSignAnimation(sign);
-		}
+		
 	}
 	public static void resetLeaderboard(Player player, Boolean allSigns, int range, Boolean allModes, Mode mode)
 	{

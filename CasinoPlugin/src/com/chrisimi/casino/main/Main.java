@@ -321,6 +321,7 @@ public class Main extends JavaPlugin {
 		RegisteredServiceProvider<Permission> permProvider = getServer().getServicesManager().getRegistration(Permission.class);
 		if(permProvider != null) {
 			perm = permProvider.getProvider();
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully hooked with " + permProvider.getPlugin().getName());
 		} else {
 			CasinoManager.LogWithColor(ChatColor.RED + "Unable to activate vault's permission system! Try restarting server and check vault!");
 		}

@@ -51,7 +51,6 @@ public class LeaderboardsignAnimation implements Runnable
 	@Override
 	public void run() 
 	{
-		
 		//will be called every frame
 		if(!(signBlock.isPlaced())) return;
 		

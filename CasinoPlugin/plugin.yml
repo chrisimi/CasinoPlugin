@@ -9,6 +9,9 @@ depend: [Vault]
 
 commands:
   casino:
+    description: shows the plugin info
+    usage: /casino 
+  casino gui:
     description: opens the casino GUI
     usage: /casino
     permission: casino.gui

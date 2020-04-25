@@ -49,7 +49,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		Player player = (Player)sender;
 		
 		if(args.length == 0) {
-			openCasinoGui((Player) sender);
+			showHelpToPlayer(player);
 		} else if(args.length == 1) {
 			if(args[0].equalsIgnoreCase("updateconfig")) {
 				if(Main.perm.has(player, "casino.admin") || player.isOp()) {
@@ -94,6 +94,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("reloadmessages"))
 			{
 				reloadMessages(player);
+			} else if(args[0].equalsIgnoreCase("gui"))
+			{
+				openCasinoGui((Player) sender);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -328,7 +331,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage(CasinoManager.getPrefix());
 		player.sendMessage("§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
-		player.sendMessage("§6/casino §8- open the casino GUI");
+		player.sendMessage("§6/casino gui§8- open the casino GUI");
 		player.sendMessage("§6/casino admin §8- admin help command"); 
 		player.sendMessage("§6/casino help slots §8- show help for placing slots signs!");
 		player.sendMessage("§6/casino help dice §8- show help for placing a dice signs!");
