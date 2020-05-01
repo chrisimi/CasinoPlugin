@@ -262,10 +262,10 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		player.sendMessage("§6§n§lFormat of a dice sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: casino (casino;server for using it as a server dice sign)");
-		player.sendMessage("     §6line 2: dice");
-		player.sendMessage("     §6line 3: the bet like 30 or 20.5");
-		player.sendMessage("     §6line 4: the win chance and the multiplicator like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
+		player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for using it as a server dice sign)");
+		player.sendMessage("     §6line 2: §edice");
+		player.sendMessage("     §6line 3: §ebet §6like 30 or 20.5");
+		player.sendMessage("     §6line 4: §ewin chance §6and §emultiplicator §6like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
 	}
 	private void showBlackjackHelpToPlayer(Player player) {
 		player.sendMessage("");
@@ -276,10 +276,10 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		player.sendMessage("§6§n§lFormat of a blackjack sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: casino (casino;server for using it as a server blackjack sign)");
-		player.sendMessage("     §6line 2: blackjack");
-		player.sendMessage("     §6line 3: minbet;maxbet like 20;30");
-		player.sendMessage("     §6line 4: multiplicator if players draws a blackjack (21) in to writing like 3 to 2");
+		player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for using it as a server blackjack sign)");
+		player.sendMessage("     §6line 2: §eblackjack");
+		player.sendMessage("     §6line 3: §eminbet§6;§emaxbet §6like 20;30");
+		player.sendMessage("     §6line 4: §emultiplicator §6if players draws a blackjack (21) in §eto writing §6like 3 to 2");
 	}
 	private void showLeaderboardSignHelpToPlayer(Player player)
 	{
@@ -292,10 +292,10 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("§6§n§lFormat of a leaderboardsign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: leaderboard (leaderboard;s for using it as a server leaderboardsign) ");
-		player.sendMessage("     §6line 2: position;cycle   position like 1 for first place, cycle is optional like month data will be only taken from this month, (year, month, week, day, hour)");
-		player.sendMessage("     §6line 3: mode (count, sumamount, highestamount)");
-		player.sendMessage("     §6line 4: range (all for all your signs, number of blocks (3 as example) for using signs in this block range");
+		player.sendMessage("     §6line 1: §eleaderboard §6(§eleaderboard;s §6for using it as a server leaderboardsign§6) ");
+		player.sendMessage("     §6line 2: §eposition§6;§ecycle §eposition §6like 1 for first place, §ecycle §6is optional like month data will be only taken from this month, (§eyear, month, week, day, hour§6)");
+		player.sendMessage("     §6line 3: §emode §6(§ecount, sumamount, highestamount§6)");
+		player.sendMessage("     §6line 4: §erange §6(§eall §6for all your signs, §enumber of blocks §6(3 as example) for using signs in this block range");
 	}
 	private void showSlotsSignHelpToPlayer(Player player)
 	{
@@ -308,11 +308,11 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("§6§n§lFormat of a Casino-Slots sign:");
 		player.sendMessage("");
-		player.sendMessage("    §6line 1: slots or slots;server for server sign");
-		player.sendMessage("    §6line 2: bet amount in decimal like 10.0");
-		player.sendMessage("    §6line 3: 3 symbols splited by ';' a semicolon like A;B;C");
-		player.sendMessage("    §6line 4: chances and multiplicators in that format: ");
-		player.sendMessage("    §6        chance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 (1 is for A, 2 is for B and 3 is for C in that example)");
+		player.sendMessage("    §6line 1: §eslots §6or §eslots;server §6for server sign");
+		player.sendMessage("    §6line 2: §ebet §6in decimal like §e10.0");
+		player.sendMessage("    §6line 3: 3 symbols splited by ';' a semicolon like §eA;B;C");
+		player.sendMessage("    §6line 4: §echances and multiplicators §6in that format: ");
+		player.sendMessage("    §6        §echance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 §6(1 is for A, 2 is for B and 3 is for C in that example)");
 		player.sendMessage("    §6example:   50-30-20;2-3-5");
 		
 	}
