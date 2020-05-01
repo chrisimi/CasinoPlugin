@@ -313,12 +313,11 @@ public class LeaderboardsignAnimation implements Runnable
 		switch (this.sign.cycleMode)
 		{
 		case YEAR:
-			
 			return new GregorianCalendar(now.get(Calendar.YEAR), 0, 1, 0, 0, 1);
 		case MONTH:
-			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 0);
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 1);
 		case WEEK:
-			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_WEEK_IN_MONTH), 0, 0, 1);
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 2 + (now.get(Calendar.DAY_OF_MONTH) - now.get(Calendar.DAY_OF_WEEK)), 0, 0, 1);
 		case DAY:
 			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		case HOUR:
@@ -357,14 +356,17 @@ public class LeaderboardsignAnimation implements Runnable
 		switch (this.sign.cycleMode)
 		{
 		case YEAR:
-			
-			return new GregorianCalendar(now.get(Calendar.YEAR), 11, 30, 23, 59, 59);
+			Calendar nowYear = new GregorianCalendar();
+			nowYear.set(Calendar.MONTH, 11);
+			return new GregorianCalendar(now.get(Calendar.YEAR), 11, nowYear.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
 		case MONTH:
 			Calendar nowMonth = new GregorianCalendar();
 			nowMonth.set(Calendar.MONTH, nowMonth.get(Calendar.MONTH) + 1);
-			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, nowMonth.getActualMinimum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, nowMonth.getActualMinimum(Calendar.DAY_OF_MONTH) - 1, 23, 59, 59);
 		case WEEK:
-			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH) + (7 - now.get(Calendar.DAY_OF_WEEK_IN_MONTH)) - 1, 23, 59, 59);
+			
+			
+			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 2 + (now.get(Calendar.DAY_OF_MONTH) + (7 - now.get(Calendar.DAY_OF_WEEK)) - 1), 23, 59, 59);
 		case DAY:
 			return new GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
 		case HOUR:
