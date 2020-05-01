@@ -67,7 +67,7 @@ public class SlotsAnimation implements Runnable
 		symbols = thisSign.getSlotsSymbols();
 		multiplicators = thisSign.getSlotsMultiplicators();
 		weights = thisSign.getSlotsWeight();
-		rollsLeft = random.nextInt(3) + 2;
+		rollsLeft = random.nextInt(20) + 2;
 		
 		for(int i = 0; i < 4; i++)
 		{
@@ -104,7 +104,7 @@ public class SlotsAnimation implements Runnable
 			if(rollsLeft < 0)
 			{
 				int line = random.nextInt(4);
-				String editedLine = "> " + lines[line] + " <";
+				String editedLine = "> " + lines[line] + " §0<";
 				sign.setLine(line, editedLine);
 				sign.update(true);
 				main.getServer().getScheduler().cancelTask(bukkitTaskId);
@@ -153,13 +153,13 @@ public class SlotsAnimation implements Runnable
 			
 			if(randomNumber < weights[0])
 			{
-				newCharacter = symbols[0];
+				newCharacter = "§b" + symbols[0];
 			} else if(randomNumber < weights[0] + weights[1])
 			{
-				newCharacter = symbols[1];
+				newCharacter = "§a" + symbols[1];
 			} else if(randomNumber <= weights[0] + weights[1] + weights[2])
 			{
-				newCharacter = symbols[2];
+				newCharacter = "§c" + symbols[2];
 			}
 			else {
 				newCharacter = "Error";
@@ -180,12 +180,16 @@ public class SlotsAnimation implements Runnable
 	{
 		
 		String[] symbStrings = line.split(" ");
-		
+		CasinoManager.Debug(this.getClass(), line);
+		CasinoManager.Debug(this.getClass(), String.format("(%s) (%s) (%s)", symbStrings[1], symbStrings[2], symbStrings[3]));
+		CasinoManager.Debug(this.getClass(), String.valueOf(symbStrings[1].equals(symbStrings[2])));
+		CasinoManager.Debug(this.getClass(), String.valueOf(symbStrings[2].equals(symbStrings[3])));
+		CasinoManager.Debug(this.getClass(), String.valueOf(symbStrings[1].equals(symbStrings[3])));
 		if(symbStrings[1].equals(symbStrings[2]) && symbStrings[1].equals(symbStrings[3]))
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				if(symbStrings[1].equals(symbols[i]))
+				if(symbStrings[1].equals(thisSign.getColorMultiplicators()[i] + symbols[i]))
 				{
 					winAmount = thisSign.bet * multiplicators[i];
 					break;

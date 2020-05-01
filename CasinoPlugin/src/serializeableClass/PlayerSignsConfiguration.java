@@ -216,4 +216,8 @@ public class PlayerSignsConfiguration {
 		}
 		return this.bet * highestMulti + bet;
 	}
+	public String[] getColorMultiplicators()
+	{
+		return new String[] {"§b", "§a", "§c"};
+	}
 }

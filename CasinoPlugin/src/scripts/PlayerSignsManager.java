@@ -960,8 +960,8 @@ public class PlayerSignsManager implements Listener {
 								if(thisSign.hasOwnerEnoughMoney(thisSign.getSlotsHighestPayout()))
 								{
 									//owner has enough money
-									sign.setLine(2, Main.econ.format(thisSign.bet));
-									sign.setLine(3, "3x " + thisSign.getSlotsSymbols()[current] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[current]));
+									sign.setLine(2, "§6" + Main.econ.format(thisSign.bet));
+									sign.setLine(3, "3x " + thisSign.getColorMultiplicators()[current] + thisSign.getSlotsSymbols()[current] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[current]));
 								} 
 								else
 								{
