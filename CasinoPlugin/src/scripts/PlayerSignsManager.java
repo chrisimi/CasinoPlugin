@@ -254,24 +254,24 @@ public class PlayerSignsManager implements Listener {
 		 */
 		
 		String[] lines = event.getLines();
-		if(!(lines[0].contains("casino") || lines[0].contains("slots"))) return;
+		if(!(lines[0].contains("casino") || lines[0].equalsIgnoreCase("casino") || lines[0].equalsIgnoreCase("slots") || lines[0].contains("slots"))) return;
 		if(lines[1].length() == 0) return;
 		if(lines[2].length() == 0) return;
 		if(lines[3].length() == 0) return;
 		
-		if(lines[1].contains("dice")) {
+		if(lines[1].contains("dice") || lines[1].equalsIgnoreCase("dice")) {
 			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin"))) {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
 				return;
 			}
 			createDiceSign(event);
-		} else if(lines[1].contains("blackjack")) {
+		} else if(lines[1].contains("blackjack") || lines[1].equalsIgnoreCase("blackjack")) {
 			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin"))) {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
 				return;
 			}
 			createBlackjackSign(event);
-		} else if(lines[0].contains("slots"))
+		} else if(lines[0].contains("slots") || lines[0].equalsIgnoreCase("slots"))
 		{
 			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
 			{
