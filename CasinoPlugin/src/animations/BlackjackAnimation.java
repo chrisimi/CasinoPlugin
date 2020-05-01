@@ -264,7 +264,7 @@ public class BlackjackAnimation implements Runnable {
 	private void draw()
 	{
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-draw"));
-		contactOwner(MessageManager.get("blackjack-owner-draw"));
+		contactOwner(MessageManager.get("blackjack-owner-draw").replace("%playername%", player.getDisplayName()));
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, this.playerBet);
 		
 		CasinoManager.Debug(this.getClass(), "Draw!");
