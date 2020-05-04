@@ -515,7 +515,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		if(event.getLine(0).contains(";server"))
+		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
@@ -622,7 +622,7 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 		}
-		if(event.getLine(0).contains(";server"))
+		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
@@ -736,7 +736,7 @@ public class PlayerSignsManager implements Listener {
 		String plusinformations = String.format(
 				"%s-%s-%s;%s-%s-%s;%s-%s-%s", symbols[0], multiplicators[0], chance[0], symbols[1], multiplicators[1], chance[1], symbols[2], multiplicators[2], chance[2]);
 	
-		if(event.getLine(0).contains(";server"))
+		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
