@@ -172,7 +172,7 @@ messages:
    slotchest-winnings_weight_message: "Type in the weight of this win! Total weight: %total_weight%!"
    slotchest-winnings-weight_not_number: "§4The weight have to be a number!"
    slotchest-winnings-weight_lower_0: "§4The weight have to be higher than 0!"
-   
+   test: "jo servas"
    
    
    

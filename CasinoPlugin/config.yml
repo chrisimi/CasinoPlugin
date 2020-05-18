@@ -18,7 +18,7 @@ enable-debug: true
 enable-console-messages: false
 
 # prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
-# default one: �9[�6Casino�9] �a
+# default one: §9[§6Casino§9] §a
 prefix: 
 
 # language
