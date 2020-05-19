@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,8 +72,8 @@ public class MessageManager
 				}
 				byte[] data = new byte[inputStream.available()];
 				inputStream.read(data);
-				OutputStream outputStream = new FileOutputStream(defaultLanguageFile);
-				outputStream.write(data);
+				OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(defaultLanguageFile), Charset.forName("UTF-8"));
+				outputStream.write(new String(data));
 				
 				inputStream.close();
 				outputStream.close();
@@ -148,8 +150,8 @@ public class MessageManager
 			}
 			byte[] data = new byte[inputStream.available()];
 			inputStream.read(data);
-			OutputStream outputStream = new FileOutputStream(tempFile);
-			outputStream.write(data);
+			OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(tempFile), Charset.forName("UTF-8"));
+			outputStream.write(new String(data));
 			
 			inputStream.close();
 			outputStream.close();

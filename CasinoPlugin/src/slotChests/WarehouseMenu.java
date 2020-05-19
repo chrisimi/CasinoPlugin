@@ -299,10 +299,12 @@ public class WarehouseMenu implements Listener{
 		for(Entry<Material, Integer> entry : sortedByList.entrySet()) {
 			if(entry.getValue() <= 0) continue;
 			
+			
+			
 			int amountOfItems = entry.getValue();
 			
 			while(amountOfItems >= 1) {
-				System.out.println(slot + " " + entry.getKey().toString() + " " + amountOfItems);
+				CasinoManager.Debug(this.getClass(), slot + " " + entry.getKey().toString() + " " + amountOfItems);
 				if(amountOfItems > 64) {
 					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), 64));
 					slot++;

@@ -1,20 +1,16 @@
 package slotChests;
 
 
-import java.io.InvalidClassException;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,12 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
-import com.google.common.util.concurrent.CycleDetectingLockFactory.WithExplicitOrdering;
-
-import net.md_5.bungee.api.ChatColor;
-import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
 import scripts.CasinoManager;
-import scripts.UpdateManager;
 
 
 public class WinningsMenu implements Listener {
@@ -276,6 +267,8 @@ public class WinningsMenu implements Listener {
 			eingabeFinished = true;
 			newItem();
 			owner.openInventory(inventory);
+			
+			//waitingForEingabhe.remove(owner);
 		}
 	}
 	
