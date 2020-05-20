@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.chrisimi.casino.main.Main;
@@ -16,7 +17,6 @@ import listeners.CasinoChatListener;
 import listeners.CasinoCommandsListener;
 import listeners.InventoryClickListener;
 import listeners.PlayerJoinListener;
-import net.md_5.bungee.api.ChatColor;
 import slotChests.SlotChestsManager;
 
 public class CasinoManager {
@@ -82,7 +82,7 @@ public class CasinoManager {
 		try {
 			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
 			
-		} catch(NullPointerException e) {
+		} catch(Exception e) {
 			if(message == null) return;
 			e.printStackTrace();
 			Bukkit.getLogger().info(message);
