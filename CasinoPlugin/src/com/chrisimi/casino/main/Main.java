@@ -99,6 +99,7 @@ public class Main extends JavaPlugin {
 	public void onDisable()
 	{
 		LeaderboardsignsManager.clearAllTasks();
+		CasinoManager.playerSignsManager.serverClose();
 	}
 
 	private void configurateMetrics(Metrics metric) {

@@ -39,7 +39,7 @@ public class PlayerSignsConfiguration {
 	@Expose
 	public double z;
 	
-	
+	public int currentSignAnimation = 0;
 	
 	
 	public PlayerSignsConfiguration() {}
