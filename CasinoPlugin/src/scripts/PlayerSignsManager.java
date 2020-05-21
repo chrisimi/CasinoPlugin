@@ -41,6 +41,15 @@ import serializeableClass.PlayerSignsConfiguration;
 
 public class PlayerSignsManager implements Listener {
 
+	/*
+	 * rewrited system:
+	 * one central thread (runnable) which manages the signs and clicks...
+	 * click: manager looks if sign exists and then creates the new animation
+	 * when finished... manager clears everything like garbage collector
+	 * 
+	 * 
+	 * 
+	 */
 	public static int rollCount = 0;
 	
 	private static HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<Location, PlayerSignsConfiguration>();
