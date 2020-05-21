@@ -655,7 +655,7 @@ public class PlayerSignsManager implements Listener {
 			}
 			else 
 			{
-				System.out.println(Main.perm.has(event.getPlayer(), "casino.blackjack.create") + " " + Main.perm.has(event.getPlayer(), "casino.admin"));
+				//System.out.println(Main.perm.has(event.getPlayer(), "casino.blackjack.create") + " " + Main.perm.has(event.getPlayer(), "casino.admin"));
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
 				event.setCancelled(true);
 				return;
