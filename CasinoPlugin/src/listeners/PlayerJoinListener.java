@@ -27,7 +27,7 @@ public class PlayerJoinListener implements Listener {
 		if(event.getPlayer().isOp() && Main.isConfigUpdated == false) {
 		
 			event.getPlayer().sendMessage(
-					String.format("%sง4there is a new version for the config.yml of this plugin... please backup your config.yml and use ง6/casino updateconfig", CasinoManager.getPrefix()));
+					String.format("%sยง4there is a new version for the config.yml of this plugin... please backup your config.yml and use ยง6/casino updateconfig", CasinoManager.getPrefix()));
 			
 		} if(event.getPlayer().isOp() && Main.isPluginUpdated == false) {
 			event.getPlayer().sendMessage(String.format("%s" + 

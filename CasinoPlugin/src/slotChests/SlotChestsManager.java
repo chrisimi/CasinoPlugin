@@ -294,7 +294,7 @@ public class SlotChestsManager implements Listener{
 	}
 	public static void createSlotChest(Location lrc, Player owner) {
 		if(slotChests.containsKey(lrc)) {
-			owner.sendMessage(CasinoManager.getPrefix() + "ง4This is a SlotChest");
+			owner.sendMessage(CasinoManager.getPrefix() + "ยง4This is a SlotChest");
 			return;
 		}
 		if(getAmountForPlayer(owner) >= configMaxAmount) {

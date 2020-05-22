@@ -65,40 +65,40 @@ public class OwnerInterfaceInventory implements Listener{
 		warehouseItem = new ItemStack(Material.CHEST, 1);
 		ItemMeta meta = warehouseItem.getItemMeta();
 		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§bwarehouse");
+		meta.setDisplayName("Â§bwarehouse");
 		warehouseItem.setItemMeta(meta);
 		ownerInterface.setItem(0, warehouseItem);
 		
 		winningsItem = new ItemStack(Material.DIAMOND, 1);
 		meta = winningsItem.getItemMeta();
 		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§awinnings");
+		meta.setDisplayName("Â§awinnings");
 		winningsItem.setItemMeta(meta);
 		ownerInterface.setItem(1, winningsItem);
 		
 		disableItem = new ItemStack(Material.RED_WOOL, 1);
 		meta = disableItem.getItemMeta();
 		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§4disable");
+		meta.setDisplayName("Â§4disable");
 		disableItem.setItemMeta(meta);
 		
 		settingsItem = new ItemStack(Material.IRON_NUGGET);
 		meta = settingsItem.getItemMeta();
-		meta.setDisplayName("§fsettings");
+		meta.setDisplayName("Â§fsettings");
 		settingsItem.setItemMeta(meta);
 		ownerInterface.setItem(6, settingsItem);
 		
 		enableItem = new ItemStack(Material.GREEN_WOOL);
 		meta = enableItem.getItemMeta();
 		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§2enable");
+		meta.setDisplayName("Â§2enable");
 		enableItem.setItemMeta(meta);
 		
 		
 		betItem = new ItemStack(Material.GOLD_INGOT, 1);
 		meta = betItem.getItemMeta();
 		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§6bet");
+		meta.setDisplayName("Â§6bet");
 		betItem.setItemMeta(meta);
 		ownerInterface.setItem(4, betItem);
 		
@@ -163,7 +163,7 @@ public class OwnerInterfaceInventory implements Listener{
 		Boolean breakOp = false;
 		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
 			if(slotChest.itemIsOnForbiddenList(entry.getKey().getType())) {
-//				owner.sendMessage(CasinoManager.getPrefix() + "§4Can't activate SlotChest! " + entry.getKey().getType().toString() + " is forbidden on this server!");
+//				owner.sendMessage(CasinoManager.getPrefix() + "Â§4Can't activate SlotChest! " + entry.getKey().getType().toString() + " is forbidden on this server!");
 				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-ownerinterface-cant_activate_forbidden_item").replace("%item%", entry.getKey().getType().toString()));
 				breakOp = true;
 			}

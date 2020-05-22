@@ -85,7 +85,7 @@ public class CasinoGUI {
 		player.openInventory(inv);
 		
 	}
-	public void updateInv() { //aktualisierungs Methode um Inventar zu verändern
+	public void updateInv() { //aktualisierungs Methode um Inventar zu verÂ§ndern
 		addItemsToInv();
 	}
 
@@ -111,14 +111,14 @@ public class CasinoGUI {
 			ItemStack material = new ItemStack(Material.OAK_SIGN);
 			
 			ItemMeta meta = material.getItemMeta();
-			meta.setDisplayName("§fbet: " + einsatz);
+			meta.setDisplayName("Â§fbet: " + einsatz);
 			material.setItemMeta(meta);
 			inv.setItem(positions[i], material);
 		}
 		ItemStack material = new ItemStack(Material.STONE_BUTTON);
 		ItemMeta meta = material.getItemMeta();
 		
-		meta.setDisplayName("§f§bROLL");
+		meta.setDisplayName("Â§fÂ§bROLL");
 		material.setItemMeta(meta);
 		inv.setItem(49, material);
 		
@@ -128,13 +128,13 @@ public class CasinoGUI {
 		
 		ItemStack block1 = new ItemStack(material.getType());
 		ItemMeta block1Meta = block1.getItemMeta();
-		block1Meta.setDisplayName("§4higher your bet!");
+		block1Meta.setDisplayName("Â§4higher your bet!");
 		block1.setItemMeta(block1Meta);
 		inv.setItem(4, block1);
 		
 		ItemStack block2 = new ItemStack(material.getType());
 		ItemMeta block2Meta = block2.getItemMeta();
-		block2Meta.setDisplayName("§4lower your bet!");
+		block2Meta.setDisplayName("Â§4lower your bet!");
 		block2.setItemMeta(block2Meta);
 		inv.setItem(13, block2);
 		
@@ -146,14 +146,14 @@ public class CasinoGUI {
 		if(einsatz >= this.minus1) {
 			ItemStack minus1 = new ItemStack(material.getType());
 			ItemMeta minus1Meta = minus1.getItemMeta();
-			minus1Meta.setDisplayName("§4- " + this.minus1);
+			minus1Meta.setDisplayName("Â§4- " + this.minus1);
 			minus1.setItemMeta(minus1Meta);
 			inv.setItem(10, minus1);
 		} else inv.setItem(10, null);
 		if(einsatz >= this.minus2) {
 			ItemStack minus5 = new ItemStack(material.getType());
 			ItemMeta minus5Meta = minus5.getItemMeta();
-			minus5Meta.setDisplayName("§4 - " + this.minus2);
+			minus5Meta.setDisplayName("Â§4 - " + this.minus2);
 			minus5.setItemMeta(minus5Meta);
 			inv.setItem(11, minus5);
 		} else inv.setItem(11, null);
@@ -161,7 +161,7 @@ public class CasinoGUI {
 		
 			ItemStack minus10 = new ItemStack(material.getType());
 			ItemMeta minus10Meta = minus10.getItemMeta();
-			minus10Meta.setDisplayName("§4 - " + this.minus3);
+			minus10Meta.setDisplayName("Â§4 - " + this.minus3);
 			minus10.setItemMeta(minus10Meta);
 			inv.setItem(12, minus10);
 		} else inv.setItem(12, null);
@@ -169,7 +169,7 @@ public class CasinoGUI {
 		
 			ItemStack minus50 = new ItemStack(material.getType());
 			ItemMeta minus50Meta = minus50.getItemMeta();
-			minus50Meta.setDisplayName("§4 - " + this.minus4);
+			minus50Meta.setDisplayName("Â§4 - " + this.minus4);
 			minus50.setItemMeta(minus50Meta);
 			inv.setItem(14, minus50);
 		} else inv.setItem(14, null);
@@ -177,14 +177,14 @@ public class CasinoGUI {
 			
 			ItemStack minus100 = new ItemStack(material.getType());
 			ItemMeta minus100Meta = minus100.getItemMeta();
-			minus100Meta.setDisplayName("§4 - " + this.minus5);
+			minus100Meta.setDisplayName("Â§4 - " + this.minus5);
 			minus100.setItemMeta(minus100Meta);
 			inv.setItem(15, minus100);
 		} else inv.setItem(15, null);
 		if(einsatz >= this.minus6) {
 			ItemStack minus500 = new ItemStack(material.getType());
 			ItemMeta minus500Meta = minus500.getItemMeta();
-			minus500Meta.setDisplayName("§4 - " + this.minus6);
+			minus500Meta.setDisplayName("Â§4 - " + this.minus6);
 			minus500.setItemMeta(minus500Meta);
 			inv.setItem(16, minus500);
 		} else inv.setItem(16, null);
@@ -197,7 +197,7 @@ public class CasinoGUI {
 		if(einsatz + plus1 <= playerBalance) {
 			ItemStack plus1 = new ItemStack(material.getType());
 			ItemMeta plus1Meta = material.getItemMeta();
-			plus1Meta.setDisplayName("§2+ " + this.plus1);
+			plus1Meta.setDisplayName("Â§2+ " + this.plus1);
 			plus1.setItemMeta(plus1Meta);
 			inv.setItem(1, plus1);
 		} else inv.setItem(1, null);
@@ -205,7 +205,7 @@ public class CasinoGUI {
 		if(einsatz + plus2 <= playerBalance) {
 			ItemStack plus5 = new ItemStack(material.getType());
 			ItemMeta plus5Meta = plus5.getItemMeta();
-			plus5Meta.setDisplayName("§2+ " + this.plus2);
+			plus5Meta.setDisplayName("Â§2+ " + this.plus2);
 			plus5.setItemMeta(plus5Meta);
 			inv.setItem(2, plus5);
 		} else inv.setItem(2, null);
@@ -213,7 +213,7 @@ public class CasinoGUI {
 		if(einsatz + plus3 <= playerBalance) {
 			ItemStack plus10 = new ItemStack(material.getType());
 			ItemMeta plus10Meta = plus10.getItemMeta();
-			plus10Meta.setDisplayName("§2+ " + this.plus3);
+			plus10Meta.setDisplayName("Â§2+ " + this.plus3);
 			plus10.setItemMeta(plus10Meta);
 			inv.setItem(3, plus10);
 		} else inv.setItem(3, null);
@@ -222,7 +222,7 @@ public class CasinoGUI {
 		if(einsatz + plus4 <= playerBalance) {
 			ItemStack plus50 = new ItemStack(material.getType());
 			ItemMeta plus50Meta = plus50.getItemMeta();
-			plus50Meta.setDisplayName("§2+ " + this.plus4);
+			plus50Meta.setDisplayName("Â§2+ " + this.plus4);
 			plus50.setItemMeta(plus50Meta);
 			inv.setItem(5, plus50);
 		} else inv.setItem(5, null);
@@ -230,7 +230,7 @@ public class CasinoGUI {
 		if(einsatz + plus5 <= playerBalance) {
 			ItemStack plus100 = new ItemStack(material.getType());
 			ItemMeta plus100Meta = plus100.getItemMeta();
-			plus100Meta.setDisplayName("§2+ " + this.plus5);
+			plus100Meta.setDisplayName("Â§2+ " + this.plus5);
 			plus100.setItemMeta(plus100Meta);
 			inv.setItem(6, plus100);
 		} else inv.setItem(6, null);
@@ -238,7 +238,7 @@ public class CasinoGUI {
 		if(einsatz + plus6 <= playerBalance) {
 			ItemStack plus500 = new ItemStack(material.getType());
 			ItemMeta plus500Meta = plus500.getItemMeta();
-			plus500Meta.setDisplayName("§2+ " + this.plus6);
+			plus500Meta.setDisplayName("Â§2+ " + this.plus6);
 			plus500.setItemMeta(plus500Meta);
 			inv.setItem(7, plus500);
 		

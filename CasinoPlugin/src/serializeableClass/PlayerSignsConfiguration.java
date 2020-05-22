@@ -131,7 +131,7 @@ public class PlayerSignsConfiguration {
 	}
 	public String getOwnerName()
 	{
-		if(isServerOwner()) return "§6Server";
+		if(isServerOwner()) return "Â§6Server";
 		else {
 			return getOwner().getName();
 		}
@@ -255,6 +255,6 @@ public class PlayerSignsConfiguration {
 	}
 	public String[] getColorMultiplicators()
 	{
-		return new String[] {"§b", "§a", "§c"};
+		return new String[] {"Â§b", "Â§a", "Â§c"};
 	}
 }

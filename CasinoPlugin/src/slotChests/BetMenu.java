@@ -80,13 +80,13 @@ public class BetMenu implements Listener{
 		
 		backButton = new ItemStack(Material.STONE_BUTTON);
 		meta = backButton.getItemMeta();
-		meta.setDisplayName("§bBack");
+		meta.setDisplayName("Â§bBack");
 		backButton.setItemMeta(meta);
 		inventory.setItem(18, backButton);
 		
 		currentBetsign = new ItemStack(Material.OAK_SIGN);
 		meta = currentBetsign.getItemMeta();
-		meta.setDisplayName("§6Current bet: " + Main.econ.format(slotChest.bet));
+		meta.setDisplayName("Â§6Current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);
 		inventory.setItem(4, currentBetsign);
 		//TODO
@@ -98,7 +98,7 @@ public class BetMenu implements Listener{
 	public void updateInventory() {
 		currentBetsign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = currentBetsign.getItemMeta();
-		meta.setDisplayName("§6current bet: " + Main.econ.format(slotChest.bet));
+		meta.setDisplayName("Â§6current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);
 		inventory.setItem(4, currentBetsign);
 		managePlusMinusBlocks();
@@ -149,11 +149,11 @@ public class BetMenu implements Listener{
 			inventory.setItem(7, plusBet3);
 			inventory.setItem(8, plusBet4);
 		}
-		//TODO blöcke wieder verschwinden
+		//TODO blÂ§cke wieder verschwinden
 	}
 	private void createNewBlock(ItemStack item, double bet) {
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(bet>=1 ? String.format("§2Increase your bet by §6%s", Main.econ.format(bet)) : String.format("§4Decrease your bet by §6%s", Main.econ.format(bet)));
+		meta.setDisplayName(bet>=1 ? String.format("Â§2Increase your bet by Â§6%s", Main.econ.format(bet)) : String.format("Â§4Decrease your bet by Â§6%s", Main.econ.format(bet)));
 		item.setItemMeta(meta);
 	}
 	
@@ -202,7 +202,7 @@ public class BetMenu implements Listener{
 			@Override
 			public void run() {
 				if(waitingForChatInputTasks.containsKey(player)) {
-					player.sendMessage(CasinoManager.getPrefix() + "§4Time for writing the input expired! Try it again!");
+					player.sendMessage(CasinoManager.getPrefix() + "Â§4Time for writing the input expired! Try it again!");
 					waitingForChatInputTasks.remove(player);
 				}
 				
@@ -251,7 +251,7 @@ public class BetMenu implements Listener{
 			return;
 		}
 		
-//		player.sendMessage(CasinoManager.getPrefix() + "§6" + Main.econ.format(input) + " is the new bet!");
+//		player.sendMessage(CasinoManager.getPrefix() + "Â§6" + Main.econ.format(input) + " is the new bet!");
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_new_bet_message").replace("%amount%", Main.econ.format(input)));
 		waitingForChatInputTasks.remove(player);
 		slotChest.bet = input;

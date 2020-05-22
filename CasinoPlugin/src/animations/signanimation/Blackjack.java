@@ -22,37 +22,37 @@ public class Blackjack implements Runnable
 	}
 	@Override
 	public void run() {
-		sign.setLine(0, "§fBlackjack");
+		sign.setLine(0, "Â§fBlackjack");
 		sign.setLine(1, thisSign.getOwnerName());
 		
 		if(thisSign.isSignDisabled()) {
-			sign.setLine(2, "§4DISABLED!");
-			sign.setLine(3, "§4DISABLED!");
+			sign.setLine(2, "Â§4DISABLED!");
+			sign.setLine(3, "Â§4DISABLED!");
 		} else {
 			if(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackMultiplicator())) {
 				if(thisSign.currentSignAnimation == 0) {
-					sign.setLine(2, "§l§6min bet: " + Main.econ.format(thisSign.bet));
+					sign.setLine(2, "Â§lÂ§6min bet: " + Main.econ.format(thisSign.bet));
 					
 					if(thisSign.plusinformations.contains("to"))
-						sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
+						sign.setLine(3, "Â§a" + thisSign.plusinformations.split(";")[1]);
 					else
-						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.bet));
+						sign.setLine(3, "Â§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.bet));
 					
 				} else {
-					sign.setLine(2, "§l§6max bet: " + Main.econ.format(thisSign.blackjackGetMaxBet()));
+					sign.setLine(2, "Â§lÂ§6max bet: " + Main.econ.format(thisSign.blackjackGetMaxBet()));
 					
 					if(thisSign.plusinformations.contains("to"))
-						sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
+						sign.setLine(3, "Â§a" + thisSign.plusinformations.split(";")[1]);
 					else
-						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.blackjackGetMaxBet()));
+						sign.setLine(3, "Â§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.blackjackGetMaxBet()));
 				}
 			} else {
 				if(thisSign.currentSignAnimation == 1) {
-					sign.setLine(2, "§4ERROR!");
-					sign.setLine(3, "§4ERROR!");
+					sign.setLine(2, "Â§4ERROR!");
+					sign.setLine(3, "Â§4ERROR!");
 				} else {
-					sign.setLine(2, "§4doesn't have");
-					sign.setLine(3, "§4enough money!");
+					sign.setLine(2, "Â§4doesn't have");
+					sign.setLine(3, "Â§4enough money!");
 				}
 			}
 				

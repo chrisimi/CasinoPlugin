@@ -89,9 +89,9 @@ public class SettingsMenu implements Listener{
 		String[] lores = RollAnimationFactory.getNameOfAllAnimations();
 		for(int i = 0; i < lores.length; i++) {
 			if(i == slotChest.animationID-1) {
-				lores[i] = "ง6" + lores[i];
+				lores[i] = "ยง6" + lores[i];
 			} else {
-				lores[i] = "ง8" + lores[i]; 
+				lores[i] = "ยง8" + lores[i]; 
 			}
 		}
 		ArrayList<String> loresList = new ArrayList<String>(lores.length);

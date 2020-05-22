@@ -322,7 +322,7 @@ public class WinningsMenu implements Listener {
 			
 			ItemStack item = entry.getKey();
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(String.format("ง5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100));
+			meta.setDisplayName(String.format("ยง5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100));
 			item.setItemMeta(meta);
 			entry.getKey().setItemMeta(meta);
 			inventory.setItem(index, item);

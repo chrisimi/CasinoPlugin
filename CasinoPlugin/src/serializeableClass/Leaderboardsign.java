@@ -89,7 +89,7 @@ public class Leaderboardsign {
 	public String getPlayerName()
 	{
 		if(isServerSign())
-			return "ง6Server";
+			return "ยง6Server";
 		return getPlayer().getName();
 	}
 	

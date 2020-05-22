@@ -297,14 +297,14 @@ public class BlackjackAnimation implements Runnable {
 		
 		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() + this.playerBet : this.playerBet * 2;
 		if(Card.getValue(cards) == 21) {
-			//player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
+			//player.sendMessage(CasinoManager.getPrefix() + "Â§lYou got a Blackjack!");
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_blackjack"));
 		}
-		//player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(winamount));
+		//player.sendMessage(CasinoManager.getPrefix() + "Â§aYou won " + Main.econ.format(winamount));
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_won").replace("%amount%", Main.econ.format(winamount)));
 		
 		CasinoManager.Debug(this.getClass(), "won!");
-		//contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
+		//contactOwner(String.format("Â§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
 		contactOwner(MessageManager.get("blackjack-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(winamount)));
 		
 		LeaderboardsignsManager.addData(player, thisSign, this.playerBet, winamount);
@@ -328,8 +328,8 @@ public class BlackjackAnimation implements Runnable {
 		for(Card card : cards)
 			a += card.toString() + ", ";
 		
-		this.sign.setLine(0, "§4§ldealer: " + Card.getValue(dealer));
-		this.sign.setLine(1, "§6§lbet: " + Main.econ.format(this.playerBet));
+		this.sign.setLine(0, "Â§4Â§ldealer: " + Card.getValue(dealer));
+		this.sign.setLine(1, "Â§6Â§lbet: " + Main.econ.format(this.playerBet));
 		this.sign.setLine(2, a);
 		this.sign.setLine(3, String.valueOf(Card.getValue(cards)));
 		
@@ -354,12 +354,12 @@ public class BlackjackAnimation implements Runnable {
 				return;
 			}
 			if(eingabe < thisAnimation.minBet) {
-				//player.sendMessage(CasinoManager.getPrefix() + "§4Your number is smaller than " + Main.econ.format(thisAnimation.minBet));
+				//player.sendMessage(CasinoManager.getPrefix() + "Â§4Your number is smaller than " + Main.econ.format(thisAnimation.minBet));
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-bet_is_too_low").replace("%min_bet%", Main.econ.format(thisAnimation.minBet)));
 				return;
 			}
 			if(eingabe > thisAnimation.maxBet) {
-				//player.sendMessage(CasinoManager.getPrefix() + "§4Your number is higher than " + Main.econ.format(thisAnimation.maxBet));
+				//player.sendMessage(CasinoManager.getPrefix() + "Â§4Your number is higher than " + Main.econ.format(thisAnimation.maxBet));
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-bet_is_too_high").replace("%max_bet%", Main.econ.format(thisAnimation.maxBet)));
 				return;
 			}

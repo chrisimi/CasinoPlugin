@@ -54,8 +54,8 @@ public class LeaderboardsignAnimation implements Runnable
 		//will be called every frame
 		if(!(signBlock.isPlaced())) return;
 		
-		signBlock.setLine(1, "ง4updating...");
-		signBlock.setLine(2, "ง4updating...");
+		signBlock.setLine(1, "ยง4updating...");
+		signBlock.setLine(2, "ยง4updating...");
 		signBlock.update(true);
 		CasinoManager.Debug(this.getClass(), sign.getLocation().toString() + " run ");
 		getData();
@@ -281,12 +281,12 @@ public class LeaderboardsignAnimation implements Runnable
 	}
 	private void writeSign() 
 	{
-		signBlock.setLine(0, "ง6งl"+String.valueOf(sign.position)+". Place");
-		signBlock.setLine(1, (currentPlayer == null) ? "ง4---" : currentPlayer.getName());
+		signBlock.setLine(0, "ยง6ยงl"+String.valueOf(sign.position)+". Place");
+		signBlock.setLine(1, (currentPlayer == null) ? "ยง4---" : currentPlayer.getName());
 		if(sign.getMode() != Mode.COUNT)
-			signBlock.setLine(2, (currentValue == 0.0) ? "ง4---" : Main.econ.format(currentValue));
+			signBlock.setLine(2, (currentValue == 0.0) ? "ยง4---" : Main.econ.format(currentValue));
 		else
-			signBlock.setLine(2, (currentValue == 0.0) ? "ง4---" : String.valueOf(currentValue));
+			signBlock.setLine(2, (currentValue == 0.0) ? "ยง4---" : String.valueOf(currentValue));
 		
 		if(sign.animationCount == 0)
 		{
@@ -301,7 +301,7 @@ public class LeaderboardsignAnimation implements Runnable
 		if(this.sign.cycleMode == Cycle.NaN && this.sign.lastManualReset != 0)
 		{
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-			signBlock.setLine(3, "งar: " + dfa.format(new Date(this.sign.lastManualReset)));
+			signBlock.setLine(3, "ยงar: " + dfa.format(new Date(this.sign.lastManualReset)));
 		}
 		
 		signBlock.update(true);
@@ -336,15 +336,15 @@ public class LeaderboardsignAnimation implements Runnable
 		case WEEK:
 		case DAY:
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-			return "งa" + df.format(getStartDateOfSign().getTime());
+			return "ยงa" + df.format(getStartDateOfSign().getTime());
 			
 		case HOUR:
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 			
-			return "งa" + dfa.format(getStartDateOfSign().getTime());
+			return "ยงa" + dfa.format(getStartDateOfSign().getTime());
 
 		default:
-			return "ง6------";
+			return "ยง6------";
 		}
 		
 	}
@@ -385,14 +385,14 @@ public class LeaderboardsignAnimation implements Runnable
 		case WEEK:
 		case DAY:
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
-			return "งc" + df.format(getEndDateOfSign().getTime());
+			return "ยงc" + df.format(getEndDateOfSign().getTime());
 			
 		case HOUR:
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-			return "งc" + dfa.format(getEndDateOfSign().getTime());
+			return "ยงc" + dfa.format(getEndDateOfSign().getTime());
 
 		default:
-			return "ง6------";
+			return "ยง6------";
 		}
 	}
 }

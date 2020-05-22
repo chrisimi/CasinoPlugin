@@ -341,7 +341,7 @@ public class SignsManager implements Listener {
 		
 		if(signValues.containsKey(sign.getLocation())) {
 			if(!(Main.perm.has(event.getPlayer(), "casino.sign.use") || event.getPlayer().isOp() || Main.perm.has(event.getPlayer(), "casino.admin"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4You don't have permissions to use a Casino-Sign!");
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Â§4You don't have permissions to use a Casino-Sign!");
 				return;
 			}
 			
@@ -444,7 +444,7 @@ public class SignsManager implements Listener {
 							sign.setLine(1, player.getDisplayName());
 							sign.setLine(2, wonrowString);
 							if(wonSymbol == "") {
-								sign.setLine(3, "§4You won nothing!");
+								sign.setLine(3, "Â§4You won nothing!");
 								
 							} else {
 								double wonamount = bet;
@@ -459,7 +459,7 @@ public class SignsManager implements Listener {
 									wonamount *= multiplicators.get(2);
 									break;
 								}
-								sign.setLine(3, "§3You won: " + wonamount);
+								sign.setLine(3, "Â§3You won: " + wonamount);
 								EconomyResponse r = Main.econ.depositPlayer(player, wonamount);
 								if(r.transactionSuccess()) {
 									player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinosigns-player_won").replace("%amount%", Main.econ.format(wonamount)).replace("%balance%",Main.econ.format(Main.econ.getBalance(player))));
@@ -505,9 +505,9 @@ public class SignsManager implements Listener {
 			@Override
 			public void run() {
 				sign.setLine(0, CasinoManager.getPrefix());
-				sign.setLine(1, "§5bet: " + Main.econ.format(bet));
-				sign.setLine(2, "§aright click");
-				sign.setLine(3, "§ato begin");
+				sign.setLine(1, "Â§5bet: " + Main.econ.format(bet));
+				sign.setLine(2, "Â§aright click");
+				sign.setLine(3, "Â§ato begin");
 				
 				Boolean a = sign.update(true);
 				sign.update();

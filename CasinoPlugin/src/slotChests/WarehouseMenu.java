@@ -37,9 +37,9 @@ import scripts.CasinoManager;
 public class WarehouseMenu implements Listener{
 	
 	/**
-	 * alles abgedeckt mit Scheiben außer ein Platz! da wird Items reingeshiftet
+	 * alles abgedeckt mit Scheiben auÂ§er ein Platz! da wird Items reingeshiftet
 	 * 
-	 * beim schließen inventar durchschauen! ob spieler etwas rausgenommen hat - fertig
+	 * beim schlieÂ§en inventar durchschauen! ob spieler etwas rausgenommen hat - fertig
 	 * 
 	 * 
 	 */
@@ -69,14 +69,14 @@ public class WarehouseMenu implements Listener{
 		changeSortModeSign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = changeSortModeSign.getItemMeta();
 		ArrayList<String> loreList = new ArrayList<>();
-		loreList.add("§6click to change!");
+		loreList.add("Â§6click to change!");
 		meta.setLore(loreList);
-		meta.setDisplayName("§asort by ID");
+		meta.setDisplayName("Â§asort by ID");
 		changeSortModeSign.setItemMeta(meta);
 		
 		sortButton = new ItemStack(Material.STONE_BUTTON);
 		meta = sortButton.getItemMeta();
-		meta.setDisplayName("§6SORT");
+		meta.setDisplayName("Â§6SORT");
 		sortButton.setItemMeta(meta);
 		
 		warehouseMenu = Bukkit.createInventory(owner, 9*6, "Warehouse");
@@ -127,7 +127,7 @@ public class WarehouseMenu implements Listener{
 								{
 									if(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount() <= itemStack.getType().getMaxStackSize())
 									{
-										//kann item zur gänze hinzufügen
+										//kann item zur gÂ§nze hinzufÂ§gen
 										warehouseMenu.getItem(i).setAmount(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount());
 										itemStack.setAmount(0);
 										break;
@@ -137,7 +137,7 @@ public class WarehouseMenu implements Listener{
 										int amountToAddInStack = itemStack.getType().getMaxStackSize() - warehouseMenu.getItem(i).getAmount();
 										if(amountToAddInStack > itemStack.getAmount())
 										{
-											//man könnte noch mehr dazutun wia eig. max
+											//man kÂ§nnte noch mehr dazutun wia eig. max
 											warehouseMenu.getItem(i).setAmount(warehouseMenu.getItem(i).getAmount() + itemStack.getAmount());
 											itemStack.setAmount(0);
 											break;
@@ -211,9 +211,9 @@ public class WarehouseMenu implements Listener{
 		if(event.getCurrentItem().equals(changeSortModeSign)) {
 			
 			ItemMeta meta = changeSortModeSign.getItemMeta();
-			meta.setDisplayName((sortByID) ? "§asort by ID" : "§asort by name");
+			meta.setDisplayName((sortByID) ? "Â§asort by ID" : "Â§asort by name");
 			ArrayList<String> loreList = new ArrayList<>();
-			loreList.add("§6click to change!");
+			loreList.add("Â§6click to change!");
 			meta.setLore(loreList);
 			changeSortModeSign.setItemMeta(meta);
 			updateInventory();

@@ -256,94 +256,94 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	private void showDiceHelpToPlayer(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
-		player.sendMessage("§f§l§nDice help");
-		if(Main.perm.has(player, "casino.dice.create")) player.sendMessage("§2permissions: §4true");
-		else player.sendMessage("§2permissions: §4false");
+		player.sendMessage("Â§fÂ§lÂ§nDice help");
+		if(Main.perm.has(player, "casino.dice.create")) player.sendMessage("Â§2permissions: Â§4true");
+		else player.sendMessage("Â§2permissions: Â§4false");
 		
-		player.sendMessage("§6§n§lFormat of a dice sign:");
+		player.sendMessage("Â§6Â§nÂ§lFormat of a dice sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for using it as a server dice sign)");
-		player.sendMessage("     §6line 2: §edice");
-		player.sendMessage("     §6line 3: §ebet §6like 30 or 20.5");
-		player.sendMessage("     §6line 4: §ewin chance §6and §emultiplicator §6like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
+		player.sendMessage("     Â§6line 1: Â§ecasino Â§6(Â§ecasino;server Â§6for using it as a server dice sign)");
+		player.sendMessage("     Â§6line 2: Â§edice");
+		player.sendMessage("     Â§6line 3: Â§ebet Â§6like 30 or 20.5");
+		player.sendMessage("     Â§6line 4: Â§ewin chance Â§6and Â§emultiplicator Â§6like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
 	}
 	private void showBlackjackHelpToPlayer(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
-		player.sendMessage("§f§l§lBlackjack help");
-		if(Main.perm.has(player, "casino.blackjack.create")) player.sendMessage("§2permissions: §4true");
-		else player.sendMessage("§2permissions: §4false");
+		player.sendMessage("Â§fÂ§lÂ§lBlackjack help");
+		if(Main.perm.has(player, "casino.blackjack.create")) player.sendMessage("Â§2permissions: Â§4true");
+		else player.sendMessage("Â§2permissions: Â§4false");
 		
-		player.sendMessage("§6§n§lFormat of a blackjack sign:");
+		player.sendMessage("Â§6Â§nÂ§lFormat of a blackjack sign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for using it as a server blackjack sign)");
-		player.sendMessage("     §6line 2: §eblackjack");
-		player.sendMessage("     §6line 3: §eminbet§6;§emaxbet §6like 20;30");
-		player.sendMessage("     §6line 4: §emultiplicator §6if players draws a blackjack (21) in §eto writing §6like 3 to 2");
+		player.sendMessage("     Â§6line 1: Â§ecasino Â§6(Â§ecasino;server Â§6for using it as a server blackjack sign)");
+		player.sendMessage("     Â§6line 2: Â§eblackjack");
+		player.sendMessage("     Â§6line 3: Â§eminbetÂ§6;Â§emaxbet Â§6like 20;30");
+		player.sendMessage("     Â§6line 4: Â§emultiplicator Â§6if players draws a blackjack (21) in Â§eto writing Â§6like 3 to 2");
 	}
 	private void showLeaderboardSignHelpToPlayer(Player player)
 	{
 		player.sendMessage("");
 		player.sendMessage("");
-		player.sendMessage("§f§lLeaderboardsign help");
-		if(Main.perm.has(player, "casino.leaderboardsign.create")) player.sendMessage("§2permissions: §4true");
-		else player.sendMessage("§2permissions: §4false");
+		player.sendMessage("Â§fÂ§lLeaderboardsign help");
+		if(Main.perm.has(player, "casino.leaderboardsign.create")) player.sendMessage("Â§2permissions: Â§4true");
+		else player.sendMessage("Â§2permissions: Â§4false");
 		
 		player.sendMessage("");
-		player.sendMessage("§6§n§lFormat of a leaderboardsign:");
+		player.sendMessage("Â§6Â§nÂ§lFormat of a leaderboardsign:");
 		player.sendMessage("");
-		player.sendMessage("     §6line 1: §eleaderboard §6(§eleaderboard;s §6for using it as a server leaderboardsign§6) ");
-		player.sendMessage("     §6line 2: §eposition§6;§ecycle §eposition §6like 1 for first place, §ecycle §6is optional like month data will be only taken from this month, (§eyear, month, week, day, hour§6)");
-		player.sendMessage("     §6line 3: §emode §6(§ecount, sumamount, highestamount§6)");
-		player.sendMessage("     §6line 4: §erange §6(§eall §6for all your signs, §enumber of blocks §6(3 as example) for using signs in this block range");
+		player.sendMessage("     Â§6line 1: Â§eleaderboard Â§6(Â§eleaderboard;s Â§6for using it as a server leaderboardsignÂ§6) ");
+		player.sendMessage("     Â§6line 2: Â§epositionÂ§6;Â§ecycle Â§eposition Â§6like 1 for first place, Â§ecycle Â§6is optional like month data will be only taken from this month, (Â§eyear, month, week, day, hourÂ§6)");
+		player.sendMessage("     Â§6line 3: Â§emode Â§6(Â§ecount, sumamount, highestamountÂ§6)");
+		player.sendMessage("     Â§6line 4: Â§erange Â§6(Â§eall Â§6for all your signs, Â§enumber of blocks Â§6(3 as example) for using signs in this block range");
 	}
 	private void showSlotsSignHelpToPlayer(Player player)
 	{
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage("");
-		player.sendMessage("§f§lCasino-Slots sign help");
+		player.sendMessage("Â§fÂ§lCasino-Slots sign help");
 
 		
 		player.sendMessage("");
-		player.sendMessage("§6§n§lFormat of a Casino-Slots sign:");
+		player.sendMessage("Â§6Â§nÂ§lFormat of a Casino-Slots sign:");
 		player.sendMessage("");
-		player.sendMessage("    §6line 1: §eslots §6or §eslots;server §6for server sign");
-		player.sendMessage("    §6line 2: §ebet §6in decimal like §e10.0");
-		player.sendMessage("    §6line 3: 3 symbols splited by ';' a semicolon like §eA;B;C");
-		player.sendMessage("    §6line 4: §echances and multiplicators §6in that format: ");
-		player.sendMessage("    §6        §echance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 §6(1 is for A, 2 is for B and 3 is for C in that example)");
-		player.sendMessage("    §6example:   50-30-20;2-3-5");
+		player.sendMessage("    Â§6line 1: Â§eslots Â§6or Â§eslots;server Â§6for server sign");
+		player.sendMessage("    Â§6line 2: Â§ebet Â§6in decimal like Â§e10.0");
+		player.sendMessage("    Â§6line 3: 3 symbols splited by ';' a semicolon like Â§eA;B;C");
+		player.sendMessage("    Â§6line 4: Â§echances and multiplicators Â§6in that format: ");
+		player.sendMessage("    Â§6        Â§echance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 Â§6(1 is for A, 2 is for B and 3 is for C in that example)");
+		player.sendMessage("    Â§6example:   50-30-20;2-3-5");
 		
 	}
 	
 	private void showHelpToAdmin(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
-		player.sendMessage("§4Admin page");
-		player.sendMessage("§6/casino reloadconfig §8- reloads the config.yml");
-		player.sendMessage("§6/casino resetdata §8- deletes all roll-data from playermanagedsigns (data.yml)");
-		player.sendMessage("§6/casino reloaddata §8- reload all leaderboard signs and data.yml. Could lag a bit!");
+		player.sendMessage("Â§4Admin page");
+		player.sendMessage("Â§6/casino reloadconfig Â§8- reloads the config.yml");
+		player.sendMessage("Â§6/casino resetdata Â§8- deletes all roll-data from playermanagedsigns (data.yml)");
+		player.sendMessage("Â§6/casino reloaddata Â§8- reload all leaderboard signs and data.yml. Could lag a bit!");
 	}
 
 	private void showHelpToPlayer(Player player) {
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage(CasinoManager.getPrefix());
-		player.sendMessage("§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
-		player.sendMessage("§6/casino gui§8- open the casino GUI");
-		player.sendMessage("§6/casino admin §8- admin help command"); 
-		player.sendMessage("§6/casino help slots §8- show help for placing slots signs!");
-		player.sendMessage("§6/casino help dice §8- show help for placing a dice signs!");
-		player.sendMessage("§6/casino help blackjack §8- show help for placing blackjack signs!");
-		player.sendMessage("§6/casino help leaderboard §8- show help for placing leaderboard signs!");
-		player.sendMessage("§6/casino sign disable §8- disable your own player sign while looking onto it!");
-		player.sendMessage("§6/casino sign enable §8- enable your own player sign while looking onto it!");
-		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8 - roll a random number which will be sent to nearby players or mentioned player!");
-		player.sendMessage("§6/casino createchest §8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
-		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
-		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
-		player.sendMessage("§6/casino resetserverleaderboard [range/all] [mode (optional)] §6- same as resetleaderboard but for serversigns!");
+		player.sendMessage("Â§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
+		player.sendMessage("Â§6/casino guiÂ§8- open the casino GUI");
+		player.sendMessage("Â§6/casino admin Â§8- admin help command"); 
+		player.sendMessage("Â§6/casino help slots Â§8- show help for placing slots signs!");
+		player.sendMessage("Â§6/casino help dice Â§8- show help for placing a dice signs!");
+		player.sendMessage("Â§6/casino help blackjack Â§8- show help for placing blackjack signs!");
+		player.sendMessage("Â§6/casino help leaderboard Â§8- show help for placing leaderboard signs!");
+		player.sendMessage("Â§6/casino sign disable Â§8- disable your own player sign while looking onto it!");
+		player.sendMessage("Â§6/casino sign enable Â§8- enable your own player sign while looking onto it!");
+		player.sendMessage("Â§6/casino roll [minimum] [maximum] [player (not needed)] Â§8 - roll a random number which will be sent to nearby players or mentioned player!");
+		player.sendMessage("Â§6/casino createchest Â§8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
+		player.sendMessage("Â§6/casino chestlocations Â§8 - get the locations from your SlotChests!");
+		player.sendMessage("Â§6/casino resetleaderboard [range/all] [mode (optional)] Â§6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
+		player.sendMessage("Â§6/casino resetserverleaderboard [range/all] [mode (optional)] Â§6- same as resetleaderboard but for serversigns!");
 	}
 	
 	private void showChestLocations(Player player) {
@@ -353,11 +353,11 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			return;
 		}
 		player.sendMessage("\n\n");
-		player.sendMessage(CasinoManager.getPrefix() + "§6§lYour SlotChests:");
+		player.sendMessage(CasinoManager.getPrefix() + "Â§6Â§lYour SlotChests:");
 		
 		int index = 1;
 		for(SlotChest chest : list) {
-			player.sendMessage(String.format("§6%s: x: %s, y: %s, z: %s", index, (int)chest.getLocation().getX(), (int)chest.getLocation().getY(), (int)chest.getLocation().getZ()));
+			player.sendMessage(String.format("Â§6%s: x: %s, y: %s, z: %s", index, (int)chest.getLocation().getX(), (int)chest.getLocation().getY(), (int)chest.getLocation().getZ()));
 			index++;
 		}
 	}

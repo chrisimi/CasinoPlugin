@@ -104,7 +104,7 @@ public class SlotsAnimation implements Runnable
 			if(rollsLeft < 0)
 			{
 				int line = random.nextInt(4);
-				String editedLine = "> " + lines[line] + " ง0<";
+				String editedLine = "> " + lines[line] + " ยง0<";
 				sign.setLine(line, editedLine);
 				sign.update(true);
 				main.getServer().getScheduler().cancelTask(bukkitTaskId);
@@ -120,7 +120,7 @@ public class SlotsAnimation implements Runnable
 							
 							sign.setLine(0, editedLine);
 							sign.setLine(1, "");
-							sign.setLine(2, "ง2You won");
+							sign.setLine(2, "ยง2You won");
 							sign.setLine(3, Main.econ.format(winAmount));
 							sign.update(true);
 							playerWon();
@@ -128,7 +128,7 @@ public class SlotsAnimation implements Runnable
 						{
 							sign.setLine(0, editedLine);
 							sign.setLine(1, "");
-							sign.setLine(2, "ง4You lost");
+							sign.setLine(2, "ยง4You lost");
 							sign.setLine(3, "");
 							sign.update(true);
 							playerLost();
@@ -153,13 +153,13 @@ public class SlotsAnimation implements Runnable
 			
 			if(randomNumber < weights[0])
 			{
-				newCharacter = "งb" + symbols[0];
+				newCharacter = "ยงb" + symbols[0];
 			} else if(randomNumber < weights[0] + weights[1])
 			{
-				newCharacter = "งa" + symbols[1];
+				newCharacter = "ยงa" + symbols[1];
 			} else if(randomNumber <= weights[0] + weights[1] + weights[2])
 			{
-				newCharacter = "งc" + symbols[2];
+				newCharacter = "ยงc" + symbols[2];
 			}
 			else {
 				newCharacter = "Error";

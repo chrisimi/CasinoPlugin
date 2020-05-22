@@ -83,14 +83,14 @@ public class CasinoAnimation {
 		//23
 		ItemStack material = new ItemStack(Material.STONE_BUTTON, 1);
 		ItemMeta meta = material.getItemMeta();
-		meta.setDisplayName("ง2Press Button to start!");
+		meta.setDisplayName("ยง2Press Button to start!");
 		
 		material.setItemMeta(meta);
 		inv.setItem(22, material);
 		player.openInventory(inv);
 		
 		meta = material.getItemMeta();
-		meta.setDisplayName("ง2Back To Menu");
+		meta.setDisplayName("ยง2Back To Menu");
 		material.setItemMeta(meta);
 		inv.setItem(36, material);
 		
@@ -131,7 +131,7 @@ public class CasinoAnimation {
 					Bukkit.getScheduler().cancelTask(tasksList.get(player));
 					ItemStack retryButton = new ItemStack(Material.OAK_BUTTON);
 					ItemMeta meta = retryButton.getItemMeta();
-					meta.setDisplayName("ง4Retry?");
+					meta.setDisplayName("ยง4Retry?");
 					retryButton.setItemMeta(meta);
 					inv.setItem(44, retryButton);
 					

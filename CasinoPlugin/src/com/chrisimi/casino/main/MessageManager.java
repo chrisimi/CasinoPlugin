@@ -226,7 +226,7 @@ public class MessageManager
 		else 
 		{
 			CasinoManager.LogWithColor(ChatColor.RED + "MESSAGE: " + early + " does not exists!");
-			return "ง4There is an error with messages! Tell it your administrator!";
+			return "ยง4There is an error with messages! Tell it your administrator!";
 			
 		}
 	}

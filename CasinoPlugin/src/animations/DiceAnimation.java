@@ -78,8 +78,8 @@ public class DiceAnimation implements Runnable {
 		double ergebnis = Double.parseDouble(sign.getLine(1));
 		if(ergebnis >= values[0] && ergebnis <= values[1]) {
 			
-			sign.setLine(2, "§aYOU WON!");
-			//player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
+			sign.setLine(2, "Â§aYOU WON!");
+			//player.sendMessage(CasinoManager.getPrefix() + "Â§aYou won " + Main.econ.format(wonamount));
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won").replace("%amount%", Main.econ.format(wonamount)));
 			
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, wonamount);
@@ -87,7 +87,7 @@ public class DiceAnimation implements Runnable {
 			//Main.econ.withdrawPlayer(owner, wonamount);
 			thisSign.withdrawOwner(wonamount);
 			if(!thisSign.isServerOwner() && owner.isOnline()) {
-				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
+				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("Â§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(wonamount)));
 				
 			} else if(!thisSign.isServerOwner()) {
@@ -100,13 +100,13 @@ public class DiceAnimation implements Runnable {
 			
 			
 		} else {
-			sign.setLine(2, "§4YOU LOST!");
-			//player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
+			sign.setLine(2, "Â§4YOU LOST!");
+			//player.sendMessage(CasinoManager.getPrefix() + "Â§4You lost " + Main.econ.format(thisSign.bet));
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_lost").replace("%amount%", Main.econ.format(thisSign.bet)));
 			
 			LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
 			if(!thisSign.isServerOwner() && owner.isOnline()) {
-				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
+				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("Â§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_lost").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(thisSign.bet)));
 			} else if(!thisSign.isServerOwner()){
 				signsManager.addOfflinePlayerWinOrLose(thisSign.bet, owner);
@@ -134,7 +134,7 @@ public class DiceAnimation implements Runnable {
 		sign.setLine(0, "");
 		sign.setLine(1, "");
 		sign.setLine(2, "");
-		sign.setLine(3, "§awin: " + thisSign.plusinformations.split(";")[0]);
+		sign.setLine(3, "Â§awin: " + thisSign.plusinformations.split(";")[0]);
 
 		
 	}

@@ -69,13 +69,13 @@ public class RollAnimationManager implements Runnable, Listener{
 		
 		beginInformationSign = new ItemStack(Material.OAK_SIGN);
 		ItemMeta meta = beginInformationSign.getItemMeta();
-		meta.setDisplayName("§6bet: " + Main.econ.format(slotChest.bet));
+		meta.setDisplayName("Â§6bet: " + Main.econ.format(slotChest.bet));
 		beginInformationSign.setItemMeta(meta);
 		inventory.setItem(4, beginInformationSign);
 		
 		beginButton = new ItemStack(Material.STONE_BUTTON);
 		meta = beginButton.getItemMeta();
-		meta.setDisplayName("§6§lROLL");
+		meta.setDisplayName("Â§6Â§lROLL");
 		beginButton.setItemMeta(meta);
 		inventory.setItem(13, beginButton);
 	}
@@ -106,14 +106,14 @@ public class RollAnimationManager implements Runnable, Listener{
 			
 			*/
 		
-		//player.sendMessage(CasinoManager.getPrefix() + "§6You paid " + Main.econ.format(slotChest.bet));
+		//player.sendMessage(CasinoManager.getPrefix() + "Â§6You paid " + Main.econ.format(slotChest.bet));
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		
 		Main.econ.withdrawPlayer(player, slotChest.bet);
 		Main.econ.depositPlayer(owner, slotChest.bet);
 		
 		if(owner.isOnline()) {
-			//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
+			//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + "Â§6Somebody played on your slotchest, you earned: " + Main.econ.format(slotChest.bet));
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		}
 		
