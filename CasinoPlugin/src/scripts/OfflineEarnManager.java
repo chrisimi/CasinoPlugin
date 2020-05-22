@@ -162,6 +162,14 @@ public class OfflineEarnManager
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("offlineearnmanager-join-minus")
 				.replace("%loss%", Main.econ.format(losses - earnings)));
 			}
+			try
+			{
+				yaml.save(offlineDataYml);
+			} catch (IOException e)
+			{
+				CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to save offlinedata.yml! " + e.getMessage());
+				e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+			}
 		}
 	}
 	
