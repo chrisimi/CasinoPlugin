@@ -20,7 +20,12 @@ import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 import scripts.CasinoManager;
 
-
+/**
+ * represent the winnings menu for the slotchest
+ * not singelton
+ * @author chris
+ *
+ */
 public class WinningsMenu implements Listener {
 
 	public static HashMap<Player, WinningsMenu> waitingForEingabe = new HashMap<>();
@@ -68,6 +73,9 @@ public class WinningsMenu implements Listener {
 		initializeInventoryReadingTask();
 		updateInventory();
 	}
+	/**
+	 * start the background task which tracks the input from the player
+	 */
 	private void initializeInventoryReadingTask() {
 		int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
 			
@@ -196,7 +204,10 @@ public class WinningsMenu implements Listener {
 		
 	}
 	
-	//
+	/**
+	 * remove a item from the list of items to win (winnable items)
+	 * @param item item to remove 
+	 */
 	private void removeItemToWin(ItemStack item) {
 		int itemsInWarehouse = 0;
 		ArrayList<ItemStack> itemLagerToRemove = new ArrayList<>(); 
@@ -232,7 +243,10 @@ public class WinningsMenu implements Listener {
 //		owner.sendMessage(CasinoManager.getPrefix() + "You successfully removed " + item.getType().toString() + " from your winnings list");
 		owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_successful_remove").replace("%item%", item.getType().toString()));
 	}
-	
+	/**
+	 * manage a player input 
+	 * @param message raw message from player
+	 */
 	private void playerEingabe(String message) {
 		if(waitingForAmount) {
 			int amount = 0;
@@ -268,7 +282,7 @@ public class WinningsMenu implements Listener {
 			newItem();
 			owner.openInventory(inventory);
 			
-			//waitingForEingabhe.remove(owner);
+			waitingForEingabe.remove(owner);
 		}
 	}
 	
