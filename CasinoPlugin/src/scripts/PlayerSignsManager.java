@@ -72,6 +72,10 @@ public class PlayerSignsManager implements Listener {
 	private Double maxBetBlackjack = 200.0;
 	private Double maxBetSlots = 200.0;
 	
+	private int maxSignsDice = -1;
+	private int maxSignsBlackjack = -1;
+	private int maxSignsSlots = -1;
+	
 	private int updateTask = 0;
 	public PlayerSignsManager(Main main) {
 		this.main = main;
@@ -138,6 +142,34 @@ public class PlayerSignsManager implements Listener {
 		} finally {
 			if(maxBetSlots == null)
 				maxBetSlots = 200.0;
+		}
+		
+		try
+		{
+			maxSignsBlackjack = Integer.valueOf(UpdateManager.getValue("blackjack-max-signs", -1).toString());
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max signs: blackjack max signs is not a valid number! Set to default value infinite");
+			maxSignsBlackjack = -1;
+		}
+		
+		try
+		{
+			maxSignsDice = Integer.valueOf(UpdateManager.getValue("dice-max-signs", -1).toString());
+			
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max signs: dice max signs is not a valid number! Set to default value infinite");
+			maxSignsDice = -1;
+		}
+		
+		try
+		{
+			maxSignsSlots = Integer.valueOf(UpdateManager.getValue("slots-max-signs", -1).toString());
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max signs: slots max signs is not a valid number! Set to default value infinite!");
+			maxSignsSlots = -1;
 		}
 	}
 	
@@ -526,6 +558,14 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
+		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.DICE) >= maxSignsDice && maxSignsDice != -1)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-reached_max_amount"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		
 		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
@@ -565,6 +605,7 @@ public class PlayerSignsManager implements Listener {
 			}
 		}
 	}
+	
 	private void createBlackjackSign(SignChangeEvent event) {
 		
 		//casino
@@ -633,6 +674,15 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 		}
+		
+		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.BLACKJACK) >= maxSignsBlackjack && maxSignsBlackjack != -1)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-reached_max_amount"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		
 		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
@@ -757,6 +807,16 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 		}
+		
+		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.SLOTS) >= maxSignsSlots && maxSignsSlots != -1)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-reached_max_amount"));
+			event.setCancelled(true);
+			return;
+		}
+		
+		
+		
 		String plusinformations = String.format(
 				"%s-%s-%s;%s-%s-%s;%s-%s-%s", symbols[0], multiplicators[0], chance[0], symbols[1], multiplicators[1], chance[1], symbols[2], multiplicators[2], chance[2]);
 	
@@ -801,6 +861,14 @@ public class PlayerSignsManager implements Listener {
 			}
 		}
 	}
+	
+	private int getAmountOfPlayerSigns(Player player, GameMode gameMode)
+	{
+		return playerSigns.values().stream()
+				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
+				.collect(Collectors.toList()).size();
+	}
+	
 	
 	public static PlayerSignsConfiguration getPlayerSign(Location location) {
 		if(!(playerSigns.containsKey(location))) return null;

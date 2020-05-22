@@ -139,7 +139,7 @@ sign-max-bet: 1000.0
 # set the maximum bet for dice signs
 dice-max-bet: 250.0
 
-#set limit for maximum dice signs per player (-1 = infinite)
+# set limit for maximum dice signs per player (-1 = infinite)
 dice-max-signs: -1
 
 # ------------------------
