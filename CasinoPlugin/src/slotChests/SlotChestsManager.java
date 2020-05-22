@@ -71,14 +71,14 @@ public class SlotChestsManager implements Listener{
 	
 	private void updateConfigValues() {
 		try {
-			configMaxAmount = Integer.valueOf(UpdateManager.getValue("slotchest.max-amount").toString());
+			configMaxAmount = Integer.valueOf(UpdateManager.getValue("slotchest-max-amount").toString());
 		} catch(NumberFormatException e) {
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-amount for SlotChest! Value is not a valid number! Set to default value: 5");
 			//main.getLogger().info("CONFIG-ERROR: While trying to configure );
 			configMaxAmount = 5;
 		}
 		try {
-			configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest.op-unlimited").toString());
+			configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest-op-unlimited").toString());
 		} catch(NumberFormatException e) {
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get op-unlimited for SlotChest! Value is not a valid boolean (true/false)! Set to default value: false");
 			configOpUnlimited = false;

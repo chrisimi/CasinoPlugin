@@ -16,11 +16,12 @@ version: 3.6
 
 enable-debug: true
 
-# enable Console messages from plugin like exported x signs from signs.yml. 
+# enable console messages from plugin
+# like exported x signs from signs.yml. 
 # Does not effect errors!
 enable-console-messages: false
 
-# prefix of the plugin, keep empty for default one !!! 
+# prefix of the plugin, keep empty for default one 
 # make sure there is a space after the prefix
 # default one §9[§6Casino§9] §a
 prefix: default
@@ -32,158 +33,145 @@ prefix: default
 # use default for the default language file
 language: default
 
-
+# ----------
+# CASINO-GUI
+# ----------
 # change the high of the possible bet's
-bet:
-# plusBlock is the Block which the player press 
-# in the GUI to higher his bet
-   plusBlock: "GREEN_WOOL"
+
+bet-plusBlock: "GREEN_WOOL"
+   
 # plus 1-6 are the different possibilites in the GUI
-   plus1: 1
-   plus2: 5
-   plus3: 10
-   plus4: 50
-   plus5: 100
-   plus6: 500
+bet-plus1: 1
+bet-plus2: 5
+bet-plus3: 10
+bet-plus4: 50
+bet-plus5: 100
+bet-plus6: 500
    
    
 # minusblock is the Block which the player press in the GUI 
 # to lower his bet
-   minusBlock: 'RED_WOOL'
-   minus1: 1
-   minus2: 5
-   minus3: 10
-   minus4: 50
-   minus5: 100
-   minus6: 500
+bet-minusBlock: 'RED_WOOL'
+bet-minus1: 1
+bet-minus2: 5
+bet-minus3: 10
+bet-minus4: 50
+bet-minus5: 100
+bet-minus6: 500
    
 # informationBlock is the Block in the middle of the GUI within 
 # the plusBlocks and minusBlocks
-   informationBlock: 'DIAMOND_BLOCK'
+bet-informationBlock: 'DIAMOND_BLOCK'
 
 # material left and right of the GUI
-   inventoryMaterial: 'PINK_STAINED_GLASS_PANE'
+bet-inventoryMaterial: 'PINK_STAINED_GLASS_PANE'
 
-animation:  
+  
 # the material to fill empty gaps in the animation GUI
-   inventoryMaterial: 'BLUE_STAINED_GLASS_PANE'   
+animation-inventoryMaterial: 'BLUE_STAINED_GLASS_PANE'   
   
    
-# Block*-Type: Minecraft name of the block, representing possibility *
-   block1-Type: 'REDSTONE_BLOCK'
+# Block*-Type Minecraft name of the block, representing possibility *
+animation-block1-Type: 'REDSTONE_BLOCK'
    
-# Multiplicator: bet * multiplicator = win amount for player with 
+# Multiplicator bet * multiplicator = win amount for player with 
 # 3 of the same block
-   block1-Multiplicator: 3.0
+animation-block1-Multiplicator: 3.0
    
-# Chance: Value which represent the chance in percent
-#    !!!Important: all Chance-Values together have to be 100!!!
-   block1-Chance: 50
+# Chance Value which represent the chance in percent
+# Important all Chance-Values together have to be 100
+animation-block1-Chance: 50
    
-   block2-Type: 'DIAMOND_BLOCK'
-   block2-Multiplicator: 6.0
-   block2-Chance: 30
+animation-block2-Type: 'DIAMOND_BLOCK'
+animation-block2-Multiplicator: 6.0
+animation-block2-Chance: 30
    
-   block3-Type: 'EMERALD_BLOCK'
-   block3-Multiplicator: 9.0
-   block3-Chance: 20
+animation-block3-Type: 'EMERALD_BLOCK'
+animation-block3-Multiplicator: 9.0
+animation-block3-Chance: 20
    
 # value in ticks (20 ticks = 1 second) 
 # for how long the animation should run 
-# (random number between these two values!)
-#    set both the same value to deactivate randomness
-   min-duration: 60
-   max-duration: 180
+# (random number between these two values)
+# set both the same value to deactivate randomness
+animation-min-duration: 60
+animation-max-duration: 180
    
 # waiting time, in ticks, between one "roll" animation. 
 # 1 is very fast and realistic but can make laggs on bigger servers
 # 2-5 is some kind of realistic, better for large servers
-   animation-cooldown: 5
+animation-animation-cooldown: 5
    
-##########################################
-# configuration for the roll command!
-##########################################
-
-# set the range for the roll command, 
+# ----------------------------------
+# configuration for the roll command
+# ----------------------------------
+# 
+# set the range for the roll command 
 # where players get a message what the player rolled
 rollcommand-range: 30
    
    
-##########################################   
-# configurations for the Casino-Signs!
-##########################################
-sign:
-
+# -----------------------------------
+# configurations for Casino-Signs
+# -----------------------------------
 # value in ticks (20 ticks = 1 second) for how long the sign should roll
-   min-duration: 30
-   max-duration: 50
+sign-min-duration: 30
+sign-max-duration: 50
    
 # the possibilities to get on the sign   
-   possibilities: [R, D, E]
+sign-possibilities: [R, D, E]
    
 # multiplicator of the bet if the player wins
-   multiplicator: [3.0, 5.0, 7.0]
+sign-multiplicator: [3.0, 5.0, 7.0]
    
 # chance for the possibilities
-   chance: [50.0, 30.0, 20.0]
+sign-chance: [50.0, 30.0, 20.0]
    
 # the maximum amount which the bet can be
-   max-bet: 1000.0
+sign-max-bet: 1000.0
    
-##########################################
+# ------------------------------
 # configurations for PlayerSigns
-##########################################
-playersigns:
-
-##################################
+# ------------------------------
+# ------------------------------
 # dice configurations
-##################################
-   dice:
-      
-# set the maximum bet for dice signs!
-      max-bet: 250.0
+# ------------------------------
+# set the maximum bet for dice signs
+dice-max-bet: 250.0
 
-#################################
+# ------------------------
 # blackjack configurations
-#################################
-   blackjack:
+# ------------------------
+# set the maximum bet for blackjack signs
+blackjack-max-bet: 250.0
       
-# set the maximum bet for blackjack signs!
-      max-bet: 250.0
-      
-#################################
+# --------------------
 # slots configurations
-#################################
-   slots:
+# --------------------
+# set the maximum bet for slots signs
+slots-max-bet: 250.0
       
-# set the maximum bet for slots signs!
-      max-bet: 250.0
-      
-#################################     
+# ------------------------------- 
 # leaderboard signs configurations
-#################################      
-   leaderboard-signs:
-   
+# -------------------------------
 # enable the leaderboard signs
-      enable: true
+leaderboard-signs-enable: true
       
-# the reload time for every leaderboard sign in TICKS! 
+# the reload time for every leaderboard sign in TICKS 
 # 1 second = 20 Ticks, 1 Minute = 20*60*10 = 1200 Ticks
-      reload-time: 1200
+leaderboard-signs-reload-time: 1200
       
-##########################################
+# ------------------------
 # SlotChest configurations
-##########################################
-slotchest:
-
+# ------------------------
 # the maximum amount of chests a player can have 
-   max-amount: 5
+slotchest-max-amount: 5
    
 # does everyone with op can have unlimited 
-   op-unlimited: true
+slotchest-op-unlimited: true
 
 # banned items 
-   list-of-banned-items:
+slotchest-list-of-banned-items:
    - 'DIAMOND_BLOCK'
 
    

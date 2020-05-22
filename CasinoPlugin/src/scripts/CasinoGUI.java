@@ -60,22 +60,22 @@ public class CasinoGUI {
 		
 		inv = Bukkit.createInventory(player, 9*6, "Casino GUI");
 		
-		plus1 = (int) UpdateManager.getValue("bet.plus1");
-		plus2 = (int) UpdateManager.getValue("bet.plus2");
-		plus3 = (int) UpdateManager.getValue("bet.plus3");
-		plus4 = (int) UpdateManager.getValue("bet.plus4");
-		plus5 = (int) UpdateManager.getValue("bet.plus5");
-		plus6 = (int) UpdateManager.getValue("bet.plus6");
-		plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.plusBlock"));
-		minus1 = (int) UpdateManager.getValue("bet.minus1");
-		minus2 = (int) UpdateManager.getValue("bet.minus2");
-		minus3 = (int) UpdateManager.getValue("bet.minus3");
-		minus4 = (int) UpdateManager.getValue("bet.minus4");
-		minus5 = (int) UpdateManager.getValue("bet.minus5");
-		minus6 = (int) UpdateManager.getValue("bet.minus6");
-		minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.minusBlock"));
-		informationBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.informationBlock"));
-		gapBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.inventoryMaterial"));
+		plus1 = (int) UpdateManager.getValue("bet-plus1");
+		plus2 = (int) UpdateManager.getValue("bet-plus2");
+		plus3 = (int) UpdateManager.getValue("bet-plus3");
+		plus4 = (int) UpdateManager.getValue("bet-plus4");
+		plus5 = (int) UpdateManager.getValue("bet-plus5");
+		plus6 = (int) UpdateManager.getValue("bet-plus6");
+		plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-plusBlock"));
+		minus1 = (int) UpdateManager.getValue("bet-minus1");
+		minus2 = (int) UpdateManager.getValue("bet-minus2");
+		minus3 = (int) UpdateManager.getValue("bet-minus3");
+		minus4 = (int) UpdateManager.getValue("bet-minus4");
+		minus5 = (int) UpdateManager.getValue("bet-minus5");
+		minus6 = (int) UpdateManager.getValue("bet-minus6");
+		minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
+		informationBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-informationBlock"));
+		gapBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-inventoryMaterial"));
 		addItemsToInv();
 		
 		guis.put(player, this);

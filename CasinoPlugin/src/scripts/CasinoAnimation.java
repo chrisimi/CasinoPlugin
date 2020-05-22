@@ -52,25 +52,25 @@ public class CasinoAnimation {
 		inv = Bukkit.createInventory(player, 5*9);
 		
 		
-		period = (int) UpdateManager.getValue("animation.animation-cooldown");
+		period = (int) UpdateManager.getValue("animation-animation-cooldown");
 		
-		block1 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation.block1-Type"));
-		block1Multiplicator = Double.parseDouble(UpdateManager.getValue("animation.block1-Multiplicator").toString());
-		block1Chance = Double.parseDouble(UpdateManager.getValue("animation.block1-Chance").toString());
+		block1 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block1-Type"));
+		block1Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block1-Multiplicator").toString());
+		block1Chance = Double.parseDouble(UpdateManager.getValue("animation-block1-Chance").toString());
 		
-		block2 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation.block2-Type"));
-		block2Multiplicator = Double.parseDouble(UpdateManager.getValue("animation.block2-Multiplicator").toString());
-		block2Chance = Double.parseDouble(UpdateManager.getValue("animation.block2-Chance").toString());
+		block2 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block2-Type"));
+		block2Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block2-Multiplicator").toString());
+		block2Chance = Double.parseDouble(UpdateManager.getValue("animation-block2-Chance").toString());
 		
-		block3 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation.block3-Type"));
-		block3Multiplicator = Double.parseDouble(UpdateManager.getValue("animation.block3-Multiplicator").toString());
-		block3Chance = Double.parseDouble(UpdateManager.getValue("animation.block3-Chance").toString());
+		block3 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block3-Type"));
+		block3Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block3-Multiplicator").toString());
+		block3Chance = Double.parseDouble(UpdateManager.getValue("animation-block3-Chance").toString());
 		
 		if(!(block1Chance+block2Chance+block3Chance == 100)) {
 			CasinoManager.LogWithColor(ChatColor.RED + "blockchanceexception: the value of all 3 values isn't 100! (" + (block1Chance+block2Chance+block3Chance) + ")");
 		}
 		
-		inventoryMaterial = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation.inventoryMaterial"));
+		inventoryMaterial = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-inventoryMaterial"));
 		
 		createInventory();
 		guiList.put(player, this);
@@ -108,12 +108,12 @@ public class CasinoAnimation {
 		inv.setItem(44, new ItemStack(inventoryMaterial));
 		
 		
-		final int minDuration = (int) UpdateManager.getValue("animation.min-duration");
+		final int minDuration = (int) UpdateManager.getValue("animation-min-duration");
 		if(minDuration <= 0) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get min-duration: min-duration is lower or equal 0 !!!");
 			Bukkit.getPluginManager().disablePlugin(main);
 		}
-		final int maxDuration = (int) UpdateManager.getValue("animation.max-duration");
+		final int maxDuration = (int) UpdateManager.getValue("animation-max-duration");
 		if(maxDuration < minDuration) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-duration: max-duration is lower than min-duration!!!");
 			Bukkit.getPluginManager().disablePlugin(main);

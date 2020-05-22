@@ -27,8 +27,8 @@ public class InventoryClickListener implements Listener{
 	public InventoryClickListener(Main main) {
 		this.main = main;
 		
-		plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.plusBlock"));
-		minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet.minusBlock"));
+		plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-plusBlock"));
+		minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
 		
 		
 		

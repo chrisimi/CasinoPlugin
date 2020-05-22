@@ -77,7 +77,7 @@ public class SignsManager implements Listener {
 	@SuppressWarnings("unchecked")
 	private void updateVariables() {
 		try {
-			minDuration = Integer.parseInt(UpdateManager.getValue("sign.min-duration").toString());
+			minDuration = Integer.parseInt(UpdateManager.getValue("sign-min-duration").toString());
 		} catch(Exception e)
 		{
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get min-duration for Casino-Signs! Value have to be a valid integer! Set to default value: 30");
@@ -85,7 +85,7 @@ public class SignsManager implements Listener {
 		}
 		
 		try {
-			maxDuration = Integer.parseInt(UpdateManager.getValue("sign.max-duration").toString());
+			maxDuration = Integer.parseInt(UpdateManager.getValue("sign-max-duration").toString());
 		} catch(Exception e)
 		{
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-duration for Casino-Signs! Value have to be a valid integer! Set to default value: 50");
@@ -93,7 +93,7 @@ public class SignsManager implements Listener {
 		}
 		
 		try {
-			possibilities = (ArrayList<String>) UpdateManager.getValue("sign.possibilities", new ArrayList<String>());
+			possibilities = (ArrayList<String>) UpdateManager.getValue("sign-possibilities", new ArrayList<String>());
 			
 			if(possibilities.size() != 3) throw new Exception("The size of the list isn't 3!");
 			
@@ -108,7 +108,7 @@ public class SignsManager implements Listener {
 		}
 			
 		try {
-			multiplicators = (ArrayList<Double>) UpdateManager.getValue("sign.multiplicator", new ArrayList<Double>());
+			multiplicators = (ArrayList<Double>) UpdateManager.getValue("sign-multiplicator", new ArrayList<Double>());
 			
 			if(multiplicators.size() != 3) throw new Exception("The size of the list isn't 3!");
 			
@@ -124,7 +124,7 @@ public class SignsManager implements Listener {
 		
 		try 
 		{
-			chances = (ArrayList<Double>) UpdateManager.getValue("sign.chance", new ArrayList<Double>());
+			chances = (ArrayList<Double>) UpdateManager.getValue("sign-chance", new ArrayList<Double>());
 			if(chances.size() == 0) throw new Exception("You probably forgot to update config.yml! Try /casino updateconfig to fix this problem!");
 			
 			if(chances.size() != 3) throw new Exception("The size of the list isn't 3!");
@@ -143,7 +143,7 @@ public class SignsManager implements Listener {
 		
 		
 		try {
-			maxBet = Double.parseDouble(UpdateManager.getValue("sign.max-bet").toString());
+			maxBet = Double.parseDouble(UpdateManager.getValue("sign-max-bet").toString());
 		} catch(Exception e)
 		{
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-bet for Casino-Signs! Value have to be a valid decimal value! Set to default value: 1000.0!");

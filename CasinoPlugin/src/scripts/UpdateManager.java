@@ -1,10 +1,16 @@
 package scripts;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,8 +49,8 @@ public class UpdateManager {
 			byte[] buffer = new byte[iStream.available()];
 			iStream.read(buffer);
 			
-			OutputStream oStream = new FileOutputStream(Main.configYml);
-			oStream.write(buffer);
+			Writer oStream = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Main.configYml), Charset.forName("UTF-8")));
+			oStream.write(new String(buffer));
 			
 			oStream.close();
 			iStream.close();
@@ -59,28 +65,165 @@ public class UpdateManager {
 	public static void updateConfigYml(Main mainInstance) {
 		//get configs from old config
 		
-		Map<String, Object> values = YamlConfiguration.loadConfiguration(Main.configYml).getValues(true);
-		Main.configYml.delete();
+		Map<String, Object> values = new HashMap<>();
+		YamlConfiguration cofn = YamlConfiguration.loadConfiguration(Main.configYml);
+		values = cofn.getValues(true);
+		
 		createConfigYml(mainInstance);
-		YamlConfiguration configYml = YamlConfiguration.loadConfiguration(Main.configYml);
 		
-		ArrayList<String> valuesToNotChange = new ArrayList<String>();
-		valuesToNotChange.add("version");
 		
-		int index = 0;
-		for(Entry<String, Object> entry : values.entrySet()) {
-			
-			if(index >= 5) continue;
-			index++;
-			
-			if(!(valuesToNotChange.contains(entry.getKey()))) {
-				configYml.set(entry.getKey(), entry.getValue());
-				
+		changeCommandsToPoints();
+		cofn = YamlConfiguration.loadConfiguration(Main.configYml);
+		
+		for(Entry<String, Object> entry : values.entrySet())
+		{
+			if(cofn.contains(entry.getKey()))
+			{
+				cofn.set(entry.getKey(), entry.getValue());
 			}
 		}
-		reloadConfig();
+		
+		try
+		{
+			cofn.save(Main.configYml);
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		changePointsToCommand();
 	}
 
+	private static void changeCommandsToPoints()
+	{
+		int index = 0;
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		StringBuilder builder = new StringBuilder();
+		try
+		{
+			reader = new BufferedReader(new FileReader(Main.configYml));
+			
+			String line = "";
+			while((line = reader.readLine()) != null) 
+			{
+				if(index < 3) { index++; builder.append(line); builder.append("\n"); continue;} //ignore die 1. 3 Zeilen
+				
+				if(line.contains("#"))
+				{
+					if(line.length() > 75)
+					{
+						String a = line.substring(75);
+						builder.append("COMMENT_" + index + ":" + a);
+						index++;
+					}
+					
+					line = line.replace("#", "COMMENT_" + index + ":");
+					index++;
+					
+				} else if(line.contains(":"))
+				{
+					String[] splited = line.split(":");
+					
+					if(splited.length != 1)
+					{
+						char[] a = splited[1].toCharArray();
+						
+						String output = "";
+						for(char ch : a)
+						{
+							output += " " + String.valueOf(Integer.valueOf(ch));
+						}
+						
+						System.out.println(splited[0] + " + " + output);
+						
+						if(splited[1].equals(" ") || splited[1].equals(""))
+						{
+							splited[1] = "''";
+						}
+						line = splited[0] + ": " + splited[1];
+					}
+				}
+				
+				builder.append(line);
+				builder.append("\n");
+				
+			}
+			
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Main.configYml), Charset.forName("UTF-8")));
+			writer.write(builder.toString());
+			
+			reader.close();
+			writer.close();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	private static void changePointsToCommand()
+	{
+		int index = 0;
+		BufferedReader reader = null;
+		BufferedWriter writer = null;
+		StringBuilder builder = new StringBuilder();
+		try
+		{
+			reader = new BufferedReader(new FileReader(Main.configYml));
+			String line = "";
+			while((line = reader.readLine()) != null)
+			{
+				builder.append(line);
+				builder.append("\n");
+				index++;
+			}
+			
+			
+			String configString = builder.toString();
+			//System.out.println(configString);
+			for(; index >= 0; index--)
+			{
+				configString = configString.replace("COMMENT_" + index+":", "# ");
+				//System.out.println("COMMENT_" + index + ": ");
+				//System.out.print(configString.contains("COMMENT_" + index + ":"));
+			}
+			//System.out.println(configString);
+			//add space
+			
+			
+			String[] lines = configString.split("\n");
+			for(int i = 0; i < lines.length; i++)
+			{
+				if(lines[i].contains(":") && lines.length > i + 1 && lines[i + 1].startsWith("# "))
+				{
+					lines[i] += "\n\n";
+				}
+			}
+			configString = String.join("\n", lines);
+			
+			
+			
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Main.configYml), Charset.forName("UTF-8")));
+			writer.write(configString);
+			
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try
+			{
+				reader.close();
+				writer.close();
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	
 	public static void reloadConfig() {
 		YamlConfiguration configYml = YamlConfiguration.loadConfiguration(Main.configYml);
 		configValues = configYml.getValues(true);

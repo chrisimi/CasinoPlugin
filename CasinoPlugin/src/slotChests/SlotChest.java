@@ -292,7 +292,7 @@ public class SlotChest {
 	public boolean itemIsOnForbiddenList(Material itemStack) {
 		ArrayList<String> inputList = new ArrayList<>();
 		try {
-			inputList = (ArrayList<String>) UpdateManager.getValue("slotchest.list-of-banned-items", new ArrayList<String>());
+			inputList = (ArrayList<String>) UpdateManager.getValue("slotchest-list-of-banned-items", new ArrayList<String>());
 		} catch(Exception e) {
 			CasinoManager.LogWithColor(org.bukkit.ChatColor.RED + "Error occured while trying to get list of banned items: values are invalid!");
 			e.printStackTrace();

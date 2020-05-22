@@ -131,7 +131,7 @@ public class PlayerSignsManager implements Listener {
 	
 	private void configureVariables() {
 		try {
-			maxBetDice = Double.parseDouble(UpdateManager.getValue("playersigns.dice.max-bet").toString());
+			maxBetDice = Double.parseDouble(UpdateManager.getValue("playersigns-dice.max-bet").toString());
 		} catch(NumberFormatException nfe) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max-bet: dice max-bet is not a valid number!");
 		} finally {
@@ -139,7 +139,7 @@ public class PlayerSignsManager implements Listener {
 				maxBetDice = 200.0;
 		}
 		try {
-			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("playersigns.blackjack.max-bet").toString());
+			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("playersigns-blackjack.max-bet").toString());
 		} catch(NumberFormatException e) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max-bet: blackjack max-bet is not a valid number!");
 		} finally {
@@ -148,7 +148,7 @@ public class PlayerSignsManager implements Listener {
 		}
 		try
 		{
-			maxBetSlots = Double.parseDouble(UpdateManager.getValue("playersigns.slots.max-bet").toString());
+			maxBetSlots = Double.parseDouble(UpdateManager.getValue("playersigns-slots.max-bet").toString());
 		} catch (NumberFormatException e)
 		{
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max-bet: slots max-bet is not a valid number!");

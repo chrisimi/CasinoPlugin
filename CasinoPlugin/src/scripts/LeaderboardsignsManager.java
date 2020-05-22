@@ -68,14 +68,14 @@ public class LeaderboardsignsManager implements Listener {
 	public void reload() 
 	{
 		try {
-			reloadTime = Integer.valueOf(UpdateManager.getValue("playersigns.leaderboard-signs.reload-time").toString());
+			reloadTime = Integer.valueOf(UpdateManager.getValue("leaderboard-signs-reload-time").toString());
 		} catch(Exception e) {
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get leaderboardsign reloadtime! You have to use a valid integer value! Set to default value: 12000 (10 Minutes)");
 			reloadTime = 12000;
 		}
 		try 
 		{
-			signsenable = Boolean.valueOf(UpdateManager.getValue("playersigns.leaderboard-signs.enable").toString());
+			signsenable = Boolean.valueOf(UpdateManager.getValue("leaderboard-signs-enable").toString());
 		} catch(Exception e) {
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get leaderboard-signs enable! You have to use a boolean value (true/false)! Set to default value: true");
 			signsenable = true;
