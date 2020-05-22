@@ -39,7 +39,7 @@ public class CasinoManager {
 		this.main = main;
 	}
 	public void prefixYml() {
-		String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix");
+		String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix").replaceAll("&", "§");
 		if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
 			LogWithColor(org.bukkit.ChatColor.YELLOW + "no prefix in config.yml... using default one!");
 		} else {

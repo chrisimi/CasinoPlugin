@@ -23,7 +23,7 @@ enable-console-messages: false
 
 # prefix of the plugin, keep empty for default one 
 # make sure there is a space after the prefix
-# default one §9[§6Casino§9] §a
+# please use '&' as color codes and put the prefix in apotrophes ('')
 prefix: default
 
 # language
