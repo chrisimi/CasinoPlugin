@@ -85,7 +85,7 @@ public class PlayerSignsConfiguration {
 		
 		changeEnum();
 	}
-	private void changeEnum()
+	public void changeEnum()
 	{
 		switch (this.gamemode)
 		{

@@ -53,7 +53,6 @@ public class Slots implements Runnable
 		sign.update(true);
 		
 		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == 2) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
-		System.out.println(thisSign.currentSignAnimation);
 	}
 
 }

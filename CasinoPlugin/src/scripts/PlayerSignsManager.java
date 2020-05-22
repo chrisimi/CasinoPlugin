@@ -113,7 +113,7 @@ public class PlayerSignsManager implements Listener {
 	
 	private void configureVariables() {
 		try {
-			maxBetDice = Double.parseDouble(UpdateManager.getValue("playersigns-dice.max-bet").toString());
+			maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet").toString());
 		} catch(NumberFormatException nfe) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max-bet: dice max-bet is not a valid number!");
 		} finally {
@@ -121,7 +121,7 @@ public class PlayerSignsManager implements Listener {
 				maxBetDice = 200.0;
 		}
 		try {
-			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("playersigns-blackjack.max-bet").toString());
+			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("blackjack-max-bet").toString());
 		} catch(NumberFormatException e) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max-bet: blackjack max-bet is not a valid number!");
 		} finally {
@@ -130,7 +130,7 @@ public class PlayerSignsManager implements Listener {
 		}
 		try
 		{
-			maxBetSlots = Double.parseDouble(UpdateManager.getValue("playersigns-slots.max-bet").toString());
+			maxBetSlots = Double.parseDouble(UpdateManager.getValue("slots-max-bet").toString());
 		} catch (NumberFormatException e)
 		{
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max-bet: slots max-bet is not a valid number!");
@@ -181,6 +181,7 @@ public class PlayerSignsManager implements Listener {
 			try {
 				if(cnf == null) throw new NullPointerException();
 				
+				cnf.changeEnum();
 				playerSigns.put(cnf.getLocation(), cnf);
 				if(cnf.plusinformations.contains("disabled")) {
 					String[] values = cnf.plusinformations.split(";");
@@ -854,19 +855,19 @@ public class PlayerSignsManager implements Listener {
 			
 			switch (cnf.gamemode)
 			{
-			case Blackjack:
+			case BLACKJACK:
 				
 					Main.getInstance().getServer().getScheduler().
 					runTask(Main.getInstance(), 
 							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 					
 				break;
-			case Slots:
+			case SLOTS:
 				Main.getInstance().getServer().getScheduler()
 				.runTask(Main.getInstance(), 
 						new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 				break;
-			case Dice:
+			case DICE:
 				Main.getInstance().getServer().getScheduler()
 				.runTask(Main.getInstance(), 
 						new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
@@ -908,17 +909,17 @@ public class PlayerSignsManager implements Listener {
 					{
 						switch (sign.gamemode)
 						{
-						case Blackjack:
+						case BLACKJACK:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Blackjack(sign.getSign(), sign));
 							break;
-						case Slots:
+						case SLOTS:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Slots(sign.getSign(), sign));
 							break;
-						case Dice:
+						case DICE:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Dice(sign.getSign(), sign));
