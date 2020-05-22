@@ -15,8 +15,22 @@ import scripts.CasinoManager;
 
 public class PlayerSignsConfiguration {
 	
+	/**
+	 * all different gamemodes a player sign can be
+	 * @author chris
+	 *
+	 */
+	public enum GameMode {
+		BLACKJACK,
+		DICE,
+		SLOTS,
+		Blackjack,
+		Dice,
+		Slots
+	}
+	
 	@Expose
-	public String gamemode;
+	public GameMode gamemode;
 	
 	@Expose
 	public String ownerUUID;
@@ -45,7 +59,7 @@ public class PlayerSignsConfiguration {
 	
 	public PlayerSignsConfiguration() {}
 	
-	public PlayerSignsConfiguration(Location lrc, String gamemode, Player player, Double bet, String plusInformations) {
+	public PlayerSignsConfiguration(Location lrc, GameMode gamemode, Player player, Double bet, String plusInformations) {
 		this.gamemode = gamemode;
 		this.ownerUUID = player.getUniqueId().toString();
 		this.bet = bet;
@@ -55,8 +69,10 @@ public class PlayerSignsConfiguration {
 		this.y = lrc.getY();
 		this.z = lrc.getZ();
 		this.disabled = false;
+		
+		changeEnum();
 	}
-	public PlayerSignsConfiguration(Location lrc, String gamemode, Double bet, String plusInformations) {
+	public PlayerSignsConfiguration(Location lrc, GameMode gamemode, Double bet, String plusInformations) {
 		this.gamemode = gamemode;
 		this.ownerUUID = "server";
 		this.bet = bet;
@@ -66,7 +82,27 @@ public class PlayerSignsConfiguration {
 		this.y = lrc.getY();
 		this.z = lrc.getZ();
 		this.disabled = false;
+		
+		changeEnum();
 	}
+	private void changeEnum()
+	{
+		switch (this.gamemode)
+		{
+		case Blackjack:
+			gamemode = GameMode.BLACKJACK;
+			break;
+		case Dice:
+			gamemode = GameMode.DICE;
+			break;
+		case Slots:
+			gamemode = GameMode.SLOTS;
+			break;
+		default:
+			break;
+		}
+	}
+	
 	
 	public Location getLocation() {
 		return new Location(Bukkit.getWorld(worldname), x, y, z);

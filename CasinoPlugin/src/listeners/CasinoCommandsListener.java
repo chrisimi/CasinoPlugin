@@ -203,7 +203,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		if(cnf.isSignDisabled()) {
 			cnf.enableSign();
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_enable").replace("%sign%", cnf.gamemode));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_enable").replace("%sign%", cnf.gamemode.toString()));
 		} else {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_enabled"));
 		}
@@ -248,7 +248,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_disabled"));
 		} else {
 			cnf.disableSign();
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_disable").replace("%sign%", cnf.gamemode));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_disable").replace("%sign%", cnf.gamemode.toString()));
 		}
 		
 	}

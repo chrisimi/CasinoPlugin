@@ -139,11 +139,17 @@ sign-max-bet: 1000.0
 # set the maximum bet for dice signs
 dice-max-bet: 250.0
 
+#set limit for maximum dice signs per player (-1 = infinite)
+dice-max-signs: -1
+
 # ------------------------
 # blackjack configurations
 # ------------------------
 # set the maximum bet for blackjack signs
 blackjack-max-bet: 250.0
+      
+# set limit for maximum blackjack signs per player (-1 = infinite)
+blackjack-max-signs: -1
       
 # --------------------
 # slots configurations
@@ -151,6 +157,9 @@ blackjack-max-bet: 250.0
 # set the maximum bet for slots signs
 slots-max-bet: 250.0
       
+# set limit for maximum slots signs per player (-1 = infinite)
+slots-max-signs: -1
+
 # ------------------------------- 
 # leaderboard signs configurations
 # -------------------------------

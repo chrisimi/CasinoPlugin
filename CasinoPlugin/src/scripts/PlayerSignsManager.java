@@ -42,6 +42,7 @@ import animations.signanimation.Dice;
 import animations.signanimation.Slots;
 import serializeableClass.PlayerSigns;
 import serializeableClass.PlayerSignsConfiguration;
+import serializeableClass.PlayerSignsConfiguration.GameMode;
 
 
 public class PlayerSignsManager implements Listener {
@@ -100,25 +101,6 @@ public class PlayerSignsManager implements Listener {
 	}
 	public void reload() {
 		configureVariables();
-	}
-	/**
-	 * not needed anymore
-	 * @param cnf
-	 */
-	@Deprecated
-	public void animationFinished(PlayerSignsConfiguration cnf) {
-		if(cnf.gamemode.equalsIgnoreCase("dice")) {
-			//this.diceNormalSign(cnf.getSign()); not needed anymore
-		} else if(cnf.gamemode.equalsIgnoreCase("blackjack")) {
-			
-			//this.blackjackNormalSign(cnf.getSign()); ignored
-			
-			
-			
-		} else if(cnf.gamemode.equalsIgnoreCase("slots"))
-		{
-			//this.slotsNormalSign(cnf.getSign()); not needed anymore
-		}
 	}
 	public void addOfflinePlayerWinOrLose(double amount, OfflinePlayer player) {
 		
@@ -216,7 +198,7 @@ public class PlayerSignsManager implements Listener {
 		
 		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<Location, PlayerSignsConfiguration>();
 		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
-			if(entry.getValue().gamemode.equalsIgnoreCase("dice")) {
+			if(entry.getValue().gamemode == GameMode.Dice) {
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
 					//this.diceNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
 				} else {
@@ -224,7 +206,7 @@ public class PlayerSignsManager implements Listener {
 					signsToDelete.put(entry.getKey(), entry.getValue());
 				}
 				
-			} else if(entry.getValue().gamemode.equalsIgnoreCase("blackjack")) {
+			} else if(entry.getValue().gamemode == GameMode.Blackjack) {
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
 					
 					
@@ -237,7 +219,7 @@ public class PlayerSignsManager implements Listener {
 					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
 					signsToDelete.put(entry.getKey(), entry.getValue());
 				}
-			} else if(entry.getValue().gamemode.equalsIgnoreCase("slots"))
+			} else if(entry.getValue().gamemode == GameMode.Slots)
 			{
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
 					//this.slotsNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
@@ -350,7 +332,7 @@ public class PlayerSignsManager implements Listener {
 			playerSigns.remove(sign.getLocation());
 			exportSigns();
 			
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode));
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode.toString()));
 		}
 	}
 	
@@ -547,7 +529,7 @@ public class PlayerSignsManager implements Listener {
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", bet, event.getLine(3));
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, bet, event.getLine(3));
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-server-successful"));
@@ -565,7 +547,7 @@ public class PlayerSignsManager implements Listener {
 		{
 			if(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin")) {
 				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Dice", event.getPlayer(), bet, event.getLine(3));
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, event.getPlayer(), bet, event.getLine(3));
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
@@ -655,7 +637,7 @@ public class PlayerSignsManager implements Listener {
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				plusInformations = maxBet.toString()+";"+plusinf;
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", minBet, plusInformations);
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Blackjack, minBet, plusInformations);
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				
@@ -681,7 +663,7 @@ public class PlayerSignsManager implements Listener {
 			if(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				plusInformations = maxBet.toString()+";"+plusinf;
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Blackjack", event.getPlayer(), minBet, plusInformations);
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Blackjack, event.getPlayer(), minBet, plusInformations);
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
@@ -782,7 +764,7 @@ public class PlayerSignsManager implements Listener {
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Slots", bet, plusinformations);
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Slots, bet, plusinformations);
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-server-successful"));
@@ -801,7 +783,7 @@ public class PlayerSignsManager implements Listener {
 			if(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), "Slots", event.getPlayer(), bet, plusinformations);
+				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Slots, event.getPlayer(), bet, plusinformations);
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-successful"));
@@ -872,19 +854,19 @@ public class PlayerSignsManager implements Listener {
 			
 			switch (cnf.gamemode)
 			{
-			case "Blackjack":
+			case Blackjack:
 				
 					Main.getInstance().getServer().getScheduler().
 					runTask(Main.getInstance(), 
 							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 					
 				break;
-			case "Slots":
+			case Slots:
 				Main.getInstance().getServer().getScheduler()
 				.runTask(Main.getInstance(), 
 						new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 				break;
-			case "Dice":
+			case Dice:
 				Main.getInstance().getServer().getScheduler()
 				.runTask(Main.getInstance(), 
 						new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
@@ -926,17 +908,17 @@ public class PlayerSignsManager implements Listener {
 					{
 						switch (sign.gamemode)
 						{
-						case "Blackjack":
+						case Blackjack:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Blackjack(sign.getSign(), sign));
 							break;
-						case "Slots":
+						case Slots:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Slots(sign.getSign(), sign));
 							break;
-						case "Dice":
+						case Dice:
 							Main.getInstance().getServer().getScheduler()
 							.runTask(Main.getInstance(), 
 									new Dice(sign.getSign(), sign));
