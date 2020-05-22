@@ -177,7 +177,9 @@ messages:
    slotchest-winnings-weight_not_number: "§4The weight have to be a number!"
    slotchest-winnings-weight_lower_0: "§4The weight have to be higher than 0!"
    
-   
+   offlineearnmanager-join-message: "While you were offline your casino signs made you: \n§3earnings: %earnings% \n§4losses: %losses%"
+   offlineearnmanager-join-plus: "So you have made §3a win of %win%"
+   offlineearnmanager-join-minus: "So you have made §4a loss of %loss%"
    
    
    

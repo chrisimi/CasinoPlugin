@@ -10,6 +10,7 @@ import com.chrisimi.casino.main.MessageManager;
 import com.chrisimi.casino.main.VersionManager;
 
 import scripts.CasinoManager;
+import scripts.OfflineEarnManager;
 import scripts.PlayerSignsManager;
 
 public class PlayerJoinListener implements Listener {
@@ -39,5 +40,8 @@ public class PlayerJoinListener implements Listener {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("player-join-message").replace("%amount%", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
 			PlayerSignsManager.playerWonWhileOffline.remove(event.getPlayer());
 		}
+		
+		
+		OfflineEarnManager.getInstance().showPlayerStats(event.getPlayer());
 	}
 }

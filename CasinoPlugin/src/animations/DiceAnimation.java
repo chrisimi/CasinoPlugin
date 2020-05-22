@@ -12,6 +12,7 @@ import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
+import scripts.OfflineEarnManager;
 import scripts.PlayerSignsManager;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -93,6 +94,11 @@ public class DiceAnimation implements Runnable {
 				signsManager.addOfflinePlayerWinOrLose(wonamount * -1, owner);
 			}
 			
+			
+			//TEST
+			OfflineEarnManager.getInstance().addLoss(owner, wonamount);
+			
+			
 		} else {
 			sign.setLine(2, "§4YOU LOST!");
 			//player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
@@ -105,6 +111,12 @@ public class DiceAnimation implements Runnable {
 			} else if(!thisSign.isServerOwner()){
 				signsManager.addOfflinePlayerWinOrLose(thisSign.bet, owner);
 			}
+			
+			
+			
+			//TEST
+			OfflineEarnManager.getInstance().addEarning(owner, thisSign.bet);
+			
 		}
 		sign.update(true);
 		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
