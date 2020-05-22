@@ -40,6 +40,7 @@ public class PlayerSignsConfiguration {
 	public double z;
 	
 	public int currentSignAnimation = 0;
+	public boolean isRunning = false;
 	
 	
 	public PlayerSignsConfiguration() {}

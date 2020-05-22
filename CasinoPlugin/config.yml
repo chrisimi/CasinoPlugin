@@ -1,6 +1,6 @@
 # Casino Plugin Version 3.6 by chrisimi
 # Copyright: chrisi050403@gmail.com
-
+# 
 # this plugin is using bStats!!!
 # to disable it go into the bStats config.yml in your plugins folder
 # after any changes please restart your server
@@ -10,29 +10,34 @@
 version: 3.6
 
 # enable debugging
-# before you report a bug, enable this and try it again. Then send me the file "latest.log" from the logs folder and the file "debug.log" from the CasinoPlugin folder
+# before you report a bug, enable this and try it again. 
+# Then send me the file "latest.log" from the logs folder 
+# and the file "debug.log" from the CasinoPlugin folder
 
 enable-debug: true
 
-# enable Console messages from plugin like: exported x signs from signs.yml. Does not effect errors!
+# enable Console messages from plugin like exported x signs from signs.yml. 
+# Does not effect errors!
 enable-console-messages: false
 
-# prefix of the plugin, keep empty for default one !!! make sure there is a space after the prefix
-# default one: §9[§6Casino§9] §a
-prefix: 
+# prefix of the plugin, keep empty for default one !!! 
+# make sure there is a space after the prefix
+# default one §9[§6Casino§9] §a
+prefix: default
 
 # language
 # set which language file the plugin should load from the messages folder!
-# use the name of the file for example jp when the filename is jp.yml (case insensitive)
+# use the name of the file for example jp when the filename is 
+# jp.yml (case insensitive)
 # use default for the default language file
 language: default
 
 
 # change the high of the possible bet's
 bet:
-# plusBlock is the Block which the player press in the GUI to higher his bet
-   plusBlock: 'GREEN_WOOL'
-   
+# plusBlock is the Block which the player press 
+# in the GUI to higher his bet
+   plusBlock: "GREEN_WOOL"
 # plus 1-6 are the different possibilites in the GUI
    plus1: 1
    plus2: 5
@@ -42,7 +47,8 @@ bet:
    plus6: 500
    
    
-# minusblock is the Block which the player press in the GUI to lower his bet
+# minusblock is the Block which the player press in the GUI 
+# to lower his bet
    minusBlock: 'RED_WOOL'
    minus1: 1
    minus2: 5
@@ -51,7 +57,8 @@ bet:
    minus5: 100
    minus6: 500
    
-# informationBlock is the Block in the middle of the GUI within the plusBlocks and minusBlocks
+# informationBlock is the Block in the middle of the GUI within 
+# the plusBlocks and minusBlocks
    informationBlock: 'DIAMOND_BLOCK'
 
 # material left and right of the GUI
@@ -65,7 +72,8 @@ animation:
 # Block*-Type: Minecraft name of the block, representing possibility *
    block1-Type: 'REDSTONE_BLOCK'
    
-# Multiplicator: bet * multiplicator = win amount for player with 3 of the same block
+# Multiplicator: bet * multiplicator = win amount for player with 
+# 3 of the same block
    block1-Multiplicator: 3.0
    
 # Chance: Value which represent the chance in percent
@@ -80,21 +88,24 @@ animation:
    block3-Multiplicator: 9.0
    block3-Chance: 20
    
-# value in ticks (20 ticks = 1 second) for how long the animation should run (random number between these two values!)
+# value in ticks (20 ticks = 1 second) 
+# for how long the animation should run 
+# (random number between these two values!)
 #    set both the same value to deactivate randomness
    min-duration: 60
    max-duration: 180
    
 # waiting time, in ticks, between one "roll" animation. 
-#    1 is very fast and realistic but can make laggs on bigger servers
-#    2-5 is some kind of realistic, better for servers with performance problems
+# 1 is very fast and realistic but can make laggs on bigger servers
+# 2-5 is some kind of realistic, better for large servers
    animation-cooldown: 5
    
 ##########################################
 # configuration for the roll command!
 ##########################################
 
-# set the range for the roll command, where players get a message what the player rolled
+# set the range for the roll command, 
+# where players get a message what the player rolled
 rollcommand-range: 30
    
    
@@ -156,7 +167,8 @@ playersigns:
 # enable the leaderboard signs
       enable: true
       
-# the reload time for every leaderboard sign in TICKS! 1 second = 20 Ticks, 1 Minute = 20*60*10 = 1200 Ticks
+# the reload time for every leaderboard sign in TICKS! 
+# 1 second = 20 Ticks, 1 Minute = 20*60*10 = 1200 Ticks
       reload-time: 1200
       
 ##########################################

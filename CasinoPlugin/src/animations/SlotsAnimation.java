@@ -224,7 +224,7 @@ public class SlotsAnimation implements Runnable
 			@Override
 			public void run()
 			{
-				manager.animationFinished(thisSign);
+				thisSign.isRunning = false;
 			}
 		}, 20*6L);
 		

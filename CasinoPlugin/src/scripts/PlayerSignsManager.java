@@ -38,6 +38,8 @@ import animations.BlackjackAnimation;
 import animations.DiceAnimation;
 import animations.SlotsAnimation;
 import animations.signanimation.Blackjack;
+import animations.signanimation.Dice;
+import animations.signanimation.Slots;
 import serializeableClass.PlayerSigns;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -51,7 +53,8 @@ public class PlayerSignsManager implements Listener {
 	 * when finished... manager clears everything like garbage collector
 	 * only animate signs if a player is in the near (16 blocks)
 	 * 
-	 * 
+	 * TODO:_
+	 * system to check if sign is running
 	 */
 	public static int rollCount = 0;
 	/**
@@ -59,9 +62,6 @@ public class PlayerSignsManager implements Listener {
 	 */
 	private static HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<Location, PlayerSignsConfiguration>();
 	
-	
-	private static HashMap<PlayerSignsConfiguration, Integer> updateTasks = new HashMap<PlayerSignsConfiguration, Integer>();
-	private static HashMap<PlayerSignsConfiguration, Integer> signTasks = new HashMap<PlayerSignsConfiguration, Integer>();
 	public static HashMap<OfflinePlayer, Double> playerWonWhileOffline = new HashMap<OfflinePlayer, Double>(); 
 	
 	private GsonBuilder builder;
@@ -101,10 +101,14 @@ public class PlayerSignsManager implements Listener {
 	public void reload() {
 		configureVariables();
 	}
+	/**
+	 * not needed anymore
+	 * @param cnf
+	 */
+	@Deprecated
 	public void animationFinished(PlayerSignsConfiguration cnf) {
-		signTasks.remove(cnf);
 		if(cnf.gamemode.equalsIgnoreCase("dice")) {
-			this.diceNormalSign(cnf.getSign());
+			//this.diceNormalSign(cnf.getSign()); not needed anymore
 		} else if(cnf.gamemode.equalsIgnoreCase("blackjack")) {
 			
 			//this.blackjackNormalSign(cnf.getSign()); ignored
@@ -113,7 +117,7 @@ public class PlayerSignsManager implements Listener {
 			
 		} else if(cnf.gamemode.equalsIgnoreCase("slots"))
 		{
-			this.slotsNormalSign(cnf.getSign());
+			//this.slotsNormalSign(cnf.getSign()); not needed anymore
 		}
 	}
 	public void addOfflinePlayerWinOrLose(double amount, OfflinePlayer player) {
@@ -214,7 +218,7 @@ public class PlayerSignsManager implements Listener {
 		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
 			if(entry.getValue().gamemode.equalsIgnoreCase("dice")) {
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
-					this.diceNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState());
+					//this.diceNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
 				} else {
 					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
 					signsToDelete.put(entry.getKey(), entry.getValue());
@@ -236,7 +240,7 @@ public class PlayerSignsManager implements Listener {
 			} else if(entry.getValue().gamemode.equalsIgnoreCase("slots"))
 			{
 				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
-					this.slotsNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState());
+					//this.slotsNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
 				} else {
 					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
 					signsToDelete.put(entry.getKey(), entry.getValue());
@@ -322,7 +326,7 @@ public class PlayerSignsManager implements Listener {
 			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
 			if(thisSign == null) return;
 			
-			if(signTasks.containsKey(thisSign)) {
+			if(thisSign.isRunning) {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_running"));
 				event.setCancelled(true);
 				return;
@@ -343,9 +347,6 @@ public class PlayerSignsManager implements Listener {
 				return;
 			}
 
-			int tasknumber = updateTasks.get(playerSigns.get(sign.getLocation()));
-			Bukkit.getScheduler().cancelTask(tasknumber);
-			updateTasks.remove(playerSigns.get(sign.getLocation()));
 			playerSigns.remove(sign.getLocation());
 			exportSigns();
 			
@@ -390,7 +391,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		if(signTasks.containsKey(thisSign)) {
+		if(thisSign.isRunning) {
 			
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-sign_is_ingame"));
 			return;
@@ -411,10 +412,7 @@ public class PlayerSignsManager implements Listener {
 		
 		//when more gamemodes think about different sigens if(gamemode = dice)
 		
-		main.getServer().getScheduler().cancelTask(updateTasks.get(thisSign));
-		updateTasks.remove(thisSign);
-		int taskNumber = main.getServer().getScheduler().runTask(main, new DiceAnimation(main, thisSign, player, this)).getTaskId();
-		signTasks.put(thisSign, taskNumber);
+		Manager.onSignClick(sign.getLocation(), player);
 	}
 	private void onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player) {
 		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin"))) {
@@ -422,7 +420,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		if(signTasks.containsKey(thisSign)) {
+		if(thisSign.isRunning) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-blackjack-sign_is_ingame"));
 			return;
 		}
@@ -449,7 +447,7 @@ public class PlayerSignsManager implements Listener {
 		
 		//signTasks.put(thisSign, taskNumber); ignored
 		
-		Manager.onSignClick(thisSign.getLocation());
+		Manager.onSignClick(thisSign.getLocation(), player);
 	}
 	private void onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
@@ -459,7 +457,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		if(signTasks.containsKey(thisSign))
+		if(thisSign.isRunning)
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-sign_is_ingame"));
 			return;
@@ -478,11 +476,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		
-		main.getServer().getScheduler().cancelTask(updateTasks.get(thisSign));
-		updateTasks.remove(thisSign);
-		
-		int taskNumber = main.getServer().getScheduler().runTask(main, new SlotsAnimation(main, thisSign, player, this)).getTaskId();
-		signTasks.put(thisSign, taskNumber);
+		Manager.onSignClick(sign.getLocation(), player);
 	}
 
 	
@@ -557,7 +551,7 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-server-successful"));
-				diceNormalSign((Sign) event.getBlock().getState());
+				//diceNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
@@ -575,7 +569,7 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
-				diceNormalSign((Sign) event.getBlock().getState());
+				//diceNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
@@ -792,7 +786,7 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-server-successful"));
-				slotsNormalSign((Sign) event.getBlock().getState());
+				//slotsNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
@@ -811,7 +805,8 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-successful"));
-				slotsNormalSign((Sign) event.getBlock().getState());
+				
+				//slotsNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();	
 			}
 			
@@ -823,153 +818,6 @@ public class PlayerSignsManager implements Listener {
 			}
 		}
 	}
-	
-	
-	private void diceNormalSign(Sign sign) {
-		if(updateTasks.containsKey(playerSigns.get(sign.getLocation()))) {
-			return;
-		}
-		try {
-		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
-			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
-			
-			//30-60
-			
-			double[] values = thisSign.getWinChancesDice();
-			double chance = values[1] - values[0] + 1;
-			@Override
-			public void run() {
-				
-				int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-					
-					int current = 0;
-					
-					@Override
-					public void run() {
-						
-						sign.setLine(0, "§fDice");
-						sign.setLine(1, thisSign.getOwnerName());
-						
-						if(thisSign.isSignDisabled()) {
-							sign.setLine(2, "§4DISABLED!");
-							sign.setLine(3, "§4DISABLED!");
-						} else {
-							if(current == 1) {
-								sign.setLine(2, "§6bet: " + Main.econ.format(thisSign.bet));
-							} else {
-								sign.setLine(2, "§awin: " + Main.econ.format(thisSign.winMultiplicatorDice() * thisSign.bet));
-							}
-							//playersign is enabled
-							if(!(thisSign.hasOwnerEnoughMoney())) {
-								//owner of the sign doesn't have enough money
-								
-								if(current == 1) {
-									sign.setLine(2, "§4ERROR!");
-									sign.setLine(3, "§4ERROR!");
-								} else {
-									sign.setLine(2, "§4doesn't have");
-									sign.setLine(3, "§4enough money!");
-								}
-							} else {
-								
-								//owner of the sign has enough money
-									sign.setLine(3, "§b§nChance: " + chance + " %");
-								
-								
-							}
-						}
-							//Bukkit.getLogger().info(String.valueOf(current));
-	
-						sign.update(true);
-						
-						
-						
-						if(current == 1)
-							current = 0;
-						else
-							current++;
-					}
-				}, 0, 60);
-				
-				updateTasks.put(thisSign, taskNumber);
-				
-				
-				
-				//Bukkit.getLogger().info(sign.getLine(0));
-			}
-		}, 20);
-		} catch(Exception e) {
-			e.printStackTrace();
-			CasinoManager.LogWithColor(ChatColor.RED + "Try to restart the server or/and recreate the sign! If the problem stays, contact the owner of the plugin!");
-		}
-	}
-	public void slotsNormalSign(Sign sign)
-	{
-		if(updateTasks.containsKey(playerSigns.get(sign.getLocation())))
-			return;
-		
-		try
-		{
-			main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-			{
-				
-				@Override
-				public void run()
-				{
-					PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
-					int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
-					{
-						int current = 0;
-						@Override
-						public void run()
-						{
-							sign.setLine(0, "§fSlots");
-							sign.setLine(1, thisSign.getOwnerName());
-							
-							if(thisSign.isSignDisabled())
-							{
-								sign.setLine(2, "§4DISABLED!");
-								sign.setLine(3, "§4DISABLED!");
-							}
-							else
-							{
-								if(thisSign.hasOwnerEnoughMoney(thisSign.getSlotsHighestPayout()))
-								{
-									//owner has enough money
-									sign.setLine(2, "§6" + Main.econ.format(thisSign.bet));
-									sign.setLine(3, "3x " + thisSign.getColorMultiplicators()[current] + thisSign.getSlotsSymbols()[current] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[current]));
-								} 
-								else
-								{
-									if(current == 1) {
-										sign.setLine(2, "§4ERROR!");
-										sign.setLine(3, "§4ERROR!");
-									} else {
-										sign.setLine(2, "§4doesn't have");
-										sign.setLine(3, "§4enough money!");
-									}
-								}
-							}
-							sign.update(true);
-							
-							if(current == 2)
-								current = 0;
-							else
-								current++;
-							
-						}
-						
-					}, 0, 60);
-					updateTasks.put(thisSign, taskNumber);
-				}
-			}, 60L);
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-			CasinoManager.LogWithColor(ChatColor.RED + "Try to restart the server or/and recreate the sign! If the problem stays, contact the owner of the plugin!");
-		}
-	}
-	
 	
 	public static PlayerSignsConfiguration getPlayerSign(Location location) {
 		if(!(playerSigns.containsKey(location))) return null;
@@ -1010,15 +858,52 @@ public class PlayerSignsManager implements Listener {
 	{
 		private static int currentID = 0;
 		
-		public static void onSignClick(Location lrc)
+		/**
+		 * click on a playersign
+		 * @param lrc location of the sign
+		 * @param player player who clicked on the sign
+		 */
+		public static void onSignClick(Location lrc, Player player)
 		{
+			PlayerSignsConfiguration cnf = PlayerSignsManager.getPlayerSign(lrc);
+			if(cnf == null) return;
 			
+			cnf.isRunning = true;
+			
+			switch (cnf.gamemode)
+			{
+			case "Blackjack":
+				
+					Main.getInstance().getServer().getScheduler().
+					runTask(Main.getInstance(), 
+							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+					
+				break;
+			case "Slots":
+				Main.getInstance().getServer().getScheduler()
+				.runTask(Main.getInstance(), 
+						new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+				break;
+			case "Dice":
+				Main.getInstance().getServer().getScheduler()
+				.runTask(Main.getInstance(), 
+						new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+				break;
+			default:
+				cnf.isRunning = false;
+				break;
+			}
 		}
-
+		/**
+		 * start the Manager
+		 */
 		public static void start()
 		{
-			currentID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), task, 0, 60);
+			currentID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), task, 0, 120);
 		}
+		/**
+		 * stop the Manager
+		 */
 		public static void stop()
 		{
 			Main.getInstance().getServer().getScheduler().cancelTask(currentID);
@@ -1031,14 +916,31 @@ public class PlayerSignsManager implements Listener {
 			{
 				for(PlayerSignsConfiguration sign : PlayerSignsManager.getPlayerSigns())
 				{
+					if(sign.isRunning) 
+					{
+						CasinoManager.Debug(this.getClass(), sign.gamemode + " is running");
+						continue;
+					}
+					
 					if(isPlayerInRange(sign.getLocation()))
 					{
 						switch (sign.gamemode)
 						{
 						case "Blackjack":
-							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), new Blackjack(sign.getSign(), sign));
+							Main.getInstance().getServer().getScheduler()
+							.runTask(Main.getInstance(), 
+									new Blackjack(sign.getSign(), sign));
 							break;
-
+						case "Slots":
+							Main.getInstance().getServer().getScheduler()
+							.runTask(Main.getInstance(), 
+									new Slots(sign.getSign(), sign));
+							break;
+						case "Dice":
+							Main.getInstance().getServer().getScheduler()
+							.runTask(Main.getInstance(), 
+									new Dice(sign.getSign(), sign));
+							break;
 						default:
 							break;
 						}
@@ -1046,6 +948,11 @@ public class PlayerSignsManager implements Listener {
 				}
 			}
 		};
+		/**
+		 * 
+		 * @param lrc of the sign
+		 * @return true if a player is in the range of 16 blocks, false if not
+		 */
 		private static boolean isPlayerInRange(Location lrc)
 		{
 			@SuppressWarnings("unchecked")
@@ -1056,7 +963,7 @@ public class PlayerSignsManager implements Listener {
 			{
 				if(player.getLocation().distance(lrc) < 16.0)
 				{
-					System.out.println("player is in range! " + player.getName() + " - " + player.getLocation().distance(lrc));
+					CasinoManager.Debug(PlayerSignsConfiguration.class, "player is in range! " + player.getName() + " - " + player.getLocation().distance(lrc));
 					return true;
 				}
 			}

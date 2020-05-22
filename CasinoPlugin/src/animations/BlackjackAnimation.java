@@ -155,7 +155,7 @@ public class BlackjackAnimation implements Runnable {
 	private void resetSign() { //animation is "finished" and bring back to normal
 		if(waitingForInputs.containsKey(player)) 
 			waitingForInputs.remove(player);
-		this.manager.animationFinished(this.thisSign);
+		thisSign.isRunning = false;
 	}
 	
 	private void nextRound() { //show the player which card he has and what he can do next

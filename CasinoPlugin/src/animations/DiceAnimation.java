@@ -52,7 +52,7 @@ public class DiceAnimation implements Runnable {
 					public void run() {
 						animate();
 						
-						if(animationCount >= 40)  {
+						if(animationCount >= 15)  {
 							endAnimation();
 							
 							return;
@@ -61,7 +61,7 @@ public class DiceAnimation implements Runnable {
 		
 						animationCount++;
 					}
-				}, 5, 2);
+				}, 5, 8);
 			} catch(Exception e) {
 				e.printStackTrace();
 				CasinoManager.LogWithColor(ChatColor.RED + "An error occured, try to restart the server! If the problems stays, contact the owner of the plugin!");
@@ -112,7 +112,7 @@ public class DiceAnimation implements Runnable {
 			@Override
 			public void run() {
 				
-				signsManager.animationFinished(thisSign);
+				thisSign.isRunning = false;
 			}
 		}, 40);
 		
