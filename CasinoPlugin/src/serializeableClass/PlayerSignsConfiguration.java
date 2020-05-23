@@ -176,7 +176,6 @@ public class PlayerSignsConfiguration {
 		{
 			double value = (isServerOwner()) ? Double.MAX_VALUE : Main.econ.getBalance(getOwner()) / blackjackMultiplicator();
 			int rounded = (int) (value * 100.0);
-			System.out.println(rounded);
 			return (double)rounded / 100.0;
 		}
 		
