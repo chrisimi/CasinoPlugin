@@ -16,6 +16,7 @@ import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
+import scripts.OfflineEarnManager;
 import scripts.PlayerSignsManager;
 import scripts.UpdateManager;
 import serializeableClass.Card;
@@ -132,7 +133,7 @@ public class BlackjackAnimation implements Runnable {
 		
 		if(!thisSign.isServerOwner())
 		{
-			this.manager.addOfflinePlayerWinOrLose(playerBet, owner);
+			OfflineEarnManager.getInstance().addEarning(owner, this.playerBet);
 			CasinoManager.Debug(this.getClass(), "[OFFLINE] " + owner.getName() + " +" + Main.econ.format(playerBet) + " because " + player.getName() + " clicked on his sign");
 		}
 		
@@ -284,7 +285,12 @@ public class BlackjackAnimation implements Runnable {
 		CasinoManager.Debug(this.getClass(), "Draw!");
 		
 		Main.econ.depositPlayer(player, this.playerBet);
-		thisSign.withdrawOwner(this.playerBet);
+		
+		//pay bet back
+		if(owner.isOnline())
+			thisSign.withdrawOwner(this.playerBet);
+		else
+			OfflineEarnManager.getInstance().addLoss(owner, this.playerBet);
 		
 		player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT, 4f, 2.5f);
 		
@@ -329,9 +335,11 @@ public class BlackjackAnimation implements Runnable {
 		thisSign.withdrawOwner(winamount);
 	
 		if(!thisSign.isServerOwner())
+		{
 			CasinoManager.Debug(this.getClass(), owner.getName() + " -" + Main.econ.format(winamount) + " because of lose!");
-		else if(!thisSign.isServerOwner())
-			this.manager.addOfflinePlayerWinOrLose(winamount * -1, owner);
+			OfflineEarnManager.getInstance().addLoss(owner, winamount);
+			
+		}
 		
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 4f, 2.5f);
 

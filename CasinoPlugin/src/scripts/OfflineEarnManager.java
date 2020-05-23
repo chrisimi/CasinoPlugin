@@ -54,6 +54,7 @@ public class OfflineEarnManager
 	 */
 	public void addEarning(OfflinePlayer player, double amount)
 	{
+		System.out.println("add earning " + player.getName() + " - " + amount);
 		synchronized (offlineDataYml)
 		{
 			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(offlineDataYml);
@@ -64,6 +65,10 @@ public class OfflineEarnManager
 				if(yaml.isSet(pathToEarnings))
 				{
 					yaml.set(pathToEarnings, yaml.getDouble(pathToEarnings) + amount);
+				}
+				else
+				{
+					yaml.set(pathToEarnings, amount);
 				}
 			}
 			else
@@ -89,6 +94,7 @@ public class OfflineEarnManager
 	 */
 	public void addLoss(OfflinePlayer player, double amount)
 	{
+		System.out.println("add loss " + player.getName() + " - " + amount);
 		synchronized (offlineDataYml)
 		{
 			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(offlineDataYml);
@@ -98,6 +104,10 @@ public class OfflineEarnManager
 				if(yaml.isSet(pathToLosses))
 				{
 					yaml.set(pathToLosses, yaml.getDouble(pathToLosses) + amount);
+				}
+				else
+				{
+					yaml.set(pathToLosses, amount);
 				}
 			}
 			else
