@@ -180,7 +180,7 @@ messages:
    offlineearnmanager-join-message: "While you were offline your casino signs made you: \n§3earnings: %earnings% \n§4losses: %losses%"
    offlineearnmanager-join-plus: "So you have made §3a win of %win%"
    offlineearnmanager-join-minus: "So you have made §4a loss of %loss%"
-   
+   offlineearnmanager-join-equal: "So you have made no win or loss"
    
    
    

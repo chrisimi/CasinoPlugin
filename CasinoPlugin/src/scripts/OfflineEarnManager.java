@@ -167,10 +167,13 @@ public class OfflineEarnManager
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("offlineearnmanager-join-plus")
 				.replace("%win%", Main.econ.format(earnings - losses)));
 			}
-			else
+			else if(earnings < losses)
 			{
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("offlineearnmanager-join-minus")
 				.replace("%loss%", Main.econ.format(losses - earnings)));
+			} else
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("offlineearnmanager-join-equal"));
 			}
 			try
 			{
