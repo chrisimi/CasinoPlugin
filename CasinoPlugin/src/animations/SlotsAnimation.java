@@ -11,6 +11,7 @@ import com.chrisimi.casino.main.MessageManager;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
+import scripts.OfflineEarnManager;
 import scripts.PlayerSignsManager;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -204,6 +205,12 @@ public class SlotsAnimation implements Runnable
 		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
 		if(!thisSign.isServerOwner() && owner.isOnline())
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_lost").replace("%playername%", player.getDisplayName()));
+		if(!thisSign.isServerOwner() && !owner.isOnline())
+		{
+			OfflineEarnManager.getInstance().addEarning(owner, thisSign.bet);
+		}
+		
+		
 		finish();
 	}
 	private void playerWon()
@@ -213,6 +220,14 @@ public class SlotsAnimation implements Runnable
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won").replace("%playername%", player.getDisplayName()));
 		Main.econ.depositPlayer(player, winAmount + thisSign.bet);
 		thisSign.withdrawOwner(winAmount + thisSign.bet);
+		
+		
+		
+		if(!thisSign.isServerOwner() && !owner.isOnline())
+		{
+			OfflineEarnManager.getInstance().addLoss(owner, winAmount + thisSign.bet);
+		}
+		
 		finish();
 	}
 	private void finish()
