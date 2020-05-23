@@ -90,13 +90,14 @@ public class DiceAnimation implements Runnable {
 				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(wonamount)));
 				
+				
 			} else if(!thisSign.isServerOwner()) {
-				signsManager.addOfflinePlayerWinOrLose(wonamount * -1, owner);
+				OfflineEarnManager.getInstance().addLoss(owner, wonamount);
 			}
 			
 			
 			//TEST
-			OfflineEarnManager.getInstance().addLoss(owner, wonamount);
+			
 			
 			
 		} else {
@@ -108,14 +109,16 @@ public class DiceAnimation implements Runnable {
 			if(!thisSign.isServerOwner() && owner.isOnline()) {
 				//owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
 				owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_lost").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(thisSign.bet)));
+
+			
 			} else if(!thisSign.isServerOwner()){
-				signsManager.addOfflinePlayerWinOrLose(thisSign.bet, owner);
+				OfflineEarnManager.getInstance().addEarning(owner, thisSign.bet);
 			}
 			
 			
 			
 			//TEST
-			OfflineEarnManager.getInstance().addEarning(owner, thisSign.bet);
+			
 			
 		}
 		sign.update(true);
