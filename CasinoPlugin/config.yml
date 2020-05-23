@@ -23,7 +23,7 @@ enable-console-messages: false
 
 # prefix of the plugin, keep empty for default one 
 # make sure there is a space after the prefix
-# please use '&' as color codes and put the prefix in apotrophes ('')
+# please use '&' as color codes and put the prefix in apostrophes ('')
 prefix: default
 
 # language

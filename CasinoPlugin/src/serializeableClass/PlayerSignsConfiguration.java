@@ -103,6 +103,10 @@ public class PlayerSignsConfiguration {
 		}
 	}
 	
+	public boolean unlimitedBet()
+	{
+		return this.bet == -1.0 || this.plusinformations.contains("-1");
+	}
 	
 	public Location getLocation() {
 		return new Location(Bukkit.getWorld(worldname), x, y, z);
@@ -161,11 +165,33 @@ public class PlayerSignsConfiguration {
 		this.disabled = true;
 	}
 	
-	
-	public Double blackjackGetMaxBet() {
+	/**
+	 * gets the maximum bet which is valid
+	 * if {@link PlayerSignsConfiguration#unlimitedBet} true then it will return the maximum account which the owner can payout
+	 * @return {@link Double} value of maxValue
+	 */
+	public Double blackjackGetMaxBet() 
+	{
+		if(unlimitedBet())
+		{
+			double value = (isServerOwner()) ? Double.MAX_VALUE : Main.econ.getBalance(getOwner()) / blackjackMultiplicator();
+			int rounded = (int) (value * 100.0);
+			System.out.println(rounded);
+			return (double)rounded / 100.0;
+		}
+		
 		String[] values = this.plusinformations.split(";");
 		return Double.valueOf(values[0]);
 	}
+	public Double blackjackGetMinBet() 
+	{
+		return (unlimitedBet()) ? 1.0 : this.bet;
+	}
+	
+	/**
+	 * get the multiplcator from the to writing
+	 * @return double value which is the factor
+	 */
 	public Double blackjackMultiplicator() {
 		if(this.plusinformations.contains("to"))
 		{

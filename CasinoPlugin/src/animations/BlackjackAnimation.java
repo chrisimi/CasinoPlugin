@@ -17,6 +17,7 @@ import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
+import scripts.UpdateManager;
 import serializeableClass.Card;
 import serializeableClass.PlayerSignsConfiguration;
 
@@ -56,6 +57,7 @@ public class BlackjackAnimation implements Runnable {
 	private Boolean finished = false;
 	private Boolean playerWantToSkip = false;
 	
+	
 	public BlackjackAnimation(Main main, PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager) {
 		this.main = main;
 		this.thisSign = thisSign;
@@ -75,10 +77,22 @@ public class BlackjackAnimation implements Runnable {
 	}
 
 	private void prepareForGettingBetFromPlayer() {
-		minBet = thisSign.bet;
+		
+//		if(thisSign.unlimitedBet() && !thisSign.isServerOwner())
+//			maxBet = Main.econ.getBalance(owner) / thisSign.blackjackMultiplicator();
+//		else if(thisSign.unlimitedBet() && thisSign.isServerOwner())
+//			maxBet = (Double.valueOf(UpdateManager.getValue("blackjack-max-bet").toString()) == -1) ? Double.MAX_VALUE : Double.valueOf(UpdateManager.getValue("blackjack-max-bet").toString());
+//		
+		
+		minBet = thisSign.blackjackGetMinBet();
 		maxBet = thisSign.blackjackGetMaxBet();
+			
+		
 		waitingForInputs.put(player, this);
+		
 		player.sendMessage("\n\n"+CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message").replace("%min_bet%", Main.econ.format(minBet)).replace("%max_bet%", Main.econ.format(maxBet)));
+		
+		
 		this.waitingForBet = true;
 		//check after 1 minute if player put nothing in reset sign!
 		currentWaitingTask = main.getServer().getScheduler().runTaskLater(main, new Runnable() {
@@ -353,6 +367,8 @@ public class BlackjackAnimation implements Runnable {
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-incorrect"));
 				return;
 			}
+
+			
 			if(eingabe < thisAnimation.minBet) {
 				//player.sendMessage(CasinoManager.getPrefix() + "§4Your number is smaller than " + Main.econ.format(thisAnimation.minBet));
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-input-bet_is_too_low").replace("%min_bet%", Main.econ.format(thisAnimation.minBet)));

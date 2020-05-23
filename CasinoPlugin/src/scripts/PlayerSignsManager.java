@@ -642,7 +642,12 @@ public class PlayerSignsManager implements Listener {
 				event.setCancelled(true);
 				return;
 			}
-		} else {
+		} else if(event.getLine(2).equalsIgnoreCase("-1"))
+		{
+			minBet = -1.0;
+			maxBet = -1.0;
+		} else 
+		{
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-bet_invalid_format"));
 			event.setCancelled(true);
 			return;
