@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -568,13 +571,14 @@ public class PlayerSignsManager implements Listener {
 		
 		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
+			
+			//Server signs
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, bet, event.getLine(3));
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-server-successful"));
-				//diceNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
@@ -586,18 +590,17 @@ public class PlayerSignsManager implements Listener {
 		}
 		else
 		{
+			//Player signs
 			if(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin")) {
 				
 				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, event.getPlayer(), bet, event.getLine(3));
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
-				//diceNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
 			{
-			//validation finished
 			
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
 				event.setCancelled(true);
@@ -690,6 +693,7 @@ public class PlayerSignsManager implements Listener {
 		
 		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
+			//server signs
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				plusInformations = maxBet.toString()+";"+plusinf;
@@ -699,11 +703,7 @@ public class PlayerSignsManager implements Listener {
 				
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-server-successful"));
-				
-				
-				
-				//blackjackNormalSign((Sign) event.getBlock().getState()); ignored
-				
+			
 				
 				exportSigns();
 			}
@@ -716,6 +716,7 @@ public class PlayerSignsManager implements Listener {
 		}
 		else
 		{
+			//player signs
 			if(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				plusInformations = maxBet.toString()+";"+plusinf;
@@ -723,12 +724,6 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
-				
-				
-				
-				//blackjackNormalSign((Sign) event.getBlock().getState()); ignored
-				
-				
 				
 				exportSigns();
 			}
@@ -827,6 +822,8 @@ public class PlayerSignsManager implements Listener {
 	
 		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
 		{
+			
+			//server signs
 			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				
@@ -834,7 +831,6 @@ public class PlayerSignsManager implements Listener {
 				playerSigns.put(newSign.getLocation(), newSign);
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-server-successful"));
-				//slotsNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();
 			}
 			else
@@ -846,6 +842,7 @@ public class PlayerSignsManager implements Listener {
 		}
 		else
 		{
+			//server signs
 			if(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
 			{
 				
@@ -854,19 +851,23 @@ public class PlayerSignsManager implements Listener {
 				
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-successful"));
 				
-				//slotsNormalSign((Sign) event.getBlock().getState()); not needed anymore
 				exportSigns();	
 			}
 			
 			else
 			{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
-			event.setCancelled(true);
-			return;
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
+				event.setCancelled(true);
+				return;
 			}
 		}
 	}
-	
+	/**
+	 * get amount of signs the player currently has
+	 * @param player {@link Player} instance of player
+	 * @param gameMode {@link GameMode} instance of gamemode
+	 * @return count as int
+	 */
 	private int getAmountOfPlayerSigns(Player player, GameMode gameMode)
 	{
 		return playerSigns.values().stream()
@@ -874,12 +875,21 @@ public class PlayerSignsManager implements Listener {
 				.collect(Collectors.toList()).size();
 	}
 	
-	
+	/**
+	 * get the {@link PlayerSignsConfiguration} from the sign 
+	 * @param location {@link Location} location of the sign
+	 * @return {@link PlayerSignsConfiguration} if location is valid otherwise null
+	 */
 	public static PlayerSignsConfiguration getPlayerSign(Location location) {
 		if(!(playerSigns.containsKey(location))) return null;
 		
 		return playerSigns.get(location);
 	}
+	/**
+	 * Get a list from locations from all signs the player owns
+	 * @param player {@link OfflinePlayer} instance of player
+	 * @return {@link ArrayList} which contains {@link Location} for every sign. Can't be null
+	 */
 	public static ArrayList<Location> getLocationsFromAllPlayerSigns(OfflinePlayer player)
 	{
 		ArrayList<Location> locations = new ArrayList<>();
@@ -893,6 +903,10 @@ public class PlayerSignsManager implements Listener {
 		}
 		return locations;
 	}
+	/**
+	 * Get a list from all locations of serversigns of the server
+	 * @return {@link ArrayList} with {@link Location} elements
+	 */
 	public static ArrayList<Location> getLocationsFromAllServerSigns()
 	{
 		ArrayList<Location> locations = new ArrayList<>();
