@@ -18,6 +18,7 @@ import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
+import animations.BlackjackAnimation;
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -97,6 +98,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("gui"))
 			{
 				openCasinoGui((Player) sender);
+			} else if(args[0].equalsIgnoreCase("resetsign"))
+			{
+				resetSign((Player)player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -152,6 +156,21 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 
 
+
+	private void resetSign(Player player)
+	{
+		if(!(Main.perm.has(player, "casino.admin")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		PlayerSignsConfiguration cnf = checkForSign(player);
+		if(cnf == null) return;
+		
+		BlackjackAnimation.resetForSign(cnf.getLocation());
+		cnf.isRunning = false;
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-sign_reset_successful"));
+	}
 
 	private void createSlotChest(Player player) {
 		if(!(Main.perm.has(player, "casino.slotchest.create") || Main.perm.has(player, "casino.admin"))) {
@@ -209,6 +228,11 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		}
 	}
 
+	/**
+	 * check if the player is looking onto one of his player signs
+	 * @param player
+	 * @return {@link PlayerSignsConfiguration} of looked sign can be null
+	 */
 	private PlayerSignsConfiguration checkForSign(Player player) {
 		Block block = player.getTargetBlockExact(10);
 		if(block == null) {
@@ -317,13 +341,15 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 	}
 	
-	private void showHelpToAdmin(Player player) {
+	private void showHelpToAdmin(Player player) 
+	{
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage("§4Admin page");
 		player.sendMessage("§6/casino reloadconfig §8- reloads the config.yml");
 		player.sendMessage("§6/casino resetdata §8- deletes all roll-data from playermanagedsigns (data.yml)");
 		player.sendMessage("§6/casino reloaddata §8- reload all leaderboard signs and data.yml. Could lag a bit!");
+		player.sendMessage("§6/casino resetsign §8- reset the sign your are look onto it. Use it when the sign is bugging");
 	}
 
 	private void showHelpToPlayer(Player player) {

@@ -3,8 +3,10 @@ package animations;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.block.Sign;
@@ -428,5 +430,18 @@ public class BlackjackAnimation implements Runnable {
 		if(!thisSign.isServerOwner() && this.owner.isOnline()) {
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + message);
 		}
+	}
+	public static void resetForSign(Location location)
+	{
+		Player player = null;
+		for(Map.Entry<Player, BlackjackAnimation> entry : waitingForInputs.entrySet())
+		{
+			if(entry.getValue().thisSign.getLocation().equals(location))
+			{
+				player = entry.getKey();
+				break;
+			}
+		}
+		waitingForInputs.remove(player);
 	}
 }

@@ -82,3 +82,8 @@ commands:
     description: reload message-system
     usage: /casino reloadmessages
     permission: casino.admin
+  casino resetsign:
+    description: reset the sign when it bugs
+    usage: /casino resetsign
+    permission: casino.admin
+    
