@@ -25,6 +25,7 @@ import scripts.LeaderboardsignsManager;
 import scripts.PlayerSignsManager;
 import scripts.RollCommand;
 import scripts.UpdateManager;
+import serializeableClass.Leaderboardsign;
 import serializeableClass.Leaderboardsign.Mode;
 import serializeableClass.PlayerSignsConfiguration;
 import slotChests.SlotChest;
@@ -101,6 +102,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("resetsign"))
 			{
 				resetSign((Player)player);
+			} else if(args[0].equalsIgnoreCase("deletereset"))
+			{
+				deletereset((Player)player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -156,7 +160,30 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 
 
-
+	//muss noch gestestet werden
+	private void deletereset(Player player)
+	{
+		Leaderboardsign sign = getLeaderboardsign(player);
+		if(sign == null) return;
+		
+		if(!(sign.isServerSign() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		if(!sign.isServerSign() && !sign.getPlayer().getUniqueId().equals(player.getUniqueId()))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
+		sign.lastManualReset = 0;
+		LeaderboardsignsManager.save();
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-leaderboard_delete_successful"));
+	}
+	
+	
+	
 	private void resetSign(Player player)
 	{
 		if(!(Main.perm.has(player, "casino.admin")))
@@ -370,6 +397,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
 		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
 		player.sendMessage("§6/casino resetserverleaderboard [range/all] [mode (optional)] §6- same as resetleaderboard but for serversigns!");
+		player.sendMessage("§6/casino deletereset §8- delete the manual reset from a sign you are looking onto it");
 	}
 	
 	private void showChestLocations(Player player) {
@@ -468,5 +496,25 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		
 		MessageManager.ReloadMessages();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-reload_messages_successful"));
+	}
+	
+	private Leaderboardsign getLeaderboardsign(Player player)
+	{
+		Block block = player.getTargetBlockExact(10);
+		if(block == null) return null;
+		
+		if(!(block.getType().toString().contains("SIGN"))) 
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_not_a_sign"));
+			return null;
+		}
+		
+		Leaderboardsign leaderboardsign = LeaderboardsignsManager.getLeaderboardsign(block.getLocation());
+		if(leaderboardsign == null)
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-leaderboard_not_a_lbsign"));
+			return null;
+		}
+		return leaderboardsign;
 	}
 }

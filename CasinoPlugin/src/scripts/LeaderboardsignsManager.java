@@ -467,6 +467,9 @@ public class LeaderboardsignsManager implements Listener {
 		
 		exportLeaderboardsigns();
 	}
+	/**
+	 * save all leaderboard signs and export them
+	 */
 	public static void save()
 	{
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();
@@ -693,6 +696,16 @@ public class LeaderboardsignsManager implements Listener {
 		//save changes
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();	
 	}
+	/**
+	 * get a leaderboardsign 
+	 * @param lrc {@link Location} of the sign
+	 * @return the sign instance or null
+	 */
+	public static Leaderboardsign getLeaderboardsign(Location lrc) 
+	{
+		return leaderboardsigns.get(lrc);
+	}
+	
 	public static void clearAllTasks()
 	{
 		for(int taskID : leaderboardsignRunnableTaskID.values())

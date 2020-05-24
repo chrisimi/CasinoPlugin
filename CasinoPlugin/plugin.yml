@@ -41,7 +41,7 @@ commands:
     usage: /casino help blackjack
   casino help leaderboard:
     description: get help for leaderboard signs
-    usage: /casino help leaderboardk
+    usage: /casino help leaderboard
   casino sign enable:
     description: enable your playersign
     usage: /casino sign enable
@@ -86,4 +86,7 @@ commands:
     description: reset the sign when it bugs
     usage: /casino resetsign
     permission: casino.admin
-    
+  casino deletereset:
+    description: deletes the manual reset from the sign 
+    usage: /casino deletereset
+    permission: [casino.admin, casino.leaderboard.create]

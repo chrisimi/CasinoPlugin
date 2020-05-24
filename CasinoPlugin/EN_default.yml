@@ -115,6 +115,8 @@ messages:
    commands-admin_successfully_reload_data: "You successfully reloaded the data!"
    commands-reload_messages_successful: "You successfully reloaded all messages!"
    commands-sign_reset_successful: "You successfully reset the sign!"
+   commands-leaderboard_not_a_lbsign: "This is not a leaderboard sign"
+   commands-leaderboard_delete_successful: "You successfully deleted the manual reset"
    
    casinogui-player_not_enough_money: "§4You don't have enough money!"
    casinogui-player_bet_message: "You are rolling with %amount%"
