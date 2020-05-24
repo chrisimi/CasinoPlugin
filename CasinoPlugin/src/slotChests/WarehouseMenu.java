@@ -297,15 +297,13 @@ public class WarehouseMenu implements Listener{
 		int slot = 0;
 		
 		for(Entry<Material, Integer> entry : sortedByList.entrySet()) {
-			if(entry.getValue() <= 0) System.out.println("a");
 			if(entry.getValue() <= 0) continue;
-			System.out.println(entry.getKey().toString() + " " + entry.getValue());
+			CasinoManager.Debug(this.getClass(), entry.getKey().toString() + " " + entry.getValue());
 			
 			
 			int amountOfItems = entry.getValue();
 			
 			while(amountOfItems >= 1) {
-				System.out.println(slot + " " + amountOfItems);
 				CasinoManager.Debug(this.getClass(), slot + " " + entry.getKey().toString() + " " + amountOfItems);
 				if(amountOfItems > entry.getKey().getMaxStackSize()) {
 					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), entry.getKey().getMaxStackSize()));
