@@ -190,7 +190,7 @@ public class PlayerSignsManager implements Listener {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: Can't get playersigns from playerSigns.json!");
 			e.printStackTrace();
 		}
-		if(jsonString.length() < 25) {
+		if(jsonString.length() < 25) { //if there are not 25 symbols, a sign can't be saved and it can be ignored
 			
 			if(CasinoManager.configEnableConsoleMessages)
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
@@ -232,39 +232,20 @@ public class PlayerSignsManager implements Listener {
 			}
 		}
 		
+		//go through all signs and check if a sign exists on the location
+		//if not add it to the map and don't import it = remove on the next export
+		
 		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<Location, PlayerSignsConfiguration>();
 		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
-			if(entry.getValue().gamemode == GameMode.Dice) {
-				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
-					//this.diceNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
-				} else {
-					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
-					signsToDelete.put(entry.getKey(), entry.getValue());
-				}
-				
-			} else if(entry.getValue().gamemode == GameMode.Blackjack) {
-				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
-					
-					
-					
-					//this.blackjackNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); ignored
-				
-				
-				
-				} else {
-					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
-					signsToDelete.put(entry.getKey(), entry.getValue());
-				}
-			} else if(entry.getValue().gamemode == GameMode.Slots)
+			if(!(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign)) 
 			{
-				if(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign) {
-					//this.slotsNormalSign((Sign) Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState()); not needed anymore
-				} else {
-					CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
-					signsToDelete.put(entry.getKey(), entry.getValue());
-				}
-			}
+				CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
+				signsToDelete.put(entry.getKey(), entry.getValue());
+			}	
 		}
+		
+		
+		//remove the listed maps from the main list
 		for(Entry<Location, PlayerSignsConfiguration> entry : signsToDelete.entrySet()) {
 			playerSigns.remove(entry.getKey());
 		}
