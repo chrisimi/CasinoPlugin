@@ -209,7 +209,7 @@ public class WarehouseMenu implements Listener{
 		}
 		
 		if(event.getCurrentItem().equals(changeSortModeSign)) {
-			
+			sortByID = !sortByID;
 			ItemMeta meta = changeSortModeSign.getItemMeta();
 			meta.setDisplayName((sortByID) ? "§asort by ID" : "§asort by name");
 			ArrayList<String> loreList = new ArrayList<>();
@@ -218,7 +218,7 @@ public class WarehouseMenu implements Listener{
 			changeSortModeSign.setItemMeta(meta);
 			updateInventory();
 			
-			sortByID = !sortByID;
+			
 			event.setCancelled(true);
 		} else if(event.getCurrentItem().equals(sortButton)) {
 			updateLager();
@@ -268,7 +268,7 @@ public class WarehouseMenu implements Listener{
 					return e2.getKey().compareTo(e1.getKey());
 					
 				case NAME:
-					return e2.getKey().toString().compareTo(e1.getKey().toString());
+					return e1.getKey().toString().compareTo(e2.getKey().toString());
 
 				default:
 					return 0;
@@ -280,7 +280,7 @@ public class WarehouseMenu implements Listener{
 		ArrayList<Entry<Material, Integer>> listOfEntries = new ArrayList<Entry<Material, Integer>>(sortedList.entrySet());
 		Collections.sort(listOfEntries, valueComperator);
 		
-//		for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
+		for(Entry<Material, Integer> entry : listOfEntries) System.out.println(entry.getKey().toString() + " " + entry.getValue());
 		
 		
 		LinkedHashMap<Material, Integer> sortedByList = new LinkedHashMap<Material, Integer>(listOfEntries.size());
@@ -289,7 +289,7 @@ public class WarehouseMenu implements Listener{
 		//clear inv
 		for(int i = 0; i < warehouseMenu.getSize(); i++)
 		{
-			if(i == 49 || i == 52 || i == 53) continue;
+			if(i == 49 || i == 52 || i == 53) continue; //ignore this 3 slots
 			warehouseMenu.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
 		}
 		
@@ -297,18 +297,20 @@ public class WarehouseMenu implements Listener{
 		int slot = 0;
 		
 		for(Entry<Material, Integer> entry : sortedByList.entrySet()) {
+			if(entry.getValue() <= 0) System.out.println("a");
 			if(entry.getValue() <= 0) continue;
-			
+			System.out.println(entry.getKey().toString() + " " + entry.getValue());
 			
 			
 			int amountOfItems = entry.getValue();
 			
 			while(amountOfItems >= 1) {
+				System.out.println(slot + " " + amountOfItems);
 				CasinoManager.Debug(this.getClass(), slot + " " + entry.getKey().toString() + " " + amountOfItems);
-				if(amountOfItems > 64) {
-					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), 64));
+				if(amountOfItems > entry.getKey().getMaxStackSize()) {
+					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), entry.getKey().getMaxStackSize()));
 					slot++;
-					amountOfItems -= 64;
+					amountOfItems -= entry.getKey().getMaxStackSize();
 				} else {
 					warehouseMenu.setItem(slot, new ItemStack(entry.getKey(), amountOfItems));
 					slot++;
