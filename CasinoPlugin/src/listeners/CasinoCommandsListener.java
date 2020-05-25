@@ -166,7 +166,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		Leaderboardsign sign = getLeaderboardsign(player);
 		if(sign == null) return;
 		
-		if(!(sign.isServerSign() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))))
+		if(sign.isServerSign() && (!Main.perm.has(player, "casino.admin") || !Main.perm.has(player, "casino.serversigns")))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
