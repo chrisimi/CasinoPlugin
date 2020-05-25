@@ -81,7 +81,7 @@ messages:
    
    
    playersigns-sign_is_running: "§4You can't break this sign because it is running currently!"
-   playersigns-player_is_not_owner: "§4You are not the owner of this playersign!"
+   playersigns-player-is_not_owner: "§4You are not the owner of this playersign!"
    playersigns-owner_destroyed_sign: "You successfully broke your %gamemode% sign!"
    playersigns-sign_is_disabled: "§4This sign is currently disabled!"
    playersigns-owner_lacks_money: "§4The Owner doesn't have enough money!"

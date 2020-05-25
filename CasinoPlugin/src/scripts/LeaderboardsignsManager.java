@@ -421,12 +421,7 @@ public class LeaderboardsignsManager implements Listener {
 				return;
 			}
 		}
-		if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-leaderboard"));
-			event.setCancelled(true);
-			return;
-		}
+		
 		
 		if(event.getLine(0).contains(";s"))
 		{
@@ -440,7 +435,19 @@ public class LeaderboardsignsManager implements Listener {
 			}
 		}
 		else
-			createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
+		{
+			if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-leaderboard"));
+				event.setCancelled(true);
+				return;
+			}
+			else
+			{
+				createLeaderboardSign(event.getPlayer(), sign, mode, all, count, position, cycle);
+			}
+		}
+			
 		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-creation_successful"));
 	}
 	
@@ -449,15 +456,22 @@ public class LeaderboardsignsManager implements Listener {
 		Leaderboardsign sign = leaderboardsigns.get(event.getBlock().getLocation());
 		if(sign == null) return;
 		
-		if(!(event.getPlayer().getUniqueId().equals(sign.getPlayer().getUniqueId()))) {
-			
-			//check if player is NOT admin
-			if(!(Main.perm.has(event.getPlayer(), "casino.admin") || event.getPlayer().isOp())) {
+		if(!(Main.perm.has(event.getPlayer(), "casino.admin")))
+		{
+			if(sign.isServerSign() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+				event.setCancelled(true);
+				return;
+			}
+			else if(!sign.isServerSign() && !(sign.getPlayer().getUniqueId().equals(event.getPlayer().getUniqueId())))
+			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				event.setCancelled(true);
 				return;
 			}
 		}
+		
 		
 		if(deleteLeaderbordsign(sign)) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("leaderboard-delete_successful"));

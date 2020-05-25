@@ -292,20 +292,20 @@ public class PlayerSignsManager implements Listener {
 		if(lines[3].length() == 0) return;
 		
 		if(lines[1].contains("dice") || lines[1].equalsIgnoreCase("dice")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin"))) {
+			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
 				return;
 			}
 			createDiceSign(event);
 		} else if(lines[1].contains("blackjack") || lines[1].equalsIgnoreCase("blackjack")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin"))) {
+			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
 				return;
 			}
 			createBlackjackSign(event);
 		} else if(lines[0].contains("slots") || lines[0].equalsIgnoreCase("slots"))
 		{
-			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
+			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns")))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
 				return;
@@ -332,19 +332,23 @@ public class PlayerSignsManager implements Listener {
 			}
 			
 			
-			if(Main.perm.has(event.getPlayer(), "casino.admin") || event.getPlayer().isOp()) {
 			
-			}
-			else if(thisSign.isServerOwner())
+			if(!(Main.perm.has(event.getPlayer(), "casino.admin")))
 			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
-			} else if(event.getPlayer().equals(thisSign.getOwner().getPlayer())) {
-				
-			} else {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_is_not_owner"));
-				event.setCancelled(true);
-				return;
+				if(thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+				{
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
+					event.setCancelled(true);
+					return;
+				} else if(!thisSign.isServerOwner() && !(thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())))
+				{
+					//it a player sign and the breaker is not the owner of the sign
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
+					event.setCancelled(true);
+					return;
+				}
 			}
+
 
 			playerSigns.remove(sign.getLocation());
 			exportSigns();
@@ -564,6 +568,7 @@ public class PlayerSignsManager implements Listener {
 			}
 			else
 			{
+				System.out.println("a");
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
 				event.setCancelled(true);
 				return;
