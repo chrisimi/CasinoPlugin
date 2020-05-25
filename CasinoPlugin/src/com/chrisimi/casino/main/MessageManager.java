@@ -151,6 +151,7 @@ public class MessageManager
 			byte[] data = new byte[inputStream.available()];
 			inputStream.read(data);
 			OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(tempFile), Charset.forName("UTF-8"));
+			System.out.println(new String(data));
 			outputStream.write(new String(data));
 			
 			inputStream.close();
@@ -205,7 +206,7 @@ public class MessageManager
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to update messages: " + e.getMessage());
 			e.printStackTrace(CasinoManager.getPrintWriterForDebug());
 		}
-		tempFile.delete();
+		//tempFile.delete();
 	}
 	public static String get(String messageName)
 	{

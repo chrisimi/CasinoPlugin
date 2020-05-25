@@ -67,8 +67,8 @@ public class LeaderboardsignAnimation implements Runnable
 	{
 		if(this.sign.cycleMode == Cycle.NaN && this.sign.lastManualReset != 0)
 		{
-			Calendar calendar = new GregorianCalendar();
-			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
+//			Calendar calendar = new GregorianCalendar();
+//			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
 			if(sign.isServerSign())
 			{
 				currentData = LeaderboardsignsManager.getPlayData(this.sign.lastManualReset, System.currentTimeMillis());
@@ -79,6 +79,16 @@ public class LeaderboardsignAnimation implements Runnable
 			}
 			//System.out.println("get a" + calendar.getTime().toString());
 			
+		} else if(this.sign.cycleMode == Cycle.NaN && this.sign.validUntil != 0)
+		{
+			if(sign.isServerSign())
+			{
+				currentData = LeaderboardsignsManager.getPlayData(0, this.sign.validUntil);
+			}
+			else
+			{
+				currentData = LeaderboardsignsManager.getPlayData(this.sign.getPlayer(), 0, this.sign.validUntil);
+			}
 		}
 		else
 		{
@@ -302,6 +312,10 @@ public class LeaderboardsignAnimation implements Runnable
 		{
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 			signBlock.setLine(3, "§ar: " + dfa.format(new Date(this.sign.lastManualReset)));
+		} else if(this.sign.cycleMode == Cycle.NaN && this.sign.validUntil != 0)
+		{
+			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+			signBlock.setLine(3, "§av: " + dfa.format(new Date(this.sign.validUntil)));
 		}
 		
 		signBlock.update(true);

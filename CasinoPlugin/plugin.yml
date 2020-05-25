@@ -89,4 +89,8 @@ commands:
   casino deletereset:
     description: deletes the manual reset from the sign 
     usage: /casino deletereset
-    permission: [casino.admin, casino.leaderboard.create]
+    permission: [casino.admin, casino.leaderboard.create, casino.serversigns]
+  casino setdate:
+    description: set a date for a leaderboardsign
+    usage: /casino setdate
+    permission: [casino.admin, casino.leaderboard.create, casino.serversigns]

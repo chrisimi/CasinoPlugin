@@ -2,7 +2,11 @@ package listeners;
 
 import static org.junit.Assert.assertTrue;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -19,6 +23,7 @@ import com.chrisimi.casino.main.MessageManager;
 import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import animations.BlackjackAnimation;
+import joptsimple.util.DateConverter;
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -128,6 +133,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("resetserverleaderboard"))
 			{
 				resetLeaderboard(player, args[1], "", true);
+			} else if(args[0].equalsIgnoreCase("setdate"))
+			{
+				setdate((Player) player, args[1]);
 			}
 		} else if(args.length == 3) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -142,6 +150,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("resetserverleaderboard"))
 			{
 				resetLeaderboard(player, args[1], args[2], true);
+			} else if(args[0].equalsIgnoreCase("setdate"))
+			{
+				setdate((Player) player, args[1] + " " + args[2]);
 			}
 		} else if(args.length == 4) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -159,6 +170,45 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 
 
+
+	private void setdate(Player player, String string)
+	{
+		System.out.println("a22");
+		DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
+		DateFormat adf = new SimpleDateFormat("MM-dd-yyyy h:mm a");
+		Date date = null;
+		try
+		{
+			date = sdf.parse(string);
+		} catch (ParseException e)
+		{
+			try
+			{
+				date = adf.parse(string);
+			} catch (Exception e2)
+			{
+				player.sendMessage(MessageManager.get("commands-setdate_invalid_format"));
+				return;
+			}
+		}
+		Leaderboardsign sign = getLeaderboardsign(player);
+		if(sign == null) return;
+		
+		if(sign.isServerSign() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		else if(!sign.isServerSign() && !(sign.getPlayer().getUniqueId().equals(player.getUniqueId())))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
+		sign.validUntil = date.getTime();
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-setdate_successful"));
+		LeaderboardsignsManager.save();
+	}
 
 	//muss noch gestestet werden
 	private void deletereset(Player player)
@@ -178,6 +228,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		}
 		
 		sign.lastManualReset = 0;
+		sign.validUntil = 0;
 		LeaderboardsignsManager.save();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-leaderboard_delete_successful"));
 	}
@@ -398,6 +449,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
 		player.sendMessage("§6/casino resetserverleaderboard [range/all] [mode (optional)] §6- same as resetleaderboard but for serversigns!");
 		player.sendMessage("§6/casino deletereset §8- delete the manual reset from a sign you are looking onto it");
+		player.sendMessage("§6/casino setdate [date] §8- set a date until where the leaderboard will count data (valid date format in numeric and without pm or am: day-month-year hour:minute");
 	}
 	
 	private void showChestLocations(Player player) {
@@ -446,6 +498,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 		}
 	}
+	
 	private void resetLeaderboard(Player player, String range, String mode, Boolean serverSigns)
 	{
 		int rangeBlocks = 0;

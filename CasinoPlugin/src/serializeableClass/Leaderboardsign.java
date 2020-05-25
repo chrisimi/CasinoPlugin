@@ -40,7 +40,7 @@ public class Leaderboardsign {
 	@Expose
 	public long lastManualReset; //last manual reset from player
 	@Expose
-	public int validUntil; //how long the duration of the sign should work like for a event to sunday etc.
+	public long validUntil; //how long the duration of the sign should work like for a event to sunday etc.
 	
 	
 	//for location
