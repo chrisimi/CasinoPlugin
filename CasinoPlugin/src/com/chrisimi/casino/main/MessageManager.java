@@ -151,7 +151,9 @@ public class MessageManager
 			byte[] data = new byte[inputStream.available()];
 			inputStream.read(data);
 			OutputStreamWriter outputStream = new OutputStreamWriter(new FileOutputStream(tempFile), Charset.forName("UTF-8"));
-			System.out.println(new String(data));
+			
+			CasinoManager.Debug(this.getClass(), new String(data));
+			
 			outputStream.write(new String(data));
 			
 			inputStream.close();
@@ -215,14 +217,14 @@ public class MessageManager
 		
 		if(chosenLanguageFilePack.containsKey(messageName))
 		{
-			return chosenLanguageFilePack.get(messageName);
+			return chosenLanguageFilePack.get(messageName).replaceAll("&", "§");
 		}
 		else if(defaultLanguageFilePack.containsKey(messageName))
 		{
 			if(chosenLanguageFile != null) //only show messages if owner set a language file
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "Language file does not have message: " + early + "!");
 			
-			return defaultLanguageFilePack.get(messageName);
+			return defaultLanguageFilePack.get(messageName).replaceAll("&", "§");
 		}
 		else 
 		{
