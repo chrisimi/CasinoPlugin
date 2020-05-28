@@ -132,8 +132,121 @@ public class LeaderboardsignAnimation implements Runnable
 		case SUMAMOUNT:
 			analyseDataSumAmount();
 			break;
+		case HIGHESTLOSS:
+			analyseHighestLoss();
+			break;
+		case SUMLOSS:
+			analyseSumLoss();
 		}
 	}
+	private void analyseHighestLoss()
+	{
+		HashMap<OfflinePlayer, Double> map = new HashMap<>();
+		for(PlayData data : currentData)
+		{
+			if(data.WonAmount != 0) continue;
+			
+			if(map.containsKey(data.Player) && map.get(data.Player) < data.PlayAmount)
+				map.put(data.Player, data.PlayAmount);
+			else if(!(map.containsKey(data.Player)))
+				map.put(data.Player, data.WonAmount);
+		}
+		
+		Comparator<Entry<OfflinePlayer, Double>> valueComparator = new Comparator<Map.Entry<OfflinePlayer,Double>>()
+		{
+
+			@Override
+			public int compare(Entry<OfflinePlayer, Double> o1, Entry<OfflinePlayer, Double> o2)
+			{
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		};
+		List<Entry<OfflinePlayer, Double>> listOfEntries = new ArrayList<>(map.entrySet());
+		Collections.sort(listOfEntries, valueComparator);
+		
+		LinkedHashMap<OfflinePlayer, Double> sortedMap = new LinkedHashMap<OfflinePlayer, Double>(listOfEntries.size());
+		for(Entry<OfflinePlayer, Double> entry : listOfEntries)
+		{
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		
+		int index = 1;
+		CasinoManager.Debug(this.getClass(), "Result of analyse highest loss");
+		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet())
+		{
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " - " + entry.getValue());
+			if(index == sign.position)
+			{
+				currentPlayer = entry.getKey();
+				currentValue = entry.getValue();
+				break;
+			}
+			else
+				index++;
+		}
+		if(sortedMap.size() == 0)
+		{
+			currentPlayer = null;
+			currentValue = 0.0;
+		}
+		
+	}
+
+
+	private void analyseSumLoss()
+	{
+		HashMap<OfflinePlayer, Double> map = new HashMap<>();
+		for(PlayData data : currentData)
+		{
+			if(data.WonAmount != 0) continue;
+			
+			if(map.containsKey(data.Player))
+				map.compute(data.Player, (a, b) -> b + data.PlayAmount);
+			else
+				map.put(data.Player, data.PlayAmount);
+		}
+		
+		Comparator<Entry<OfflinePlayer, Double>> valueComperator = new Comparator<Map.Entry<OfflinePlayer,Double>>()
+		{
+
+			@Override
+			public int compare(Entry<OfflinePlayer, Double> o1, Entry<OfflinePlayer, Double> o2)
+			{
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		};
+		
+		List<Entry<OfflinePlayer, Double>> listOfEntries = new ArrayList<>(map.entrySet());
+		Collections.sort(listOfEntries, valueComperator);
+		
+		LinkedHashMap<OfflinePlayer, Double> sortedMap = new LinkedHashMap<OfflinePlayer, Double>(listOfEntries.size());
+		for(Entry<OfflinePlayer, Double> entry : listOfEntries)
+		{
+			sortedMap.put(entry.getKey(), entry.getValue());
+		}
+		
+		int index = 1;
+		CasinoManager.Debug(this.getClass(), "Result of analyse sum loss");
+		for(Entry<OfflinePlayer, Double> entry : sortedMap.entrySet())
+		{
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " - " + entry.getValue());
+			if(index == sign.position)
+			{
+				currentPlayer = entry.getKey();
+				currentValue = entry.getValue();
+				break;
+			}
+			else
+				index++;
+		}
+		if(sortedMap.size() == 0)
+		{
+			currentPlayer = null;
+			currentValue = 0.0;
+		}
+	}
+
+
 	private void analyseDataCount() 
 	{
 	

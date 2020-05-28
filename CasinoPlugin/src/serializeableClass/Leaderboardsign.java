@@ -14,7 +14,9 @@ public class Leaderboardsign {
 	public enum Mode {
 		HIGHESTAMOUNT,
 		COUNT,
-		SUMAMOUNT
+		SUMAMOUNT,
+		HIGHESTLOSS,
+		SUMLOSS
 	}
 	public enum Cycle
 	{
