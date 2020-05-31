@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 
-import net.minecraft.server.v1_14_R1.Item;
 import scripts.CasinoManager;
 
 public class BetMenu implements Listener{
@@ -72,7 +71,7 @@ public class BetMenu implements Listener{
 		
 		inventory = Bukkit.createInventory(player, 9*3, "setup your bet!");
 		
-		inputsign = new ItemStack(Material.OAK_SIGN);
+		inputsign = new ItemStack(Material.SIGN);
 		ItemMeta meta = inputsign.getItemMeta();
 		meta.setDisplayName("Write bet in chat");
 		inputsign.setItemMeta(meta);
@@ -84,7 +83,7 @@ public class BetMenu implements Listener{
 		backButton.setItemMeta(meta);
 		inventory.setItem(18, backButton);
 		
-		currentBetsign = new ItemStack(Material.OAK_SIGN);
+		currentBetsign = new ItemStack(Material.SIGN);
 		meta = currentBetsign.getItemMeta();
 		meta.setDisplayName("§6Current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);
@@ -96,7 +95,7 @@ public class BetMenu implements Listener{
 		managePlusMinusBlocks();
 	}
 	public void updateInventory() {
-		currentBetsign = new ItemStack(Material.OAK_SIGN);
+		currentBetsign = new ItemStack(Material.SIGN);
 		ItemMeta meta = currentBetsign.getItemMeta();
 		meta.setDisplayName("§6current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);

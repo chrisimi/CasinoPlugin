@@ -22,10 +22,6 @@ import org.junit.experimental.theories.Theories;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
-
-import net.minecraft.server.v1_14_R1.SoundCategory;
-import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
-import net.minecraft.server.v1_14_R1.EntityFox.i;
 import scripts.CasinoManager;
 import slotChests.SlotChest;
 
@@ -67,7 +63,7 @@ public class RollAnimationManager implements Runnable, Listener{
 	private void initialize() {
 		fillMaterial = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
 		
-		beginInformationSign = new ItemStack(Material.OAK_SIGN);
+		beginInformationSign = new ItemStack(Material.SIGN);
 		ItemMeta meta = beginInformationSign.getItemMeta();
 		meta.setDisplayName("§6bet: " + Main.econ.format(slotChest.bet));
 		beginInformationSign.setItemMeta(meta);

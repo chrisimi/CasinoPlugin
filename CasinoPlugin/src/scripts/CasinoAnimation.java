@@ -103,8 +103,8 @@ public class CasinoAnimation {
 		
 		
 		placeRandomizeBlocks();
-		inv.setItem(20, new ItemStack(Material.BIRCH_SIGN));
-		inv.setItem(24, new ItemStack(Material.BIRCH_SIGN));
+		inv.setItem(20, new ItemStack(Material.SIGN));
+		inv.setItem(24, new ItemStack(Material.SIGN));
 		inv.setItem(44, new ItemStack(inventoryMaterial));
 		
 		

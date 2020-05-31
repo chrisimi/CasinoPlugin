@@ -19,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 
-import net.minecraft.server.v1_14_R1.VoxelShapeDiscrete;
 import scripts.CasinoManager;
 
 public class OwnerInterfaceInventory implements Listener{

@@ -108,7 +108,7 @@ public class CasinoGUI {
 	private void addSignsAndButton() {
 		int[] positions = {30, 32, 39, 41};
 		for(int i = 0; i < 4; i++) {
-			ItemStack material = new ItemStack(Material.OAK_SIGN);
+			ItemStack material = new ItemStack(Material.SIGN);
 			
 			ItemMeta meta = material.getItemMeta();
 			meta.setDisplayName("§fbet: " + einsatz);

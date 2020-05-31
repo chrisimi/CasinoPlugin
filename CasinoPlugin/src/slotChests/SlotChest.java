@@ -30,8 +30,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.google.gson.annotations.Expose;
 
-import net.minecraft.server.v1_14_R1.EnumAnimation;
-import net.minecraft.server.v1_14_R1.AdvancementProgress.a;
 import scripts.CasinoManager;
 import scripts.UpdateManager;
 

@@ -47,7 +47,7 @@ public class SignsManager implements Listener {
 	
 	private static HashMap<Location, Double> signValues = new HashMap<Location, Double>(); //values with bet werte serialisieren
 	
-	private Material[] signs = new Material[] {Material.OAK_SIGN, Material.OAK_WALL_SIGN};
+	private Material[] signs = new Material[] {Material.SIGN, Material.SIGN};
 	
 	private Main main;
 	

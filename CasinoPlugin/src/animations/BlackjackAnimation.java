@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
-import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -343,7 +342,7 @@ public class BlackjackAnimation implements Runnable {
 			
 		}
 		
-		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 4f, 2.5f);
+		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_AMBIENT, 4f, 2.5f);
 
 		finish();
 	}

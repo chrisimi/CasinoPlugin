@@ -25,13 +25,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
-import com.mojang.authlib.minecraft.InsecureTextureException.WrongTextureOwnerException;
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.datafixers.types.templates.List;
-import com.mysql.fabric.xmlrpc.base.Array;
-
-import net.minecraft.server.v1_14_R1.EntityFox.i;
-import net.minecraft.server.v1_14_R1.LootItemFunctionApplyBonus.e;
 import scripts.CasinoManager;
 
 public class WarehouseMenu implements Listener{
@@ -66,7 +59,7 @@ public class WarehouseMenu implements Listener{
 	}
 	
 	private void initialize() {
-		changeSortModeSign = new ItemStack(Material.OAK_SIGN);
+		changeSortModeSign = new ItemStack(Material.SIGN);
 		ItemMeta meta = changeSortModeSign.getItemMeta();
 		ArrayList<String> loreList = new ArrayList<>();
 		loreList.add("§6click to change!");

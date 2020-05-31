@@ -74,6 +74,7 @@ public class Leaderboardsign {
 		this.range = String.valueOf(count);
 	}
 	public void setRange(Boolean all) {
+		
 		if(all)
 			this.range = "all";
 	}

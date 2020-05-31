@@ -20,10 +20,8 @@ import org.bukkit.event.Listener;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
-import com.mojang.datafixers.functions.PointFreeRule.CompAssocLeft;
 
 import animations.BlackjackAnimation;
-import joptsimple.util.DateConverter;
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -255,7 +253,8 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
-		Block block = player.getTargetBlockExact(10);
+//		Block block = player.getTargetBlockExact(10);
+		Block block = null;
 		if(block == null)
 			return;
 		
@@ -312,7 +311,8 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	 * @return {@link PlayerSignsConfiguration} of looked sign can be null
 	 */
 	private PlayerSignsConfiguration checkForSign(Player player) {
-		Block block = player.getTargetBlockExact(10);
+//		Block block = player.getTargetBlockExact(10);
+		Block block = null;
 		if(block == null) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_invalid_target"));
 			return null;
@@ -553,7 +553,8 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 	private Leaderboardsign getLeaderboardsign(Player player)
 	{
-		Block block = player.getTargetBlockExact(10);
+//		Block block = player.getTargetBlockExact(10);
+		Block block = null;
 		if(block == null) return null;
 		
 		if(!(block.getType().toString().contains("SIGN"))) 
