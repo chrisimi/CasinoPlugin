@@ -254,7 +254,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			return;
 		}
 //		Block block = player.getTargetBlockExact(10);
-		Block block = null;
+		Block block = player.getTargetBlock(null, 10);
 		if(block == null)
 			return;
 		
@@ -312,7 +312,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	 */
 	private PlayerSignsConfiguration checkForSign(Player player) {
 //		Block block = player.getTargetBlockExact(10);
-		Block block = null;
+		Block block = player.getTargetBlock(null, 10);
 		if(block == null) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_invalid_target"));
 			return null;
@@ -554,7 +554,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	private Leaderboardsign getLeaderboardsign(Player player)
 	{
 //		Block block = player.getTargetBlockExact(10);
-		Block block = null;
+		Block block = player.getTargetBlock(null, 10);
 		if(block == null) return null;
 		
 		if(!(block.getType().toString().contains("SIGN"))) 
