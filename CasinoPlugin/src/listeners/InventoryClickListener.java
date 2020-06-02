@@ -12,6 +12,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
+import com.chrisimi.inventoryapi.InventoryAPI;
 
 import scripts.CasinoAnimation;
 import scripts.CasinoGUI;
@@ -37,6 +38,8 @@ public class InventoryClickListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
+		InventoryAPI.InventoryAPIInventoryClickEvent(event);
+		
 		if(event.getCurrentItem() == null) return;
 		Player player = (Player)event.getWhoClicked();
 		if(event.getInventory().equals(CasinoGUI.getInv())) {
@@ -100,7 +103,7 @@ public class InventoryClickListener implements Listener{
 	}
 	@EventHandler
 	public void onInventoryLeave(InventoryCloseEvent event) {
-		
+		InventoryAPI.InventoryCloseEvent(event);
 		
 		if(event.getInventory().equals(CasinoGUI.getInv())) {
 			CasinoGUI.removeInventory((Player) event.getPlayer()); 

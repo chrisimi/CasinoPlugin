@@ -22,6 +22,7 @@ import com.chrisimi.casino.main.Main;
 import com.chrisimi.casino.main.MessageManager;
 
 import animations.BlackjackAnimation;
+import hologramsystem.HologramMenu;
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -108,6 +109,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("deletereset"))
 			{
 				deletereset((Player)player);
+			} else if(args[0].equalsIgnoreCase("createhologram"))
+			{
+				createHologram((Player)player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -168,6 +172,11 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 
 
+
+	private void createHologram(Player player)
+	{
+		new HologramMenu(player);
+	}
 
 	private void setdate(Player player, String string)
 	{

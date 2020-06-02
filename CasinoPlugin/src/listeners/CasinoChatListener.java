@@ -8,6 +8,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 
 import com.chrisimi.casino.main.Main;
+import com.chrisimi.inventoryapi.InventoryAPI;
 
 import animations.BlackjackAnimation;
 
@@ -21,6 +22,8 @@ public class CasinoChatListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
+		InventoryAPI.InventoryAPIPlayerChatEvent(event, main);
+		
 		Player player = event.getPlayer();
 		if(BlackjackAnimation.IsBlackJackAnimationWaitingForUserInput(player)) {
 			main.getServer().getScheduler().runTask(main, new Runnable() {
