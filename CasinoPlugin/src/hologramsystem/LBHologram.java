@@ -27,7 +27,18 @@ public class LBHologram
 	public Mode mode;
 	
 	@Expose
-	public int positions;
+	public String hologramName;
+	
+	@Expose
+	public int minPosition;
+	@Expose
+	public int maxPosition;
+	
+	@Expose
+	public boolean useAllMode;
+	@Expose
+	public int range;
+	
 	
 	
 	public boolean isServerHologram()
