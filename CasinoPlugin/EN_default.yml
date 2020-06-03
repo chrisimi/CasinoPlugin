@@ -194,6 +194,8 @@ messages:
    hologrammenu-range: "&6Set the range for using casino signs, similiar to the leaderboard signs. Use a number to indicate the range in blocks or use &eall &6for every casino sign you created." 
    hologrammenu-invalid_format_range: "&4Invalid format. Try to use a number for indicating the range of blocks from where the hologram should use the data or use &eall&6 for all signs you created."
    hologrammenu-range_successful: "&6You successfully set the range for the hologram."
+   hologrammenu-name: "&6Write the name of the hologram in the chat. The name should be unique for managing and deleting."
+   hologrammneu-name_successful: "&6You successfully set the name of the hologram."
    hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
    
    

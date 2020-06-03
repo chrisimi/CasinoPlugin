@@ -37,7 +37,8 @@ public class HologramMenu implements IInventoryAPI
 		NONE,
 		LOCATION,
 		POSITION,
-		RANGE
+		RANGE,
+		NAME
 	}
 	
 	
@@ -49,8 +50,9 @@ public class HologramMenu implements IInventoryAPI
 	private int minPosition = 0;
 	private int maxPosition = 0;
 	private String nameOfHologram;
-	private boolean useAllMode;
+	private boolean useAllMode = false;
 	private int range = 0;
+	private boolean isServerSign = false;
 	
 	private boolean validValues = false;
 	
@@ -60,6 +62,8 @@ public class HologramMenu implements IInventoryAPI
 	private ItemStack choosePosition = new ItemStack(Material.SIGN);
 	private ItemStack setLocation = scripts.Skull.getSkullByTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDM4Y2YzZjhlNTRhZmMzYjNmOTFkMjBhNDlmMzI0ZGNhMTQ4NjAwN2ZlNTQ1Mzk5MDU1NTI0YzE3OTQxZjRkYyJ9fX0=");
 	private ItemStack setRange = new ItemStack(Material.TRIPWIRE_HOOK);
+	private ItemStack setHologramName = new ItemStack(Material.SIGN);
+	private ItemStack changeServerSign = new ItemStack(Material.GOLD_BLOCK);
 	private ItemStack createHologram = new ItemStack(Material.STONE_BUTTON);
 	
 	public HologramMenu(Player player)
@@ -98,6 +102,11 @@ public class HologramMenu implements IInventoryAPI
 		setLocation.setItemMeta(meta);
 		bukkitInventory.setItem(7, setRange);
 		
+		meta = setHologramName.getItemMeta();
+		meta.setDisplayName("§6set hologram name");
+		setHologramName.setItemMeta(meta);
+		bukkitInventory.setItem(8, setHologramName);
+		
 		updateInventory();
 		
 	}
@@ -110,6 +119,8 @@ public class HologramMenu implements IInventoryAPI
 		
 		editCreateHologramButton();
 		bukkitInventory.setItem(22, createHologram);
+		
+		editServerSignBlock();
 	}
 	
 
@@ -138,7 +149,22 @@ public class HologramMenu implements IInventoryAPI
 		else if(event.getClicked().equals(setLocation)) setLocation();
 		else if(event.getClicked().equals(setRange)) setRange();
 		else if(event.getClicked().equals(createHologram)) createHologram();
+		else if(event.getClicked().equals(setHologramName)) setHologramName();
+		else if(event.getClicked().equals(changeServerSign)) changeServerSign();
 		updateInventory();
+	}
+	
+	private void changeServerSign()
+	{
+		isServerSign = !isServerSign;
+	}
+
+	private void setHologramName()
+	{
+		waitingForChatInput = WaitingFor.NAME;
+		closeInventory();
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name"));
+		inventory.waitforChatInput(player);
 	}
 	
 	private void setRange()
@@ -207,7 +233,11 @@ public class HologramMenu implements IInventoryAPI
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-invalid_format_range"));
 			else
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-range_successful"));
-			
+			break;
+		case NAME:
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
+			nameOfHologram = event.getMessage();
+			break;
 		default:
 			break;
 		}
@@ -275,13 +305,26 @@ public class HologramMenu implements IInventoryAPI
 		hologram.useAllMode = useAllMode;
 		hologram.range = range;
 		hologram.hologramName = nameOfHologram;
+		hologram.setLocation(player.getLocation());
+		hologram.ownerUUID = (isServerSign) ? "server" : player.getUniqueId().toString();
 		
+		HologramSystem.addHologram(hologram);
 	}
 	
 	private void editCreateHologramButton()
 	{
 		boolean allCorrect = true;
 		List<String> lore = new ArrayList<>();
+		
+		if(nameOfHologram.equals(""))
+		{
+			lore.add("§4- no name set");
+			allCorrect = false;
+		}
+		else
+		{
+			lore.add("§a- name: " + nameOfHologram);
+		}
 		
 		lore.add("§a- using mode: " + currentMode.toString());
 		
@@ -314,6 +357,17 @@ public class HologramMenu implements IInventoryAPI
 			}
 		}
 		
+		if(isServerSign)
+		{
+			lore.add("§a- is a ServerSign");
+		}
+		else
+		{
+			lore.add("§a- is a player sign (yours)");
+		}
+		
+		
+		
 		if(allCorrect)
 		{
 			ItemMeta meta = createHologram.getItemMeta();
@@ -328,7 +382,30 @@ public class HologramMenu implements IInventoryAPI
 		}
 		validValues = allCorrect;
 	}
-
+	
+	private void editServerSignBlock()
+	{
+		
+		
+		if(isServerSign)
+		{
+			ItemMeta meta = changeServerSign.getItemMeta();
+			meta.setDisplayName("§4Change it to a player sign!");
+			changeServerSign.setItemMeta(meta);
+		}
+		else
+		{
+			ItemMeta meta = changeServerSign.getItemMeta();
+			meta.setDisplayName("§6Change it to a serversign!");
+			changeServerSign.setItemMeta(meta);
+		}
+		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
+		{
+			bukkitInventory.setItem(17, changeServerSign);
+		}
+		else
+			bukkitInventory.setItem(17, null);
+	}
 	
 	private List<String> getLoreForModes()
 	{

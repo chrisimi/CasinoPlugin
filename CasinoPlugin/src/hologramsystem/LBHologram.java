@@ -41,12 +41,20 @@ public class LBHologram
 	
 	
 	
+	
 	public boolean isServerHologram()
 	{
-		return Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID)) == null;
+		return ownerUUID.equals("server");
 	}
 	public Location getLocation()
 	{
 		return new Location(Bukkit.getWorld(world), x, y, z);
+	}
+	public void setLocation(Location lrc)
+	{
+		this.x = lrc.getX();
+		this.y = lrc.getY();
+		this.z = lrc.getZ();
+		this.world = lrc.getWorld().getName();
 	}
 }

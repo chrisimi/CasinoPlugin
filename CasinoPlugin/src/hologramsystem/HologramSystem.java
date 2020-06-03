@@ -176,4 +176,10 @@ public class HologramSystem
 		@Expose
 		public List<LBHologram> container = new ArrayList<>();
 	}
+
+	public static void addHologram(LBHologram hologram)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
