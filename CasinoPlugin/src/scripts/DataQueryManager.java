@@ -11,15 +11,13 @@ import org.bukkit.entity.Player;
 import animations.LeaderboardsignAnimation;
 import hologramsystem.LBHologram;
 import serializeableClass.Leaderboardsign.Cycle;
+import utils.CycleHelper;
+import utils.data.Query;
 import serializeableClass.PlayData;
 
 public class DataQueryManager
 {
-	public class Query 
-	{
-		double value;
-		OfflinePlayer player;
-	}
+
 	private class QueryPost 
 	{
 		public boolean isServerSign;
@@ -37,8 +35,8 @@ public class DataQueryManager
 			this.cycleMode = animation.sign.cycleMode;
 			this.lastManualReset = animation.sign.lastManualReset;
 			this.validUntil = animation.sign.validUntil;
-			this.startDate = animation.getStartDateOfSign();
-			this.endDate = animation.getEndDateOfSign();
+			this.startDate = CycleHelper.getStartDateOfSign(animation.sign.cycleMode);
+			this.endDate = CycleHelper.getEndDateOfSign(animation.sign.cycleMode);
 		}
 		public QueryPost(LBHologram hologram)
 		{
@@ -47,14 +45,16 @@ public class DataQueryManager
 			this.cycleMode = hologram.cycleMode;
 			this.lastManualReset = hologram.lastManualReset;
 			this.validUntil = hologram.validuntil;
-			
+			this.startDate = CycleHelper.getStartDateOfSign(hologram.cycleMode);
+			this.endDate = CycleHelper.getEndDateOfSign(hologram.cycleMode);
 		}
 	}
 	
 	
 	public static Query getQuery(LeaderboardsignAnimation animation)
 	{
-		
+		return null;
+//		TODO
 	}
 	
 	private List<PlayData> getData(QueryPost post)

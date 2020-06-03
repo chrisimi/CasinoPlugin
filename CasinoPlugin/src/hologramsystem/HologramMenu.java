@@ -28,8 +28,10 @@ public class HologramMenu implements IInventoryAPI
 {
 	/*
 	 * todo
-	 *  function to set hologram name
-	 *  when player has serversigns perms a block should be in the inventory to set if it's a server sign
+	 *  done function to set hologram name
+	 *  done when player has serversigns perms a block should be in the inventory to set if it's a server sign
+	 * 
+	 * add a button to switch between cycles
 	 * 
 	 */
 	
