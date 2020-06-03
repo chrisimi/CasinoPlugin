@@ -171,6 +171,34 @@ public class HologramSystem
 		});
 	}
 	
+	private void createHologram(LBHologram lbHologram)
+	{
+		
+	}
+	
+	private static class Manager 
+	{
+		private static int currentID = 0;
+		
+		public static void start()
+		{
+			
+		}
+		public static void stop()
+		{
+			
+		}
+		private static Runnable task = new Runnable()
+		{
+			
+			@Override
+			public void run()
+			{
+				
+			}
+		};
+	}
+	
 	private class LBHologramContainer 
 	{
 		@Expose
@@ -179,7 +207,8 @@ public class HologramSystem
 
 	public static void addHologram(LBHologram hologram)
 	{
-		// TODO Auto-generated method stub
-		
+		datas.put(hologram.getLocation(), hologram);
+		HologramSystem.getInstance().createHologram(hologram);
+		HologramSystem.getInstance().exportData();
 	}
 }

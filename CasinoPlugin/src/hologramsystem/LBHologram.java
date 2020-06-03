@@ -4,9 +4,11 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 
 import com.google.gson.annotations.Expose;
 
+import serializeableClass.Leaderboardsign.Cycle;
 import serializeableClass.Leaderboardsign.Mode;
 
 public class LBHologram
@@ -27,6 +29,9 @@ public class LBHologram
 	public Mode mode;
 	
 	@Expose
+	public Cycle cycleMode;
+	
+	@Expose
 	public String hologramName;
 	
 	@Expose
@@ -38,6 +43,11 @@ public class LBHologram
 	public boolean useAllMode;
 	@Expose
 	public int range;
+	
+	@Expose
+	public long lastManualReset;
+	@Expose
+	public long validuntil;
 	
 	
 	
@@ -56,5 +66,11 @@ public class LBHologram
 		this.y = lrc.getY();
 		this.z = lrc.getZ();
 		this.world = lrc.getWorld().getName();
+	}
+	public OfflinePlayer getOwner()
+	{
+		if(isServerHologram()) return null;
+		
+		return Bukkit.getOfflinePlayer(UUID.fromString(ownerUUID));
 	}
 }
