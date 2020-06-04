@@ -3,6 +3,8 @@ package scripts;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.bukkit.OfflinePlayer;
@@ -11,53 +13,43 @@ import org.bukkit.entity.Player;
 import animations.LeaderboardsignAnimation;
 import hologramsystem.LBHologram;
 import serializeableClass.Leaderboardsign.Cycle;
+import serializeableClass.Leaderboardsign.Mode;
 import utils.CycleHelper;
+import utils.data.CountAnalyse;
+import utils.data.DataAnalyse;
 import utils.data.Query;
+import utils.data.QueryPost;
 import serializeableClass.PlayData;
 
 public class DataQueryManager
 {
 
-	private class QueryPost 
-	{
-		public boolean isServerSign;
-		public OfflinePlayer player;
-		public Cycle cycleMode;
-		public long lastManualReset;
-		public long validUntil;
-		public Calendar startDate;
-		public Calendar endDate;
-		
-		public QueryPost(LeaderboardsignAnimation animation)
-		{
-			this.isServerSign = animation.sign.isServerSign();
-			this.player = animation.sign.getPlayer();
-			this.cycleMode = animation.sign.cycleMode;
-			this.lastManualReset = animation.sign.lastManualReset;
-			this.validUntil = animation.sign.validUntil;
-			this.startDate = CycleHelper.getStartDateOfSign(animation.sign.cycleMode);
-			this.endDate = CycleHelper.getEndDateOfSign(animation.sign.cycleMode);
-		}
-		public QueryPost(LBHologram hologram)
-		{
-			this.isServerSign = hologram.isServerHologram();
-			this.player = hologram.getOwner();
-			this.cycleMode = hologram.cycleMode;
-			this.lastManualReset = hologram.lastManualReset;
-			this.validUntil = hologram.validuntil;
-			this.startDate = CycleHelper.getStartDateOfSign(hologram.cycleMode);
-			this.endDate = CycleHelper.getEndDateOfSign(hologram.cycleMode);
-		}
-	}
-	
-	
 	public static Query getQuery(LeaderboardsignAnimation animation)
 	{
 		return null;
 //		TODO
 	}
+	public static LinkedHashMap<Integer, Query> getQuery(LBHologram hologram)
+	{
+		List<PlayData> data = getData(new QueryPost(hologram));
+		
+		DataAnalyse analyse = getAnalyse(hologram.mode, data);
+		
+		return analyse.getData(hologram.minPosition, hologram.maxPosition);
+	}
 	
-	private List<PlayData> getData(QueryPost post)
+	private static DataAnalyse getAnalyse(Mode mode, List<PlayData> data)
+	{
+		switch (mode)
+		{
+		case COUNT:
+			return new CountAnalyse(data);
+		default:
+			return null;
+		}
+	}
+	
+	private static List<PlayData> getData(QueryPost post)
 	{
 		List<PlayData> currentData = new ArrayList<>();
 		if(post.cycleMode == Cycle.NaN && post.lastManualReset != 0)

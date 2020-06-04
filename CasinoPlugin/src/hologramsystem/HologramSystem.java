@@ -8,11 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 import com.chrisimi.casino.main.Main;
@@ -24,7 +28,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 
 import scripts.CasinoManager;
+import scripts.DataQueryManager;
 import scripts.PlayerSignsManager;
+import utils.data.Query;
 
 /**
  * Singelton class which is maintaining the holograms
@@ -171,9 +177,61 @@ public class HologramSystem
 		});
 	}
 	
-	private void createHologram(LBHologram lbHologram)
+	private Hologram createHologram(LBHologram lbHologram)
 	{
+		Hologram holo = HologramsAPI.createHologram(Main.getInstance(), lbHologram.getLocation());
 		
+		LinkedHashMap<Integer, Query> datas = DataQueryManager.getQuery(lbHologram);
+		
+		holo.appendTextLine(lbHologram.description);
+		
+		//get max length of name
+		int highestLengthName = 0;
+		int highestLengthValue = 0;
+		for(Query query : datas.values())
+		{
+			highestLengthName = (query.player.getName().length() > highestLengthName) ? query.player.getName().length() : highestLengthName;
+			highestLengthValue = (int) (((query.value / 10.0) > highestLengthValue) ? query.value / 10.0 : highestLengthValue);
+		}
+		
+		
+		
+		for(Map.Entry<Integer, Query> entry : datas.entrySet())
+		{
+			int pos = entry.getKey();
+			
+			if(pos <= 3 && lbHologram.highlightTop3)
+			{
+				switch (pos)
+				{
+				case 1:
+					holo.appendTextLine("§3" + getLine(entry.getValue(), highestLengthName, highestLengthValue));
+					holo.appendItemLine(new ItemStack(Material.DIAMOND_BLOCK));
+					break;
+				case 2:
+					holo.appendTextLine("§6" + getLine(entry.getValue(), highestLengthName, highestLengthValue));
+					holo.appendItemLine(new ItemStack(Material.GOLD_BLOCK));
+					break;
+				case 3:
+					holo.appendTextLine("§7" + getLine(entry.getValue(), highestLengthName, highestLengthValue));
+					holo.appendItemLine(new ItemStack(Material.IRON_BLOCK));
+				default:
+					break;
+				}
+			}
+			if(!lbHologram.highlightTop3)
+			{
+				holo.appendTextLine("§4" + entry.getKey() + " | " + getLine(entry.getValue(), highestLengthName, highestLengthValue));
+			}
+		}
+		
+		return holo;
+	}
+	private String getLine(Query query, int maxLengthName, int maxLengthValue)
+	{
+		if(query == null || query.player == null ) return "";
+		
+		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + "d", query.player.getName(), query.value);
 	}
 	
 	private static class Manager 
@@ -194,7 +252,17 @@ public class HologramSystem
 			@Override
 			public void run()
 			{
-				
+				for(Map.Entry<Location, LBHologram> entry : datas.entrySet())
+				{
+					//delete old hologram
+					if(holograms.containsKey(entry.getKey()))
+					{
+						holograms.remove(entry.getKey());
+					}
+					
+					Hologram holo = HologramSystem.getInstance().createHologram(entry.getValue());
+					holograms.put(entry.getKey(), holo);
+				}
 			}
 		};
 	}

@@ -48,7 +48,10 @@ public class LBHologram
 	public long lastManualReset;
 	@Expose
 	public long validuntil;
-	
+	@Expose
+	public String description;
+	@Expose
+	public boolean highlightTop3;
 	
 	
 	
