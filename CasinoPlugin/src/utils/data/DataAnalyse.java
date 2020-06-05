@@ -11,10 +11,21 @@ import java.util.Map.Entry;
 import org.bukkit.OfflinePlayer;
 
 import serializeableClass.PlayData;
-
+/**
+ * abstract class for analyse data for holograms and leaderboard signs
+ * @author chris
+ *
+ */
 public abstract class DataAnalyse
 {
+	/**
+	 * list of data which the analyse should have
+	 */
 	protected final List<PlayData> data;
+	/**
+	 * 
+	 * @param data list of {@link PlayData} containing the data for the analyse
+	 */
 	public DataAnalyse(List<PlayData> data)
 	{
 		this.data = data;
@@ -34,5 +45,11 @@ public abstract class DataAnalyse
 		return sortedMap;
 	}
 	
+	/**
+	 * get the analysed data in a {@link LinkedHashMap}
+	 * @param from start Position 
+	 * @param to end position. Have to be higher than @param from
+	 * @return {@link LinkedHashMap} containing the number of the position as key and the query for the position as value
+	 */
 	public abstract LinkedHashMap<Integer, Query> getData(int from, int to);
 }

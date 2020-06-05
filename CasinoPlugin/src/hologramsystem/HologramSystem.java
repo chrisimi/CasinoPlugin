@@ -30,6 +30,7 @@ import com.google.gson.annotations.Expose;
 import scripts.CasinoManager;
 import scripts.DataQueryManager;
 import scripts.PlayerSignsManager;
+import scripts.UpdateManager;
 import utils.data.Query;
 
 /**
@@ -51,7 +52,10 @@ public class HologramSystem
 	private static Map<Location, Hologram> holograms = new HashMap<Location, Hologram>();
 	
 	private static boolean configValueEnabled;
+	private static int updateCycleTime;
+	
 	private static boolean holographicsEnabled;
+	
 	private static File hologramsjson;
 	private static Gson gson;
 	
@@ -69,7 +73,27 @@ public class HologramSystem
 	private HologramSystem()
 	{
 		this.main = Main.getInstance();
-		
+		initializeConfigValues();
+	}
+	
+	private void initializeConfigValues()
+	{
+		try 
+		{
+			configValueEnabled = Boolean.parseBoolean(UpdateManager.getValue("holograms-enabled", true).toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to parse value for enabling holograms. Set to default value: true");
+			configValueEnabled = true;
+		}
+		try
+		{
+			updateCycleTime = Integer.parseInt(UpdateManager.getValue("holograms-updatecycle", 1200).toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to parse value for holograms update cycle. Set to default value 1200 (2 minutes)");
+			updateCycleTime = 1200;
+		}
 	}
 	
 	public void startSystem(Plugin plugin)

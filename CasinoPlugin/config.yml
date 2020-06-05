@@ -183,7 +183,15 @@ slotchest-op-unlimited: true
 slotchest-list-of-banned-items:
    - 'DIAMOND_BLOCK'
 
-   
+# -----------------------
+# Hologram configurations
+# -----------------------
+
+# set to true to enable holograms on the server
+holograms-enabled: true
+
+# set the update cycle for holograms. Unit is Ticks 20 ticks = 1 second
+holograms-updatecycle: 2400
    
 
 

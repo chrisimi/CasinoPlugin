@@ -10,8 +10,15 @@ import org.bukkit.OfflinePlayer;
 
 import serializeableClass.PlayData;
 
+/**
+ * class for analysing datas 
+ * type: Count
+ * @author chris
+ *
+ */
 public class CountAnalyse extends DataAnalyse
 {
+	//default comparator for count
 	
 	public static Comparator<Entry<OfflinePlayer, Double>> comparator = new Comparator<Entry<OfflinePlayer, Double>>()
 	{

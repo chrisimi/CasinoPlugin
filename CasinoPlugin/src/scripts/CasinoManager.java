@@ -80,7 +80,7 @@ public class CasinoManager {
 	
 	public static void LogWithColor(String message) {
 		try {
-			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('ยง', prefix) + message);
+			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('ง', prefix) + message);
 			
 		} catch(Exception e) {
 			if(message == null) return;
