@@ -17,7 +17,7 @@ import serializeableClass.PlayData;
  *
  */
 public abstract class DataAnalyse
-{
+{ 
 	/**
 	 * list of data which the analyse should have
 	 */
@@ -43,6 +43,36 @@ public abstract class DataAnalyse
 			sortedMap.put(entry.getKey(), entry.getValue());
 		}
 		return sortedMap;
+	}
+	/**
+	 * create a linkedhashmap containing the the sorted elements for the leaderboard or hologram and analyse the data from the list
+	 * @param from start position
+	 * @param to end position
+	 * @param comp {@link Comparator} for the analyse of data
+	 * @return {@link LinkedHashMap} keyd with the position and valued with the Query
+	 */
+	protected LinkedHashMap<Integer, Query> getData(int from, int to, Comparator<Entry<OfflinePlayer, Double>> comp)
+	{
+		LinkedHashMap<OfflinePlayer, Double> values = analyseData(comp);
+		
+		LinkedHashMap<Integer, Query> result = new LinkedHashMap<>();
+		
+		int place = 1;
+		
+		for(Entry<OfflinePlayer, Double> entry : values.entrySet())
+		{
+			if(place >= from && place >= to)
+			{
+				Query query = new Query();
+				query.player = entry.getKey();
+				query.value = entry.getValue();
+				
+				final int currPos = place;
+				result.put(currPos, query);
+			}
+			place++;
+		}
+		return result;
 	}
 	
 	/**

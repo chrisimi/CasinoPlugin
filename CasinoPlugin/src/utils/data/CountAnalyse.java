@@ -49,26 +49,7 @@ public class CountAnalyse extends DataAnalyse
 	@Override
 	public LinkedHashMap<Integer, Query> getData(int from, int to)
 	{
-		LinkedHashMap<OfflinePlayer, Double> values = analyseData(comparator);
-		
-		LinkedHashMap<Integer, Query> result = new LinkedHashMap<>();
-		
-		int place = 1;
-		
-		for(Entry<OfflinePlayer, Double> entry : values.entrySet())
-		{
-			if(place >= from && place >= to)
-			{
-				Query query = new Query();
-				query.player = entry.getKey();
-				query.value = entry.getValue();
-				
-				final int currPos = place;
-				result.put(currPos, query);
-			}
-			place++;
-		}
-		return result;
+		return this.getData(from, to, comparator);
 	}
 
 }
