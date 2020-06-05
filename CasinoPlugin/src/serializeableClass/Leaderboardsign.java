@@ -20,12 +20,12 @@ public class Leaderboardsign {
 	}
 	public enum Cycle
 	{
-		YEAR,
-		MONTH,
-		WEEK,
-		DAY,
+		NaN,
 		HOUR,
-		NaN
+		DAY,
+		WEEK,
+		MONTH,
+		YEAR
 	}
 	
 	@Expose

@@ -21,6 +21,7 @@ import com.chrisimi.inventoryapi.Inventory;
 import com.chrisimi.inventoryapi.InventoryAPI;
 
 import scripts.CasinoManager;
+import serializeableClass.Leaderboardsign.Cycle;
 import serializeableClass.Leaderboardsign.Mode;
 
 
@@ -49,6 +50,7 @@ public class HologramMenu implements IInventoryAPI
 	private final org.bukkit.inventory.Inventory bukkitInventory;
 	
 	private Mode currentMode = Mode.HIGHESTAMOUNT;
+	private Cycle currentCycle = Cycle.NaN;
 	private int minPosition = 0;
 	private int maxPosition = 0;
 	private String nameOfHologram;
@@ -67,6 +69,7 @@ public class HologramMenu implements IInventoryAPI
 	private ItemStack setHologramName = new ItemStack(Material.SIGN);
 	private ItemStack changeServerSign = new ItemStack(Material.GOLD_BLOCK);
 	private ItemStack createHologram = new ItemStack(Material.STONE_BUTTON);
+	private ItemStack switchBetweenCycles = new ItemStack(Material.CLOCK);
 	
 	public HologramMenu(Player player)
 	{
@@ -88,6 +91,10 @@ public class HologramMenu implements IInventoryAPI
 		ItemMeta meta = switchBetweenModes.getItemMeta();
 		meta.setDisplayName("§6change leaderboard mode");
 		switchBetweenModes.setItemMeta(meta);
+		
+		meta = switchBetweenCycles.getItemMeta();
+		meta.setDisplayName("§6change cycle");
+		switchBetweenCycles.setItemMeta(meta);
 		
 		meta = choosePosition.getItemMeta();
 		meta.setDisplayName("§6set showing positions");
@@ -123,13 +130,16 @@ public class HologramMenu implements IInventoryAPI
 		bukkitInventory.setItem(22, createHologram);
 		
 		editServerSignBlock();
+		
+		editSwitchBetweenCycles();
 	}
 	
 
 
-
-
-
+	
+	
+	
+	
 	@Override
 	public void openInventory()
 	{
@@ -147,6 +157,7 @@ public class HologramMenu implements IInventoryAPI
 	public void onInventoryClick(ClickEvent event)
 	{
 		if(event.getClicked().equals(switchBetweenModes)) clickSwitchMode();
+		else if(event.getClicked().equals(switchBetweenCycles)) clickSwitchCycle();
 		else if(event.getClicked().equals(choosePosition)) choosePosition();
 		else if(event.getClicked().equals(setLocation)) setLocation();
 		else if(event.getClicked().equals(setRange)) setRange();
@@ -194,7 +205,6 @@ public class HologramMenu implements IInventoryAPI
 
 	private void clickSwitchMode()
 	{
-		System.out.println("higher");
 		Mode[] modes = Mode.values();
 		
 		for(int i = 0; i < modes.length; i++)
@@ -209,6 +219,10 @@ public class HologramMenu implements IInventoryAPI
 				break;
 			}
 		}
+	}
+	private void clickSwitchCycle()
+	{
+		currentCycle = (currentCycle.ordinal() < Cycle.values().length) ? Cycle.values()[currentCycle.ordinal()] : Cycle.values()[0];
 	}
 //	
 //	Chat event area
@@ -302,6 +316,7 @@ public class HologramMenu implements IInventoryAPI
 		
 		LBHologram hologram = new LBHologram();
 		hologram.mode = currentMode;
+		hologram.cycleMode = currentCycle;
 		hologram.minPosition = minPosition;
 		hologram.maxPosition = maxPosition;
 		hologram.useAllMode = useAllMode;
@@ -387,8 +402,7 @@ public class HologramMenu implements IInventoryAPI
 	
 	private void editServerSignBlock()
 	{
-		
-		
+
 		if(isServerSign)
 		{
 			ItemMeta meta = changeServerSign.getItemMeta();
@@ -407,6 +421,31 @@ public class HologramMenu implements IInventoryAPI
 		}
 		else
 			bukkitInventory.setItem(17, null);
+	}
+	
+	private void editSwitchBetweenCycles()
+	{
+		Cycle[] cycles = Cycle.values();
+		
+		List<String> lores = new ArrayList<>();
+		for(Cycle cycle : cycles)
+		{
+			String lore = "";
+			if(cycle == currentCycle)
+				lore += "§6§l";
+			else
+				lore += "§6";
+			
+			if(cycle == Cycle.NaN)
+				lore += "no cycle";
+			else
+				lore += cycle.toString();
+			lores.add(lore);
+		}
+		
+		ItemMeta meta = switchBetweenCycles.getItemMeta();
+		meta.setLore(lores);
+		switchBetweenCycles.setItemMeta(meta);
 	}
 	
 	private List<String> getLoreForModes()

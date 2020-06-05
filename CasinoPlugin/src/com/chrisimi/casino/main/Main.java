@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import hologramsystem.HologramSystem;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import scripts.CasinoAnimation;
@@ -93,6 +94,7 @@ public class Main extends JavaPlugin {
 		
 		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
+		HologramSystem.getInstance().startSystem(this); //start hologram system
 	}
 	
 	@Override
@@ -100,6 +102,7 @@ public class Main extends JavaPlugin {
 	{
 		LeaderboardsignsManager.clearAllTasks();
 		CasinoManager.playerSignsManager.serverClose();
+		HologramSystem.getInstance().stopSystem();
 	}
 
 	private void configurateMetrics(Metrics metric) {

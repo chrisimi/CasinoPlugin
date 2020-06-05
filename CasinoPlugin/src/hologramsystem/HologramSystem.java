@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -74,6 +75,8 @@ public class HologramSystem
 	{
 		this.main = Main.getInstance();
 		initializeConfigValues();
+		
+		
 	}
 	
 	private void initializeConfigValues()
@@ -98,12 +101,45 @@ public class HologramSystem
 	
 	public void startSystem(Plugin plugin)
 	{
+		if(!(checkCompatibility(plugin))) return; //if there is an error with HolographicDisplays or the user disabled the holograms
+		
+		
 		hologramsjson = new File(plugin.getDataFolder(), "holograms.json");
 		createFiles();
 		
 		gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
 		loadPlaceholders();
 		importData();
+		
+		Manager.start();
+	}
+	
+	
+
+	public void stopSystem()
+	{
+		Manager.stop();
+	}
+	private boolean checkCompatibility(Plugin plugin)
+	{
+		holographicsEnabled = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
+		
+		if(!configValueEnabled)
+		{
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "You've disabled holograms! No holograms will be loaded.");
+			return false;
+		}
+		else if(!holographicsEnabled)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Can't find HolographicDisplays! Make sure that you are using the newest version and it's working!");
+			return false;
+		}
+		else
+		{
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Holograms are enabled on the server.");
+			return true;
+		}
+		
 	}
 	
 	private void createFiles()
@@ -264,11 +300,14 @@ public class HologramSystem
 		
 		public static void start()
 		{
+			if(currentID != 0)
+				stop();
 			
+			currentID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), task, 0, updateCycleTime);
 		}
 		public static void stop()
 		{
-			
+			Main.getInstance().getServer().getScheduler().cancelTask(currentID);
 		}
 		private static Runnable task = new Runnable()
 		{
