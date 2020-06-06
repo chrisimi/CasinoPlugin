@@ -263,9 +263,10 @@ public class HologramSystem
 		for(Query query : datas.values())
 		{
 			highestLengthName = (query.player.getName().length() > highestLengthName) ? query.player.getName().length() : highestLengthName;
-			highestLengthValue = (int) (((query.value / 10.0) > highestLengthValue) ? query.value / 10.0 : highestLengthValue);
+			highestLengthValue = (getLength(query.value) > highestLengthValue) ? getLength(query.value) : highestLengthValue;
+			System.out.println(highestLengthValue);
+
 		}
-		highestLengthValue += 1;
 		
 		
 		for(Map.Entry<Integer, Query> entry : datas.entrySet())
@@ -304,9 +305,23 @@ public class HologramSystem
 	private String getLine(Query query, int maxLengthName, int maxLengthValue)
 	{
 		if(query == null || query.player == null ) return "";
-		
+		System.out.println(maxLengthName + " " + maxLengthValue);
 		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f", query.player.getName(), query.value);
 	}
+	
+	private int getLength(double a)
+	{
+		int length = 4;
+		int exp = 10;
+		
+		while(a > exp)
+		{
+			length++;
+			exp *= 10;
+		}
+		return length;
+	}
+	
 	
 	private static class Manager 
 	{
