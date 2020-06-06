@@ -1,6 +1,7 @@
 package hologramsystem;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -41,7 +42,8 @@ public class HologramMenu implements IInventoryAPI
 		LOCATION,
 		POSITION,
 		RANGE,
-		NAME
+		NAME,
+		DESCRIPTION
 	}
 	
 	
@@ -70,6 +72,7 @@ public class HologramMenu implements IInventoryAPI
 	private ItemStack changeServerSign = new ItemStack(Material.GOLD_BLOCK);
 	private ItemStack createHologram = new ItemStack(Material.STONE_BUTTON);
 	private ItemStack switchBetweenCycles = new ItemStack(Material.CLOCK);
+	private ItemStack setDescription = new ItemStack(Material.SIGN);
 	
 	public HologramMenu(Player player)
 	{
@@ -106,22 +109,27 @@ public class HologramMenu implements IInventoryAPI
 		meta = choosePosition.getItemMeta();
 		meta.setDisplayName("§6set showing positions");
 		choosePosition.setItemMeta(meta);
-		bukkitInventory.setItem(5, choosePosition);
+		bukkitInventory.setItem(1, choosePosition);
 		
 		meta = setLocation.getItemMeta();
 		meta.setDisplayName("§6set location (optional) your current position will be used");
 		setLocation.setItemMeta(meta);
-		bukkitInventory.setItem(6, setLocation);
+		bukkitInventory.setItem(2, setLocation);
 		
 		meta = setRange.getItemMeta();
 		meta.setDisplayName("§6set range");
 		setRange.setItemMeta(meta);
-		bukkitInventory.setItem(7, setRange);
+		bukkitInventory.setItem(3, setRange);
 		
 		meta = setHologramName.getItemMeta();
 		meta.setDisplayName("§6set hologram name");
 		setHologramName.setItemMeta(meta);
-		bukkitInventory.setItem(8, setHologramName);
+		bukkitInventory.setItem(4, setHologramName);
+		
+		meta = setDescription.getItemMeta();
+		meta.setDisplayName("§6set description - information, which will be shown on the top of the hologram");
+		setDescription.setItemMeta(meta);
+		bukkitInventory.setItem(5, setDescription);
 		
 		updateInventory();
 		
@@ -131,7 +139,7 @@ public class HologramMenu implements IInventoryAPI
 		ItemMeta meta = switchBetweenModes.getItemMeta();
 		meta.setLore(getLoreForModes());
 		switchBetweenModes.setItemMeta(meta);
-		bukkitInventory.setItem(4, switchBetweenModes);
+		bukkitInventory.setItem(0, switchBetweenModes);
 		
 		editCreateHologramButton();
 		bukkitInventory.setItem(22, createHologram);
@@ -142,10 +150,6 @@ public class HologramMenu implements IInventoryAPI
 	}
 	
 
-
-	
-	
-	
 	
 	@Override
 	public void openInventory()
@@ -173,10 +177,15 @@ public class HologramMenu implements IInventoryAPI
 		else if(event.getClicked().equals(createHologram)) createHologram();
 		else if(event.getClicked().equals(setHologramName)) setHologramName();
 		else if(event.getClicked().equals(changeServerSign)) changeServerSign();
+		else if(event.getClicked().equals(setDescription)) setDescription();
 		
 		updateInventory();
 	}
 	
+	private void setDescription()
+	{
+		//TODO
+	}
 	private void changeServerSign()
 	{
 		isServerSign = !isServerSign;
@@ -262,8 +271,14 @@ public class HologramMenu implements IInventoryAPI
 			openInventory();
 			break;
 		case NAME:
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
-			nameOfHologram = event.getMessage();
+			
+			if(hologramnameExists(event.getMessage()))
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
+			else
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name_exists"));
+				return;
+			}
 			openInventory();
 			break;
 		default:
@@ -273,6 +288,17 @@ public class HologramMenu implements IInventoryAPI
 		waitingForChatInput = (waitingForChatInput != WaitingFor.NONE) ? WaitingFor.NONE : waitingForChatInput; //set waitingforchatinput back to none 
 		updateInventory();
 		
+	}
+	
+	private boolean hologramnameExists(String name)
+	{
+		HologramSystem.getInstance();
+		for(LBHologram holo : HologramSystem.getHolograms())
+		{
+			if(holo.hologramName.equals(name)) return true;
+		}
+		
+		return false;
 	}
 	
 	private boolean choosePosition(String message)
@@ -431,10 +457,10 @@ public class HologramMenu implements IInventoryAPI
 		}
 		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
 		{
-			bukkitInventory.setItem(17, changeServerSign);
+			bukkitInventory.setItem(9, changeServerSign);
 		}
 		else
-			bukkitInventory.setItem(17, null);
+			bukkitInventory.setItem(9, null);
 	}
 	
 	private void editSwitchBetweenCycles()
@@ -460,6 +486,7 @@ public class HologramMenu implements IInventoryAPI
 		ItemMeta meta = switchBetweenCycles.getItemMeta();
 		meta.setLore(lores);
 		switchBetweenCycles.setItemMeta(meta);
+		bukkitInventory.setItem(6, switchBetweenCycles);
 	}
 	
 	private List<String> getLoreForModes()

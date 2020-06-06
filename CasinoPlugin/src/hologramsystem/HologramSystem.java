@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -253,7 +255,7 @@ public class HologramSystem
 		
 		LinkedHashMap<Integer, Query> datas = DataQueryManager.getQuery(lbHologram);
 		
-		System.out.println("found queries: " + datas.size());
+		CasinoManager.Debug(this.getClass(), "found queries: " + datas.size());
 		
 		holo.appendTextLine(lbHologram.description);
 		
@@ -264,7 +266,7 @@ public class HologramSystem
 		{
 			highestLengthName = (query.player.getName().length() > highestLengthName) ? query.player.getName().length() : highestLengthName;
 			highestLengthValue = (getLength(query.value) > highestLengthValue) ? getLength(query.value) : highestLengthValue;
-			System.out.println(highestLengthValue);
+			CasinoManager.Debug(this.getClass(), String.valueOf(highestLengthValue));
 
 		}
 		
@@ -273,7 +275,7 @@ public class HologramSystem
 		{
 			int pos = entry.getKey();
 			
-			System.out.println("pos: " + pos + " " + entry.getValue().toString());
+			CasinoManager.Debug(this.getClass(), "pos: " + pos + " " + entry.getValue().toString());
 			
 			if(pos <= 3 && lbHologram.highlightTop3)
 			{
@@ -299,13 +301,11 @@ public class HologramSystem
 				holo.appendTextLine("§4" + entry.getKey() + " | " + getLine(entry.getValue(), highestLengthName, highestLengthValue));
 			}
 		}
-		System.out.println("holo has lines: " + holo.size());
 		return holo;
 	}
 	private String getLine(Query query, int maxLengthName, int maxLengthValue)
 	{
 		if(query == null || query.player == null ) return "";
-		System.out.println(maxLengthName + " " + maxLengthValue);
 		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f", query.player.getName(), query.value);
 	}
 	
@@ -321,6 +321,8 @@ public class HologramSystem
 		}
 		return length;
 	}
+	
+	
 	
 	
 	private static class Manager 
@@ -344,10 +346,10 @@ public class HologramSystem
 			@Override
 			public void run()
 			{
-				System.out.println("holoram system manager " + datas.size());
+				CasinoManager.Debug(this.getClass(), "holoram system manager " + datas.size());
 				for(Map.Entry<Location, LBHologram> entry : datas.entrySet())
 				{
-					System.out.println("current hologram: " + entry.getKey().toString());
+					CasinoManager.Debug(this.getClass(), "current hologram: " + entry.getKey().toString());
 					//delete old hologram
 					if(holograms.containsKey(entry.getKey()))
 					{
@@ -373,5 +375,9 @@ public class HologramSystem
 		datas.put(hologram.getLocation(), hologram);
 		HologramSystem.getInstance().createHologram(hologram);
 		HologramSystem.getInstance().exportData();
+	}
+	public static Collection<LBHologram> getHolograms()
+	{
+		return datas.values();
 	}
 }
