@@ -36,6 +36,7 @@ public class Main extends JavaPlugin {
 	public static String pluginVersion = "3.6";
 	public static Boolean isPluginUpdated = true;
 	
+	public static boolean development = true;
 	
 	public static File configYml;
 	

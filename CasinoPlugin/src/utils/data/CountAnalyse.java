@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.OfflinePlayer;
 
+import scripts.CasinoManager;
 import serializeableClass.PlayData;
 
 /**
@@ -43,6 +44,11 @@ public class CountAnalyse extends DataAnalyse
 				map.put(data.Player, 1.0);
 			}
 		}
+		
+		CasinoManager.Debug(this.getClass(), "prepareData: ");
+		for(Entry<OfflinePlayer, Double> entry : map.entrySet())
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " " + entry.getValue());
+		
 		return map;
 	}
 

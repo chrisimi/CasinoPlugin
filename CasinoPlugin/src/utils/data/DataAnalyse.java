@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 
 import org.bukkit.OfflinePlayer;
 
-
+import scripts.CasinoManager;
 import serializeableClass.PlayData;
 /**
  * abstract class for analyse data for holograms and leaderboard signs
@@ -54,7 +54,10 @@ public abstract class DataAnalyse
 	 */
 	protected LinkedHashMap<Integer, Query> getData(int from, int to, Comparator<Entry<OfflinePlayer, Double>> comp)
 	{
+		
 		LinkedHashMap<OfflinePlayer, Double> values = analyseData(comp);
+		
+		CasinoManager.Debug(this.getClass(), "getData size " + values.size());
 		
 		LinkedHashMap<Integer, Query> result = new LinkedHashMap<>();
 		
@@ -62,7 +65,8 @@ public abstract class DataAnalyse
 		
 		for(Entry<OfflinePlayer, Double> entry : values.entrySet())
 		{
-			if(place >= from && place >= to)
+			CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " " + entry.getValue());
+			if(place >= from && place <= to)
 			{
 				Query query = new Query();
 				query.player = entry.getKey();
@@ -70,6 +74,7 @@ public abstract class DataAnalyse
 				
 				final int currPos = place;
 				result.put(currPos, query);
+				CasinoManager.Debug(this.getClass(), entry.getKey().getName() + " " + entry.getValue() + " set for place " + currPos);
 			}
 			place++;
 		}

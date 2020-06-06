@@ -80,7 +80,7 @@ public class CasinoManager {
 	
 	public static void LogWithColor(String message) {
 		try {
-			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
+			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('ï¿½', prefix) + message);
 			
 		} catch(Exception e) {
 			if(message == null) return;
@@ -108,6 +108,10 @@ public class CasinoManager {
 			
 		}
 		String message = String.format("[%s] %s: %s" , new Date().toString(), className.toString(), debugMessage);
+		
+		
+		if(Main.development)
+			Main.getInstance().getLogger().info(message);
 		
 		
 		synchronized (debugfile)

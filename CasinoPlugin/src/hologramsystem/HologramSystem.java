@@ -144,8 +144,15 @@ public class HologramSystem
 	
 	private void createFiles()
 	{
-		if(!hologramsjson.exists())
-			hologramsjson.mkdirs();
+		try
+		{
+			if(!hologramsjson.exists())
+				hologramsjson.createNewFile();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
 	}
 	
 	private synchronized void importData()
@@ -171,7 +178,10 @@ public class HologramSystem
 			
 			if(container == null || container.container.size() == 0) throw new Exception("Error while trying to get holograms");
 			
-			
+			for(LBHologram holo : container.container)
+			{
+				datas.put(holo.getLocation(), holo);
+			}
 			
 		} catch (Exception e)
 		{
@@ -243,6 +253,8 @@ public class HologramSystem
 		
 		LinkedHashMap<Integer, Query> datas = DataQueryManager.getQuery(lbHologram);
 		
+		System.out.println("found queries: " + datas.size());
+		
 		holo.appendTextLine(lbHologram.description);
 		
 		//get max length of name
@@ -253,12 +265,14 @@ public class HologramSystem
 			highestLengthName = (query.player.getName().length() > highestLengthName) ? query.player.getName().length() : highestLengthName;
 			highestLengthValue = (int) (((query.value / 10.0) > highestLengthValue) ? query.value / 10.0 : highestLengthValue);
 		}
-		
+		highestLengthValue += 1;
 		
 		
 		for(Map.Entry<Integer, Query> entry : datas.entrySet())
 		{
 			int pos = entry.getKey();
+			
+			System.out.println("pos: " + pos + " " + entry.getValue().toString());
 			
 			if(pos <= 3 && lbHologram.highlightTop3)
 			{
@@ -284,14 +298,14 @@ public class HologramSystem
 				holo.appendTextLine("§4" + entry.getKey() + " | " + getLine(entry.getValue(), highestLengthName, highestLengthValue));
 			}
 		}
-		
+		System.out.println("holo has lines: " + holo.size());
 		return holo;
 	}
 	private String getLine(Query query, int maxLengthName, int maxLengthValue)
 	{
 		if(query == null || query.player == null ) return "";
 		
-		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + "d", query.player.getName(), query.value);
+		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f", query.player.getName(), query.value);
 	}
 	
 	private static class Manager 
@@ -315,12 +329,15 @@ public class HologramSystem
 			@Override
 			public void run()
 			{
+				System.out.println("holoram system manager " + datas.size());
 				for(Map.Entry<Location, LBHologram> entry : datas.entrySet())
 				{
+					System.out.println("current hologram: " + entry.getKey().toString());
 					//delete old hologram
 					if(holograms.containsKey(entry.getKey()))
 					{
-						holograms.remove(entry.getKey());
+						Hologram holo = holograms.remove(entry.getKey());
+						holo.delete();
 					}
 					
 					Hologram holo = HologramSystem.getInstance().createHologram(entry.getValue());

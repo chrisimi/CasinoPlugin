@@ -575,6 +575,7 @@ public class LeaderboardsignsManager implements Listener {
 					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromDate.getTimeInMillis() && a.Timestamp < toDate.getTimeInMillis())
 					.collect(Collectors.toList());
 		}
+		System.out.println("size: " + dataList.size());
 		return dataList;
 	}
 	public static List<PlayData> getPlayData(long fromMilis, long toMilis)

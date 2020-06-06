@@ -53,7 +53,7 @@ public class HologramMenu implements IInventoryAPI
 	private Cycle currentCycle = Cycle.NaN;
 	private int minPosition = 0;
 	private int maxPosition = 0;
-	private String nameOfHologram;
+	private String nameOfHologram = "";
 	private boolean useAllMode = false;
 	private int range = 0;
 	private boolean isServerSign = false;
@@ -82,7 +82,14 @@ public class HologramMenu implements IInventoryAPI
 		openInventory();
 		initialize();
 	}
-	
+	public HologramMenu(Player player, LBHologram hologram)
+	{
+		this(player);
+		/* load data from holorgam to edit it
+		 * 
+		 */
+//		loadFromHologram(); TODO
+	}
 	
 	
 	
@@ -108,7 +115,7 @@ public class HologramMenu implements IInventoryAPI
 		
 		meta = setRange.getItemMeta();
 		meta.setDisplayName("§6set range");
-		setLocation.setItemMeta(meta);
+		setRange.setItemMeta(meta);
 		bukkitInventory.setItem(7, setRange);
 		
 		meta = setHologramName.getItemMeta();
@@ -144,12 +151,14 @@ public class HologramMenu implements IInventoryAPI
 	public void openInventory()
 	{
 		inventory.openInventory();
+		player.openInventory(bukkitInventory);
 	}
 
 	@Override
 	public void closeInventory()
 	{
 		inventory.closeInventory();
+		player.closeInventory();
 	}
 	
 	
@@ -164,6 +173,7 @@ public class HologramMenu implements IInventoryAPI
 		else if(event.getClicked().equals(createHologram)) createHologram();
 		else if(event.getClicked().equals(setHologramName)) setHologramName();
 		else if(event.getClicked().equals(changeServerSign)) changeServerSign();
+		
 		updateInventory();
 	}
 	
@@ -249,17 +259,19 @@ public class HologramMenu implements IInventoryAPI
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-invalid_format_range"));
 			else
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-range_successful"));
+			openInventory();
 			break;
 		case NAME:
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
 			nameOfHologram = event.getMessage();
+			openInventory();
 			break;
 		default:
 			break;
 		}
 		
 		waitingForChatInput = (waitingForChatInput != WaitingFor.NONE) ? WaitingFor.NONE : waitingForChatInput; //set waitingforchatinput back to none 
-		
+		updateInventory();
 		
 	}
 	
@@ -389,12 +401,14 @@ public class HologramMenu implements IInventoryAPI
 		{
 			ItemMeta meta = createHologram.getItemMeta();
 			meta.setDisplayName("§6Create hologram");
+			meta.setLore(lore);
 			createHologram.setItemMeta(meta);
 		}
 		else
 		{
 			ItemMeta meta = createHologram.getItemMeta();
 			meta.setDisplayName("§4You can't create a hologram!");
+			meta.setLore(lore);
 			createHologram.setItemMeta(meta);
 		}
 		validValues = allCorrect;

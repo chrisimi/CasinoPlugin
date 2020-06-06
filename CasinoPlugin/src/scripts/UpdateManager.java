@@ -248,7 +248,7 @@ public class UpdateManager {
 	public static Object getValue(String path, Object obj) {
 		Object o = configValues.get(path);
 		if(o == null) {
-			Main.getInstance().getLogger().info(ChatColor.RED + path + " is not valid using default value! Try to update the config!");
+			CasinoManager.LogWithColor(ChatColor.RED + path + " is not valid using default value! Try to update the config!");
 			return obj;
 		} else
 			return o;

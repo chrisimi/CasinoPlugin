@@ -1,3 +1,4 @@
+
 package scripts;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import utils.data.CountAnalyse;
 import utils.data.DataAnalyse;
 import utils.data.Query;
 import utils.data.QueryPost;
+import utils.data.SumamountAnalyse;
 import serializeableClass.PlayData;
 
 public class DataQueryManager
@@ -34,7 +36,6 @@ public class DataQueryManager
 		List<PlayData> data = getData(new QueryPost(hologram));
 		
 		DataAnalyse analyse = getAnalyse(hologram.mode, data);
-		
 		return analyse.getData(hologram.minPosition, hologram.maxPosition);
 	}
 	
@@ -44,6 +45,8 @@ public class DataQueryManager
 		{
 		case COUNT:
 			return new CountAnalyse(data);
+		case SUMAMOUNT:
+			return new SumamountAnalyse(data);
 		default:
 			return null;
 		}
@@ -82,6 +85,7 @@ public class DataQueryManager
 			if(post.isServerSign)
 			{
 				currentData = LeaderboardsignsManager.getPlayData(post.startDate, post.endDate);
+				System.out.println(post.startDate.getTimeInMillis() + " " + post.endDate.getTimeInMillis());
 			}
 			else
 			{

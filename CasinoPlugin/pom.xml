@@ -5,6 +5,7 @@
   <version>2.7.1</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
+    
     <resources>
     	<resource>
     		<directory>${project.basedir}</directory>
@@ -38,15 +39,22 @@
       				<include>com.chrisimi:InventoryAPI</include>
       			</includes>
       		</artifactSet>
+      		
       	</configuration>
       	<executions>
       		<execution>
       			<phase>package</phase>
       			<goals>
       				<goal>shade</goal>
+      				
       			</goals>
+      			<configuration>
+      				<outputFile>D:/MinecraftServers/minecraft 1.14.4 version Spigot/plugins/CasinoPlugin-${project.version}.jar</outputFile>
+      			</configuration>
       		</execution>
+      		
       	</executions>
+      	
       	
       </plugin>
       

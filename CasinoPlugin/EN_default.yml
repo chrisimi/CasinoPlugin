@@ -187,7 +187,7 @@ messages:
    offlineearnmanager-join-minus: "So you have made &4a loss of %loss%"
    offlineearnmanager-join-equal: "So you have made no win or loss"
    
-   hologrammenu-chooseposition: "&6Type in the position from and to for the leaderboard sign. For example &el1-10 means &6from first place to tenth place."
+   hologrammenu-chooseposition: "&6Type in the position from and to for the leaderboard sign. For example &e1-10 means &6from first place to tenth place."
    hologrammenu-invalid_format_position: "&4Invalid format. Try &efrom&6-&eto&6. Example: 1-10 means from first place to tenth place."
    hologrammenu-position_successful: "&6You successfully set the positions for the leaderboard sign."
    hologrammenu-location: "&6Go to the target location and write something in the chat."

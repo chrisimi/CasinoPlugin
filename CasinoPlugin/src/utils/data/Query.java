@@ -6,4 +6,10 @@ public class Query
 {
 	public double value;
 	public OfflinePlayer player;
+	
+	@Override
+	public String toString()
+	{
+		return player.getName() + " " + value;
+	}
 }
