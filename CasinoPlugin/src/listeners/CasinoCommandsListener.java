@@ -23,6 +23,8 @@ import com.chrisimi.casino.main.MessageManager;
 
 import animations.BlackjackAnimation;
 import hologramsystem.HologramMenu;
+import hologramsystem.HologramSystem;
+import hologramsystem.LBHologram;
 import scripts.CasinoGUI;
 import scripts.CasinoManager;
 import scripts.LeaderboardsignsManager;
@@ -138,6 +140,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("setdate"))
 			{
 				setdate((Player) player, args[1]);
+			} else if(args[0].equalsIgnoreCase("edithologram"))
+			{
+				editHologram((Player) player, args[1]);
 			}
 		} else if(args.length == 3) {
 			if(args[0].equalsIgnoreCase("roll")) {
@@ -172,6 +177,18 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 
 
+
+	private void editHologram(Player player, String string)
+	{
+		//TODO permission
+		LBHologram holo = HologramSystem.getHologramByName(string);
+		if(holo == null)
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-invalid_hologramname"));
+			return;
+		}
+		new HologramMenu(player, holo);
+	}
 
 	private void createHologram(Player player)
 	{

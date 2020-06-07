@@ -34,6 +34,8 @@ import scripts.CasinoManager;
 import scripts.DataQueryManager;
 import scripts.PlayerSignsManager;
 import scripts.UpdateManager;
+import serializeableClass.Leaderboardsign.Cycle;
+import utils.CycleHelper;
 import utils.data.Query;
 
 /**
@@ -257,7 +259,20 @@ public class HologramSystem
 		
 		CasinoManager.Debug(this.getClass(), "found queries: " + datas.size());
 		
-		holo.appendTextLine(lbHologram.description);
+		String[] lines = lbHologram.description.replaceAll("&", "§").split("\n");
+		for(int i = 0; i < lines.length; i++)
+			holo.appendTextLine(lines[i]);
+		
+		if(lbHologram.cycleMode != Cycle.NaN)
+		{
+			holo.appendTextLine("§6" + CycleHelper.getDateStringFromCycle(lbHologram.cycleMode, CycleHelper.getStartDateOfSign(lbHologram.cycleMode)) 
+								+ " §e- §6" 
+								+ CycleHelper.getDateStringFromCycle(lbHologram.cycleMode, CycleHelper.getEndDateOfSign(lbHologram.cycleMode)));
+		}
+		
+		holo.appendTextLine("");
+		
+		
 		
 		//get max length of name
 		int highestLengthName = 0;
@@ -298,7 +313,7 @@ public class HologramSystem
 			}
 			if(!lbHologram.highlightTop3)
 			{
-				holo.appendTextLine("§4" + entry.getKey() + " | " + getLine(entry.getValue(), highestLengthName, highestLengthValue));
+				holo.appendTextLine("§3" + entry.getKey() + " | " + getLine(entry.getValue(), highestLengthName, highestLengthValue));
 			}
 		}
 		return holo;
@@ -379,5 +394,29 @@ public class HologramSystem
 	public static Collection<LBHologram> getHolograms()
 	{
 		return datas.values();
+	}
+
+	public static void updateHologram(LBHologram hologram, Location oldLocation)
+	{
+		//remove old entry
+		datas.remove(oldLocation);
+		Hologram holo = holograms.remove(oldLocation);
+		if(holo != null)
+			holo.delete();
+		
+		datas.put(hologram.getLocation(), hologram);
+		
+		HologramSystem.getInstance().createHologram(hologram);
+		HologramSystem.getInstance().exportData();
+		
+	}
+	public static LBHologram getHologramByName(String name)
+	{
+		for(LBHologram holo : datas.values())
+		{
+			if(holo.hologramName.equals(name))
+				return holo;
+		}
+		return null;
 	}
 }

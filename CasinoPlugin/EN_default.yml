@@ -119,6 +119,7 @@ messages:
    commands-leaderboard_delete_successful: "You successfully deleted the manual reset"
    commands-setdate_invalid_format: "&4Invalid date format. Try it with only numbers and one of the following formats:\nday-month-year hour:minute\nmonth-day-year hour:minute pm/am"
    commands-setdate_successful: "You successfully set the expiry date for the sign"
+   commands-invalid_hologramname: "&4There is no hologram with that name. Try another one."
    
    casinogui-player_not_enough_money: "&4You don't have enough money!"
    casinogui-player_bet_message: "You are rolling with %amount%"
@@ -199,8 +200,9 @@ messages:
    hologrammneu-name_successful: "&6You successfully set the name of the hologram."
    hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\n' &6 to move to the next line or use color codes with &e'&'"
    hologrammenu-description_successful: "&6You successfully set the description of the hologram."
-   hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
    
+   hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
+   hologrammenu-update: "You successfully updated the hologram."
    
    
    

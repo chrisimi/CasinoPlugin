@@ -77,10 +77,9 @@ public class CycleHelper
 		case YEAR:
 		case MONTH:
 		case WEEK:
-		case DAY:
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
 			return "§c" + df.format(date.getTime());
-			
+		case DAY:	
 		case HOUR:
 			DateFormat dfa = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 			return "§c" + dfa.format(date.getTime());
