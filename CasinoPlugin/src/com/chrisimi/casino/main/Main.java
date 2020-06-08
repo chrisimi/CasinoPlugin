@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.chrisimi.inventoryapi.InventoryAPI;
+
 import hologramsystem.HologramSystem;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -96,6 +98,8 @@ public class Main extends JavaPlugin {
 		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
 		HologramSystem.getInstance().startSystem(this); //start hologram system
+		
+		InventoryAPI.initiate(this);
 	}
 	
 	@Override

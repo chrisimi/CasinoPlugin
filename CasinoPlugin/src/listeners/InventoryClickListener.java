@@ -38,7 +38,6 @@ public class InventoryClickListener implements Listener{
 	
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
-		InventoryAPI.InventoryAPIInventoryClickEvent(event);
 		
 		if(event.getCurrentItem() == null) return;
 		Player player = (Player)event.getWhoClicked();
@@ -103,7 +102,6 @@ public class InventoryClickListener implements Listener{
 	}
 	@EventHandler
 	public void onInventoryLeave(InventoryCloseEvent event) {
-		InventoryAPI.InventoryCloseEvent(event);
 		
 		if(event.getInventory().equals(CasinoGUI.getInv())) {
 			CasinoGUI.removeInventory((Player) event.getPlayer()); 

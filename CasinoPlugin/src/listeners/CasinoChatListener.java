@@ -22,7 +22,6 @@ public class CasinoChatListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
-		InventoryAPI.InventoryAPIPlayerChatEvent(event, main);
 		
 		Player player = event.getPlayer();
 		if(BlackjackAnimation.IsBlackJackAnimationWaitingForUserInput(player)) {
