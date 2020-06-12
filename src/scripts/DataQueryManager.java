@@ -18,9 +18,12 @@ import serializeableClass.Leaderboardsign.Mode;
 import utils.CycleHelper;
 import utils.data.CountAnalyse;
 import utils.data.DataAnalyse;
+import utils.data.HighestamountAnalyse;
+import utils.data.HighestlossAnalyse;
 import utils.data.Query;
 import utils.data.QueryPost;
 import utils.data.SumamountAnalyse;
+import utils.data.SumlossAnalyse;
 import serializeableClass.PlayData;
 
 public class DataQueryManager
@@ -47,6 +50,12 @@ public class DataQueryManager
 			return new CountAnalyse(data);
 		case SUMAMOUNT:
 			return new SumamountAnalyse(data);
+		case HIGHESTAMOUNT:
+			return new HighestamountAnalyse(data);
+		case SUMLOSS:
+			return new SumlossAnalyse(data);
+		case HIGHESTLOSS:
+			return new HighestlossAnalyse(data);
 		default:
 			return null;
 		}

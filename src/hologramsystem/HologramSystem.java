@@ -281,7 +281,7 @@ public class HologramSystem
 		{
 			highestLengthName = (query.player.getName().length() > highestLengthName) ? query.player.getName().length() : highestLengthName;
 			highestLengthValue = (getLength(query.value) > highestLengthValue) ? getLength(query.value) : highestLengthValue;
-			CasinoManager.Debug(this.getClass(), String.valueOf(highestLengthValue));
+			CasinoManager.Debug(this.getClass(), String.valueOf(highestLengthValue) + " " + String.valueOf(highestLengthName));
 
 		}
 		
@@ -321,6 +321,10 @@ public class HologramSystem
 	private String getLine(Query query, int maxLengthName, int maxLengthValue)
 	{
 		if(query == null || query.player == null ) return "";
+		maxLengthName += 1;
+		
+		CasinoManager.Debug(this.getClass(), "%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f");
+		CasinoManager.Debug(this.getClass(), String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f", query.player.getName(), query.value));
 		return String.format("%-" + maxLengthName + "s | %" +  maxLengthValue + ".2f", query.player.getName(), query.value);
 	}
 	

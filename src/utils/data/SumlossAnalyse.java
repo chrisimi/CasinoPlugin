@@ -34,7 +34,7 @@ public class SumlossAnalyse extends DataAnalyse
 			
 			if(resultHashMap.containsKey(data.Player))
 			{
-				if(resultHashMap.get(data.Player) < data.PlayAmount) resultHashMap.put(data.Player, data.PlayAmount);
+				resultHashMap.compute(data.Player, (a, b) -> b + data.PlayAmount);
 			}
 			else
 			{
