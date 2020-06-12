@@ -94,3 +94,11 @@ commands:
     description: set a date for a leaderboardsign
     usage: /casino setdate
     permission: [casino.admin, casino.leaderboard.create, casino.serversigns]
+  casino edithologram:
+    description: edit a created hologram
+    usage: /casino edithologram <name>
+    permission: [casino.admin, casino.hologram.create, casino.hologram.server]
+  casino createhologram:
+    description: create a hologram
+    usage: /casino createhologram
+    permission: [casino.admin, casino.hologram.create, casino.hologram.server]

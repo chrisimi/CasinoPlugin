@@ -538,9 +538,11 @@ public class HologramMenu implements IInventoryAPI
 			meta.setDisplayName("§6Change it to a serversign!");
 			changeServerSign.setItemMeta(meta);
 		}
-		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
+		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server"))
 		{
-			bukkitInventory.setItem(9, changeServerSign);
+			//check when the hologram is getting edited if the player is admin because a player shouldn't be able to make a server sign back to a player sign
+			if(loadedHologram != null && Main.perm.has(player, "casino.admin"))
+				bukkitInventory.setItem(9, changeServerSign);
 		}
 		else
 			bukkitInventory.setItem(9, null);

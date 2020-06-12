@@ -94,7 +94,6 @@ public class DataQueryManager
 			if(post.isServerSign)
 			{
 				currentData = LeaderboardsignsManager.getPlayData(post.startDate, post.endDate);
-				System.out.println(post.startDate.getTimeInMillis() + " " + post.endDate.getTimeInMillis());
 			}
 			else
 			{

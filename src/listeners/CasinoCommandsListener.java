@@ -39,6 +39,12 @@ import slotChests.SlotChestsManager;
 
 public class CasinoCommandsListener implements Listener, CommandExecutor {
 
+	/* casino.hologram.create - to create a hologram (normal)
+	 * casino.hologram.server - create and manage server holograms
+	 * 
+	 */
+	
+	
 	private Main main;
 	
 	public CasinoCommandsListener(Main main) {
@@ -180,18 +186,42 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 	private void editHologram(Player player, String string)
 	{
-		//TODO permission
+		if(!(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server") || Main.perm.has(player,  "casino.hologram.create")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
+		
 		LBHologram holo = HologramSystem.getHologramByName(string);
 		if(holo == null)
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-invalid_hologramname"));
 			return;
 		}
+		
+		if(holo.isServerHologram() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
+		if(!holo.isServerHologram() && !(holo.getOwner().getUniqueId().equals(player.getUniqueId())) && !(Main.perm.has(player, "casino.admin")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+		
 		new HologramMenu(player, holo);
 	}
 
 	private void createHologram(Player player)
 	{
+		if(!(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server") || Main.perm.has(player,  "casino.hologram.create")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
 		new HologramMenu(player);
 	}
 
