@@ -1,0 +1,46 @@
+package com.chrisimi.casinoplugin.listeners;
+
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+
+import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.main.VersionManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
+import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
+
+public class PlayerJoinListener implements Listener {
+
+	private Main main;
+	public PlayerJoinListener(Main main) {
+		this.main = main;
+		Bukkit.getPluginManager().registerEvents(this, main);
+	}
+	
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		if(event.getPlayer().isOp() && Main.isConfigUpdated == false) {
+		
+			event.getPlayer().sendMessage(
+					String.format("%s§4there is a new version for the config.yml of this plugin... please backup your config.yml and use §6/casino updateconfig", CasinoManager.getPrefix()));
+			
+		} if(event.getPlayer().isOp() && Main.isPluginUpdated == false) {
+			event.getPlayer().sendMessage(String.format("%s" + 
+					"Version %s is out! (you are running now version %s) Update now on: https://www.spigotmc.org/resources/casino-plugin.71898/ \n\n", CasinoManager.getPrefix(), VersionManager.newestVersion, Main.pluginVersion));
+			
+		}
+		
+		
+		if(PlayerSignsManager.playerWonWhileOffline.containsKey(event.getPlayer())) {
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("player-join-message").replace("%amount%", Main.econ.format(PlayerSignsManager.playerWonWhileOffline.get(event.getPlayer()))));
+			PlayerSignsManager.playerWonWhileOffline.remove(event.getPlayer());
+		}
+		
+		
+		OfflineEarnManager.getInstance().showPlayerStats(event.getPlayer());
+	}
+}
