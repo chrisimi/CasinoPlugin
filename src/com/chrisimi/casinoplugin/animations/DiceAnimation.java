@@ -13,6 +13,7 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
 import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
 import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
+import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 public class DiceAnimation implements Runnable {
@@ -24,6 +25,8 @@ public class DiceAnimation implements Runnable {
 	private Sign sign;
 	private PlayerSignsManager signsManager;
 	
+	private static int updateCycle = 8;
+	
 	private int tasknumber;
 	public DiceAnimation(Main main, PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager) {
 		this.main = main;
@@ -32,6 +35,20 @@ public class DiceAnimation implements Runnable {
 		this.owner = thisSign.getOwner();
 		this.sign =  thisSign.getSign();
 		this.signsManager = manager;
+		
+		getConfigValues();
+	}
+	
+	private void getConfigValues()
+	{
+		try
+		{
+			updateCycle = Integer.valueOf(UpdateManager.getValue("dice-animation-speed", 8).toString());
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get Dice animation speed: invalid number! Set to default value: 8 Ticks");
+			updateCycle = 8;
+		}
 	}
 	
 	@Override
@@ -61,7 +78,7 @@ public class DiceAnimation implements Runnable {
 		
 						animationCount++;
 					}
-				}, 5, 8);
+				}, 5, updateCycle);
 			} catch(Exception e) {
 				e.printStackTrace();
 				CasinoManager.LogWithColor(ChatColor.RED + "An error occured, try to restart the server! If the problems stays, contact the owner of the plugin!");

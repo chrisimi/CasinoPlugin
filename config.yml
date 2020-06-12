@@ -133,6 +133,14 @@ sign-max-bet: 1000.0
 # ------------------------------
 # configurations for PlayerSigns
 # ------------------------------
+
+# the update cycle for player signs in Ticks
+playersigns-update-cycle: 120
+
+# distance between sign and player to get loaded 
+# -1 to disable that
+playersigns-distance: 16
+
 # ------------------------------
 # dice configurations
 # ------------------------------
@@ -141,6 +149,9 @@ dice-max-bet: 250.0
 
 # set limit for maximum dice signs per player (-1 = infinite)
 dice-max-signs: -1
+
+# amount of ticks between a roll animation 
+dice-animation-speed: 8
 
 # ------------------------
 # blackjack configurations

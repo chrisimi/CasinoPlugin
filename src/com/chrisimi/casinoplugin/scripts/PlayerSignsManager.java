@@ -75,6 +75,9 @@ public class PlayerSignsManager implements Listener {
 	private int maxSignsBlackjack = -1;
 	private int maxSignsSlots = -1;
 	
+	private int managerUpdateCycle = 120;
+	private int managerDistance = 16;
+	
 	private int updateTask = 0;
 	public PlayerSignsManager(Main main) {
 		this.main = main;
@@ -87,7 +90,7 @@ public class PlayerSignsManager implements Listener {
 		importSigns();
 		updateSignsJson();
 		
-		Manager.start();
+		Manager.start(this);
 	}
 	private void updateSignsJson() {
 		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
@@ -169,6 +172,24 @@ public class PlayerSignsManager implements Listener {
 		{
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max signs: slots max signs is not a valid number! Set to default value infinite!");
 			maxSignsSlots = -1;
+		}
+		
+		try
+		{
+			managerUpdateCycle = Integer.valueOf(UpdateManager.getValue("playersigns-update-cycle", 120).toString());
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns update cycle: is not a valid number! Set to default value: 6 seconds!");
+			managerUpdateCycle = 120;
+		}
+		
+		try
+		{
+			managerDistance = Integer.valueOf(UpdateManager.getValue("playersigns-distance", 16).toString());
+		} catch (Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns distance: is not a valid number! Set to default value: 16 blocks");
+			managerDistance = 16;
 		}
 	}
 	
@@ -949,9 +970,9 @@ public class PlayerSignsManager implements Listener {
 		/**
 		 * start the Manager
 		 */
-		public static void start()
+		public static void start(PlayerSignsManager manager)
 		{
-			currentID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), task, 0, 120);
+			currentID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), task, 0, manager.managerUpdateCycle);
 		}
 		/**
 		 * stop the Manager
@@ -1007,13 +1028,15 @@ public class PlayerSignsManager implements Listener {
 		 */
 		private static boolean isPlayerInRange(Location lrc)
 		{
+			if(CasinoManager.playerSignsManager.managerDistance == -1) return true;
+			
 			@SuppressWarnings("unchecked")
 			ArrayList<Player> players = (ArrayList<Player>) Bukkit.getOnlinePlayers().stream()
 					.filter(a -> a.getWorld().equals(lrc.getWorld()))
 					.collect(Collectors.toList());
 			for(Player player : players)
 			{
-				if(player.getLocation().distance(lrc) < 16.0)
+				if(player.getLocation().distance(lrc) < CasinoManager.playerSignsManager.managerDistance)
 				{
 					CasinoManager.Debug(PlayerSignsConfiguration.class, "player is in range! " + player.getName() + " - " + player.getLocation().distance(lrc));
 					return true;

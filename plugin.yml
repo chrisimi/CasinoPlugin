@@ -1,6 +1,6 @@
 name: CasinoPlugin
 author: chrisimi
-main: com.chrisimi.casino.main.Main
+main: com.chrisimi.casinoplugin.main.Main
 version: 3.7
 api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
