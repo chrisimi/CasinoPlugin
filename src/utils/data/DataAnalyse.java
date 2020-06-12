@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.OfflinePlayer;
@@ -19,6 +20,17 @@ import serializeableClass.PlayData;
  */
 public abstract class DataAnalyse
 { 
+	
+	public Comparator<Entry<OfflinePlayer, Double>> comparator = new Comparator<Map.Entry<OfflinePlayer,Double>>()
+	{
+
+		@Override
+		public int compare(Entry<OfflinePlayer, Double> o1, Entry<OfflinePlayer, Double> o2)
+		{
+			return o2.getValue().compareTo(o1.getValue());
+		}
+	};
+	
 	/**
 	 * list of data which the analyse should have
 	 */

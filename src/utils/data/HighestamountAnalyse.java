@@ -5,47 +5,41 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.OfflinePlayer;
 
 import serializeableClass.PlayData;
 
-/**
- * class for analysing data 
- * current mode: Sumamount
- * {@link Mode}
- * 
- * @author chris
- *
- */
-public class SumamountAnalyse extends DataAnalyse
+public class HighestamountAnalyse extends DataAnalyse
 {
 	
-	
-	public SumamountAnalyse(List<PlayData> data)
+
+	public HighestamountAnalyse(List<PlayData> data)
 	{
 		super(data);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	protected HashMap<OfflinePlayer, Double> prepareData()
 	{
-		HashMap<OfflinePlayer, Double> resultHashMap = new HashMap<OfflinePlayer, Double>();
+		HashMap<OfflinePlayer, Double> resultHashMap = new HashMap<>();
 		
 		Iterator<PlayData> iterator = data.iterator();
 		
 		while(iterator.hasNext())
 		{
-			PlayData data = iterator.next();
-			if(resultHashMap.containsKey(data.Player))
+			PlayData playData = iterator.next();
+			
+			if(resultHashMap.containsKey(playData.Player))
 			{
-				resultHashMap.compute(data.Player, (a, b) -> b + data.PlayAmount);
+				if(resultHashMap.get(playData.Player) < playData.WonAmount)
+					resultHashMap.put(playData.Player, playData.WonAmount);
 			}
 			else
 			{
-				resultHashMap.put(data.Player, data.PlayAmount);
+				resultHashMap.put(playData.Player, playData.WonAmount);
 			}
 		}
 		return resultHashMap;

@@ -12,19 +12,9 @@ import org.bukkit.OfflinePlayer;
 
 import serializeableClass.PlayData;
 
-/**
- * class for analysing data 
- * current mode: Sumamount
- * {@link Mode}
- * 
- * @author chris
- *
- */
-public class SumamountAnalyse extends DataAnalyse
+public class SumlossAnalyse extends DataAnalyse
 {
-	
-	
-	public SumamountAnalyse(List<PlayData> data)
+	public SumlossAnalyse(List<PlayData> data)
 	{
 		super(data);
 	}
@@ -32,21 +22,25 @@ public class SumamountAnalyse extends DataAnalyse
 	@Override
 	protected HashMap<OfflinePlayer, Double> prepareData()
 	{
-		HashMap<OfflinePlayer, Double> resultHashMap = new HashMap<OfflinePlayer, Double>();
+		HashMap<OfflinePlayer, Double> resultHashMap = new HashMap<>();
 		
 		Iterator<PlayData> iterator = data.iterator();
 		
 		while(iterator.hasNext())
 		{
 			PlayData data = iterator.next();
+			
+			if(data.WonAmount != 0.0) continue;
+			
 			if(resultHashMap.containsKey(data.Player))
 			{
-				resultHashMap.compute(data.Player, (a, b) -> b + data.PlayAmount);
+				if(resultHashMap.get(data.Player) < data.PlayAmount) resultHashMap.put(data.Player, data.PlayAmount);
 			}
 			else
 			{
 				resultHashMap.put(data.Player, data.PlayAmount);
 			}
+			
 		}
 		return resultHashMap;
 	}
