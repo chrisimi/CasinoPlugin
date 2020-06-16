@@ -149,7 +149,7 @@ public class SlotsAnimation implements Runnable
 		String newCharacter = "";
 		for(int i = 0; i < 3; i++)
 		{
-			int randomNumber = random.nextInt(100) + 1;
+			int randomNumber = random.nextInt((int) (weights[0] + weights[1] + weights[2])) + 1;
 			
 			if(randomNumber < weights[0])
 			{

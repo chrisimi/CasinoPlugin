@@ -3,6 +3,7 @@ package com.chrisimi.casinoplugin.serializables;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
@@ -148,7 +149,15 @@ public class PlayerSignsConfiguration {
 		return Main.econ.has(getOwner(), amount);
 	}
 	public Sign getSign() {
-		return (Sign) Bukkit.getWorld(worldname).getBlockAt(this.getLocation()).getState();
+		try 
+		{
+			Sign sign =  (Sign) Bukkit.getWorld(worldname).getBlockAt(this.getLocation()).getState();
+			return sign;
+		} catch(ClassCastException e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "There is not a sign for a CasinoSign at: " + this.getLocation().toString());
+		}
+		return null;
 	}
 	
 	public Boolean isSignDisabled() {
