@@ -119,6 +119,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			} else if(args[0].equalsIgnoreCase("createhologram"))
 			{
 				createHologram((Player)player);
+			} else if(args[0].equalsIgnoreCase("holograms"))
+			{
+				showHolograms((Player)player);
 			}
 		} else if(args.length == 2) {
 			if(args[0].equalsIgnoreCase("help") && args[1].equalsIgnoreCase("dice")) {
@@ -182,6 +185,16 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 
 
+
+	private void showHolograms(Player player)
+	{
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-holograms-overview"));
+		ArrayList<LBHologram> holograms = HologramSystem.getHologramsFromPlayer(player);
+		for(LBHologram holo : holograms)
+		{
+			player.sendMessage("§a " + holo.hologramName + " | " + holo.getLocation().getWorld().getName() + " | " + holo.getLocation().getBlockX() + " | " + holo.getLocation().getBlockY() + " | " + holo.getLocation().getBlockZ());
+		}
+	}
 
 	private void editHologram(Player player, String string)
 	{
@@ -501,9 +514,13 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("§6/casino sign disable §8- disable your own player sign while looking onto it!");
 		player.sendMessage("§6/casino sign enable §8- enable your own player sign while looking onto it!");
 		player.sendMessage("");
-		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8 - roll a random number which will be sent to nearby players or mentioned player!");
-		player.sendMessage("§6/casino createchest §8 - create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
-		player.sendMessage("§6/casino chestlocations §8 - get the locations from your SlotChests!");
+		player.sendMessage("§6/casino roll [minimum] [maximum] [player (not needed)] §8- roll a random number which will be sent to nearby players or mentioned player!");
+		player.sendMessage("§6/casino createchest §8- create your own slotchest while looking on a normal chest!!! clear it's inventory before!");
+		player.sendMessage("§6/casino chestlocations §8- get the locations from your SlotChests!");
+		player.sendMessage("");
+		player.sendMessage("§6/casino createhologram §8- open the GUI to create a hologram");
+		player.sendMessage("§6/casino edithologram [name] §8- edit hologram [name]");
+		player.sendMessage("§6/casino holograms §8- get the name of all your holograms and their position");
 		player.sendMessage("");
 		player.sendMessage("§6/casino resetleaderboard [range/all] [mode (optional)] §6- reset the leaderboard in range (blocks). (mode: sumamount, count, highestamount)");
 		player.sendMessage("§6/casino resetserverleaderboard [range/all] [mode (optional)] §6- same as resetleaderboard but for serversigns!");

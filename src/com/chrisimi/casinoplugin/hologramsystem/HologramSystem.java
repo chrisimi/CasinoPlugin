@@ -8,17 +8,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -398,7 +401,12 @@ public class HologramSystem
 	{
 		return datas.values();
 	}
-
+	public static ArrayList<LBHologram> getHologramsFromPlayer(Player player)
+	{
+		return (ArrayList<LBHologram>) datas.values().stream()
+				.filter(a -> !a.isServerHologram() && a.getOwner().getUniqueId().equals(player.getUniqueId()))
+				.collect(Collectors.toList());
+	}
 	public static void updateHologram(LBHologram hologram, Location oldLocation)
 	{
 		//remove old entry

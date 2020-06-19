@@ -6,7 +6,6 @@ api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
 depend: [Vault]
 
-
 commands:
   casino:
     description: shows the plugin info
@@ -102,3 +101,6 @@ commands:
     description: create a hologram
     usage: /casino createhologram
     permission: [casino.admin, casino.hologram.create, casino.hologram.server]
+  casino holograms:
+    description: show all holograms from the user
+    usage: /casino holograms

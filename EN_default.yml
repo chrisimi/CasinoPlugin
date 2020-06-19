@@ -120,6 +120,7 @@ messages:
    commands-setdate_invalid_format: "&4Invalid date format. Try it with only numbers and one of the following formats:\nday-month-year hour:minute\nmonth-day-year hour:minute pm/am"
    commands-setdate_successful: "You successfully set the expiry date for the sign"
    commands-invalid_hologramname: "&4There is no hologram with that name."
+   commands-holograms-overview: "Your holograms:"
    
    casinogui-player_not_enough_money: "&4You don't have enough money!"
    casinogui-player_bet_message: "You are rolling with %amount%"
