@@ -239,7 +239,6 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 	private void setdate(Player player, String string)
 	{
-		System.out.println("a22");
 		DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm");
 		DateFormat adf = new SimpleDateFormat("MM-dd-yyyy h:mm a");
 		Date date = null;
