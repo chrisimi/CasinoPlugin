@@ -107,7 +107,6 @@ public class HologramSystem
 	
 	public void startSystem(Plugin plugin)
 	{
-		if(!(checkCompatibility(plugin))) return; //if there is an error with HolographicDisplays or the user disabled the holograms
 		
 		
 		hologramsjson = new File(plugin.getDataFolder(), "holograms.json");
@@ -126,27 +125,7 @@ public class HologramSystem
 	{
 		Manager.stop();
 	}
-	private boolean checkCompatibility(Plugin plugin)
-	{
-		holographicsEnabled = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
-		
-		if(!configValueEnabled)
-		{
-			CasinoManager.LogWithColor(ChatColor.YELLOW + "You've disabled holograms! No holograms will be loaded.");
-			return false;
-		}
-		else if(!holographicsEnabled)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Can't find HolographicDisplays! Make sure that you are using the newest version and it's working! https://dev.bukkit.org/projects/holographic-displays");
-			return false;
-		}
-		else
-		{
-			CasinoManager.LogWithColor(ChatColor.GREEN + "Holograms are enabled on the server.");
-			return true;
-		}
-		
-	}
+
 	
 	private void createFiles()
 	{

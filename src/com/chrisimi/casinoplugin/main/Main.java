@@ -7,6 +7,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -97,7 +98,8 @@ public class Main extends JavaPlugin {
 		
 		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
-		HologramSystem.getInstance().startSystem(this); //start hologram system
+		if(checkCompatibility())
+			HologramSystem.getInstance().startSystem(this); //start hologram system
 		
 		InventoryAPI.initiate(this);
 	}
@@ -336,6 +338,34 @@ public class Main extends JavaPlugin {
 		}
 	}
 
+	/**
+	 * get the compatibility
+	 * @param plugin Instance of the plugin
+	 * @return false if HolographicDisplays is not available or invalid
+	 */
+	private boolean checkCompatibility()
+	{
+		boolean holographicsEnabled = Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays");
+		boolean configValueEnabled = Boolean.parseBoolean(UpdateManager.getValue("holograms-enabled", true).toString());
+		
+		if(!configValueEnabled)
+		{
+			CasinoManager.LogWithColor(ChatColor.YELLOW + "You've disabled holograms! No holograms will be loaded.");
+			return false;
+		}
+		else if(!holographicsEnabled)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Can't find HolographicDisplays! Make sure that you are using the newest version and it's working! https://dev.bukkit.org/projects/holographic-displays");
+			return false;
+		}
+		else
+		{
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Holograms are enabled on the server.");
+			return true;
+		}
+		
+	}
+	
 	public static Main getInstance()
 	{
 		return instance;
