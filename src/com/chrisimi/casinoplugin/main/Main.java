@@ -33,10 +33,10 @@ public class Main extends JavaPlugin {
 	/**
 	 * config version in jar
 	 */
-	public static String configVersion = "3.7"; //version in jar
+	public static String configVersion = "3.7.1"; //version in jar
 	public static Boolean isConfigUpdated = true;
 	
-	public static String pluginVersion = "3.7";
+	public static String pluginVersion = "3.7.1";
 	public static Boolean isPluginUpdated = true;
 	
 	public static boolean development = false;
