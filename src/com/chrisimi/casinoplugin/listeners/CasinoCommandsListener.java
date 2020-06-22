@@ -184,10 +184,12 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 	
 	
 
-
+	
 
 	private void showHolograms(Player player)
 	{
+		if(!checkIfHologramSystemUp(player)) return;
+		
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-holograms-overview"));
 		ArrayList<LBHologram> holograms = HologramSystem.getHologramsFromPlayer(player);
 		for(LBHologram holo : holograms)
@@ -198,6 +200,9 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 	private void editHologram(Player player, String string)
 	{
+		if(!checkIfHologramSystemUp(player)) return;
+		
+		
 		if(!(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server") || Main.perm.has(player,  "casino.hologram.create")))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
@@ -229,6 +234,8 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 
 	private void createHologram(Player player)
 	{
+		if(!checkIfHologramSystemUp(player)) return;
+		
 		if(!(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server") || Main.perm.has(player,  "casino.hologram.create")))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
@@ -645,5 +652,19 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			return null;
 		}
 		return leaderboardsign;
+	}
+	/**
+	 * check if the hologram system is up
+	 * @param player playerinstance to message him
+	 * @return true if the system is up and false if not
+	 */
+	private boolean checkIfHologramSystemUp(Player player)
+	{
+		if(!Main.hologramSystemUp)
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-holograms-disabled"));
+			return false;
+		}
+		return true;
 	}
 }

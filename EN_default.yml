@@ -121,6 +121,7 @@ messages:
    commands-setdate_successful: "You successfully set the expiry date for the sign"
    commands-invalid_hologramname: "&4There is no hologram with that name."
    commands-holograms-overview: "Your holograms:"
+   commands-holograms-disabled: "&4You can't use this command because holograms are disabled on this server"
    
    casinogui-player_not_enough_money: "&4You don't have enough money!"
    casinogui-player_bet_message: "You are rolling with %amount%"

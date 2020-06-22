@@ -38,14 +38,20 @@ public class CasinoManager {
 		this.main = main;
 	}
 	public void prefixYml() {
-		String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix").replaceAll("&", "§");
-		if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
-			LogWithColor(org.bukkit.ChatColor.YELLOW + "no prefix in config.yml... using default one!");
-		} else {
-			main.getLogger().info(String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
-			prefix = prefixFromYml;
+		try {
+			String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix").replaceAll("&", "§");
+			if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
+				LogWithColor(org.bukkit.ChatColor.YELLOW + "no prefix in config.yml... using default one!");
+			} else {
+				main.getLogger().info(String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
+				prefix = prefixFromYml;
+			}
+		} catch(Exception e)
+		{
+			LogWithColor(ChatColor.RED + "An error occured while trying to get prefix. That's because you are using a old config."
+					+ " Try to rename or delete your config.yml and restart/reload the server OR go into the config.yml and go to prefix (line 27) and write 'default'.");
+			prefix = "§9[§6Casino§9] §a";
 		}
-		
 	}
 	public void initialize() {
 		

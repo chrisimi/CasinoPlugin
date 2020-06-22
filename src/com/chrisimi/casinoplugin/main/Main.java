@@ -57,6 +57,9 @@ public class Main extends JavaPlugin {
 	private static Main instance;
 	public static MessageManager msgManager;
 	
+	
+	public static boolean hologramSystemUp;
+	
 	@Override
 	public void onEnable() {
 		
@@ -98,7 +101,9 @@ public class Main extends JavaPlugin {
 		
 		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
-		if(checkCompatibility())
+		
+		//check if the hologram system can be started
+		if(hologramSystemUp = checkCompatibility())
 			HologramSystem.getInstance().startSystem(this); //start hologram system
 		
 		InventoryAPI.initiate(this);
