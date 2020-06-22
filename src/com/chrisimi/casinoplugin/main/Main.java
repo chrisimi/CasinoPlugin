@@ -360,7 +360,7 @@ public class Main extends JavaPlugin {
 		}
 		else if(!holographicsEnabled)
 		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Can't find HolographicDisplays! Make sure that you are using the newest version and it's working! https://dev.bukkit.org/projects/holographic-displays");
+			CasinoManager.LogWithColor(ChatColor.RED + "Can't find HolographicDisplays! Make sure that you are using the newest version and it's working! https://dev.bukkit.org/projects/holographic-displays. \nYou can also deactivate the hologram system in the config.yml to remove this message.");
 			return false;
 		}
 		else
