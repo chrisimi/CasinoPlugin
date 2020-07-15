@@ -25,7 +25,7 @@ import com.chrisimi.inventoryapi.Inventory;
 import com.chrisimi.inventoryapi.InventoryAPI;
 
 
-public class HologramMenu implements IInventoryAPI
+public class HologramMenu extends Inventory implements IInventoryAPI
 {
 	/*
 	 * todo
@@ -44,11 +44,6 @@ public class HologramMenu implements IInventoryAPI
 		NAME,
 		DESCRIPTION
 	}
-	
-	
-	private final Player player;
-	private final Inventory inventory;
-	private final org.bukkit.inventory.Inventory bukkitInventory;
 	
 	private Mode currentMode = Mode.HIGHESTAMOUNT;
 	private Cycle currentCycle = Cycle.NaN;
@@ -82,10 +77,11 @@ public class HologramMenu implements IInventoryAPI
 	
 	public HologramMenu(Player player)
 	{
-		this.player = player;
-		this.inventory = InventoryAPI.createInventory(player, 9 * 3, Main.getInstance(), "Hologram create menu");
-		this.bukkitInventory = inventory.getInventory();
-		inventory.addEvents(this);
+		super(player, 9*3, Main.getInstance(), "Hologram create menu");
+		//this.player = player;
+		//this.inventory = InventoryAPI.createInventory(player, 9 * 3, Main.getInstance(), "Hologram create menu");
+
+		addEvents(this);
 		
 		
 		openInventory();
@@ -94,7 +90,7 @@ public class HologramMenu implements IInventoryAPI
 	public HologramMenu(Player player, LBHologram hologram)
 	{
 		this(player);
-		/* load data from holorgam to edit it
+		/* load data from hologram to edit it
 		 * 
 		 */
 		loadFromHologram(hologram);
@@ -174,23 +170,7 @@ public class HologramMenu implements IInventoryAPI
 		
 		editHighlightTop3();
 	}
-	
 
-	
-	
-	@Override
-	public void openInventory()
-	{
-		inventory.openInventory();
-		player.openInventory(bukkitInventory);
-	}
-
-	@Override
-	public void closeInventory()
-	{
-		inventory.closeInventory();
-		player.closeInventory();
-	}
 	
 	
 	@com.chrisimi.inventoryapi.EventMethodAnnotation
@@ -216,11 +196,10 @@ public class HologramMenu implements IInventoryAPI
 	}
 	private void setDescription()
 	{
-		//TODO
 		waitingForChatInput = WaitingFor.DESCRIPTION;
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-description"));
 		closeInventory();
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	private void changeServerSign()
 	{
@@ -232,7 +211,7 @@ public class HologramMenu implements IInventoryAPI
 		waitingForChatInput = WaitingFor.NAME;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	
 	private void setRange()
@@ -240,19 +219,19 @@ public class HologramMenu implements IInventoryAPI
 		waitingForChatInput = WaitingFor.RANGE;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-range"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	private void setLocation()
 	{
 		waitingForChatInput = WaitingFor.LOCATION;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-location"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 
 	private void choosePosition()
 	{
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-chooseposition"));
 		waitingForChatInput = WaitingFor.POSITION;
 		closeInventory();
@@ -350,15 +329,15 @@ public class HologramMenu implements IInventoryAPI
 		int a, b;
 		try
 		{
-			a = Integer.valueOf(message.split("-")[0]);
-			b = Integer.valueOf(message.split("-")[1]);
+			a = Integer.parseInt(message.split("-")[0]);
+			b = Integer.parseInt(message.split("-")[1]);
 		} catch (Exception e)
 		{
 			return false;
 		}
 		
-		minPosition = (a < b) ? a : b;
-		maxPosition = (b > a) ? b : a;
+		minPosition = Math.min(a, b);
+		maxPosition = Math.max(a, b);
 		return true;
 		
 	}
@@ -368,14 +347,13 @@ public class HologramMenu implements IInventoryAPI
 		{
 			useAllMode = true;
 			range = 0;
-			return true;
 		}
 		else
 		{
 			int rangeInput = 0;
 			try
 			{
-				rangeInput = Integer.valueOf(message);
+				rangeInput = Integer.parseInt(message);
 			} catch (Exception e)
 			{
 				return false;
@@ -385,17 +363,17 @@ public class HologramMenu implements IInventoryAPI
 			
 			range = rangeInput;
 			useAllMode = false;
-			return true;
 		}
+		return true;
 	}
 	
 	private void createHologram()
 	{
-//	TODO	
 		if(!validValues) return;
 		
-		LBHologram hologram = null;
-		
+		LBHologram hologram;
+		hologram = null;
+
 		if(loadedHologram == null)
 			hologram = new LBHologram();
 		else
@@ -492,7 +470,7 @@ public class HologramMenu implements IInventoryAPI
 		{
 			lore.add("§a- top 3 won't be highlighed with a diamond, gold and iron block.");
 		}
-		if(description == "")
+		if(description.equals(""))
 		{
 			lore.add("§a- you haven't setup a description for the hologram");
 		}
@@ -500,8 +478,7 @@ public class HologramMenu implements IInventoryAPI
 		{
 			lore.add("§a- description: ");
 			String[] lines = description.replaceAll("&", "§").split("\n");
-			for(int i = 0; i < lines.length; i++)
-				lore.add("  " + lines[i]);
+			for (String line : lines) lore.add("  " + line);
 		}
 		
 		
@@ -520,24 +497,23 @@ public class HologramMenu implements IInventoryAPI
 			meta.setLore(lore);
 			createHologram.setItemMeta(meta);
 		}
-		validValues = allCorrect;
+		if (allCorrect) validValues = true;
+		else validValues = false;
 	}
 	
 	private void editServerSignBlock()
 	{
 
+		ItemMeta meta = changeServerSign.getItemMeta();
 		if(isServerSign)
 		{
-			ItemMeta meta = changeServerSign.getItemMeta();
 			meta.setDisplayName("§4Change it to a player sign!");
-			changeServerSign.setItemMeta(meta);
 		}
 		else
 		{
-			ItemMeta meta = changeServerSign.getItemMeta();
 			meta.setDisplayName("§6Change it to a serversign!");
-			changeServerSign.setItemMeta(meta);
 		}
+		changeServerSign.setItemMeta(meta);
 		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server"))
 		{
 			//check when the hologram is getting edited if the player is admin because a player shouldn't be able to make a server sign back to a player sign
