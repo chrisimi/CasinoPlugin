@@ -7,7 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ItemAPI {
 
     /**
-     * create a
+     * create a item stack with a customized display name
      * @param name
      * @param material
      * @return
