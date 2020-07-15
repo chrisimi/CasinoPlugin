@@ -11,7 +11,7 @@ messages:
    no-permissions-creating-dicesign: "&4You don't have permissions to create a dice sign!"
    no-permissions-using-dicesigns: "&4You don't have permissions to use dice signs!"
    playersigns-dice-sign_is_ingame: "&4This Dice game is currently ingame!"
-   playersigns-player_lacks_money: "&4You don't have enough money to play Dice!"
+   playersigns-dice-player_lacks_money: "&4You don't have enough money to play Dice!"
    playersigns-creation-dice-bet_invalid: "&4The bet is not valid!"
    playersigns-creation-dice-bet_is_higher_than_max_bet: "&4Your bet is higher than the maximum bet. The maximum bet allowed on this server is: %max_bet%!" 
    playersigns-creation-dice-win_chance_invalid: "&4The format for the win-chance and multiplicator is invalid! (Example 1-45;2)"
