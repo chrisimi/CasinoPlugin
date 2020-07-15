@@ -24,6 +24,5 @@
     <orderEntry type="library" name="Maven: org.spigotmc:spigot-api:javadoc:1.14.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: org.spigotmc:spigot-api:sources:1.14.4-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.chrisimi:InventoryAPI:0.1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.chrisimi:itemapi:0.1-BETA" level="project" />
   </component>
 </module>

@@ -36,7 +36,6 @@
       		<artifactSet>
       			<includes>
       				<include>com.chrisimi:InventoryAPI</include>
-      				<include>com.chrisimi:itemapi</include>
       			</includes>
       		</artifactSet>
       		
@@ -115,12 +114,6 @@
 		<groupId>com.chrisimi</groupId>
 		<artifactId>InventoryAPI</artifactId>
 		<version>0.1.0</version>
-		<scope>compile</scope>
-	</dependency>
-		<dependency>
-		<groupId>com.chrisimi</groupId>
-		<artifactId>itemapi</artifactId>
-		<version>0.1-BETA</version>
 		<scope>compile</scope>
 	</dependency>
 </dependencies>

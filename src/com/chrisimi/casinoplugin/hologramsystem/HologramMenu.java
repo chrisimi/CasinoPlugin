@@ -23,7 +23,6 @@ import com.chrisimi.inventoryapi.EventMethodAnnotation;
 import com.chrisimi.inventoryapi.IInventoryAPI;
 import com.chrisimi.inventoryapi.Inventory;
 import com.chrisimi.inventoryapi.InventoryAPI;
-import com.chrisimi.itemapi.ItemAPI;
 
 
 public class HologramMenu implements IInventoryAPI
@@ -80,7 +79,6 @@ public class HologramMenu implements IInventoryAPI
 	private ItemStack switchBetweenCycles = new ItemStack(Material.CLOCK);
 	private ItemStack setDescription = new ItemStack(Material.SIGN);
 	private ItemStack chooseHighlightTop3 = new ItemStack(Material.GLOWSTONE);
-	private ItemStack randomBlock = null;
 	
 	public HologramMenu(Player player)
 	{
@@ -123,9 +121,6 @@ public class HologramMenu implements IInventoryAPI
 	
 	private void initialize()
 	{
-		randomBlock = ItemAPI.getItemStack("test", Material.ORANGE_STAINED_GLASS_PANE);
-		bukkitInventory.setItem(26, randomBlock);
-		System.out.println("halo");
 		
 		ItemMeta meta = switchBetweenModes.getItemMeta();
 		meta.setDisplayName("§6change leaderboard mode");

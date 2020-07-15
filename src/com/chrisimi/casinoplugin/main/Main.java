@@ -21,7 +21,6 @@ import com.chrisimi.casinoplugin.scripts.SignsManager;
 import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationManager;
 import com.chrisimi.inventoryapi.InventoryAPI;
-import com.chrisimi.itemapi.ItemAPI;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -108,7 +107,6 @@ public class Main extends JavaPlugin {
 			HologramSystem.getInstance().startSystem(this); //start hologram system
 		
 		InventoryAPI.initiate(this);
-		ItemAPI.initialize(this);
 	}
 	
 	@Override
@@ -347,7 +345,6 @@ public class Main extends JavaPlugin {
 
 	/**
 	 * get the compatibility
-	 * @param plugin Instance of the plugin
 	 * @return false if HolographicDisplays is not available or invalid
 	 */
 	private boolean checkCompatibility()
