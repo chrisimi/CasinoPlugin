@@ -426,7 +426,7 @@ public class PlayerSignsManager implements Listener {
 			return;
 		}
 		if(!(Main.econ.has(player, thisSign.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_lacks_money"));
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-player_lacks_money"));
 			return;
 		}
 		

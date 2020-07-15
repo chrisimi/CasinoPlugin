@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -26,10 +27,13 @@ public class InventoryClickListener implements Listener{
 	private Material minusBlock;
 	public InventoryClickListener(Main main) {
 		this.main = main;
-		
-		plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-plusBlock"));
-		minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
-		
+		try {
+			plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-plusBlock"));
+			minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to parse material for the GUI. Perhaps you use version 1.12 or lower.");
+		}
 		
 		
 		Bukkit.getPluginManager().registerEvents(this, main);

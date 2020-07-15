@@ -345,7 +345,6 @@ public class Main extends JavaPlugin {
 
 	/**
 	 * get the compatibility
-	 * @param plugin Instance of the plugin
 	 * @return false if HolographicDisplays is not available or invalid
 	 */
 	private boolean checkCompatibility()

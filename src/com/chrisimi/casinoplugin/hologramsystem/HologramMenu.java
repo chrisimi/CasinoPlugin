@@ -121,6 +121,7 @@ public class HologramMenu implements IInventoryAPI
 	
 	private void initialize()
 	{
+		
 		ItemMeta meta = switchBetweenModes.getItemMeta();
 		meta.setDisplayName("§6change leaderboard mode");
 		switchBetweenModes.setItemMeta(meta);
