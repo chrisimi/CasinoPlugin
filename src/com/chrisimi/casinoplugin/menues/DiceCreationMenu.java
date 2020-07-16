@@ -55,6 +55,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         addEvents(this);
 
         openInventory();
+        updateInventory();
     }
 
     private void initialize()
@@ -142,7 +143,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         }
         openInventory();
         currentInputType = InputType.NONE;
-
+        updateInventory();
     }
     private void setWinRange()
     {
@@ -171,13 +172,14 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
     private void finishButton()
     {
         PlayerSignsConfiguration conf = new PlayerSignsConfiguration
-                (this.lrc, PlayerSignsConfiguration.GameMode.DICE, player, this.bet, String.format("%s-%s", rangeMin, rangeMax));
+                (this.lrc, PlayerSignsConfiguration.GameMode.DICE, player, this.bet, String.format("%s-%s;%s", rangeMin, rangeMax, winMultiplicand));
 
         //TODO add check for maxsign and maxbet
 
         PlayerSignsManager.addPlayerSign(conf);
 
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-creation-dice_successful"));
+        closeInventory();
     }
     private void updateLoreButton()
     {
@@ -188,7 +190,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         lore.add((bet != 0.0) ? String.format("-§a bet is %s", Main.econ.format(bet)) : "-§4 bet is not set");
 
         if(rangeMin != -1 && rangeMax != -1 && rangeMin < rangeMax && rangeMax < 100 && rangeMin > 0)
-            lore.add("-§a range is set");
+            lore.add("-§a range is set to " + String.format("§e%s§6-§e%s", rangeMin, rangeMax));
         else
         {
             allValuesValid = false;
@@ -212,5 +214,6 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
 
         meta.setLore(lore);
         finishButton.setItemMeta(meta);
+        bukkitInventory.setItem(8, finishButton);
     }
 }
