@@ -16,6 +16,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Inventory to create a dice sign
+ */
 public class DiceCreationMenu extends Inventory implements IInventoryAPI
 {
     private enum InputType
@@ -37,18 +40,24 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
 
     private boolean allValuesValid = false;
 
-    private ItemStack setBet = ItemAPI.createItem("§6Set the bet", Material.GOLD_INGOT);
-    private ItemStack setWinRange = ItemAPI.createItem("§6Set the win range", Material.COMPASS);
-    private ItemStack setWinMultiplicant = ItemAPI.createItem("§6Set the win multiplicand", Material.JUKEBOX);
-    private ItemStack serverSign = ItemAPI.createItem("§6change it to a server sign", Material.GOLD_BLOCK);
-    private ItemStack disableSign = ItemAPI.createItem("§4Disable this sign", Material.RED_WOOL);
-    private ItemStack enableSign = ItemAPI.createItem("§aEnable this sign", Material.GREEN_WOOL);
-    private ItemStack finishButton = ItemAPI.createItem("§a finish", Material.STONE_BUTTON);
+    private final ItemStack setBet = ItemAPI.createItem("§6Set the bet", Material.GOLD_INGOT);
+    private final ItemStack setWinRange = ItemAPI.createItem("§6Set the win range", Material.COMPASS);
+    private final ItemStack setWinMultiplicand = ItemAPI.createItem("§6Set the win multiplicand", Material.JUKEBOX);
+    private final ItemStack serverSign = ItemAPI.createItem("§6change it to a server sign", Material.GOLD_BLOCK);
+    private final ItemStack disableSign = ItemAPI.createItem("§4Disable this sign", Material.RED_WOOL);
+    private final ItemStack enableSign = ItemAPI.createItem("§aEnable this sign", Material.GREEN_WOOL);
+    private final ItemStack finishButton = ItemAPI.createItem("§a finish", Material.STONE_BUTTON);
 
     private final Location lrc;
+
+    /**
+     * Create a new inventory to create a dice sign
+     * @param lrc Location of the sign
+     * @param player player, owner of the sign
+     */
     public DiceCreationMenu(Location lrc, Player player)
     {
-        super(player, 9*1, Main.getInstance(), "Dice creation menu");
+        super(player, 9, Main.getInstance(), "Dice creation menu");
         this.lrc = lrc;
 
         initialize();
@@ -62,7 +71,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
     {
         bukkitInventory.setItem(0, setBet);
         bukkitInventory.setItem(1, setWinRange);
-        bukkitInventory.setItem(2, setWinMultiplicant);
+        bukkitInventory.setItem(2, setWinMultiplicand);
         bukkitInventory.setItem(5, serverSign);
         bukkitInventory.setItem(7, disableSign);
 
@@ -86,7 +95,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         else if(event.getClicked().equals(finishButton) && allValuesValid) finishButton();
         else if(event.getClicked().equals(setBet)) setBet();
         else if(event.getClicked().equals(setWinRange)) setWinRange();
-        else if(event.getClicked().equals(setWinMultiplicant)) setWinMultiplicand();
+        else if(event.getClicked().equals(setWinMultiplicand)) setWinMultiplicand();
         else if(event.getClicked().equals(serverSign)) isServerSign = !isServerSign;
         updateInventory();
     }
@@ -99,8 +108,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
             {
                 try
                 {
-                    double chatBet = Double.parseDouble(event.getMessage());
-                    this.bet = chatBet;
+                    this.bet = Double.parseDouble(event.getMessage());
                 } catch(Exception e)
                 {
                     player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
@@ -132,8 +140,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
             {
                 try
                 {
-                    double chatMultiplicand = Double.parseDouble(event.getMessage());
-                    this.winMultiplicand = chatMultiplicand;
+                    this.winMultiplicand = Double.parseDouble(event.getMessage());
                 } catch(Exception e)
                 {
                     player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-doubel_invalid"));
@@ -174,6 +181,9 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         PlayerSignsConfiguration conf = new PlayerSignsConfiguration
                 (this.lrc, PlayerSignsConfiguration.GameMode.DICE, player, this.bet, String.format("%s-%s;%s", rangeMin, rangeMax, winMultiplicand));
 
+        //make player sign conf server sign too
+        if(this.isServerSign)
+            conf.ownerUUID = "server";
 
         PlayerSignsManager.addPlayerSign(conf);
 
