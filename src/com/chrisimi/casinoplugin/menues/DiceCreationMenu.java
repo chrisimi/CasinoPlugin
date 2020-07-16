@@ -1,11 +1,12 @@
 package com.chrisimi.casinoplugin.menues;
 
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
+import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
-import com.chrisimi.inventoryapi.ClickEvent;
-import com.chrisimi.inventoryapi.EventMethodAnnotation;
-import com.chrisimi.inventoryapi.IInventoryAPI;
-import com.chrisimi.inventoryapi.Inventory;
+import com.chrisimi.inventoryapi.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,12 +18,22 @@ import java.util.List;
 
 public class DiceCreationMenu extends Inventory implements IInventoryAPI
 {
+    private enum InputType
+    {
+        NONE,
+        BET,
+        RANGE,
+        WINMULTIPLICAND
+    }
+
     private boolean isServerSign = false;
     private double bet = 0.0;
     private int rangeMin = -1;
     private int rangeMax = -1;
     private double winMultiplicand = 2.0;
     private boolean isDisabled = false;
+
+    private InputType currentInputType = InputType.NONE;
 
     private boolean allValuesValid = false;
 
@@ -61,6 +72,8 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
     {
         bukkitInventory.setItem(7, (isDisabled) ? enableSign : disableSign);
 
+        ItemAPI.changeName(serverSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
+
         updateLoreButton();
     }
 
@@ -70,12 +83,101 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         if(event.getClicked().equals(disableSign)) isDisabled = true;
         else if(event.getClicked().equals(enableSign)) isDisabled = false;
         else if(event.getClicked().equals(finishButton) && allValuesValid) finishButton();
+        else if(event.getClicked().equals(setBet)) setBet();
+        else if(event.getClicked().equals(setWinRange)) setWinRange();
+        else if(event.getClicked().equals(setWinMultiplicant)) setWinMultiplicand();
+        else if(event.getClicked().equals(serverSign)) isServerSign = !isServerSign;
         updateInventory();
+    }
+    @EventMethodAnnotation
+    public void onChat(ChatEvent event)
+    {
+        switch(currentInputType)
+        {
+            case BET:
+            {
+                try
+                {
+                    double chatBet = Double.parseDouble(event.getMessage());
+                    this.bet = chatBet;
+                } catch(Exception e)
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
+                }
+            }
+            break;
+            case RANGE:
+            {
+                if(!(event.getMessage().contains("-")))
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-string_invalid"));
+                }
+                else
+                    try
+                    {
+                        String[] splited = event.getMessage().split("-");
+                        int chatMinRange = Integer.parseInt(splited[0]);
+                        int chatMaxRange = Integer.parseInt(splited[1]);
+
+                        this.rangeMin = chatMinRange;
+                        this.rangeMax = chatMaxRange;
+                    } catch(Exception e)
+                    {
+                        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-integer_invalid"));
+                    }
+            }
+            break;
+            case WINMULTIPLICAND:
+            {
+                try
+                {
+                    double chatMultiplicand = Double.parseDouble(event.getMessage());
+                    this.winMultiplicand = chatMultiplicand;
+                } catch(Exception e)
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-doubel_invalid"));
+                }
+            }
+            break;
+        }
+        openInventory();
+        currentInputType = InputType.NONE;
+
+    }
+    private void setWinRange()
+    {
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-dice-set_win_range"));
+        closeInventory();
+        waitforChatInput(player);
+        currentInputType = InputType.RANGE;
+    }
+
+    private void setWinMultiplicand()
+    {
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-dice-set_win_multiplicand"));
+        closeInventory();
+        waitforChatInput(player);
+        currentInputType = InputType.WINMULTIPLICAND;
+    }
+
+    private void setBet()
+    {
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-dice-set_bet"));
+        closeInventory();
+        waitforChatInput(player);
+        currentInputType = InputType.BET;
     }
 
     private void finishButton()
     {
-        //TODO finish creation
+        PlayerSignsConfiguration conf = new PlayerSignsConfiguration
+                (this.lrc, PlayerSignsConfiguration.GameMode.DICE, player, this.bet, String.format("%s-%s", rangeMin, rangeMax));
+
+        //TODO add check for maxsign and maxbet
+
+        PlayerSignsManager.addPlayerSign(conf);
+
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-creation-dice_successful"));
     }
     private void updateLoreButton()
     {

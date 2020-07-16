@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.menues.DiceCreationMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -304,6 +305,14 @@ public class PlayerSignsManager implements Listener {
 		
 		String[] lines = event.getLines();
 		if(!(lines[0].contains("casino") || lines[0].equalsIgnoreCase("casino") || lines[0].equalsIgnoreCase("slots") || lines[0].contains("slots"))) return;
+
+		if(lines[0].contains("casino") && lines[1].contains("dice"))
+		{
+			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
+		}
+
+
 		if(lines[1].length() == 0) return;
 		if(lines[2].length() == 0) return;
 		if(lines[3].length() == 0) return;
@@ -926,7 +935,13 @@ public class PlayerSignsManager implements Listener {
 	{
 		return new ArrayList<>(playerSigns.values());
 	}
-	
+
+	public static void addPlayerSign(PlayerSignsConfiguration conf)
+	{
+		playerSigns.put(conf.getLocation(), conf);
+		CasinoManager.playerSignsManager.exportSigns();
+	}
+
 	private static class Manager 
 	{
 		private static int currentID = 0;

@@ -206,5 +206,12 @@ messages:
    hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
    hologrammenu-update: "You successfully updated the hologram."
    
-   
-   
+   creationmenu-dice-set_win_range: "Write in the chat the range when the player should win between 1 and 100 in the format &efrom&6-&eto&6 like 1-20."
+   creationmenu-dice-set_win_multiplicand: "Write in the chat the number, the bet of the player should be multiplied with when he wins like 2 or 1.5."
+   creationmenu-dice-set_bet: "Write the bet for this dice sign in the chat."
+
+   creationmenu-input-double_invalid: "&4This is not a valid number!"
+   creationmenu-input-string_invalid: "&4This is not a valid format!"
+   creationmenu-input-integer_invalid: "&4This is not a valid integer!"
+
+   creationmenu-creation-dice_successful: "You successfully created a dice sign!"
