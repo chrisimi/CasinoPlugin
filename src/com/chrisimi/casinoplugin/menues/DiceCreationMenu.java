@@ -174,7 +174,6 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         PlayerSignsConfiguration conf = new PlayerSignsConfiguration
                 (this.lrc, PlayerSignsConfiguration.GameMode.DICE, player, this.bet, String.format("%s-%s;%s", rangeMin, rangeMax, winMultiplicand));
 
-        //TODO add check for maxsign and maxbet
 
         PlayerSignsManager.addPlayerSign(conf);
 
@@ -186,8 +185,21 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         List<String> lore = new ArrayList<>();
         allValuesValid = true;
 
-        allValuesValid = bet != 0.0;
-        lore.add((bet != 0.0) ? String.format("-§a bet is %s", Main.econ.format(bet)) : "-§4 bet is not set");
+        if(bet != 0.0)
+        {
+            if(bet > PlayerSignsManager.getMaxBetDice())
+            {
+                lore.add("-§4 the bet limit is " + Main.econ.format(PlayerSignsManager.getMaxBetDice()));
+                allValuesValid = false;
+            }
+            else
+                lore.add("-§a bet is " + Main.econ.format(bet));
+        }
+        else
+        {
+            lore.add("-§4 bet is not set");
+            allValuesValid = false;
+        }
 
         if(rangeMin != -1 && rangeMax != -1 && rangeMin < rangeMax && rangeMax < 100 && rangeMin > 0)
             lore.add("-§a range is set to " + String.format("§e%s§6-§e%s", rangeMin, rangeMax));
@@ -204,6 +216,12 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
             lore.add("-§4 win multiplicand is not set");
             allValuesValid = false;
         }
+        if(!PlayerSignsManager.playerCanCreateDiceSign(player))
+        {
+            lore.add("-§4 you can't create a new dice sign because you are at the limit");
+            allValuesValid = false;
+        }
+
 
         ItemMeta meta = finishButton.getItemMeta();
 

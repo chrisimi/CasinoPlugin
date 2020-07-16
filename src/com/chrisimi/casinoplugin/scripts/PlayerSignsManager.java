@@ -68,11 +68,11 @@ public class PlayerSignsManager implements Listener {
 	private GsonBuilder builder;
 	private Gson gson;
 	private Main main;
-	private Double maxBetDice = 200.0;
+	private static Double maxBetDice = 200.0;
 	private Double maxBetBlackjack = 200.0;
 	private Double maxBetSlots = 200.0;
 	
-	private int maxSignsDice = -1;
+	private static int maxSignsDice = -1;
 	private int maxSignsBlackjack = -1;
 	private int maxSignsSlots = -1;
 	
@@ -880,7 +880,7 @@ public class PlayerSignsManager implements Listener {
 	 * @param gameMode {@link GameMode} instance of gamemode
 	 * @return count as int
 	 */
-	private int getAmountOfPlayerSigns(Player player, GameMode gameMode)
+	private static int getAmountOfPlayerSigns(Player player, GameMode gameMode)
 	{
 		return playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
@@ -940,6 +940,12 @@ public class PlayerSignsManager implements Listener {
 	{
 		playerSigns.put(conf.getLocation(), conf);
 		CasinoManager.playerSignsManager.exportSigns();
+	}
+
+	public static double getMaxBetDice() {return maxBetDice;}
+	public static boolean playerCanCreateDiceSign(Player player)
+	{
+		return getAmountOfPlayerSigns(player, GameMode.DICE) >= maxSignsDice;
 	}
 
 	private static class Manager 
