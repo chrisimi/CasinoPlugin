@@ -4,6 +4,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.List;
+
 public class ItemAPI {
 
     /**
@@ -32,6 +34,12 @@ public class ItemAPI {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(newName);
 
+        itemStack.setItemMeta(meta);
+    }
+    public static void setLore(ItemStack itemStack, List<String> elements)
+    {
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.setLore(elements);
         itemStack.setItemMeta(meta);
     }
 }
