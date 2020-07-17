@@ -112,7 +112,7 @@ public class PlayerSignsConfiguration {
 		return new Location(Bukkit.getWorld(worldname), x, y, z);
 	}
 	
-	public double[] getWinChancesDice() {
+	public double[] getWinChancesDiceOld() {
 		double[] values = new double[2];
 		String[] informations = plusinformations.split(";");
 		String[] numbers = informations[0].split("-");
@@ -120,6 +120,20 @@ public class PlayerSignsConfiguration {
 		values[1] = Double.parseDouble(numbers[1]);
 		return values;
 	}
+
+	public int[] getWinChancesDice()
+	{
+		//TODO add check for false values
+		int[] values = new int[2];
+		String[] informations = plusinformations.split(";");
+		String[] numbers = informations[0].split("-");
+		values[0] = Integer.parseInt(numbers[0]);
+		values[1] = Integer.parseInt(numbers[1]);
+
+		return values;
+	}
+
+
 	public double winMultiplicatorDice() {
 		String[] informations = plusinformations.split(";");
 		Double value = Double.parseDouble(informations[1].trim());

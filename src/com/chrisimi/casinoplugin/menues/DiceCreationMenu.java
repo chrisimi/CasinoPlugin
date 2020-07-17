@@ -67,6 +67,26 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         updateInventory();
     }
 
+    public DiceCreationMenu(PlayerSignsConfiguration conf, Player player)
+    {
+        this(conf.getLocation(), player);
+
+        //set the values in local variables
+        initializeValues(conf);
+    }
+
+    private void initializeValues(PlayerSignsConfiguration conf)
+    {
+        isServerSign = conf.isServerOwner();
+        bet = conf.bet;
+        rangeMin = conf.getWinChancesDice()[0];
+        rangeMax = conf.getWinChancesDice()[1];
+        winMultiplicand = conf.winMultiplicatorDice();
+        isDisabled = conf.disabled;
+
+        updateInventory();
+    }
+
     private void initialize()
     {
         bukkitInventory.setItem(0, setBet);

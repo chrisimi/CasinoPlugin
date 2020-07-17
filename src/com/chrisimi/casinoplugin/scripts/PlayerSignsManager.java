@@ -406,11 +406,19 @@ public class PlayerSignsManager implements Listener {
 		Sign sign = (Sign) event.getClickedBlock().getState();
 		if(sign == null) return;
 		
-		if(sign.getLine(0).contains("Dice")) {
-			onDiceSignClick(sign, thisSign, player);
-		} else if(sign.getLine(0).contains("Blackjack")) {
+		if(sign.getLine(0).contains("Dice"))
+		{
+			if(event.getPlayer().isSneaking())
+				new DiceCreationMenu(thisSign, event.getPlayer());
+			else
+				onDiceSignClick(sign, thisSign, player);
+
+		}
+		else if(sign.getLine(0).contains("Blackjack"))
+		{
 			onBlackjackSignClick(sign, thisSign, player);
-		} else if(sign.getLine(0).contains("Slots"))
+		}
+		else if(sign.getLine(0).contains("Slots"))
 		{
 			onSlotsSignClick(sign, thisSign, player);
 		}
