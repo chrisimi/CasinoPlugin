@@ -103,6 +103,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         bukkitInventory.setItem(7, (isDisabled) ? enableSign : disableSign);
 
         ItemAPI.changeName(serverSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
+        bukkitInventory.setItem(5, serverSign);
 
         updateLoreButton();
     }
@@ -204,6 +205,9 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         //make player sign conf server sign too
         if(this.isServerSign)
             conf.ownerUUID = "server";
+
+        //disable the sign if it have to be
+        conf.disabled = isDisabled;
 
         PlayerSignsManager.addPlayerSign(conf);
 
