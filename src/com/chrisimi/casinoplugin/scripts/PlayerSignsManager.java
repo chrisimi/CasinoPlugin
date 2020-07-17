@@ -956,7 +956,19 @@ public class PlayerSignsManager implements Listener {
 	public static double getMaxBetBlackjack() {return maxBetBlackjack;}
 	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
-		return getAmountOfPlayerSigns(player, gamemode) >= maxSignsDice;
+		switch (gamemode)
+		{
+			case BLACKJACK:
+				if(maxSignsBlackjack == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsBlackjack;
+			case DICE:
+				if(maxSignsDice == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsDice;
+			case SLOTS:
+				if(maxSignsSlots == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsSlots;
+		}
+		return false;
 	}
 
 	private static class Manager 

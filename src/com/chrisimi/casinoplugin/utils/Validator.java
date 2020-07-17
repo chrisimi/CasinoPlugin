@@ -30,11 +30,18 @@ public class Validator
         }
         catch(Exception e) { return false;}
 
+        System.out.println(conf.bet + " - " + PlayerSignsManager.getMaxBetDice());
 
+        if(!conf.isServerOwner())
+            if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE))
+            {
+                System.out.println("aa");
+                return false;
+            }
 
-        return (conf.bet != null && conf.plusinformations.contains("-") && conf.plusinformations.contains(";")
+        return conf.plusinformations.contains("-") && conf.plusinformations.contains(";")
         && conf.plusinformations.split("-").length == 2 && conf.plusinformations.split(";").length == 2
-        && conf.bet <= PlayerSignsManager.getMaxBetDice() && (!conf.isServerOwner() && PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE)));
+        && conf.bet <= PlayerSignsManager.getMaxBetDice();
     }
     private static boolean validateBlackjack(PlayerSignsConfiguration conf)
     {
@@ -46,8 +53,15 @@ public class Validator
         }
         catch(Exception e) {return false;}
 
-        return (conf.bet != null && conf.plusinformations.contains(";") && conf.plusinformations.split(";").length == 2
-        && conf.bet <= PlayerSignsManager.getMaxBetBlackjack() && (!conf.isServerOwner() && PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.Blackjack)));
+        if(!conf.isServerOwner())
+            if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.BLACKJACK))
+            {
+                System.out.println("aa");
+                return false;
+            }
+
+        return conf.plusinformations.contains(";") && conf.plusinformations.split(";").length == 2
+        && conf.bet <= PlayerSignsManager.getMaxBetBlackjack();
     }
     private static boolean validateSlots(PlayerSignsConfiguration conf)
     {
@@ -60,7 +74,14 @@ public class Validator
         }
         catch(Exception e) {return false;}
 
-        return (conf.bet != null && conf.getSlotsWeight().length == 3 && conf.getSlotsSymbols().length == 3
-        && conf.bet <= PlayerSignsManager.getMaxBetSlots() && (!conf.isServerOwner() && PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.SLOTS)));
+        if(!conf.isServerOwner())
+            if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE))
+            {
+                System.out.println("aa");
+                return false;
+            }
+
+        return conf.getSlotsWeight().length == 3 && conf.getSlotsSymbols().length == 3
+        && conf.bet <= PlayerSignsManager.getMaxBetSlots();
     }
 }
