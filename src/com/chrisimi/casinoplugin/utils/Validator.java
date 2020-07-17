@@ -30,14 +30,10 @@ public class Validator
         }
         catch(Exception e) { return false;}
 
-        System.out.println(conf.bet + " - " + PlayerSignsManager.getMaxBetDice());
 
         if(!conf.isServerOwner())
             if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE))
-            {
-                System.out.println("aa");
                 return false;
-            }
 
         return conf.plusinformations.contains("-") && conf.plusinformations.contains(";")
         && conf.plusinformations.split("-").length == 2 && conf.plusinformations.split(";").length == 2
@@ -55,10 +51,7 @@ public class Validator
 
         if(!conf.isServerOwner())
             if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.BLACKJACK))
-            {
-                System.out.println("aa");
                 return false;
-            }
 
         return conf.plusinformations.contains(";") && conf.plusinformations.split(";").length == 2
         && conf.bet <= PlayerSignsManager.getMaxBetBlackjack();
@@ -76,10 +69,7 @@ public class Validator
 
         if(!conf.isServerOwner())
             if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE))
-            {
-                System.out.println("aa");
                 return false;
-            }
 
         return conf.getSlotsWeight().length == 3 && conf.getSlotsSymbols().length == 3
         && conf.bet <= PlayerSignsManager.getMaxBetSlots();
