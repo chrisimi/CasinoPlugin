@@ -226,7 +226,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
             lore.add("-§4 win multiplicand is not set");
             allValuesValid = false;
         }
-        if(!PlayerSignsManager.playerCanCreateDiceSign(player))
+        if(!PlayerSignsManager.playerCanCreateSign(player, PlayerSignsConfiguration.GameMode.DICE))
         {
             lore.add("-§4 you can't create a new dice sign because you are at the limit");
             allValuesValid = false;

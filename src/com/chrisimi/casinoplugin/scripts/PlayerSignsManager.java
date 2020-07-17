@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import java.util.Map.Entry;
 
 import com.chrisimi.casinoplugin.menues.DiceCreationMenu;
+import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -69,12 +70,12 @@ public class PlayerSignsManager implements Listener {
 	private Gson gson;
 	private Main main;
 	private static Double maxBetDice = 200.0;
-	private Double maxBetBlackjack = 200.0;
-	private Double maxBetSlots = 200.0;
+	private static Double maxBetBlackjack = 200.0;
+	private static Double maxBetSlots = 200.0;
 	
 	private static int maxSignsDice = -1;
-	private int maxSignsBlackjack = -1;
-	private int maxSignsSlots = -1;
+	private static int maxSignsBlackjack = -1;
+	private static int maxSignsSlots = -1;
 	
 	private int managerUpdateCycle = 120;
 	private int managerDistance = 16;
@@ -235,7 +236,15 @@ public class PlayerSignsManager implements Listener {
 				if(cnf == null) throw new NullPointerException();
 				
 				cnf.changeEnum();
+
+				//check if player sign has valid values
+				if(!Validator.validate(cnf))
+				{
+					CasinoManager.LogWithColor(ChatColor.RED + "A player sign with invalid values have been found. The sign is now disabled and can be enabled again when all values are valid");
+					cnf.disabled = true;
+				}
 				playerSigns.put(cnf.getLocation(), cnf);
+
 				if(cnf.plusinformations.contains("disabled")) {
 					String[] values = cnf.plusinformations.split(";");
 					cnf.plusinformations = values[0] + ";" + values[1];
@@ -880,7 +889,7 @@ public class PlayerSignsManager implements Listener {
 	 * @param gameMode {@link GameMode} instance of gamemode
 	 * @return count as int
 	 */
-	private static int getAmountOfPlayerSigns(Player player, GameMode gameMode)
+	private static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
 	{
 		return playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
@@ -943,9 +952,11 @@ public class PlayerSignsManager implements Listener {
 	}
 
 	public static double getMaxBetDice() {return maxBetDice;}
-	public static boolean playerCanCreateDiceSign(Player player)
+	public static double getMaxBetSlots() {return maxBetSlots;}
+	public static double getMaxBetBlackjack() {return maxBetBlackjack;}
+	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
-		return getAmountOfPlayerSigns(player, GameMode.DICE) >= maxSignsDice;
+		return getAmountOfPlayerSigns(player, gamemode) >= maxSignsDice;
 	}
 
 	private static class Manager 

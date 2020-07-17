@@ -99,6 +99,7 @@ messages:
    commands-player-slotchest_chest_invalid: "&4This is not a valid chest!"
    commands-player-slotchest_chest_not_empty: "&4This chest contains items! You have to remove them first, before you can create a SlotChest out of it!"
    commands-player-slotchest_no_slotchests: "&4You don't have any SlotChests!"
+   commands-player-playersigns_enable_error: "&4You can't enable this sign because it has invalid values!"
    commands-player-playersigns_enable: "You successfully enabled your %sign% sign!"
    commands-player-playersigns_is_enabled: "&4Your sign is currently enabled!"
    commands-player-playersigns_disable: "You successfully disabled your %sign% sign!"
