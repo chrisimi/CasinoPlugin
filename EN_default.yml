@@ -210,9 +210,13 @@ messages:
    creationmenu-dice-set_win_range: "Write in the chat the range when the player should win between 1 and 100 in the format &efrom&6-&eto&6 like 1-20."
    creationmenu-dice-set_win_multiplicand: "Write in the chat the number, the bet of the player should be multiplied with when he wins like 2 or 1.5."
    creationmenu-dice-set_bet: "Write the bet for this dice sign in the chat."
+   creationmenu-leaderboard-set_position: "Write the number of the position for this sign in the chat like 1 for the first place."
+   creationmenu-leaderboard-set_range: "Write the amount of blocks the sign should cover or 'all' for all your signs."
+   creationmenu-leaderboard-set_valid_date: "Write the date, until which the sign should use data, in the chat or 'remove' to remove it. Use for the date dd-MM-yyy hh:mm or MM-dd-yyyy h:mm";
 
    creationmenu-input-double_invalid: "&4This is not a valid number!"
    creationmenu-input-string_invalid: "&4This is not a valid format!"
    creationmenu-input-integer_invalid: "&4This is not a valid integer!"
+   creationmenu-input-date_invalid: "&4This is not a valid date!"
 
    creationmenu-creation-dice_successful: "You successfully created a dice sign!"
