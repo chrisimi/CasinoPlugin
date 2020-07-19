@@ -92,7 +92,8 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         bukkitInventory.setItem(0, setBet);
         bukkitInventory.setItem(1, setWinRange);
         bukkitInventory.setItem(2, setWinMultiplicand);
-        bukkitInventory.setItem(5, serverSign);
+        if(playerIsAllowedForServerSigns())
+            bukkitInventory.setItem(5, serverSign);
         bukkitInventory.setItem(7, disableSign);
 
         bukkitInventory.setItem(8, finishButton);
@@ -102,8 +103,11 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
     {
         bukkitInventory.setItem(7, (isDisabled) ? enableSign : disableSign);
 
-        ItemAPI.changeName(serverSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
-        bukkitInventory.setItem(5, serverSign);
+        if(playerIsAllowedForServerSigns())
+        {
+            ItemAPI.changeName(serverSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
+            bukkitInventory.setItem(5, serverSign);
+        }
 
         updateLoreButton();
     }
@@ -267,5 +271,9 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
         meta.setLore(lore);
         finishButton.setItemMeta(meta);
         bukkitInventory.setItem(8, finishButton);
+    }
+    private boolean playerIsAllowedForServerSigns()
+    {
+        return Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns");
     }
 }
