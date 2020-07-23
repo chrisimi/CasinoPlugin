@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.menues.BlackjackCreationMenu;
 import com.chrisimi.casinoplugin.menues.DiceCreationMenu;
 import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
@@ -319,6 +320,10 @@ public class PlayerSignsManager implements Listener {
 		{
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 			return;
+		} else if(lines[0].contains("casino") && lines[1].contains("blackjack"))
+		{
+			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
 		}
 
 
@@ -408,7 +413,8 @@ public class PlayerSignsManager implements Listener {
 		
 		if(sign.getLine(0).contains("Dice"))
 		{
-			if(event.getPlayer().isSneaking())
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
 				new DiceCreationMenu(thisSign, event.getPlayer());
 			else
 				onDiceSignClick(sign, thisSign, player);
@@ -416,7 +422,11 @@ public class PlayerSignsManager implements Listener {
 		}
 		else if(sign.getLine(0).contains("Blackjack"))
 		{
-			onBlackjackSignClick(sign, thisSign, player);
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
+				new BlackjackCreationMenu(thisSign, event.getPlayer());
+			else
+				onBlackjackSignClick(sign, thisSign, player);
 		}
 		else if(sign.getLine(0).contains("Slots"))
 		{

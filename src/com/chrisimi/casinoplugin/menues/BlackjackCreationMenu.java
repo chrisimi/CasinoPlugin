@@ -56,6 +56,7 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
         initialize();
 
         updateInventory();
+        openInventory();
     }
 
     public BlackjackCreationMenu(PlayerSignsConfiguration conf, Player player)
