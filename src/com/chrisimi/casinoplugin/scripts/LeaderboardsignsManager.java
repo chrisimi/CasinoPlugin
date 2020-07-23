@@ -613,7 +613,15 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		return dataList;
 	}
-	
+
+	public static void addLeaderboardSign(Leaderboardsign lb)
+	{
+		CasinoManager.leaderboardManager.deleteLeaderbordsign(leaderboardsigns.get(lb.getLocation()));
+
+		leaderboardsigns.put(lb.getLocation(), lb);
+		CasinoManager.leaderboardManager.addSignAnimation(lb);
+		CasinoManager.leaderboardManager.exportLeaderboardsigns();
+	}
 	
 	public static void resetData() 
 	{

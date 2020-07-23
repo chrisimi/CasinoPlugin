@@ -3,8 +3,8 @@ package com.chrisimi.casinoplugin.menues;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign;
-import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
 import org.bukkit.Location;
@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +34,7 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
     private final ItemStack setMode = ItemAPI.createItem("§6Set the mode", Material.REDSTONE_TORCH);
     private final ItemStack setRange = ItemAPI.createItem("§6Set the range", Material.COMPASS);
     private final ItemStack setServerSign = ItemAPI.createItem("§6Change to a server sign", Material.GOLD_BLOCK);
-    private final ItemStack resetSign = ItemAPI.createItem("§6reset sign", Material.REDSTONE_WIRE);
+    private final ItemStack resetSign = ItemAPI.createItem("§6reset sign", Material.REDSTONE);
     private final ItemStack setValidDate = ItemAPI.createItem("§6set time until sign use data", Material.CLOCK);
 
     private final ItemStack finishButton = ItemAPI.createItem("§6Finish creation", Material.STONE_BUTTON);
@@ -47,7 +46,8 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
     private int position = Integer.MIN_VALUE;
     private Leaderboardsign.Cycle cycle = Leaderboardsign.Cycle.NaN;
     private Leaderboardsign.Mode mode = Leaderboardsign.Mode.HIGHESTAMOUNT;
-    private boolean lastManualReset = false;
+    private boolean shouldSignReset = false;
+    private long oldValue = 0L;
     private long validUntil = 0L;
 
     private boolean allValuesValid = false;
@@ -86,8 +86,9 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
         this.position = cnf.position;
         this.cycle = cnf.cycleMode;
         this.mode = cnf.getMode();
-        this.lastManualReset = cnf.lastManualReset == 0;
+        this.shouldSignReset = cnf.lastManualReset == 0;
         this.validUntil = cnf.validUntil;
+        this.oldValue = cnf.lastManualReset;
     }
 
     private void initialize()
@@ -112,7 +113,7 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
             bukkitInventory.setItem(8, setServerSign);
         }
 
-        ItemAPI.changeName(resetSign, (lastManualReset) ? "§6stop reseting sign" : "§6reseting sign");
+        ItemAPI.changeName(resetSign, (shouldSignReset) ? "§6reseting sign" : "§6remove reset");
         bukkitInventory.setItem(9, resetSign);
 
         //manage the other buttons
@@ -200,7 +201,7 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
         else if(event.getClicked().equals(setRange)) setRange();
         else if(event.getClicked().equals(setServerSign)) isServerSign = !isServerSign;
         else if(event.getClicked().equals(finishButton) && allValuesValid) finishButton();
-        else if(event.getClicked().equals(resetSign)) lastManualReset = !lastManualReset;
+        else if(event.getClicked().equals(resetSign)) shouldSignReset = !shouldSignReset;
         else if(event.getClicked().equals(setValidDate)) setValidDate();
         updateInventory();
     }
@@ -215,6 +216,25 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
 
     private void finishButton()
     {
+        Leaderboardsign lb = new Leaderboardsign();
+        lb.ownerUUID = (isServerSign) ? "server" : player.getUniqueId().toString();
+        if(rangeAll)
+            lb.setRange(true);
+        else
+            lb.setRange(rangeValue);
+        lb.position = position;
+        lb.cycleMode = cycle;
+        lb.setMode(mode);
+        if(shouldSignReset && oldValue != 0L)
+            lb.lastManualReset = (shouldSignReset) ? 0L : oldValue;
+        else
+            lb.lastManualReset = (shouldSignReset) ? System.currentTimeMillis() : 0L;
+
+        lb.validUntil = validUntil;
+        lb.setLocation(this.lrc);
+
+        LeaderboardsignsManager.addLeaderboardSign(lb);
+        closeInventory();
     }
 
     private void setRange()

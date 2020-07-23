@@ -212,7 +212,7 @@ messages:
    creationmenu-dice-set_bet: "Write the bet for this dice sign in the chat."
    creationmenu-leaderboard-set_position: "Write the number of the position for this sign in the chat like 1 for the first place."
    creationmenu-leaderboard-set_range: "Write the amount of blocks the sign should cover or 'all' for all your signs."
-   creationmenu-leaderboard-set_valid_date: "Write the date, until which the sign should use data, in the chat or 'remove' to remove it. Use for the date dd-MM-yyy hh:mm or MM-dd-yyyy h:mm";
+   creationmenu-leaderboard-set_valid_date: "Write the date, until which the sign should use data, in the chat or 'remove' to remove it. Use for the date dd-MM-yyy hh:mm or MM-dd-yyyy h:mm"
 
    creationmenu-input-double_invalid: "&4This is not a valid number!"
    creationmenu-input-string_invalid: "&4This is not a valid format!"
