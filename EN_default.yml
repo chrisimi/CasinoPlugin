@@ -213,10 +213,14 @@ messages:
    creationmenu-leaderboard-set_position: "Write the number of the position for this sign in the chat like 1 for the first place."
    creationmenu-leaderboard-set_range: "Write the amount of blocks the sign should cover or 'all' for all your signs."
    creationmenu-leaderboard-set_valid_date: "Write the date, until which the sign should use data, in the chat or 'remove' to remove it. Use for the date dd-MM-yyy hh:mm or MM-dd-yyyy h:mm"
+   creationmenu-blackjack-set_min_bet: "Write the min bet in the chat."
+   creationmenu-blackjack-set_max_bet: "Write the max bet in the chat. You can use '-1' for an unlimited bet."
+   creationmenu-blackjack-set_win_multiplicand: "Write the win mutliplicand in the chat. You can either use a number like 2.5 or the to-writing like 3 to 2."
 
    creationmenu-input-double_invalid: "&4This is not a valid number!"
    creationmenu-input-string_invalid: "&4This is not a valid format!"
    creationmenu-input-integer_invalid: "&4This is not a valid integer!"
    creationmenu-input-date_invalid: "&4This is not a valid date!"
 
-   creationmenu-creation-dice_successful: "You successfully created a dice sign!"
+   creationmenu-creation-dice_successful: "You successfully created or updated a dice sign!"
+   creationmenu-creation-blackjack_successful: "You successfully created or updated a blackjack sign!"

@@ -204,6 +204,21 @@ public class PlayerSignsConfiguration {
 		String[] values = this.plusinformations.split(";");
 		return Double.valueOf(values[0]);
 	}
+
+	public boolean blackjackIsToWriting()
+	{
+		return this.plusinformations.contains("to");
+	}
+
+	public int[] blackjackGetToWriting()
+	{
+		String[] splits = plusinformations.split(";");
+		String[] values = splits[1].split("to");
+		int a = Integer.parseInt(values[0]);
+		int b = Integer.parseInt(values[1]);
+		return new int[] {a, b};
+	}
+
 	public Double blackjackGetMinBet() 
 	{
 		return (unlimitedBet()) ? 1.0 : this.bet;
