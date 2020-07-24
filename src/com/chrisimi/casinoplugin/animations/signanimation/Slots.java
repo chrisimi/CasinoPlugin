@@ -36,7 +36,7 @@ public class Slots implements Runnable
 			{
 				//owner has enough money
 				sign.setLine(2, "§6" + Main.econ.format(thisSign.bet));
-				sign.setLine(3, "3x " + thisSign.getColorMultiplicators()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
+				sign.setLine(3, "3x " + thisSign.getColorCodesSlots()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
 			} 
 			else
 			{

@@ -45,7 +45,7 @@ public class Validator
         {
             conf.blackjackGetMaxBet();
             conf.blackjackGetMinBet();
-            conf.blackjackMultiplicator();
+            conf.blackjackGetMultiplicand();
         }
         catch(Exception e) {return false;}
 

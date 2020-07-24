@@ -42,9 +42,6 @@ public class SlotsAnimation implements Runnable
 		
 	}
 
-
-
-
 	@Override
 	public void run()
 	{
@@ -77,6 +74,8 @@ public class SlotsAnimation implements Runnable
 		
 		bukkitTaskId = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, animation, 0, 5L);
 	}
+
+	//main animation runnable which will be called every update
 	Runnable animation = new Runnable()
 	{
 		
@@ -84,13 +83,16 @@ public class SlotsAnimation implements Runnable
 		@Override
 		public void run()
 		{
+			//move every line to the next one 1 -> 2 etc.
+			//ignoring the first line because a new line will be generated there
 			String[] lines = sign.getLines();
 			
 			for(int i = 2; i >= 0; i--)
 			{
 				lines[i+1] = lines[i];
 			}
-			
+
+			//generate the new line
 			String newLine = generateNewLine();
 			lines[0] = newLine;
 			
@@ -189,7 +191,7 @@ public class SlotsAnimation implements Runnable
 		{
 			for(int i = 0; i < 3; i++)
 			{
-				if(symbStrings[1].equals(thisSign.getColorMultiplicators()[i] + symbols[i]))
+				if(symbStrings[1].equals(thisSign.getColorCodesSlots()[i] + symbols[i]))
 				{
 					winAmount = thisSign.bet * multiplicators[i];
 					break;
