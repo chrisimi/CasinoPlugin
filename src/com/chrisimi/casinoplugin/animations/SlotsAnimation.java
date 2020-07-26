@@ -22,10 +22,7 @@ public class SlotsAnimation implements Runnable
 	private final OfflinePlayer owner;
 	private final PlayerSignsManager manager;
 	private Sign sign;
-	
-	private String[] symbols;
-	private double[] multiplicators;
-	private double[] weights;
+
 	private Random random = new Random();
 	private int rollsLeft = 0;
 	private int bukkitTaskId = 0;
@@ -61,9 +58,6 @@ public class SlotsAnimation implements Runnable
 	}
 	private void startAnimation()
 	{
-		symbols = thisSign.getSlotsSymbols();
-		multiplicators = thisSign.getSlotsMultiplicators();
-		weights = thisSign.getSlotsWeight();
 		rollsLeft = random.nextInt(20) + 2;
 		
 		for(int i = 0; i < 4; i++)
@@ -149,22 +143,25 @@ public class SlotsAnimation implements Runnable
 	{
 		String newLine = "";
 		String newCharacter = "";
-		for(int i = 0; i < 3; i++)
+
+		String[] symbols = thisSign.getSlotsSymbols();
+		double[] weights = thisSign.getSlotsWeight();
+
+		for(int i = 0; i < symbols.length; i++)
 		{
-			int randomNumber = random.nextInt((int) (weights[0] + weights[1] + weights[2])) + 1;
-			
-			if(randomNumber < weights[0])
+
+			int randomNumber = random.nextInt((int) (thisSign.getSlotsWeightSum())) + 1;
+
+			double weightSum = 0.0;
+			for(int j = 0; j < symbols.length; j++)
 			{
-				newCharacter = "§b" + symbols[0];
-			} else if(randomNumber < weights[0] + weights[1])
-			{
-				newCharacter = "§a" + symbols[1];
-			} else if(randomNumber <= weights[0] + weights[1] + weights[2])
-			{
-				newCharacter = "§c" + symbols[2];
-			}
-			else {
-				newCharacter = "Error";
+				weightSum += weights[i];
+
+				if(randomNumber < weightSum)
+				{
+					newCharacter = symbols[i];
+					break;
+				}
 			}
 			
 			if(i == 0)
@@ -189,11 +186,11 @@ public class SlotsAnimation implements Runnable
 		CasinoManager.Debug(this.getClass(), String.valueOf(symbStrings[1].equals(symbStrings[3])));
 		if(symbStrings[1].equals(symbStrings[2]) && symbStrings[1].equals(symbStrings[3]))
 		{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < thisSign.getSlotsSymbols().length; i++)
 			{
-				if(symbStrings[1].equals(thisSign.getColorCodesSlots()[i] + symbols[i]))
+				if(symbStrings[1].equals(thisSign.getColorCodesSlots()[i] + thisSign.getSlotsSymbols()[i]))
 				{
-					winAmount = thisSign.bet * multiplicators[i];
+					winAmount = thisSign.bet * thisSign.getSlotsMultiplicators()[i];
 					break;
 				}
 			}
