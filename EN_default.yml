@@ -216,6 +216,9 @@ messages:
    creationmenu-blackjack-set_min_bet: "Write the min bet in the chat."
    creationmenu-blackjack-set_max_bet: "Write the max bet in the chat. You can use '-1' for an unlimited bet."
    creationmenu-blackjack-set_win_multiplicand: "Write the win mutliplicand in the chat. You can either use a number like 2.5 or the to-writing like 3 to 2."
+   creationmenu-slots-set_elem_symbol: "Write the symbol for the new option in the chat. You can also use color codes with '§'."
+   creationmenu-slots-set_elem_weight: "Write the weight for the new option in the chat. The total weight is {total_weight}."
+   creationmenu-slots-set_elem_win_multiplicand: "Write the win multiplicand for the new option in the chat if the player gets 3 of this option."
 
    creationmenu-input-double_invalid: "&4This is not a valid number!"
    creationmenu-input-string_invalid: "&4This is not a valid format!"

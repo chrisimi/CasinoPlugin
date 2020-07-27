@@ -40,7 +40,7 @@ public class Slots implements Runnable
 			} 
 			else
 			{
-				if(thisSign.currentSignAnimation == 1) {
+				if((thisSign.currentSignAnimation % 2) == 1) {
 					sign.setLine(2, "§4ERROR!");
 					sign.setLine(3, "§4ERROR!");
 				} else {
@@ -51,7 +51,7 @@ public class Slots implements Runnable
 		}
 		sign.update(true);
 		
-		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == 2) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
+		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == thisSign.getSlotsSymbols().length) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
 	}
 
 }
