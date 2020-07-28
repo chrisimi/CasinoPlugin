@@ -11,8 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.swing.*;
-
 public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 {
     private enum WaitingFor
@@ -20,7 +18,10 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         NONE,
         ADDOPTION1,
         ADDOPTION2,
-        ADDOPTION3
+        ADDOPTION3,
+        NEWWEIGHT,
+        NEWWINMULTIPLICAND,
+        NEWOPTION
     }
 
     private class Element
@@ -30,7 +31,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         public double winMultiplicand;
 
         public ItemStack changeOptionItemStack;
-        public ItemStack changeChanceItemStack;
+        public ItemStack changeWeightItemStack;
         public ItemStack changeWinMultiplicandItemStack;
         public ItemStack removeOptionItemStack;
     }
@@ -38,7 +39,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private final ItemStack addOption = ItemAPI.createItem("§6add option", Material.STONE_BUTTON);
     private final ItemStack removeOption = ItemAPI.createItem("§aremove option", Material.RED_BANNER); //when click you can remove this element
-    private final ItemStack changeChanceOfOption = ItemAPI.createItem("§6change option", Material.YELLOW_BANNER); //when click you can change the chance to get it
+    private final ItemStack changeWeightOfOption = ItemAPI.createItem("§6change option", Material.YELLOW_BANNER); //when click you can change the chance to get it
     private final ItemStack showOption = ItemAPI.createItem("§6{option numr} {option}", Material.BLUE_BANNER); //when click you can change the item like 'A' to 'B'
     private final ItemStack changeWinMultiplicandOfOption = ItemAPI.createItem("§6{win multiplicand}", Material.BROWN_BANNER); //when click you can change the win multiplicand if you get 3 in a row
 
@@ -52,6 +53,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private Element[] elements = new Element[9];
     private int currAddPos = 0;
+    private int currEditPos = 0;
     private WaitingFor waitingFor = WaitingFor.NONE;
 
     private final Location lrc;
@@ -73,10 +75,10 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     {
         this(conf.getLocation(), player);
 
-        initializeValues();
+        initializeValues(conf);
     }
 
-    private void initializeValues()
+    private void initializeValues(PlayerSignsConfiguration conf)
     {
 
     }
@@ -96,7 +98,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     }
 
     /**
-     * sort the options in elem array so that there are no empty spaces
+     * sort the options in elem array so that there are no empty spaces between elements
      */
     private void sortOptions()
     {
@@ -121,7 +123,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
             if(elements[i] == null) continue;
 
             ItemStack changeOption = new ItemStack(showOption.getType());
-            ItemStack changeChance = new ItemStack(changeChanceOfOption.getType());
+            ItemStack changeChance = new ItemStack(changeWeightOfOption.getType());
             ItemStack changeWinMultiplicand = new ItemStack(changeWinMultiplicandOfOption.getType());
             ItemStack removeOptionIS = new ItemStack(removeOption.getType());
 
@@ -131,7 +133,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
             ItemAPI.changeName(removeOptionIS, "§4remove option");
 
             elements[i].changeOptionItemStack = changeOption;
-            elements[i].changeChanceItemStack = changeChance;
+            elements[i].changeWeightItemStack = changeChance;
             elements[i].changeWinMultiplicandItemStack = changeWinMultiplicand;
             elements[i].removeOptionItemStack = removeOptionIS;
 
@@ -145,9 +147,9 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     private double getWeightSum()
     {
         double sum = 0.0;
-        for(int i = 0; i < elements.length; i++)
-            if(elements[i] != null)
-                sum += elements[i].weight;
+        for (Element element : elements)
+            if (element != null)
+                sum += element.weight;
 
         return sum;
     }
@@ -161,7 +163,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
             if(elements[i] != null)
             {
                 if(event.getClicked().equals(elements[i].changeOptionItemStack)) changeOption(i);
-                else if(event.getClicked().equals(elements[i].changeChanceItemStack)) changeChance(i);
+                else if(event.getClicked().equals(elements[i].changeWeightItemStack)) changeWeight(i);
                 else if(event.getClicked().equals(elements[i].changeWinMultiplicandItemStack)) changeWinMultiplicand(i);
                 else if(event.getClicked().equals(elements[i].removeOptionItemStack)) removeOption(i);
             }
@@ -172,17 +174,29 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeOption(int index)
     {
-
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_symbol"));
+        closeInventory();
+        waitingFor = WaitingFor.NEWOPTION;
+        waitforChatInput(player);
+        currEditPos = index;
     }
 
-    private void changeChance(int index)
+    private void changeWeight(int index)
     {
-
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_weight"));
+        closeInventory();
+        waitingFor = WaitingFor.NEWWEIGHT;
+        waitforChatInput(player);
+        currEditPos = index;
     }
 
     private void changeWinMultiplicand(int index)
     {
-
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_win_multiplicand"));
+        closeInventory();
+        waitingFor = WaitingFor.NEWWINMULTIPLICAND;
+        waitforChatInput(player);
+        currEditPos = index;
     }
 
     private void removeOption(int index)
@@ -204,15 +218,18 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         switch(waitingFor)
         {
             case ADDOPTION1:
+            {
                 //create new element at current pos
                 elements[currAddPos] = new Element();
                 elements[currAddPos].symbol = event.getMessage();
 
-                //prepare for next chat input
+                //prepare for next chat input (weight)
                 player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_weight").replace("{total_weight}", String.format("%.2f", getWeightSum())));
                 waitforChatInput(player);
                 waitingFor = WaitingFor.ADDOPTION2;
                 return;
+
+            }
             case ADDOPTION2:
             {
                 try
@@ -220,6 +237,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                     //set value
                     elements[currAddPos].weight = Double.parseDouble(event.getMessage());
 
+                    //prepare for next chat input (win multiplicand)
                     player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_win_multiplicand"));
                     waitforChatInput(player);
                     waitingFor = WaitingFor.ADDOPTION3;
@@ -229,6 +247,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                     player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
                     elements[currAddPos] = null;
                 }
+                break;
             }
             case ADDOPTION3:
             {
@@ -244,7 +263,40 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                     player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
                     elements[currAddPos] = null;
                 }
+                break;
             }
+            case NEWOPTION:
+            {
+                elements[currEditPos].symbol = event.getMessage();
+                currEditPos = -1;
+                break;
+            }
+            case NEWWEIGHT:
+            {
+                try
+                {
+                    elements[currEditPos].weight = Double.parseDouble(event.getMessage());
+                    currEditPos = -1;
+                }
+                catch(Exception e)
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
+                }
+                break;
+            }
+            case NEWWINMULTIPLICAND:
+            {
+                try
+                {
+                    elements[currEditPos].winMultiplicand = Double.parseDouble(event.getMessage());
+                    currEditPos = -1;
+                } catch(Exception e)
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
+                }
+                break;
+            }
+
         }
 
         updateInventory();
