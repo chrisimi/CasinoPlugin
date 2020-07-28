@@ -24,7 +24,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         NEWOPTION
     }
 
-    private class Element
+    private static class Element
     {
         public String symbol;
         public double weight;
@@ -34,6 +34,72 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         public ItemStack changeWeightItemStack;
         public ItemStack changeWinMultiplicandItemStack;
         public ItemStack removeOptionItemStack;
+
+        /**
+         * get an array of {@link Element} from an saved, valid slots string
+         * @param inputString string which contains the values
+         * @return {@link Element} array, with a depending size of the input
+         * @throws Exception if inputString is not in a valid format
+         */
+        public static Element[] getArray(String inputString) throws Exception
+        {
+            //split elements
+            String[] splined = inputString.split(";");
+
+            //check if it contains 2 '-' to ensure it is a valid string
+            for(int i = 0; i < splined.length; i++)
+            {
+                int count = 0;
+                for(char character : splined[i].toCharArray())
+                    if(character == '-')
+                        count++;
+
+                if(count != 2)
+                    throw new Exception("input string is invalid. Element: " + i);
+            }
+            Element[] result = new Element[splined.length];
+
+
+            for(int i = 0; i < splined.length; i++)
+            {
+                //extract saved elements from string
+                String[] elements = splined[i].split("-");
+
+                //check if values are all in a valid format
+                try
+                {
+                    result[i].symbol = elements[0];
+                    result[i].winMultiplicand = Double.parseDouble(elements[1]);
+                    result[i].weight = Double.parseDouble(elements[2]);
+                } catch(NumberFormatException nfe)
+                {
+                    throw new Exception("input string is invalid. One element is not valid, element: " + i);
+                }
+            }
+
+            return result;
+        }
+
+        /**
+         * convert a {@link Element} array to it's string version
+         * @param input {@link Element} array which should be converted
+         * @return a String as the converted version of the array, can be empty if array or elements are null
+         */
+        public static String toString(Element[] input)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for(int i = 0; i < input.length; i++)
+            {
+                if(input[i] == null) continue;
+
+                if(i != 0) sb.append(";");
+
+                sb.append(String.format("%s-%.2f-%.2f", input[i].symbol, input[i].winMultiplicand, input[i].weight));
+            }
+
+            return sb.toString();
+        }
     }
 
 
