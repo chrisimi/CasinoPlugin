@@ -178,7 +178,6 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     private void initialize()
     {
         bukkitInventory.setItem(45, setBet);
-        bukkitInventory.setItem(47, setServerSign);
         bukkitInventory.setItem(53, finishButton);
     }
 
@@ -191,8 +190,13 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
         //main sign things
         bukkitInventory.setItem(51, (isDisabled) ? enableSign : disableSign);
-        ItemAPI.changeName(setServerSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
-        bukkitInventory.setItem(47, setServerSign);
+
+        //check if player has permissions for making a server sign
+        if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
+        {
+            ItemAPI.changeName(setServerSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
+            bukkitInventory.setItem(47, setServerSign);
+        }
 
         updateFinishButton();
     }
