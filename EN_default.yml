@@ -229,3 +229,5 @@ messages:
    creationmenu-creation-dice_successful: "You successfully created or updated a dice sign!"
    creationmenu-creation-blackjack_successful: "You successfully created or updated a blackjack sign!"
    creationmenu-creation-slots_successful: "You successfully created or updated a slots sign!"
+
+   creationmenu-error-message: "An error occurred. {error}"

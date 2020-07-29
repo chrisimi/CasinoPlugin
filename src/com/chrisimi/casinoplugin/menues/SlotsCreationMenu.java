@@ -122,7 +122,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private final ItemStack barrier = ItemAPI.createItem("", Material.PINK_STAINED_GLASS_PANE);
 
-    private Element[] elements = new Element[9];
+    private final Element[] elements = new Element[9];
     private int currAddPos = 0;
     private int currEditPos = 0;
     private WaitingFor waitingFor = WaitingFor.NONE;
@@ -151,11 +151,28 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         this(conf.getLocation(), player);
 
         initializeValues(conf);
+
+        updateInventory();
     }
 
     private void initializeValues(PlayerSignsConfiguration conf)
     {
+        //parse plus information from sign to element array
+        try
+        {
+            Element[] elements = Element.getArray(conf.plusinformations);
+            for(int i = 0; i < elements.length && i < 9; i++)
+                this.elements[i] = elements[i];
 
+        } catch(Exception e)
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "can't parse information of sign"));
+            closeInventory();
+        }
+
+        this.bet = conf.bet;
+        this.isDisabled = conf.disabled;
+        this.isServerSign = conf.isServerOwner();
     }
 
     private void initialize()
@@ -197,7 +214,6 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                 }
             }
         }
-
         //set the currAddPos to the next empty space
 
         for(int i = 0; i < 9; i++)
