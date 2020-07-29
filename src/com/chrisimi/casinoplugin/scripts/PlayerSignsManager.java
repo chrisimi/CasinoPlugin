@@ -14,6 +14,7 @@ import java.util.Map.Entry;
 
 import com.chrisimi.casinoplugin.menues.BlackjackCreationMenu;
 import com.chrisimi.casinoplugin.menues.DiceCreationMenu;
+import com.chrisimi.casinoplugin.menues.SlotsCreationMenu;
 import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -321,6 +322,10 @@ public class PlayerSignsManager implements Listener {
 		{
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 			return;
+		} else if(lines[0].contains("casino") && lines[1].contains("slots"))
+		{
+			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
 		}
 
 
@@ -427,7 +432,11 @@ public class PlayerSignsManager implements Listener {
 		}
 		else if(sign.getLine(0).contains("Slots"))
 		{
-			onSlotsSignClick(sign, thisSign, player);
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
+				new SlotsCreationMenu(thisSign, player);
+			else
+				onSlotsSignClick(sign, thisSign, player);
 		}
 		else
 		{
