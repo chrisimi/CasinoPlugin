@@ -3,6 +3,7 @@ package com.chrisimi.casinoplugin.menues;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
@@ -10,6 +11,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 {
@@ -21,6 +25,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         ADDOPTION3,
         NEWWEIGHT,
         NEWWINMULTIPLICAND,
+        BET,
         NEWOPTION
     }
 
@@ -121,6 +126,10 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     private int currAddPos = 0;
     private int currEditPos = 0;
     private WaitingFor waitingFor = WaitingFor.NONE;
+    private boolean isDisabled = false;
+    private double bet = Double.MIN_VALUE;
+    private boolean isServerSign = false;
+    private boolean allValuesValid = false;
 
     private final Location lrc;
     public SlotsCreationMenu(Location lrc, Player player)
@@ -151,7 +160,9 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void initialize()
     {
-
+        bukkitInventory.setItem(45, setBet);
+        bukkitInventory.setItem(47, setServerSign);
+        bukkitInventory.setItem(53, finishButton);
     }
 
     private void updateInventory()
@@ -161,6 +172,12 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         bukkitInventory.setItem(currAddPos, addOption);
         updateSymbolsInventory();
 
+        //main sign things
+        bukkitInventory.setItem(51, (isDisabled) ? enableSign : disableSign);
+        ItemAPI.changeName(setServerSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
+        bukkitInventory.setItem(47, setServerSign);
+
+        updateFinishButton();
     }
 
     /**
@@ -180,6 +197,23 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                 }
             }
         }
+
+        //set the currAddPos to the next empty space
+
+        for(int i = 0; i < 9; i++)
+            if(elements[i] == null)
+                currAddPos = i;
+
+    }
+
+    private int amountValidElements()
+    {
+        int result = 0;
+        for(Element element : elements)
+            if(element != null)
+                result++;
+
+        return result;
     }
 
     private void updateSymbolsInventory()
@@ -220,10 +254,41 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         return sum;
     }
 
+    private void updateFinishButton()
+    {
+        boolean valuesValid = true;
+        List<String> lore = new ArrayList<>();
+
+        if(bet == Double.MIN_VALUE)
+        {
+            lore.add("-§4 bet is not set");
+            valuesValid = false;
+        } else
+            lore.add("-§a bet is set to " + Main.econ.format(bet));
+
+        lore.add((isServerSign) ? "-§e sign is a server sign" : "-§e sign is a player sign");
+        lore.add((isDisabled) ? "-§e sign is disabled" : "-§e sign is enabled");
+
+        if(amountValidElements() < 3)
+        {
+            lore.add("-§4 sign doesn't have enough elements, minimum is 3");
+            valuesValid = false;
+        } else
+            lore.add("-§a sign has " + amountValidElements() + " elements");
+
+        allValuesValid = valuesValid;
+        ItemAPI.changeName(finishButton, (valuesValid) ? "§6create sign" : "§4can't create sign because values are invalid or missing");
+        bukkitInventory.setItem(53, finishButton);
+    }
     @EventMethodAnnotation
     public void onClick(ClickEvent event)
     {
         if(event.getClicked().equals(addOption)) addOption();
+        else if(event.getClicked().equals(setBet)) setBet();
+        else if(event.getClicked().equals(setServerSign)) isServerSign = !isServerSign;
+        else if(event.getClicked().equals(disableSign)) isDisabled = true;
+        else if(event.getClicked().equals(enableSign)) isDisabled = false;
+        else if(event.getClicked().equals(finishButton) && allValuesValid) finishButton();
 
         for(int i = 0; i < elements.length; i++)
             if(elements[i] != null)
@@ -236,6 +301,29 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
         updateInventory();
 
+    }
+
+    private void finishButton()
+    {
+        PlayerSignsConfiguration conf = new PlayerSignsConfiguration(this.lrc, PlayerSignsConfiguration.GameMode.SLOTS, this.player, this.bet, Element.toString(elements));
+
+        if(isServerSign)
+            conf.ownerUUID = "server";
+
+        conf.disabled = isDisabled;
+
+        PlayerSignsManager.addPlayerSign(conf);
+        closeInventory();
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-creation-slots_successful"));
+
+    }
+
+    private void setBet()
+    {
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_bet"));
+        closeInventory();
+        waitingFor = WaitingFor.BET;
+        waitforChatInput(player);
     }
 
     private void changeOption(int index)
@@ -362,7 +450,19 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                 }
                 break;
             }
+            case BET:
+            {
+                try
+                {
+                    bet = Double.parseDouble(event.getMessage());
+                } catch(Exception e)
+                {
+                    bet = Double.MIN_VALUE;
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
+                }
 
+                break;
+            }
         }
 
         updateInventory();

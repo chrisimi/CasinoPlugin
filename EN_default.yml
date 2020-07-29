@@ -219,6 +219,7 @@ messages:
    creationmenu-slots-set_elem_symbol: "Write the symbol for the new option in the chat. You can also use color codes with '§'."
    creationmenu-slots-set_elem_weight: "Write the weight for the new option in the chat. The total weight is {total_weight}."
    creationmenu-slots-set_elem_win_multiplicand: "Write the win multiplicand for the new option in the chat if the player gets 3 of this option."
+   creationmenu-slots-set_bet: "Write the bet for this slots sign in the chat."
 
    creationmenu-input-double_invalid: "&4This is not a valid number!"
    creationmenu-input-string_invalid: "&4This is not a valid format!"
@@ -227,3 +228,4 @@ messages:
 
    creationmenu-creation-dice_successful: "You successfully created or updated a dice sign!"
    creationmenu-creation-blackjack_successful: "You successfully created or updated a blackjack sign!"
+   creationmenu-creation-slots_successful: "You successfully created or updated a slots sign!"
