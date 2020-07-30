@@ -355,7 +355,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeOption(int index)
     {
-        System.out.println("change option for index " + index);
+        CasinoManager.Debug(this.getClass(), "change option for index " + index);
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_symbol"));
         closeInventory();
         waitingFor = WaitingFor.NEWOPTION;
@@ -365,8 +365,8 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeWeight(int index)
     {
-        System.out.println("change weight for index " + index);
-        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_weight"));
+        CasinoManager.Debug(this.getClass(), "change weight for index " + index);
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_weight").replace("{total_weight}", String.valueOf(this.getWeightSum())));
         closeInventory();
         waitingFor = WaitingFor.NEWWEIGHT;
         waitforChatInput(player);
@@ -375,7 +375,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeWinMultiplicand(int index)
     {
-        System.out.println("change win multiplicand for index " + index);
+        CasinoManager.Debug(this.getClass(), "change win multiplicand for index " + index);
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_win_multiplicand"));
         closeInventory();
         waitingFor = WaitingFor.NEWWINMULTIPLICAND;
