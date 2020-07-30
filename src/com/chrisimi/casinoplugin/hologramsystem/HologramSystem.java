@@ -180,7 +180,6 @@ public class HologramSystem
 				reader.close();
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -210,7 +209,6 @@ public class HologramSystem
 				writer.close();
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

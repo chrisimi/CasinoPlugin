@@ -146,7 +146,6 @@ public class CasinoManager {
 			return new PrintWriter(new BufferedWriter(new FileWriter(debugfile, true)));
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

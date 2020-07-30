@@ -28,9 +28,11 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
  */
 public class WinningsMenu implements Listener {
 
+	//TODO rewrite to use new InventoryAPI
+
 	public static HashMap<Player, WinningsMenu> waitingForEingabe = new HashMap<>();
 	
-	public static HashMap<WinningsMenu, Integer> inventoryReadingTasks = new HashMap<>(); //TODO: on inventory close stop task
+	public static HashMap<WinningsMenu, Integer> inventoryReadingTasks = new HashMap<>();
 	
 	
 	private Main main;

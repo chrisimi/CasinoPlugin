@@ -37,7 +37,6 @@ public class NormalRightToLeftAnimation implements IRollAnimation {
 	
 	@Override
 	public Inventory getInventory() {
-		// TODO Auto-generated method stub
 		return inventory;
 	}
 	
@@ -117,7 +116,6 @@ public class NormalRightToLeftAnimation implements IRollAnimation {
 
 	@Override
 	public int getAnimationID() {
-		// TODO Auto-generated method stub
 		return 1;
 	}
 

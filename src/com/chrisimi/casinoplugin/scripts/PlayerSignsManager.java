@@ -47,19 +47,9 @@ import com.google.gson.JsonSyntaxException;
 
 public class PlayerSignsManager implements Listener {
 
-	/*
-	 * rewrited system:
-	 * one central thread (runnable) which manages the signs and clicks...
-	 * click: manager looks if sign exists and then creates the new animation
-	 * when finished... manager clears everything like garbage collector
-	 * only animate signs if a player is in the near (16 blocks)
-	 * 
-	 * TODO:_
-	 * system to check if sign is running
-	 */
 	public static int rollCount = 0;
 	/**
-	 * map which contains all player signs keyd with their location
+	 * map which contains all player signs keyed with their location
 	 */
 	private static HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<Location, PlayerSignsConfiguration>();
 	

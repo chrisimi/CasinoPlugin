@@ -22,7 +22,8 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
 
 public class BetMenu implements Listener{
 
-	//TODO: 2 modis fia bet amoi prozentual und amoi mid fixen werten!
+	//TODO rewrite to use new InventoryAPI
+
 	public static HashMap<Player, BetMenu> waitingForChatInputTasks = new HashMap<>();
 	
 	public Inventory inventory;
@@ -87,7 +88,6 @@ public class BetMenu implements Listener{
 		meta.setDisplayName("§6Current bet: " + Main.econ.format(slotChest.bet));
 		currentBetsign.setItemMeta(meta);
 		inventory.setItem(4, currentBetsign);
-		//TODO
 		
 		player.openInventory(inventory);
 		
@@ -147,7 +147,6 @@ public class BetMenu implements Listener{
 			inventory.setItem(7, plusBet3);
 			inventory.setItem(8, plusBet4);
 		}
-		//TODO bl§cke wieder verschwinden
 	}
 	private void createNewBlock(ItemStack item, double bet) {
 		ItemMeta meta = item.getItemMeta();

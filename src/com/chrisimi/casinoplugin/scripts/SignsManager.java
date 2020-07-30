@@ -174,7 +174,6 @@ public class SignsManager implements Listener {
 			writer.write(gson.toJson(signs, Signs.class));
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -376,7 +375,6 @@ public class SignsManager implements Listener {
 					return;
 				}
 				HashMap<Integer, String> lines = new HashMap<Integer, String>();
-				// TODO Auto-generated method stub
 				if(sign.getLine(0).length() > 10) {
 					
 					for(int i = 0; i < 4; i++) { //prepareSign

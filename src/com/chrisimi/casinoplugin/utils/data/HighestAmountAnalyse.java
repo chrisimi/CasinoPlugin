@@ -11,14 +11,13 @@ import org.bukkit.OfflinePlayer;
 
 import com.chrisimi.casinoplugin.serializables.PlayData;
 
-public class HighestamountAnalyse extends DataAnalyse
+public class HighestAmountAnalyse extends DataAnalyse
 {
 	
 
-	public HighestamountAnalyse(List<PlayData> data)
+	public HighestAmountAnalyse(List<PlayData> data)
 	{
 		super(data);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

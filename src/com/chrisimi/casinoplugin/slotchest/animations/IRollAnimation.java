@@ -5,6 +5,8 @@ import org.bukkit.inventory.ItemStack;
 
 public interface IRollAnimation {
 
+	//TODO translate to english
+
 	//wird beim Initialisieren vom RollAnimationManager ausgef§hrt!
 	void initialize();
 	

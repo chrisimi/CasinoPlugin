@@ -38,7 +38,7 @@ public class SlotChestsManager implements Listener{
 	/* when owner clicks on slotchest, a interface will pop up where he can configure the chest
 	 * 9 slots with items to win and to bet
 	 * 
-	 * upgrades to get more space in warehouse and winningstab
+	 * upgrades to get more space in warehouse and winnings menu
 	 * 
 	 */
 	private static HashMap<Location, SlotChest> slotChests = new HashMap<Location, SlotChest>();
@@ -62,7 +62,6 @@ public class SlotChestsManager implements Listener{
 		try {
 			importChests();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -103,8 +102,7 @@ public class SlotChestsManager implements Listener{
 		reader.close();
 		if(json.length() < 24)
 			return;
-		
-		//TODO: implement function to check if chest is valid!
+
 		SlotChestsJson slotChestsJson = null;
 		try {
 			slotChestsJson = gson.fromJson(json, SlotChestsJson.class);
@@ -164,7 +162,6 @@ public class SlotChestsManager implements Listener{
 		try {
 			exportChests();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -310,7 +307,6 @@ public class SlotChestsManager implements Listener{
 			for(int i = 0; i < 50; i++)
 				lrc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, lrc, 5, null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_error"));
 		}

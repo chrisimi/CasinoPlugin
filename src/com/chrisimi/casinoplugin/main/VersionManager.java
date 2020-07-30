@@ -61,7 +61,6 @@ public class VersionManager {
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to get version!");
 			e.printStackTrace();
 		}

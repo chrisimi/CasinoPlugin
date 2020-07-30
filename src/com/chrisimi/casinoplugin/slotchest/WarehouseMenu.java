@@ -28,14 +28,9 @@ import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 
 public class WarehouseMenu implements Listener{
-	
-	/**
-	 * alles abgedeckt mit Scheiben au§er ein Platz! da wird Items reingeshiftet
-	 * 
-	 * beim schlie§en inventar durchschauen! ob spieler etwas rausgenommen hat - fertig
-	 * 
-	 * 
-	 */
+
+	//TODO rewrite to use new InventoryAPI
+
 	public static HashMap<Inventory, Integer> tasks = new HashMap<>();
 	
 	

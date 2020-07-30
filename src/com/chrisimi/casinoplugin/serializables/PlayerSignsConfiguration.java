@@ -123,7 +123,6 @@ public class PlayerSignsConfiguration {
 
 	public int[] getWinChancesDice()
 	{
-		//TODO add check for false values
 		int[] values = new int[2];
 		String[] informations = plusinformations.split(";");
 		String[] numbers = informations[0].split("-");

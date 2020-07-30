@@ -8,7 +8,10 @@ import com.chrisimi.casinoplugin.slotchest.SlotChest;
 
 public class RollAnimationFactory {
 
-	public static IRollAnimation GetRollAnimation(Main main, SlotChest slotChest, Player player) {
+	//TODO fix switch issue and add documentation
+
+	public static IRollAnimation GetRollAnimation(Main main, SlotChest slotChest, Player player)
+	{
 		switch(slotChest.animationID) {
 		case 0:
 			return new NormalLeftToRightAnimation(main, slotChest, player);

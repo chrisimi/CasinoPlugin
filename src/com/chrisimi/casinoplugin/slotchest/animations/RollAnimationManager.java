@@ -27,6 +27,8 @@ import com.chrisimi.casinoplugin.slotchest.SlotChest;
 
 public class RollAnimationManager implements Runnable, Listener{
 
+	//TODO rewrite to use new InventoryAPI
+
 	public static int rollsGlobal = 0;
 	
 	private final OfflinePlayer owner;

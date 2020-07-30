@@ -2,24 +2,17 @@
 package com.chrisimi.casinoplugin.scripts;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 import com.chrisimi.casinoplugin.animations.LeaderboardsignAnimation;
 import com.chrisimi.casinoplugin.hologramsystem.LBHologram;
 import com.chrisimi.casinoplugin.serializables.PlayData;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Cycle;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Mode;
-import com.chrisimi.casinoplugin.utils.CycleHelper;
 import com.chrisimi.casinoplugin.utils.data.CountAnalyse;
 import com.chrisimi.casinoplugin.utils.data.DataAnalyse;
-import com.chrisimi.casinoplugin.utils.data.HighestamountAnalyse;
+import com.chrisimi.casinoplugin.utils.data.HighestAmountAnalyse;
 import com.chrisimi.casinoplugin.utils.data.HighestlossAnalyse;
 import com.chrisimi.casinoplugin.utils.data.Query;
 import com.chrisimi.casinoplugin.utils.data.QueryPost;
@@ -28,11 +21,10 @@ import com.chrisimi.casinoplugin.utils.data.SumlossAnalyse;
 
 public class DataQueryManager
 {
-
+	@Deprecated
 	public static Query getQuery(LeaderboardsignAnimation animation)
 	{
 		return null;
-//		TODO
 	}
 	public static LinkedHashMap<Integer, Query> getQuery(LBHologram hologram)
 	{
@@ -51,7 +43,7 @@ public class DataQueryManager
 		case SUMAMOUNT:
 			return new SumamountAnalyse(data);
 		case HIGHESTAMOUNT:
-			return new HighestamountAnalyse(data);
+			return new HighestAmountAnalyse(data);
 		case SUMLOSS:
 			return new SumlossAnalyse(data);
 		case HIGHESTLOSS:

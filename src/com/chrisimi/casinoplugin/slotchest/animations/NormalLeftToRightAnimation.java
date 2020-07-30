@@ -29,7 +29,7 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 		this.main = main;
 		this.slotChest = slotChest;
 		this.player = player;
-		this.inventory = Bukkit.createInventory(player, inventorySize, "roll animation"); //TODO besserer name
+		this.inventory = Bukkit.createInventory(player, inventorySize, "roll animation");
 		
 		fillmaterial = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
 	}
@@ -105,13 +105,11 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 
 	@Override
 	public int getAnimationID() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
 	@Override
 	public int getInventorySize() {
-		// TODO Auto-generated method stub
 		return inventorySize;
 	}
 

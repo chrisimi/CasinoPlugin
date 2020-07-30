@@ -9,6 +9,9 @@ import com.chrisimi.casinoplugin.main.Main;
 @Deprecated
 public class SlotChestAnimation implements Listener{
 
+
+	//TODO delete 
+
 	private final Main main;
 	private final SlotChest slotChest;
 	private final OfflinePlayer owner;

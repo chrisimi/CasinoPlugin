@@ -144,7 +144,6 @@ public class SlotChest {
 			try {
 				throw new Exception("World is not valid!");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

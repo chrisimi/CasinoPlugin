@@ -24,6 +24,9 @@ public class OwnerInterfaceInventory implements Listener{
 	/*
 	 * Interface for the Owner, to configure his chest!
 	 */
+
+	//TODO rewrite to use new InventoryAPI
+
 	private Player owner;
 	private Main main;
 	private SlotChest slotChest;

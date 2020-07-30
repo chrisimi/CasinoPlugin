@@ -57,7 +57,6 @@ public class UpdateManager {
 			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully created config.yml!");
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -216,7 +215,6 @@ public class UpdateManager {
 				writer.close();
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

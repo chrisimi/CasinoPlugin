@@ -19,6 +19,8 @@ import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationFactory;
 
 public class SettingsMenu implements Listener{
 
+	//TODO rewrite to use new InventoryAPI
+
 	private final Main main;
 	private final SlotChest slotChest;
 	private final Player owner;
