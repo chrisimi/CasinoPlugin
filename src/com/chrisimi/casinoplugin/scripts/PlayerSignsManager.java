@@ -8,17 +8,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.menues.BlackjackCreationMenu;
+import com.chrisimi.casinoplugin.menues.DiceCreationMenu;
+import com.chrisimi.casinoplugin.menues.SlotsCreationMenu;
+import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -67,13 +68,13 @@ public class PlayerSignsManager implements Listener {
 	private GsonBuilder builder;
 	private Gson gson;
 	private Main main;
-	private Double maxBetDice = 200.0;
-	private Double maxBetBlackjack = 200.0;
-	private Double maxBetSlots = 200.0;
+	private static Double maxBetDice = 200.0;
+	private static Double maxBetBlackjack = 200.0;
+	private static Double maxBetSlots = 200.0;
 	
-	private int maxSignsDice = -1;
-	private int maxSignsBlackjack = -1;
-	private int maxSignsSlots = -1;
+	private static int maxSignsDice = -1;
+	private static int maxSignsBlackjack = -1;
+	private static int maxSignsSlots = -1;
 	
 	private int managerUpdateCycle = 120;
 	private int managerDistance = 16;
@@ -234,7 +235,15 @@ public class PlayerSignsManager implements Listener {
 				if(cnf == null) throw new NullPointerException();
 				
 				cnf.changeEnum();
+
+				//check if player sign has valid values
+				if(!Validator.validate(cnf))
+				{
+					CasinoManager.LogWithColor(ChatColor.RED + "A player sign with invalid values have been found. The sign is now disabled and can be enabled again when all values are valid");
+					cnf.disabled = true;
+				}
 				playerSigns.put(cnf.getLocation(), cnf);
+
 				if(cnf.plusinformations.contains("disabled")) {
 					String[] values = cnf.plusinformations.split(";");
 					cnf.plusinformations = values[0] + ";" + values[1];
@@ -304,6 +313,22 @@ public class PlayerSignsManager implements Listener {
 		
 		String[] lines = event.getLines();
 		if(!(lines[0].contains("casino") || lines[0].equalsIgnoreCase("casino") || lines[0].equalsIgnoreCase("slots") || lines[0].contains("slots"))) return;
+
+		if(lines[0].contains("casino") && lines[1].contains("dice"))
+		{
+			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
+		} else if(lines[0].contains("casino") && lines[1].contains("blackjack"))
+		{
+			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
+		} else if(lines[0].contains("casino") && lines[1].contains("slots"))
+		{
+			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
+		}
+
+
 		if(lines[1].length() == 0) return;
 		if(lines[2].length() == 0) return;
 		if(lines[3].length() == 0) return;
@@ -388,13 +413,30 @@ public class PlayerSignsManager implements Listener {
 		Sign sign = (Sign) event.getClickedBlock().getState();
 		if(sign == null) return;
 		
-		if(sign.getLine(0).contains("Dice")) {
-			onDiceSignClick(sign, thisSign, player);
-		} else if(sign.getLine(0).contains("Blackjack")) {
-			onBlackjackSignClick(sign, thisSign, player);
-		} else if(sign.getLine(0).contains("Slots"))
+		if(sign.getLine(0).contains("Dice"))
 		{
-			onSlotsSignClick(sign, thisSign, player);
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
+				new DiceCreationMenu(thisSign, event.getPlayer());
+			else
+				onDiceSignClick(sign, thisSign, player);
+
+		}
+		else if(sign.getLine(0).contains("Blackjack"))
+		{
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
+				new BlackjackCreationMenu(thisSign, event.getPlayer());
+			else
+				onBlackjackSignClick(sign, thisSign, player);
+		}
+		else if(sign.getLine(0).contains("Slots"))
+		{
+			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
+				new SlotsCreationMenu(thisSign, player);
+			else
+				onSlotsSignClick(sign, thisSign, player);
 		}
 		else
 		{
@@ -449,7 +491,7 @@ public class PlayerSignsManager implements Listener {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
 			return;
 		}
-		if(!(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackMultiplicator()))) {
+		if(!(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackGetMultiplicand()))) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
 			return;
 		}
@@ -871,7 +913,7 @@ public class PlayerSignsManager implements Listener {
 	 * @param gameMode {@link GameMode} instance of gamemode
 	 * @return count as int
 	 */
-	private int getAmountOfPlayerSigns(Player player, GameMode gameMode)
+	private static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
 	{
 		return playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
@@ -926,7 +968,33 @@ public class PlayerSignsManager implements Listener {
 	{
 		return new ArrayList<>(playerSigns.values());
 	}
-	
+
+	public static void addPlayerSign(PlayerSignsConfiguration conf)
+	{
+		playerSigns.put(conf.getLocation(), conf);
+		CasinoManager.playerSignsManager.exportSigns();
+	}
+
+	public static double getMaxBetDice() {return maxBetDice;}
+	public static double getMaxBetSlots() {return maxBetSlots;}
+	public static double getMaxBetBlackjack() {return maxBetBlackjack;}
+	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
+	{
+		switch (gamemode)
+		{
+			case BLACKJACK:
+				if(maxSignsBlackjack == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsBlackjack;
+			case DICE:
+				if(maxSignsDice == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsDice;
+			case SLOTS:
+				if(maxSignsSlots == -1) return true;
+				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsSlots;
+		}
+		return false;
+	}
+
 	private static class Manager 
 	{
 		private static int currentID = 0;

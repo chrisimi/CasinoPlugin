@@ -22,10 +22,7 @@ public class SlotsAnimation implements Runnable
 	private final OfflinePlayer owner;
 	private final PlayerSignsManager manager;
 	private Sign sign;
-	
-	private String[] symbols;
-	private double[] multiplicators;
-	private double[] weights;
+
 	private Random random = new Random();
 	private int rollsLeft = 0;
 	private int bukkitTaskId = 0;
@@ -41,9 +38,6 @@ public class SlotsAnimation implements Runnable
 		this.sign = thisSign.getSign();
 		
 	}
-
-
-
 
 	@Override
 	public void run()
@@ -64,9 +58,6 @@ public class SlotsAnimation implements Runnable
 	}
 	private void startAnimation()
 	{
-		symbols = thisSign.getSlotsSymbols();
-		multiplicators = thisSign.getSlotsMultiplicators();
-		weights = thisSign.getSlotsWeight();
 		rollsLeft = random.nextInt(20) + 2;
 		
 		for(int i = 0; i < 4; i++)
@@ -77,6 +68,8 @@ public class SlotsAnimation implements Runnable
 		
 		bukkitTaskId = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, animation, 0, 5L);
 	}
+
+	//main animation runnable which will be called every update
 	Runnable animation = new Runnable()
 	{
 		
@@ -84,13 +77,16 @@ public class SlotsAnimation implements Runnable
 		@Override
 		public void run()
 		{
+			//move every line to the next one 1 -> 2 etc.
+			//ignoring the first line because a new line will be generated there
 			String[] lines = sign.getLines();
 			
 			for(int i = 2; i >= 0; i--)
 			{
 				lines[i+1] = lines[i];
 			}
-			
+
+			//generate the new line
 			String newLine = generateNewLine();
 			lines[0] = newLine;
 			
@@ -147,22 +143,29 @@ public class SlotsAnimation implements Runnable
 	{
 		String newLine = "";
 		String newCharacter = "";
+
+		String[] symbols = thisSign.getSlotsSymbols();
+		String[] colorCodes = thisSign.getColorCodesSlots();
+		double[] weights = thisSign.getSlotsWeight();
+
+		/*
+		//for 3 elements on the display
 		for(int i = 0; i < 3; i++)
 		{
-			int randomNumber = random.nextInt((int) (weights[0] + weights[1] + weights[2])) + 1;
-			
-			if(randomNumber < weights[0])
+
+			int randomNumber = random.nextInt((int) (thisSign.getSlotsWeightSum())) + 1;
+
+			//get the character from the weight sum
+			double weightSum = 0.0;
+			for(int j = 0; j < symbols.length; j++)
 			{
-				newCharacter = "§b" + symbols[0];
-			} else if(randomNumber < weights[0] + weights[1])
-			{
-				newCharacter = "§a" + symbols[1];
-			} else if(randomNumber <= weights[0] + weights[1] + weights[2])
-			{
-				newCharacter = "§c" + symbols[2];
-			}
-			else {
-				newCharacter = "Error";
+				weightSum += weights[i];
+
+				if(randomNumber < weightSum)
+				{
+					newCharacter = colorCodes[i] + symbols[i];
+					break;
+				}
 			}
 			
 			if(i == 0)
@@ -172,8 +175,28 @@ public class SlotsAnimation implements Runnable
 			else if(i == 2)
 				newLine += " " + newCharacter;
 		}
-		
-		
+		*/
+
+		//for 3 element on the sign
+		for(int i = 0; i < 3; i++)
+		{
+			double randomNum = random.nextDouble() * thisSign.getSlotsWeightSum();
+
+			//iterate through all symbols weight to find out which symbol has the correct weight
+			double sumWeight = 0.0;
+			for(int j = 0; j < symbols.length; j++)
+			{
+				sumWeight += weights[j];
+				if(randomNum < sumWeight)
+				{
+					newCharacter = colorCodes[j] + symbols[j];
+					break;
+				}
+			}
+
+			newLine += " " + newCharacter;
+		}
+
 		return newLine;
 	}
 	private Boolean checkIfPlayerWon(String line)
@@ -187,11 +210,11 @@ public class SlotsAnimation implements Runnable
 		CasinoManager.Debug(this.getClass(), String.valueOf(symbStrings[1].equals(symbStrings[3])));
 		if(symbStrings[1].equals(symbStrings[2]) && symbStrings[1].equals(symbStrings[3]))
 		{
-			for(int i = 0; i < 3; i++)
+			for(int i = 0; i < thisSign.getSlotsSymbols().length; i++)
 			{
-				if(symbStrings[1].equals(thisSign.getColorMultiplicators()[i] + symbols[i]))
+				if(symbStrings[1].equals(thisSign.getColorCodesSlots()[i] + thisSign.getSlotsSymbols()[i]))
 				{
-					winAmount = thisSign.bet * multiplicators[i];
+					winAmount = thisSign.bet * thisSign.getSlotsMultiplicators()[i];
 					break;
 				}
 			}

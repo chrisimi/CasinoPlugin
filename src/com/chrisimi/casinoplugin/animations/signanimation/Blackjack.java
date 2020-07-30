@@ -28,14 +28,14 @@ public class Blackjack implements Runnable
 			sign.setLine(2, "§4DISABLED!");
 			sign.setLine(3, "§4DISABLED!");
 		} else {
-			if(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackMultiplicator())) {
+			if(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackGetMultiplicand())) {
 				if(thisSign.currentSignAnimation == 0) {
 					sign.setLine(2, "§l§6min: " + Main.econ.format(thisSign.blackjackGetMinBet()));
 					
 					if(thisSign.plusinformations.contains("to"))
 						sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
 					else
-						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.bet));
+						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackGetMultiplicand()*thisSign.bet));
 					
 				} else {
 					//print infinite symbol when max bet is infinite
@@ -47,7 +47,7 @@ public class Blackjack implements Runnable
 					if(thisSign.plusinformations.contains("to"))
 						sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
 					else
-						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackMultiplicator()*thisSign.blackjackGetMaxBet()));
+						sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackGetMultiplicand()*thisSign.blackjackGetMaxBet()));
 				}
 			} else {
 				if(thisSign.currentSignAnimation == 1) {

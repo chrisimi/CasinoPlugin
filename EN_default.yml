@@ -99,6 +99,7 @@ messages:
    commands-player-slotchest_chest_invalid: "&4This is not a valid chest!"
    commands-player-slotchest_chest_not_empty: "&4This chest contains items! You have to remove them first, before you can create a SlotChest out of it!"
    commands-player-slotchest_no_slotchests: "&4You don't have any SlotChests!"
+   commands-player-playersigns_enable_error: "&4You can't enable this sign because it has invalid values!"
    commands-player-playersigns_enable: "You successfully enabled your %sign% sign!"
    commands-player-playersigns_is_enabled: "&4Your sign is currently enabled!"
    commands-player-playersigns_disable: "You successfully disabled your %sign% sign!"
@@ -206,5 +207,27 @@ messages:
    hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
    hologrammenu-update: "You successfully updated the hologram."
    
-   
-   
+   creationmenu-dice-set_win_range: "Write in the chat the range when the player should win between 1 and 100 in the format &efrom&6-&eto&6 like 1-20."
+   creationmenu-dice-set_win_multiplicand: "Write in the chat the number, the bet of the player should be multiplied with when he wins like 2 or 1.5."
+   creationmenu-dice-set_bet: "Write the bet for this dice sign in the chat."
+   creationmenu-leaderboard-set_position: "Write the number of the position for this sign in the chat like 1 for the first place."
+   creationmenu-leaderboard-set_range: "Write the amount of blocks the sign should cover or 'all' for all your signs."
+   creationmenu-leaderboard-set_valid_date: "Write the date, until which the sign should use data, in the chat or 'remove' to remove it. Use for the date dd-MM-yyy hh:mm or MM-dd-yyyy h:mm"
+   creationmenu-blackjack-set_min_bet: "Write the min bet in the chat."
+   creationmenu-blackjack-set_max_bet: "Write the max bet in the chat. You can use '-1' for an unlimited bet."
+   creationmenu-blackjack-set_win_multiplicand: "Write the win mutliplicand in the chat. You can either use a number like 2.5 or the to-writing like 3 to 2."
+   creationmenu-slots-set_elem_symbol: "Write the symbol for the new option in the chat. You can also use color codes with '&'."
+   creationmenu-slots-set_elem_weight: "Write the weight for the new option in the chat. The total weight is {total_weight}."
+   creationmenu-slots-set_elem_win_multiplicand: "Write the win multiplicand for the new option in the chat if the player gets 3 of this option."
+   creationmenu-slots-set_bet: "Write the bet for this slots sign in the chat."
+
+   creationmenu-input-double_invalid: "&4This is not a valid number!"
+   creationmenu-input-string_invalid: "&4This is not a valid format!"
+   creationmenu-input-integer_invalid: "&4This is not a valid integer!"
+   creationmenu-input-date_invalid: "&4This is not a valid date!"
+
+   creationmenu-creation-dice_successful: "You successfully created or updated a dice sign!"
+   creationmenu-creation-blackjack_successful: "You successfully created or updated a blackjack sign!"
+   creationmenu-creation-slots_successful: "You successfully created or updated a slots sign!"
+
+   creationmenu-error-message: "An error occurred. {error}"

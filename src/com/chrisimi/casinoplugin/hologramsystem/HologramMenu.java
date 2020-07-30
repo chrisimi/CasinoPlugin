@@ -1,40 +1,28 @@
 package com.chrisimi.casinoplugin.hologramsystem;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Skull;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Cycle;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Mode;
-import com.chrisimi.inventoryapi.ChatEvent;
-import com.chrisimi.inventoryapi.ClickEvent;
-import com.chrisimi.inventoryapi.EventMethodAnnotation;
-import com.chrisimi.inventoryapi.IInventoryAPI;
-import com.chrisimi.inventoryapi.Inventory;
-import com.chrisimi.inventoryapi.InventoryAPI;
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class HologramMenu implements IInventoryAPI
+/**
+ * @author chrisimi github.com/chrismi
+ *
+ * a inventory which tends to create a hologram or update a existing one
+ */
+public class HologramMenu extends Inventory implements IInventoryAPI
 {
-	/*
-	 * todo
-	 *  done function to set hologram name
-	 *  done when player has serversigns perms a block should be in the inventory to set if it's a server sign
-	 * 
-	 * add a button to switch between cycles
-	 * 
-	 */
 	
 	private enum WaitingFor {
 		NONE,
@@ -44,11 +32,6 @@ public class HologramMenu implements IInventoryAPI
 		NAME,
 		DESCRIPTION
 	}
-	
-	
-	private final Player player;
-	private final Inventory inventory;
-	private final org.bukkit.inventory.Inventory bukkitInventory;
 	
 	private Mode currentMode = Mode.HIGHESTAMOUNT;
 	private Cycle currentCycle = Cycle.NaN;
@@ -69,32 +52,43 @@ public class HologramMenu implements IInventoryAPI
 	
 	private WaitingFor waitingForChatInput = WaitingFor.NONE;
 	
-	private ItemStack switchBetweenModes = new ItemStack(Material.GOLD_NUGGET);
-	private ItemStack choosePosition = new ItemStack(Material.SIGN);
-	private ItemStack setLocation = com.chrisimi.casinoplugin.scripts.Skull.getSkullByTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDM4Y2YzZjhlNTRhZmMzYjNmOTFkMjBhNDlmMzI0ZGNhMTQ4NjAwN2ZlNTQ1Mzk5MDU1NTI0YzE3OTQxZjRkYyJ9fX0=");
-	private ItemStack setRange = new ItemStack(Material.TRIPWIRE_HOOK);
-	private ItemStack setHologramName = new ItemStack(Material.SIGN);
-	private ItemStack changeServerSign = new ItemStack(Material.GOLD_BLOCK);
-	private ItemStack createHologram = new ItemStack(Material.STONE_BUTTON);
-	private ItemStack switchBetweenCycles = new ItemStack(Material.CLOCK);
-	private ItemStack setDescription = new ItemStack(Material.SIGN);
-	private ItemStack chooseHighlightTop3 = new ItemStack(Material.GLOWSTONE);
-	
+	private final ItemStack switchBetweenModes = ItemAPI.createItem("§6change leaderboard mode", Material.GOLD_NUGGET);
+	private final ItemStack choosePosition = ItemAPI.createItem("§6set showing positions", Material.SIGN);
+	private final ItemStack setLocation = com.chrisimi.casinoplugin.scripts.Skull.getSkullByTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDM4Y2YzZjhlNTRhZmMzYjNmOTFkMjBhNDlmMzI0ZGNhMTQ4NjAwN2ZlNTQ1Mzk5MDU1NTI0YzE3OTQxZjRkYyJ9fX0=");
+	private final ItemStack setRange = ItemAPI.createItem("§6set range", Material.TRIPWIRE_HOOK);
+	private final ItemStack setHologramName = ItemAPI.createItem("§6set hologram name", Material.SIGN);
+	private final ItemStack changeServerSign = new ItemStack(Material.GOLD_BLOCK);
+	private final ItemStack createHologram = new ItemStack(Material.STONE_BUTTON);
+	private final ItemStack switchBetweenCycles = ItemAPI.createItem("§6change cycle", Material.CLOCK);
+	private final ItemStack setDescription = ItemAPI.createItem("§6set description - information, which will be shown on the top of the hologram (optional", Material.SIGN);
+	private final ItemStack chooseHighlightTop3 = new ItemStack(Material.GLOWSTONE);
+
+	/**
+	 * start in a new inventory to create a new hologram
+	 * @param player instance of player
+	 */
 	public HologramMenu(Player player)
 	{
-		this.player = player;
-		this.inventory = InventoryAPI.createInventory(player, 9 * 3, Main.getInstance(), "Hologram create menu");
-		this.bukkitInventory = inventory.getInventory();
-		inventory.addEvents(this);
+		super(player, 9*3, Main.getInstance(), "Hologram create menu");
+		//this.player = player;
+		//this.inventory = InventoryAPI.createInventory(player, 9 * 3, Main.getInstance(), "Hologram create menu");
+
+		addEvents(this);
 		
 		
 		openInventory();
 		initialize();
 	}
+
+	/**
+	 * update a existing hologram
+	 * @param player player instance of the owner
+	 * @param hologram hologram instance of the hologram to edit
+	 */
 	public HologramMenu(Player player, LBHologram hologram)
 	{
 		this(player);
-		/* load data from holorgam to edit it
+		/* load data from hologram to edit it
 		 * 
 		 */
 		loadFromHologram(hologram);
@@ -102,6 +96,7 @@ public class HologramMenu implements IInventoryAPI
 	
 	private void loadFromHologram(LBHologram hologram)
 	{
+		//load the data from the hologram object
 		loadedHologram = hologram;
 		oldLocation = hologram.getLocation().clone();
 		this.currentMode = hologram.mode;
@@ -121,38 +116,16 @@ public class HologramMenu implements IInventoryAPI
 	
 	private void initialize()
 	{
-		
-		ItemMeta meta = switchBetweenModes.getItemMeta();
-		meta.setDisplayName("§6change leaderboard mode");
-		switchBetweenModes.setItemMeta(meta);
-		
-		meta = switchBetweenCycles.getItemMeta();
-		meta.setDisplayName("§6change cycle");
-		switchBetweenCycles.setItemMeta(meta);
-		
-		meta = choosePosition.getItemMeta();
-		meta.setDisplayName("§6set showing positions");
-		choosePosition.setItemMeta(meta);
+		//set position of items because they won't change
 		bukkitInventory.setItem(1, choosePosition);
-		
-		meta = setLocation.getItemMeta();
-		meta.setDisplayName("§6set location (optional) your current position will be used");
-		setLocation.setItemMeta(meta);
+
+		ItemAPI.changeName(setLocation, "§6set location (optional), your current position will be used");
 		bukkitInventory.setItem(2, setLocation);
-		
-		meta = setRange.getItemMeta();
-		meta.setDisplayName("§6set range");
-		setRange.setItemMeta(meta);
+
 		bukkitInventory.setItem(3, setRange);
-		
-		meta = setHologramName.getItemMeta();
-		meta.setDisplayName("§6set hologram name");
-		setHologramName.setItemMeta(meta);
+
 		bukkitInventory.setItem(4, setHologramName);
-		
-		meta = setDescription.getItemMeta();
-		meta.setDisplayName("§6set description - information, which will be shown on the top of the hologram (optional)");
-		setDescription.setItemMeta(meta);
+
 		bukkitInventory.setItem(5, setDescription);
 		
 		updateInventory();
@@ -160,37 +133,22 @@ public class HologramMenu implements IInventoryAPI
 	}
 	private void updateInventory()
 	{
+		//set lore for switch mode
 		ItemMeta meta = switchBetweenModes.getItemMeta();
 		meta.setLore(getLoreForModes());
 		switchBetweenModes.setItemMeta(meta);
 		bukkitInventory.setItem(0, switchBetweenModes);
-		
+
+		//change create hologram button
 		editCreateHologramButton();
 		bukkitInventory.setItem(22, createHologram);
-		
+
+		//change other blocks
 		editServerSignBlock();
-		
 		editSwitchBetweenCycles();
-		
 		editHighlightTop3();
 	}
-	
 
-	
-	
-	@Override
-	public void openInventory()
-	{
-		inventory.openInventory();
-		player.openInventory(bukkitInventory);
-	}
-
-	@Override
-	public void closeInventory()
-	{
-		inventory.closeInventory();
-		player.closeInventory();
-	}
 	
 	
 	@com.chrisimi.inventoryapi.EventMethodAnnotation
@@ -216,11 +174,10 @@ public class HologramMenu implements IInventoryAPI
 	}
 	private void setDescription()
 	{
-		//TODO
 		waitingForChatInput = WaitingFor.DESCRIPTION;
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-description"));
 		closeInventory();
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	private void changeServerSign()
 	{
@@ -232,7 +189,7 @@ public class HologramMenu implements IInventoryAPI
 		waitingForChatInput = WaitingFor.NAME;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	
 	private void setRange()
@@ -240,19 +197,19 @@ public class HologramMenu implements IInventoryAPI
 		waitingForChatInput = WaitingFor.RANGE;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-range"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 	private void setLocation()
 	{
 		waitingForChatInput = WaitingFor.LOCATION;
 		closeInventory();
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-location"));
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 	}
 
 	private void choosePosition()
 	{
-		inventory.waitforChatInput(player);
+		waitforChatInput(player);
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-chooseposition"));
 		waitingForChatInput = WaitingFor.POSITION;
 		closeInventory();
@@ -310,7 +267,7 @@ public class HologramMenu implements IInventoryAPI
 			break;
 		case NAME:
 			
-			if(!hologramnameExists(event.getMessage()))
+			if(!hologramNameExists(event.getMessage()))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
 				this.nameOfHologram = event.getMessage();
@@ -329,12 +286,12 @@ public class HologramMenu implements IInventoryAPI
 			break;
 		}
 		
-		waitingForChatInput = (waitingForChatInput != WaitingFor.NONE) ? WaitingFor.NONE : waitingForChatInput; //set waitingforchatinput back to none 
+		waitingForChatInput = WaitingFor.NONE; //set waiting for chat input back to none
 		updateInventory();
 		
 	}
 	
-	private boolean hologramnameExists(String name)
+	private boolean hologramNameExists(String name)
 	{
 		for(LBHologram holo : HologramSystem.getHolograms())
 		{
@@ -350,15 +307,15 @@ public class HologramMenu implements IInventoryAPI
 		int a, b;
 		try
 		{
-			a = Integer.valueOf(message.split("-")[0]);
-			b = Integer.valueOf(message.split("-")[1]);
+			a = Integer.parseInt(message.split("-")[0]);
+			b = Integer.parseInt(message.split("-")[1]);
 		} catch (Exception e)
 		{
 			return false;
 		}
 		
-		minPosition = (a < b) ? a : b;
-		maxPosition = (b > a) ? b : a;
+		minPosition = Math.min(a, b);
+		maxPosition = Math.max(a, b);
 		return true;
 		
 	}
@@ -368,14 +325,13 @@ public class HologramMenu implements IInventoryAPI
 		{
 			useAllMode = true;
 			range = 0;
-			return true;
 		}
 		else
 		{
-			int rangeInput = 0;
+			int rangeInput;
 			try
 			{
-				rangeInput = Integer.valueOf(message);
+				rangeInput = Integer.parseInt(message);
 			} catch (Exception e)
 			{
 				return false;
@@ -385,17 +341,21 @@ public class HologramMenu implements IInventoryAPI
 			
 			range = rangeInput;
 			useAllMode = false;
-			return true;
 		}
+		return true;
 	}
 	
 	private void createHologram()
 	{
-//	TODO	
+
+		//check if all values are valid
+
+		//afterwards put all information from local variables in a new hologram instance or update in the existing one
+		//send the instance to the hologram system for proceeding
 		if(!validValues) return;
-		
-		LBHologram hologram = null;
-		
+
+		LBHologram hologram;
+
 		if(loadedHologram == null)
 			hologram = new LBHologram();
 		else
@@ -492,7 +452,7 @@ public class HologramMenu implements IInventoryAPI
 		{
 			lore.add("§a- top 3 won't be highlighed with a diamond, gold and iron block.");
 		}
-		if(description == "")
+		if(description.equals(""))
 		{
 			lore.add("§a- you haven't setup a description for the hologram");
 		}
@@ -500,8 +460,7 @@ public class HologramMenu implements IInventoryAPI
 		{
 			lore.add("§a- description: ");
 			String[] lines = description.replaceAll("&", "§").split("\n");
-			for(int i = 0; i < lines.length; i++)
-				lore.add("  " + lines[i]);
+			for (String line : lines) lore.add("  " + line);
 		}
 		
 		
@@ -520,27 +479,27 @@ public class HologramMenu implements IInventoryAPI
 			meta.setLore(lore);
 			createHologram.setItemMeta(meta);
 		}
+		//set the value
 		validValues = allCorrect;
 	}
 	
 	private void editServerSignBlock()
 	{
 
+		ItemMeta meta = changeServerSign.getItemMeta();
 		if(isServerSign)
 		{
-			ItemMeta meta = changeServerSign.getItemMeta();
 			meta.setDisplayName("§4Change it to a player sign!");
-			changeServerSign.setItemMeta(meta);
 		}
 		else
 		{
-			ItemMeta meta = changeServerSign.getItemMeta();
 			meta.setDisplayName("§6Change it to a serversign!");
-			changeServerSign.setItemMeta(meta);
 		}
+		changeServerSign.setItemMeta(meta);
 		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server"))
 		{
-			//check when the hologram is getting edited if the player is admin because a player shouldn't be able to make a server sign back to a player sign
+			//check when the hologram is getting edited or  if the player is admin
+			// because a player shouldn't be able to make a server sign back to a player sign
 			if(loadedHologram != null && Main.perm.has(player, "casino.admin"))
 				bukkitInventory.setItem(9, changeServerSign);
 		}

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -366,11 +367,17 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
 		}
-		
-		// TODO Auto-generated method stub
+
+
 		PlayerSignsConfiguration cnf = checkForSign(player);
 		if(cnf == null) return; //feedback wird vorher schon ausgegeben
-		
+
+		if(!(Validator.validate(cnf)))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_enable_error"));
+			return;
+		}
+
 		if(cnf.isSignDisabled()) {
 			cnf.enableSign();
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_enable").replace("%sign%", cnf.gamemode.toString()));

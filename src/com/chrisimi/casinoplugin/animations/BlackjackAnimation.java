@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -18,7 +17,6 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
 import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
 import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
-import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.Card;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
@@ -315,7 +313,7 @@ public class BlackjackAnimation implements Runnable {
 			return;
 		}
 		
-		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackMultiplicator() + this.playerBet : this.playerBet * 2;
+		double winamount = (Card.getValue(cards) == 21) ? this.playerBet * this.thisSign.blackjackGetMultiplicand() + this.playerBet : this.playerBet * 2;
 		if(Card.getValue(cards) == 21) {
 			//player.sendMessage(CasinoManager.getPrefix() + "§lYou got a Blackjack!");
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-player_blackjack"));

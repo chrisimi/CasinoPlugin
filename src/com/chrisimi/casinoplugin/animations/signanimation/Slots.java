@@ -36,11 +36,11 @@ public class Slots implements Runnable
 			{
 				//owner has enough money
 				sign.setLine(2, "§6" + Main.econ.format(thisSign.bet));
-				sign.setLine(3, "3x " + thisSign.getColorMultiplicators()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
+				sign.setLine(3, "3x " + thisSign.getColorCodesSlots()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
 			} 
 			else
 			{
-				if(thisSign.currentSignAnimation == 1) {
+				if((thisSign.currentSignAnimation % 2) == 1) {
 					sign.setLine(2, "§4ERROR!");
 					sign.setLine(3, "§4ERROR!");
 				} else {
@@ -50,8 +50,7 @@ public class Slots implements Runnable
 			}
 		}
 		sign.update(true);
-		
-		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == 2) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
+		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == thisSign.getSlotsSymbols().length - 1) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
 	}
 
 }

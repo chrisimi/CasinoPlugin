@@ -88,7 +88,6 @@ public class UpdateManager {
 			cofn.save(Main.configYml);
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		changePointsToCommand();
@@ -135,7 +134,7 @@ public class UpdateManager {
 							output += " " + String.valueOf(Integer.valueOf(ch));
 						}
 						
-						System.out.println(splited[0] + " + " + output);
+						CasinoManager.Debug(UpdateManager.class, splited[0] + " + " + output);
 						
 						if(splited[1].equals(" ") || splited[1].equals(""))
 						{

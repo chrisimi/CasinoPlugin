@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.chrisimi.casinoplugin.menues.LeaderboardCreationMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
@@ -38,6 +40,8 @@ import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Mode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class LeaderboardsignsManager implements Listener {
 		
@@ -351,7 +355,18 @@ public class LeaderboardsignsManager implements Listener {
 			checkIfSignIsLeaderboardSign(event);
 		}
 	}
-	
+	@EventHandler
+	public void onSignClick(PlayerInteractEvent event)
+	{
+		if(!(event.getAction() == Action.RIGHT_CLICK_BLOCK)) return;
+		if(!(event.getClickedBlock().getType().toString().contains("SIGN"))) return;
+
+		Leaderboardsign lb = getLeaderboardsign(event.getClickedBlock().getLocation());
+		if(lb == null) return;
+
+		new LeaderboardCreationMenu(lb, event.getPlayer());
+	}
+
 	private void checkIfSignIsLeaderboardSign(SignChangeEvent event) 
 	{
 		Sign sign = null;
@@ -369,7 +384,15 @@ public class LeaderboardsignsManager implements Listener {
 		if(!(lines[0].contains("leaderboard"))) {
 			return;
 		}
-	
+
+		//check if sign is empty and thus open the leaderboard creation menu
+		if(lines[1].isEmpty() && lines[2].isEmpty() && lines[3].isEmpty())
+		{
+			new LeaderboardCreationMenu(event.getBlock().getLocation(), event.getPlayer());
+			return;
+		}
+
+
 		if(lines[1].contains(";"))
 		{
 			String[] values = lines[1].split(";");
@@ -504,7 +527,7 @@ public class LeaderboardsignsManager implements Listener {
 	}
 	/**
 	 * Get all PlayData with 
-	 * @param location of sign
+	 * @param player OfflinePlayer instance
 	 * @return ArrayList containing all playdata where uuid Player is owner
 	 */
 	public static List<PlayData> getPlayData(OfflinePlayer player) {
@@ -590,7 +613,15 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		return dataList;
 	}
-	
+
+	public static void addLeaderboardSign(Leaderboardsign lb)
+	{
+		CasinoManager.leaderboardManager.deleteLeaderbordsign(leaderboardsigns.get(lb.getLocation()));
+
+		leaderboardsigns.put(lb.getLocation(), lb);
+		CasinoManager.leaderboardManager.addSignAnimation(lb);
+		CasinoManager.leaderboardManager.exportLeaderboardsigns();
+	}
 	
 	public static void resetData() 
 	{

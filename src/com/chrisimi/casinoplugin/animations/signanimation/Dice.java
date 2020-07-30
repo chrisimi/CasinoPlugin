@@ -18,7 +18,7 @@ public class Dice implements Runnable
 	@Override
 	public void run() {
 		
-		double[] values = thisSign.getWinChancesDice();
+		double[] values = thisSign.getWinChancesDiceOld();
 		double chance = values[1] - values[0] + 1;
 		
 		sign.setLine(0, "§fDice");

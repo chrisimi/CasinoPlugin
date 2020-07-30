@@ -90,7 +90,7 @@ public class DiceAnimation implements Runnable {
 		double wonamount = thisSign.winMultiplicatorDice() * thisSign.bet;
 		main.getServer().getScheduler().cancelTask(tasknumber);
 		
-		double[] values = thisSign.getWinChancesDice();
+		double[] values = thisSign.getWinChancesDiceOld();
 		double ergebnis = Double.parseDouble(sign.getLine(1));
 		if(ergebnis >= values[0] && ergebnis <= values[1]) {
 			
