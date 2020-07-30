@@ -327,7 +327,19 @@ public class PlayerSignsConfiguration {
 		for(int i = 0; i < values.length; i++)
 		{
 			String[] splited = symbols[i].split("-");
-			values[i] = splited[0];
+
+			//check if symbol contains a color code and if yes remove it with the color code
+			//to ensure that the color code isn't twice on the sign
+			if(splited[0].contains("&"))
+			{
+				int pos = splited[0].indexOf("&");
+				if(splited[0].charAt(pos + 1) != '&')
+					values[i] = splited[0].replace("&" + splited[0].charAt(pos + 1), "");
+				else
+					values[i] = splited[0];
+			}
+			else
+				values[i] = splited[0];
 		}
 		return values;
 	}
@@ -400,23 +412,33 @@ public class PlayerSignsConfiguration {
 	 */
 	public String[] getColorCodesSlots()
 	{
-		String[] symbols = getSlotsSymbols();
+		String[] sectors = plusinformations.split(";");
+		String[] symbols = new String[sectors.length];
+
+		//extract the first element of every sector of plus informations to gain the symbol with color code
+		for(int i = 0; i < sectors.length; i++)
+			symbols[i] = sectors[i].split("-")[0];
+
 		String[] colors = new String[symbols.length];
 
 		for(int i = 0; i < symbols.length; i++)
 		{
-			if(symbols[i].contains("§"))
+			if(symbols[i].contains("&"))
 			{
-				int index = symbols[i].indexOf("§");
+				int index = symbols[i].indexOf("&");
 
 				char a;
-				//check if there are two paragraph symbols to see if it is a color code or not
+				//check if there are two ampersand symbols to see if it is a color code or not
 				//if yes add color code WITH paragraph symbol to the string array
-				if((a = symbols[i].charAt(index + 1)) != '§')
+				if((a = symbols[i].charAt(index + 1)) != '&')
+				{
 					colors[i] = "§" + a;
+				}
 				else
-					symbols[i] = "";
+					colors[i] = "§0";
 			}
+			else
+				colors[i] = "§0";
 		}
 		return colors;
 	}

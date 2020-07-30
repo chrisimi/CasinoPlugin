@@ -42,4 +42,5 @@ public class ItemAPI {
         meta.setLore(elements);
         itemStack.setItemMeta(meta);
     }
+
 }

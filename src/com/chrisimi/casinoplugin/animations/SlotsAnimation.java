@@ -145,13 +145,17 @@ public class SlotsAnimation implements Runnable
 		String newCharacter = "";
 
 		String[] symbols = thisSign.getSlotsSymbols();
+		String[] colorCodes = thisSign.getColorCodesSlots();
 		double[] weights = thisSign.getSlotsWeight();
 
-		for(int i = 0; i < symbols.length; i++)
+		/*
+		//for 3 elements on the display
+		for(int i = 0; i < 3; i++)
 		{
 
 			int randomNumber = random.nextInt((int) (thisSign.getSlotsWeightSum())) + 1;
 
+			//get the character from the weight sum
 			double weightSum = 0.0;
 			for(int j = 0; j < symbols.length; j++)
 			{
@@ -159,7 +163,7 @@ public class SlotsAnimation implements Runnable
 
 				if(randomNumber < weightSum)
 				{
-					newCharacter = symbols[i];
+					newCharacter = colorCodes[i] + symbols[i];
 					break;
 				}
 			}
@@ -171,8 +175,28 @@ public class SlotsAnimation implements Runnable
 			else if(i == 2)
 				newLine += " " + newCharacter;
 		}
-		
-		
+		*/
+
+		//for 3 element on the sign
+		for(int i = 0; i < 3; i++)
+		{
+			double randomNum = random.nextDouble() * thisSign.getSlotsWeightSum();
+
+			//iterate through all symbols weight to find out which symbol has the correct weight
+			double sumWeight = 0.0;
+			for(int j = 0; j < symbols.length; j++)
+			{
+				sumWeight += weights[j];
+				if(randomNum < sumWeight)
+				{
+					newCharacter = colorCodes[j] + symbols[j];
+					break;
+				}
+			}
+
+			newLine += " " + newCharacter;
+		}
+
 		return newLine;
 	}
 	private Boolean checkIfPlayerWon(String line)

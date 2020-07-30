@@ -50,8 +50,7 @@ public class Slots implements Runnable
 			}
 		}
 		sign.update(true);
-		
-		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == thisSign.getSlotsSymbols().length) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
+		thisSign.currentSignAnimation = (thisSign.currentSignAnimation == thisSign.getSlotsSymbols().length - 1) ? 0 : ++thisSign.currentSignAnimation; // add 1 and set it to 0 if it's 2.     range: 0-2
 	}
 
 }

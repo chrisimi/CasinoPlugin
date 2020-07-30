@@ -12,8 +12,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 {
@@ -73,6 +75,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                 //check if values are all in a valid format
                 try
                 {
+                    result[i] = new Element();
                     result[i].symbol = elements[0];
                     result[i].winMultiplicand = Double.parseDouble(elements[1]);
                     result[i].weight = Double.parseDouble(elements[2]);
@@ -100,7 +103,9 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
                 if(i != 0) sb.append(";");
 
-                sb.append(String.format("%s-%.2f-%.2f", input[i].symbol, input[i].winMultiplicand, input[i].weight));
+                DecimalFormat df = new DecimalFormat("#.##");
+
+                sb.append(String.format("%s-%s-%s", input[i].symbol, df.format(input[i].winMultiplicand), df.format(input[i].weight)));
             }
 
             return sb.toString();
@@ -134,7 +139,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
     private final Location lrc;
     public SlotsCreationMenu(Location lrc, Player player)
     {
-        super(player, 9*3, Main.getInstance(), "Slots creation menu");
+        super(player, 9*6, Main.getInstance(), "Slots creation menu");
 
         this.lrc = lrc;
 
@@ -166,6 +171,8 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
         } catch(Exception e)
         {
+            e.printStackTrace();
+
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "can't parse information of sign"));
             closeInventory();
         }
@@ -218,8 +225,8 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
                 }
             }
         }
-        //set the currAddPos to the next empty space
 
+        //set the currAddPos to the next empty space
         for(int i = 0; i < 9; i++)
             if(elements[i] == null)
                 currAddPos = i;
@@ -247,10 +254,10 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
             ItemStack changeWinMultiplicand = new ItemStack(changeWinMultiplicandOfOption.getType());
             ItemStack removeOptionIS = new ItemStack(removeOption.getType());
 
-            ItemAPI.changeName(changeOption, String.format("§6%s. %s §6- change symbol", i, elements[i].symbol));
-            ItemAPI.changeName(changeChance, String.format("§6%s of %s (%.2f) - change weight", elements[i].weight, getWeightSum(), elements[i].weight / getWeightSum()));
-            ItemAPI.changeName(changeWinMultiplicand, String.format("§6%.1f x - change win multiplicand", elements[i].winMultiplicand));
-            ItemAPI.changeName(removeOptionIS, "§4remove option");
+            ItemAPI.changeName(changeOption, String.format("§6%s. %s §6- change symbol", i, elements[i].symbol.replaceAll("&", "§")));
+            ItemAPI.changeName(changeChance, String.format("§6%s. %s of %s (%.2f) - change weight", i, elements[i].weight, getWeightSum(), elements[i].weight / getWeightSum()));
+            ItemAPI.changeName(changeWinMultiplicand, String.format("§6%s. %.1f x - change win multiplicand", i, elements[i].winMultiplicand));
+            ItemAPI.changeName(removeOptionIS, String.format("§6%s. §4remove option", i));
 
             elements[i].changeOptionItemStack = changeOption;
             elements[i].changeWeightItemStack = changeChance;
@@ -348,6 +355,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeOption(int index)
     {
+        System.out.println("change option for index " + index);
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_symbol"));
         closeInventory();
         waitingFor = WaitingFor.NEWOPTION;
@@ -357,6 +365,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeWeight(int index)
     {
+        System.out.println("change weight for index " + index);
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_weight"));
         closeInventory();
         waitingFor = WaitingFor.NEWWEIGHT;
@@ -366,6 +375,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
     private void changeWinMultiplicand(int index)
     {
+        System.out.println("change win multiplicand for index " + index);
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-slots-set_elem_win_multiplicand"));
         closeInventory();
         waitingFor = WaitingFor.NEWWINMULTIPLICAND;
