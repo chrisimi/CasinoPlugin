@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.scripts;
 
 import com.chrisimi.casinoplugin.main.Metrics;
+import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationManager;
 
 import java.util.concurrent.Callable;
@@ -82,6 +83,42 @@ public class BStatsManager
             {
                 CasinoManager.Debug(this.getClass(), "sent currently_running_leaderboardsigns with value " + LeaderboardsignsManager.leaderboardsignRunnableTaskID.size());
                 return LeaderboardsignsManager.leaderboardsignRunnableTaskID.size();
+            }
+        }));
+
+        //currently running dice signs
+        metric.addCustomChart(new Metrics.SingleLineChart("currently_running_dice_signs", new Callable<Integer>()
+        {
+            @Override
+            public Integer call() throws Exception
+            {
+                int amount = PlayerSignsManager.getTotalAmountSigns(PlayerSignsConfiguration.GameMode.DICE);
+                CasinoManager.Debug(this.getClass(), "sent currently_running_dice_signs with value " + amount);
+                return amount;
+            }
+        }));
+
+        //currently running blackjack signs
+        metric.addCustomChart(new Metrics.SingleLineChart("currently_running_blackjack_signs", new Callable<Integer>()
+        {
+            @Override
+            public Integer call() throws Exception
+            {
+                int amount = PlayerSignsManager.getTotalAmountSigns(PlayerSignsConfiguration.GameMode.BLACKJACK);
+                CasinoManager.Debug(this.getClass(), "sent currently_running_blackjack_signs with value " + amount);
+                return amount;
+            }
+        }));
+
+        //currently running slots signs
+        metric.addCustomChart(new Metrics.SingleLineChart("currently_running_slots_signs", new Callable<Integer>()
+        {
+            @Override
+            public Integer call() throws Exception
+            {
+                int amount = PlayerSignsManager.getTotalAmountSigns(PlayerSignsConfiguration.GameMode.SLOTS);
+                CasinoManager.Debug(this.getClass(), "sent currently_running_slots_signs with value " + amount);
+                return amount;
             }
         }));
     }

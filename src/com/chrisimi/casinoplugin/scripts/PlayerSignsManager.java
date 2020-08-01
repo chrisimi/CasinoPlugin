@@ -985,6 +985,17 @@ public class PlayerSignsManager implements Listener {
 		return false;
 	}
 
+	/**
+	 * get the total amount of signs for gamemode x
+	 * @param gameMode game mode
+	 * @return {@link Integer} value representing the total amount of signs with {@link GameMode} game mode
+	 */
+	public static int getTotalAmountSigns(GameMode gameMode)
+	{
+		return (int) playerSigns.values().stream()
+				.filter(a -> a.gamemode == gameMode)
+				.count();
+	}
 	private static class Manager 
 	{
 		private static int currentID = 0;
