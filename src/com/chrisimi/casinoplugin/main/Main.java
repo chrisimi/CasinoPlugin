@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
+import com.chrisimi.casinoplugin.scripts.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -12,13 +13,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.chrisimi.casinoplugin.hologramsystem.HologramSystem;
-import com.chrisimi.casinoplugin.scripts.CasinoAnimation;
-import com.chrisimi.casinoplugin.scripts.CasinoManager;
-import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
-import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
-import com.chrisimi.casinoplugin.scripts.RollCommand;
-import com.chrisimi.casinoplugin.scripts.SignsManager;
-import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationManager;
 import com.chrisimi.inventoryapi.InventoryAPI;
 
@@ -97,7 +91,7 @@ public class Main extends JavaPlugin {
 		activatePermissionSystem();
 		
 		Metrics metric = new Metrics(this); //Stats plugin
-		configurateMetrics(metric);
+		BStatsManager.configureMetrics(metric);
 		
 		//CasinoManager.LogWithColor("Test: " + MessageManager.get("test"));
 		
@@ -117,70 +111,6 @@ public class Main extends JavaPlugin {
 		HologramSystem.getInstance().stopSystem();
 	}
 
-	private void configurateMetrics(Metrics metric) {
-		
-		metric.addCustomChart(new Metrics.SingleLineChart("use_of_slots", new Callable<Integer>() {
-
-			@Override
-			public Integer call() throws Exception {
-				int amount = CasinoAnimation.rollCount;
-				CasinoAnimation.rollCount = 0;
-				//Bukkit.getLogger().info("Send use_of_slots to bstats: " + amount);
-				return amount;
-				
-			}
-			
-		}));
-		metric.addCustomChart(new Metrics.SingleLineChart("use_of_casinosigns", new Callable<Integer>() {
-			@Override
-			public Integer call() throws Exception {
-				int amount = SignsManager.playCount;
-				SignsManager.playCount = 0;
-				//Bukkit.getLogger().info("Send use_of_casinoslots to bstats: " + amount);
-				return amount;
-				
-			}
-			
-		}));
-		metric.addCustomChart(new Metrics.SingleLineChart("use_of_playersigns", new Callable<Integer>() {
-			
-			@Override
-			public Integer call() throws Exception {
-				int amount = PlayerSignsManager.rollCount;
-				PlayerSignsManager.rollCount = 0;
-				//Bukkit.getLogger().info("Send use_of_playersigns to bstats: " + amount);
-				return amount;
-			}
-			
-		}));
-		metric.addCustomChart(new Metrics.SingleLineChart("use_of_roll_command", new Callable<Integer>() {
-			@Override
-			public Integer call() throws Exception {
-				int amount = RollCommand.rollAmount;
-				RollCommand.rollAmount = 0;
-				return amount;
-			}
-		}));
-		metric.addCustomChart(new Metrics.SingleLineChart("use_of_slotchest", new Callable<Integer>() {
-
-			@Override
-			public Integer call() throws Exception {
-				int amount = RollAnimationManager.rollsGlobal;
-				RollAnimationManager.rollsGlobal = 0;
-				return amount;
-			}
-			
-		}));
-		metric.addCustomChart(new Metrics.SingleLineChart("currently_running_leaderboardsigns", new Callable<Integer>()
-		{
-
-			@Override
-			public Integer call() throws Exception
-			{
-				return LeaderboardsignsManager.leaderboardsignRunnableTaskID.size();
-			}
-		}));
-	}
 	
 
 
