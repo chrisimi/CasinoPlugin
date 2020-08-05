@@ -108,122 +108,76 @@ public class PlayerSignsManager implements Listener {
 		}
 	}
 	
-	private void configureVariables() {
-		try {
-			maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet").toString());
-		} catch(NumberFormatException nfe) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max-bet: dice max-bet is not a valid number!");
-		} finally {
-			if(maxBetDice == null)
-				maxBetDice = 200.0;
-		}
-		try {
-			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("blackjack-max-bet").toString());
-		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max-bet: blackjack max-bet is not a valid number!");
-		} finally {
-			if(maxBetBlackjack == null)
-				maxBetBlackjack = 200.0;
-		}
-		try
-		{
-			maxBetSlots = Double.parseDouble(UpdateManager.getValue("slots-max-bet").toString());
-		} catch (NumberFormatException e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max-bet: slots max-bet is not a valid number!");
-			
-		} finally {
-			if(maxBetSlots == null)
-				maxBetSlots = 200.0;
-		}
-		
-		try
-		{
-			maxSignsBlackjack = Integer.valueOf(UpdateManager.getValue("blackjack-max-signs", -1).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max signs: blackjack max signs is not a valid number! Set to default value infinite");
-			maxSignsBlackjack = -1;
-		}
-		
-		try
-		{
-			maxSignsDice = Integer.valueOf(UpdateManager.getValue("dice-max-signs", -1).toString());
-			
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max signs: dice max signs is not a valid number! Set to default value infinite");
-			maxSignsDice = -1;
-		}
-		
-		try
-		{
-			maxSignsSlots = Integer.valueOf(UpdateManager.getValue("slots-max-signs", -1).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max signs: slots max signs is not a valid number! Set to default value infinite!");
-			maxSignsSlots = -1;
-		}
-		
-		try
-		{
-			managerUpdateCycle = Integer.valueOf(UpdateManager.getValue("playersigns-update-cycle", 120).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns update cycle: is not a valid number! Set to default value: 6 seconds!");
-			managerUpdateCycle = 120;
-		}
-		
-		try
-		{
-			managerDistance = Integer.valueOf(UpdateManager.getValue("playersigns-distance", 16).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns distance: is not a valid number! Set to default value: 16 blocks");
-			managerDistance = 16;
-		}
+	private void configureVariables()
+	{
+		maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet", 200.0).toString());
+		maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("blackjack-max-bet", 200.0).toString());
+		maxBetSlots = Double.parseDouble(UpdateManager.getValue("slots-max-bet", 200.0).toString());
+
+		maxSignsBlackjack = Integer.parseInt(UpdateManager.getValue("blackjack-max-signs", -1).toString());
+		maxSignsDice = Integer.parseInt(UpdateManager.getValue("dice-max-signs", -1).toString());
+		maxSignsSlots = Integer.parseInt(UpdateManager.getValue("slots-max-signs", -1).toString());
+
+		managerUpdateCycle = Integer.parseInt(UpdateManager.getValue("playersigns-update-cycle", 120).toString());
+		managerDistance = Integer.parseInt(UpdateManager.getValue("playersigns-distance", 16).toString());
 	}
 	
-	private void importSigns() {
+	private void importSigns()
+	{
 		String line = "";
-		String jsonString = "";
-		
-		try {
+		StringBuilder sb = new StringBuilder();
+
+		//read all characters from the file
+		try
+		{
 			BufferedReader reader = new BufferedReader(new FileReader(Main.playerSignsYml));
-			while((line = reader.readLine()) != null) {
-				jsonString += line;
+			while((line = reader.readLine()) != null)
+			{
+				sb.append(line);
 			}
 			reader.close();
-		} catch(IOException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: Can't get playersigns from playerSigns.json!");
+		} catch(IOException e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: can't get player signs from playerSigns.json!");
 			e.printStackTrace();
 		}
-		if(jsonString.length() < 25) { //if there are not 25 symbols, a sign can't be saved and it can be ignored
-			
+
+		//check if there are some characters, if not stop the import process
+		if(sb.toString().length() < 25)
+		{
 			if(CasinoManager.configEnableConsoleMessages)
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
+
 			return;
 		}
 		ArrayList<PlayerSignsConfiguration> signs = null;
-		try {
-			signs = gson.fromJson(jsonString, PlayerSigns.class).playerSigns;
-		} catch(JsonSyntaxException jse) {
-			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import PlayerSigns from json: Invalid Json file!");
+		try
+		{
+			signs = gson.fromJson(sb.toString(), PlayerSigns.class).playerSigns;
+		} catch(JsonSyntaxException jse)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "An error occurred while trying to import PlayerSigns from json: Invalid Json file!");
 			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
-			
+
 			CasinoManager.LogWithColor(ChatColor.RED + "Closing Server because of an fatal error!");
 			Bukkit.shutdown();
 			return;
 		}
 		
-		if(signs == null) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns from json file: sign is null?");
+		if(signs == null)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get player signs from json file: sign is null?");
 			return;
 		}
-		for(PlayerSignsConfiguration cnf : signs) {
-			try {
+
+		//go through all signs and validate them
+		for(PlayerSignsConfiguration cnf : signs)
+		{
+			try
+			{
 				if(cnf == null) throw new NullPointerException();
-				
+
+				//check if the sign has an old enum and change it to the new ones
 				cnf.changeEnum();
 
 				//check if player sign has valid values
@@ -234,16 +188,20 @@ public class PlayerSignsManager implements Listener {
 				}
 				playerSigns.put(cnf.getLocation(), cnf);
 
-				if(cnf.plusinformations.contains("disabled")) {
+				if(cnf.plusinformations.contains("disabled"))
+				{
 					String[] values = cnf.plusinformations.split(";");
-					cnf.plusinformations = values[0] + ";" + values[1];
+
+					/* cnf.plusinformations = values[0] + ";" + values[1]; - old code */
+
 					cnf.disabled = true;
-				} else if(cnf.disabled == null) cnf.disabled = false;
+				} else if(cnf.disabled == null)
+					cnf.disabled = false;
 				
 			} catch(NullPointerException npe) {
-				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: NullPointerException");
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged player sign in json file! Data will be deleted! Code: NullPointerException");
 			} catch(Exception e) {
-				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: Unknown");
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged player sign in json file! Data will be deleted! Code: Unknown");
 				
 			}
 		}
@@ -252,17 +210,19 @@ public class PlayerSignsManager implements Listener {
 		//if not add it to the map and don't import it = remove on the next export
 		
 		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<Location, PlayerSignsConfiguration>();
-		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
+		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet())
+		{
 			if(!(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign)) 
 			{
-				CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
+				CasinoManager.LogWithColor(ChatColor.RED + "1 sign does not exist in the world: " + entry.getKey().toString());
 				signsToDelete.put(entry.getKey(), entry.getValue());
 			}	
 		}
 		
 		
 		//remove the listed maps from the main list
-		for(Entry<Location, PlayerSignsConfiguration> entry : signsToDelete.entrySet()) {
+		for(Entry<Location, PlayerSignsConfiguration> entry : signsToDelete.entrySet())
+		{
 			playerSigns.remove(entry.getKey());
 		}
 		if(signsToDelete.size() > 1)
@@ -473,7 +433,7 @@ public class PlayerSignsManager implements Listener {
 	 * @param gameMode {@link GameMode} instance of gamemode
 	 * @return count as int
 	 */
-	private static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
+	public static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
 	{
 		return playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
@@ -529,15 +489,53 @@ public class PlayerSignsManager implements Listener {
 		return new ArrayList<>(playerSigns.values());
 	}
 
+	/**
+	 * add a new {@link PlayerSignsConfiguration} in the system
+	 * @param conf instance of the player sign
+	 */
 	public static void addPlayerSign(PlayerSignsConfiguration conf)
 	{
-		playerSigns.put(conf.getLocation(), conf);
-		CasinoManager.playerSignsManager.exportSigns();
+		if(Validator.validate(conf))
+		{
+			playerSigns.put(conf.getLocation(), conf);
+			CasinoManager.playerSignsManager.exportSigns();
+		}
+
 	}
 
-	public static double getMaxBetDice() {return maxBetDice;}
-	public static double getMaxBetSlots() {return maxBetSlots;}
-	public static double getMaxBetBlackjack() {return maxBetBlackjack;}
+	/**
+	 *
+	 * @return the max bet set for dice signs
+	 */
+	public static double getMaxBetDice()
+	{
+		return maxBetDice;
+	}
+
+	/**
+	 *
+	 * @return the max bet set for slots signs
+	 */
+	public static double getMaxBetSlots()
+	{
+		return maxBetSlots;
+	}
+
+	/**
+	 *
+	 * @return the max bet set for blackjack signs
+	 */
+	public static double getMaxBetBlackjack()
+	{
+		return maxBetBlackjack;
+	}
+
+	/**
+	 * check if the player can create a sign from game mode without getting over the limit
+	 * @param player instance of the player
+	 * @param gamemode which mode should be checked
+	 * @return true if the player can create a new sign of the game mode without getting over the limit
+	 */
 	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
 		switch (gamemode)
@@ -584,28 +582,25 @@ public class PlayerSignsManager implements Listener {
 			
 			switch (cnf.gamemode)
 			{
-			case BLACKJACK:
-				
-					Main.getInstance().getServer().getScheduler().
-					runTask(Main.getInstance(), 
+				case BLACKJACK:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 					
-				break;
-			case SLOTS:
-				Main.getInstance().getServer().getScheduler()
-				.runTask(Main.getInstance(), 
-						new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
-				break;
-			case DICE:
-				Main.getInstance().getServer().getScheduler()
-				.runTask(Main.getInstance(), 
-						new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
-				break;
-			default:
-				cnf.isRunning = false;
-				break;
+					break;
+				case SLOTS:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
+							new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+					break;
+				case DICE:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
+							new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+					break;
+				default:
+					cnf.isRunning = false;
+					break;
 			}
 		}
+
 		/**
 		 * start the Manager
 		 */
@@ -620,6 +615,11 @@ public class PlayerSignsManager implements Listener {
 		{
 			Main.getInstance().getServer().getScheduler().cancelTask(currentID);
 		}
+
+		/**
+		 * the runnable which contains the functionality of the manager
+		 * the runnable will be called every x ticks (configurable in the config) to do his work
+		 */
 		private static Runnable task = new Runnable()
 		{
 			
@@ -633,24 +633,24 @@ public class PlayerSignsManager implements Listener {
 						CasinoManager.Debug(this.getClass(), sign.gamemode + " is running");
 						continue;
 					}
-					
+
+					//check if a player is in the range of a sign
+					//if yes, execute the idle animation
+					//to ensure that only loaded signs has a idle animation = better performance
 					if(isPlayerInRange(sign.getLocation()))
 					{
 						switch (sign.gamemode)
 						{
 						case BLACKJACK:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Blackjack(sign.getSign(), sign));
 							break;
 						case SLOTS:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Slots(sign.getSign(), sign));
 							break;
 						case DICE:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Dice(sign.getSign(), sign));
 							break;
 						default:
