@@ -51,13 +51,11 @@ public class PlayerSignsManager implements Listener {
 	/**
 	 * map which contains all player signs keyed with their location
 	 */
-	private static HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<Location, PlayerSignsConfiguration>();
+	private static final HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<>();
 	
-	public static HashMap<OfflinePlayer, Double> playerWonWhileOffline = new HashMap<OfflinePlayer, Double>(); 
-	
-	private GsonBuilder builder;
-	private Gson gson;
-	private Main main;
+	public static final HashMap<OfflinePlayer, Double> playerWonWhileOffline = new HashMap<>();
+
+	private final Gson gson;
 	private static Double maxBetDice = 200.0;
 	private static Double maxBetBlackjack = 200.0;
 	private static Double maxBetSlots = 200.0;
@@ -68,14 +66,16 @@ public class PlayerSignsManager implements Listener {
 	
 	private int managerUpdateCycle = 120;
 	private int managerDistance = 16;
-	
-	private int updateTask = 0;
-	public PlayerSignsManager(Main main) {
-		this.main = main;
-		main.getServer().getPluginManager().registerEvents(this, main);
-		
-		builder = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls();
-		gson = builder.create();
+
+	public PlayerSignsManager()
+	{
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
+
+		gson = new GsonBuilder()
+				.setPrettyPrinting()
+				.excludeFieldsWithoutExposeAnnotation()
+				.serializeNulls()
+				.create();
 		
 		configureVariables();
 		importSigns();
@@ -83,13 +83,9 @@ public class PlayerSignsManager implements Listener {
 		
 		Manager.start(this);
 	}
-	private void updateSignsJson() {
-		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			@Override
-			public void run() {
-				exportSigns();
-			}
-		}, 12000, 12000);
+	private void updateSignsJson()
+	{
+		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), this::exportSigns, 12000, 12000);
 	}
 	
 	public void serverClose() {
@@ -99,131 +95,77 @@ public class PlayerSignsManager implements Listener {
 	public void reload() {
 		configureVariables();
 	}
-	public void addOfflinePlayerWinOrLose(double amount, OfflinePlayer player) {
-		
-		if(playerWonWhileOffline.containsKey(player)) {
-			playerWonWhileOffline.compute(player, (p, m) ->  m + amount );
-		} else {
-			playerWonWhileOffline.put(player, amount);
-		}
+
+	private void configureVariables()
+	{
+		maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet", 200.0).toString());
+		maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("blackjack-max-bet", 200.0).toString());
+		maxBetSlots = Double.parseDouble(UpdateManager.getValue("slots-max-bet", 200.0).toString());
+
+		maxSignsBlackjack = Integer.parseInt(UpdateManager.getValue("blackjack-max-signs", -1).toString());
+		maxSignsDice = Integer.parseInt(UpdateManager.getValue("dice-max-signs", -1).toString());
+		maxSignsSlots = Integer.parseInt(UpdateManager.getValue("slots-max-signs", -1).toString());
+
+		managerUpdateCycle = Integer.parseInt(UpdateManager.getValue("playersigns-update-cycle", 120).toString());
+		managerDistance = Integer.parseInt(UpdateManager.getValue("playersigns-distance", 16).toString());
 	}
 	
-	private void configureVariables() {
-		try {
-			maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet").toString());
-		} catch(NumberFormatException nfe) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max-bet: dice max-bet is not a valid number!");
-		} finally {
-			if(maxBetDice == null)
-				maxBetDice = 200.0;
-		}
-		try {
-			maxBetBlackjack = Double.parseDouble(UpdateManager.getValue("blackjack-max-bet").toString());
-		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max-bet: blackjack max-bet is not a valid number!");
-		} finally {
-			if(maxBetBlackjack == null)
-				maxBetBlackjack = 200.0;
-		}
+	private void importSigns()
+	{
+		String line;
+		StringBuilder sb = new StringBuilder();
+
+		//read all characters from the file
 		try
 		{
-			maxBetSlots = Double.parseDouble(UpdateManager.getValue("slots-max-bet").toString());
-		} catch (NumberFormatException e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max-bet: slots max-bet is not a valid number!");
-			
-		} finally {
-			if(maxBetSlots == null)
-				maxBetSlots = 200.0;
-		}
-		
-		try
-		{
-			maxSignsBlackjack = Integer.valueOf(UpdateManager.getValue("blackjack-max-signs", -1).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get blackjack max signs: blackjack max signs is not a valid number! Set to default value infinite");
-			maxSignsBlackjack = -1;
-		}
-		
-		try
-		{
-			maxSignsDice = Integer.valueOf(UpdateManager.getValue("dice-max-signs", -1).toString());
-			
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get dice max signs: dice max signs is not a valid number! Set to default value infinite");
-			maxSignsDice = -1;
-		}
-		
-		try
-		{
-			maxSignsSlots = Integer.valueOf(UpdateManager.getValue("slots-max-signs", -1).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get slots max signs: slots max signs is not a valid number! Set to default value infinite!");
-			maxSignsSlots = -1;
-		}
-		
-		try
-		{
-			managerUpdateCycle = Integer.valueOf(UpdateManager.getValue("playersigns-update-cycle", 120).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns update cycle: is not a valid number! Set to default value: 6 seconds!");
-			managerUpdateCycle = 120;
-		}
-		
-		try
-		{
-			managerDistance = Integer.valueOf(UpdateManager.getValue("playersigns-distance", 16).toString());
-		} catch (Exception e)
-		{
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns distance: is not a valid number! Set to default value: 16 blocks");
-			managerDistance = 16;
-		}
-	}
-	
-	private void importSigns() {
-		String line = "";
-		String jsonString = "";
-		
-		try {
 			BufferedReader reader = new BufferedReader(new FileReader(Main.playerSignsYml));
-			while((line = reader.readLine()) != null) {
-				jsonString += line;
+			while((line = reader.readLine()) != null)
+			{
+				sb.append(line);
 			}
 			reader.close();
-		} catch(IOException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: Can't get playersigns from playerSigns.json!");
+		} catch(IOException e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to import signs: can't get player signs from playerSigns.json!");
 			e.printStackTrace();
 		}
-		if(jsonString.length() < 25) { //if there are not 25 symbols, a sign can't be saved and it can be ignored
-			
+
+		//check if there are some characters, if not stop the import process
+		if(sb.toString().length() < 25)
+		{
 			if(CasinoManager.configEnableConsoleMessages)
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "No playersigns to import!");
+
 			return;
 		}
-		ArrayList<PlayerSignsConfiguration> signs = null;
-		try {
-			signs = gson.fromJson(jsonString, PlayerSigns.class).playerSigns;
-		} catch(JsonSyntaxException jse) {
-			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import PlayerSigns from json: Invalid Json file!");
+		ArrayList<PlayerSignsConfiguration> signs;
+		try
+		{
+			signs = gson.fromJson(sb.toString(), PlayerSigns.class).playerSigns;
+		} catch(JsonSyntaxException jse)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "An error occurred while trying to import PlayerSigns from json: Invalid Json file!");
 			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
-			
+
 			CasinoManager.LogWithColor(ChatColor.RED + "Closing Server because of an fatal error!");
 			Bukkit.shutdown();
 			return;
 		}
 		
-		if(signs == null) {
-			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get playersigns from json file: sign is null?");
+		if(signs == null)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get player signs from json file: sign is null?");
 			return;
 		}
-		for(PlayerSignsConfiguration cnf : signs) {
-			try {
+
+		//go through all signs and validate them
+		for(PlayerSignsConfiguration cnf : signs)
+		{
+			try
+			{
 				if(cnf == null) throw new NullPointerException();
-				
+
+				//check if the sign has an old enum and change it to the new ones
 				cnf.changeEnum();
 
 				//check if player sign has valid values
@@ -234,16 +176,16 @@ public class PlayerSignsManager implements Listener {
 				}
 				playerSigns.put(cnf.getLocation(), cnf);
 
-				if(cnf.plusinformations.contains("disabled")) {
-					String[] values = cnf.plusinformations.split(";");
-					cnf.plusinformations = values[0] + ";" + values[1];
+				if(cnf.plusinformations.contains("disabled"))
+				{
 					cnf.disabled = true;
-				} else if(cnf.disabled == null) cnf.disabled = false;
+				} else if(cnf.disabled == null)
+					cnf.disabled = false;
 				
 			} catch(NullPointerException npe) {
-				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: NullPointerException");
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged player sign in json file! Data will be deleted! Code: NullPointerException");
 			} catch(Exception e) {
-				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged PlayerSign in json file! Data will be deleted! Code: Unknown");
+				CasinoManager.LogWithColor(ChatColor.RED + "Found a damaged player sign in json file! Data will be deleted! Code: Unknown");
 				
 			}
 		}
@@ -251,18 +193,20 @@ public class PlayerSignsManager implements Listener {
 		//go through all signs and check if a sign exists on the location
 		//if not add it to the map and don't import it = remove on the next export
 		
-		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<Location, PlayerSignsConfiguration>();
-		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet()) {
+		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<>();
+		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet())
+		{
 			if(!(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign)) 
 			{
-				CasinoManager.LogWithColor(ChatColor.RED + "1 Sign is not valid: " + entry.getKey().toString());
+				CasinoManager.LogWithColor(ChatColor.RED + "1 sign does not exist in the world: " + entry.getKey().toString());
 				signsToDelete.put(entry.getKey(), entry.getValue());
 			}	
 		}
 		
 		
 		//remove the listed maps from the main list
-		for(Entry<Location, PlayerSignsConfiguration> entry : signsToDelete.entrySet()) {
+		for(Entry<Location, PlayerSignsConfiguration> entry : signsToDelete.entrySet())
+		{
 			playerSigns.remove(entry.getKey());
 		}
 		if(signsToDelete.size() > 1)
@@ -292,101 +236,63 @@ public class PlayerSignsManager implements Listener {
 	}
 	
 	@EventHandler
-	public void onSignsPlace(SignChangeEvent event) {
-		
-		/*
-		 * 0: casino prefix
-		 * 1: dice
-		 * 2: bet
-		 * 3: win chances: 1-100 or 60-100
-		 */
-		
+	public void onSignsPlace(SignChangeEvent event)
+	{
 		String[] lines = event.getLines();
-		if(!(lines[0].contains("casino") || lines[0].equalsIgnoreCase("casino") || lines[0].equalsIgnoreCase("slots") || lines[0].contains("slots"))) return;
 
-		if(lines[0].contains("casino") && lines[1].contains("dice"))
+		//check if the first line contains casino
+		if(!Validator.is(lines[0], "casino")) return;
+
+		if(Validator.is(lines[1], "dice"))
 		{
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
-		} else if(lines[0].contains("casino") && lines[1].contains("blackjack"))
+		} else if(Validator.is(lines[1], "blackjack"))
 		{
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
-		} else if(lines[0].contains("casino") && lines[1].contains("slots"))
+		} else if(Validator.is(lines[1], "slots"))
 		{
 			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
 		}
-
-
-		if(lines[1].length() == 0) return;
-		if(lines[2].length() == 0) return;
-		if(lines[3].length() == 0) return;
-		
-		if(lines[1].contains("dice") || lines[1].equalsIgnoreCase("dice")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
-				return;
-			}
-			createDiceSign(event);
-		} else if(lines[1].contains("blackjack") || lines[1].equalsIgnoreCase("blackjack")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
-				return;
-			}
-			createBlackjackSign(event);
-		} else if(lines[0].contains("slots") || lines[0].equalsIgnoreCase("slots"))
-		{
-			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns")))
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
-				return;
-			}
-			createSlotsSign(event);
-		}
-		
 	}
 
 	@EventHandler
-	public void onSignsBreak(BlockBreakEvent event) {
-		if(!(event.getBlock().getType().toString().contains("SIGN"))) return;
+	public void onSignsBreak(BlockBreakEvent event)
+	{
+		if (!(event.getBlock().getType().toString().contains("SIGN"))) return;
 		Sign sign = (Sign) event.getBlock().getState();
-		
-		if(sign.getLine(3).length() > 2) {
-			
-			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
-			if(thisSign == null) return;
-			
-			if(thisSign.isRunning) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_running"));
+
+		PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
+		if (thisSign == null) return;
+
+		//cancel break because sign is currently running
+		if (thisSign.isRunning)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_running"));
+			event.setCancelled(true);
+			return;
+		}
+
+		//check if player has permission to break the sign
+		if (!(Main.perm.has(event.getPlayer(), "casino.admin")))
+		{
+			if (thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
+				event.setCancelled(true);
+				return;
+			} else if (!thisSign.isServerOwner() && !(thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
 				event.setCancelled(true);
 				return;
 			}
-			
-			
-			
-			if(!(Main.perm.has(event.getPlayer(), "casino.admin")))
-			{
-				if(thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
-				{
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
-					event.setCancelled(true);
-					return;
-				} else if(!thisSign.isServerOwner() && !(thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())))
-				{
-					//it a player sign and the breaker is not the owner of the sign
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
-					event.setCancelled(true);
-					return;
-				}
-			}
-
-
-			playerSigns.remove(sign.getLocation());
-			exportSigns();
-			
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode.toString()));
 		}
+
+		//remove sign from the list
+		playerSigns.remove(sign.getLocation());
+		exportSigns();
+
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode.toString()));
 	}
 	
 	@EventHandler
@@ -402,512 +308,120 @@ public class PlayerSignsManager implements Listener {
 		
 		Sign sign = (Sign) event.getClickedBlock().getState();
 		if(sign == null) return;
-		
-		if(sign.getLine(0).contains("Dice"))
-		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
-				new DiceCreationMenu(thisSign, event.getPlayer());
-			else
-				onDiceSignClick(sign, thisSign, player);
 
-		}
-		else if(sign.getLine(0).contains("Blackjack"))
+		//check for some various options
+		if(thisSign.isRunning)
 		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
-				new BlackjackCreationMenu(thisSign, event.getPlayer());
-			else
-				onBlackjackSignClick(sign, thisSign, player);
-		}
-		else if(sign.getLine(0).contains("Slots"))
-		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
-				new SlotsCreationMenu(thisSign, player);
-			else
-				onSlotsSignClick(sign, thisSign, player);
-		}
-		else
-		{
-			return;
-		}
-		
-		
-		rollCount++;
-	}
-	private void onDiceSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player) { // continue log/error methode
-		if(!(Main.perm.has(player, "casino.dice.use") || Main.perm.has(player, "casino.admin"))) {
-			
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-dicesigns"));
-			return;
-		}
-		
-		if(thisSign.isRunning) {
-			
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-sign_is_ingame"));
 			return;
-		}
-		if(thisSign.isSignDisabled()) {
+		} else if(thisSign.isSignDisabled())
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
 			return;
-		}
-		
-		if(thisSign.hasOwnerEnoughMoney() == false) {
+		} else if(!thisSign.hasOwnerEnoughMoney())
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
 			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
+		} else if(!(Main.econ.has(player, thisSign.bet)))
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-player_lacks_money"));
 			return;
 		}
-		
-		//when more gamemodes think about different sigens if(gamemode = dice)
-		
-		Manager.onSignClick(sign.getLocation(), player);
+
+
+		//check if player is sneaking and has permission for this sign (check if it's a server sign and he has server sign permission or if it's his sign)
+		if(event.getPlayer().isSneaking() &&
+				((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+				(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
+		{
+			switch(thisSign.gamemode)
+			{
+				case DICE:
+				case Dice:
+					new DiceCreationMenu(thisSign, event.getPlayer());
+					break;
+				case BLACKJACK:
+				case Blackjack:
+					new BlackjackCreationMenu(thisSign, event.getPlayer());
+					break;
+				case SLOTS:
+				case Slots:
+					new SlotsCreationMenu(thisSign, event.getPlayer());
+			}
+		}
+		else
+		{
+			switch(thisSign.gamemode)
+			{
+				case DICE:
+				case Dice:
+					if(onDiceSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+				case BLACKJACK:
+				case Blackjack:
+					if(onBlackjackSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+				case SLOTS:
+				case Slots:
+					if(onSlotsSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+			}
+		}
+		rollCount++;
 	}
-	private void onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player) {
-		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin"))) {
+
+	//check some cases for dice signs
+	private boolean onDiceSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+	{
+		if(!(Main.perm.has(player, "casino.dice.use") || Main.perm.has(player, "casino.admin")))
+		{
+			
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-dicesigns"));
+			return false;
+		}
+
+		return true;
+	}
+
+	//check some cases for blackjack signs
+	private boolean onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+	{
+		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin")))
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-blackjacksigns"));
-			return;
+			return false;
 		}
-		
-		if(thisSign.isRunning) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-blackjack-sign_is_ingame"));
-			return;
-		}
-		
-		if(thisSign.isSignDisabled()) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
-			return;
-		}
-		if(!(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackGetMultiplicand()))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
-			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_lacks_money"));
-			return;
-		}
-		
-		//main.getServer().getScheduler().cancelTask(updateTasks.get(thisSign));
-		//updateTasks.remove(thisSign);
-		
-		//int taskNumber = main.getServer().getScheduler().runTask(main, new BlackjackAnimation(main, thisSign, player, this)).getTaskId();
-		
-		
-		
-		//signTasks.put(thisSign, taskNumber); ignored
-		
-		Manager.onSignClick(thisSign.getLocation(), player);
+
+		return true;
 	}
-	private void onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+
+	//check some cases for slots signs
+	private boolean onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
 		if(!(Main.perm.has(player, "casino.slots.use") || Main.perm.has(player, "casino.admin")))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-slotssigns"));
-			return;
+			return false;
 		}
-		
-		if(thisSign.isRunning)
-		{
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-sign_is_ingame"));
-			return;
-		}
-		
-		if(thisSign.isSignDisabled()) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
-			return;
-		}
-		if(!(thisSign.hasOwnerEnoughMoney(thisSign.getSlotsHighestPayout()))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
-			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_lacks_money"));
-			return;
-		}
-		
-		Manager.onSignClick(sign.getLocation(), player);
+
+		return true;
 	}
 
-	
-	private void createDiceSign(SignChangeEvent event) {
-		//bet validation
-		Double bet = null;
-		try {
-			 bet = Double.parseDouble(event.getLine(2));
-		} catch(NumberFormatException nfe) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-bet_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		if(bet > maxBetDice) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-bet_is_higher_than_max_bet").replace("%max_bet%", Main.econ.format(maxBetDice)));
-			event.setCancelled(true);
-			return;
-		}
-		
-		//winmultiplicator
-		if(!(event.getLine(3).contains(";") && event.getLine(3).contains("-"))) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-win_chance_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		
-		String[] informations = event.getLine(3).split(";");
-		Double winmultiplicator = null;
-		try {
-			winmultiplicator = Double.parseDouble(informations[1]);
-		} catch(NumberFormatException nfe) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-winmultiplicator_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		//win chanes validation
-		String[] values = informations[0].split("-");
-		if(values.length != 2) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-win_chance_format_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		Double winChanceBegin = null;
-		Double winChanceEnd = null;
-		try {
-			winChanceBegin = Double.parseDouble(values[0]);
-			winChanceEnd = Double.parseDouble(values[1]);
-		} catch(NumberFormatException nfe) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-win_chance_number_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		if(winChanceEnd < winChanceBegin) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-win_chance_first_higher"));
-			event.setCancelled(true);
-			return;
-		}
-		if(!(winChanceBegin > 0 && winChanceBegin <= 100 || winChanceEnd > 0 && winChanceEnd <= 100)) {
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-win_chance_not_in100"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.DICE) >= maxSignsDice && maxSignsDice != -1)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-reached_max_amount"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		
-		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
-		{
-			
-			//Server signs
-			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
-			{
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, bet, event.getLine(3));
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-server-successful"));
-				exportSigns();
-			}
-			else
-			{
-				System.out.println("a");
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-		else
-		{
-			//Player signs
-			if(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin")) {
-				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Dice, event.getPlayer(), bet, event.getLine(3));
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-dice-successful"));
-				exportSigns();
-			}
-			else
-			{
-			
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-	}
-	
-	private void createBlackjackSign(SignChangeEvent event) {
-		
-		//casino
-		//blackjack
-		//minEinsatz;maxEinsatz ->maxEinsatz zu plusinformations
-		//gewinnMultiplicator
-		Double minBet = null;
-		Double maxBet = null;
-		String plusinf = "";
-		String plusInformations = "";
-		if(event.getLine(2).contains(";")) {
-			String[] values = event.getLine(2).split(";");
-			if(values.length == 2) {
-				try {
-					minBet = Double.parseDouble(values[0]);
-					maxBet = Double.parseDouble(values[1]);
-				} catch(NumberFormatException e) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-bet_invalid"));
-					event.setCancelled(true);
-					return;
-				}
-				if(maxBet < minBet) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-max_bet_invalid"));
-					event.setCancelled(true);
-					return;
-				}
-				if(maxBet > maxBetBlackjack) {
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-over_max_server_bet").replace("%max_amount_server%", Main.econ.format(maxBetBlackjack)));
-					event.setCancelled(true);
-					return;
-				}
-			} else {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-max_bet_missing"));
-				event.setCancelled(true);
-				return;
-			}
-		} else if(event.getLine(2).equalsIgnoreCase("-1"))
-		{
-			minBet = -1.0;
-			maxBet = -1.0;
-		} else 
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-bet_invalid_format"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		if(event.getLine(3).contains("to"))
-		{
-			String[] values = event.getLine(3).trim().split("to");
-			try 
-			{
-				if(values.length != 2) throw new Exception("invalid winning (3 to 2)!");
-				Double left = Double.parseDouble(values[0]);
-				Double right = Double.parseDouble(values[1]);
-				plusinf = event.getLine(3);
-			} catch(Exception e)
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-invalid_winning").replace("%error%", e.getMessage()));
-				event.setCancelled(true);
-				return;
-			}
-		} else
-		{
-			try {
-				Double winMultiplicator = Double.parseDouble(event.getLine(3));
-				plusinf = winMultiplicator.toString();
-			} catch(NumberFormatException e) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-invalid_win_multiplicator"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-		
-		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.BLACKJACK) >= maxSignsBlackjack && maxSignsBlackjack != -1)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-reached_max_amount"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		
-		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
-		{
-			//server signs
-			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
-			{
-				plusInformations = maxBet.toString()+";"+plusinf;
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Blackjack, minBet, plusInformations);
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-server-successful"));
-			
-				
-				exportSigns();
-			}
-			else
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-		else
-		{
-			//player signs
-			if(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
-			{
-				plusInformations = maxBet.toString()+";"+plusinf;
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Blackjack, event.getPlayer(), minBet, plusInformations);
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-blackjack-successful"));
-				
-				exportSigns();
-			}
-			else 
-			{
-				//System.out.println(Main.perm.has(event.getPlayer(), "casino.blackjack.create") + " " + Main.perm.has(event.getPlayer(), "casino.admin"));
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
-				event.setCancelled(true);
-				return;
-			
-			}
-			
-		}
-	}
-	private void createSlotsSign(SignChangeEvent event)
-	{
-		Double bet = 0.0;
-		String[] symbols = new String[3];
-		double[] multiplicators = new double[3];
-		double[] chance = new double[3];
 
-		try
-		{
-			bet = Double.parseDouble(event.getLine(1));
-		} catch (Exception e)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-bet_invalid"));
-			event.setCancelled(true);
-			return;
-		}
-		if(bet > maxBetSlots)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-bet_higher_than_max_bet").replace("%max_bet%", Main.econ.format(maxBetSlots)));
-			event.setCancelled(true);
-			return;
-		}
-		
-		symbols = event.getLine(2).split(";");
-		if(symbols.length != 3)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-not-enough-symbols"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		String[] values = event.getLine(3).split(";");
-		if(values.length != 2)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-forgot_chance_or_multiplicator"));
-			event.setCancelled(true);
-			return;
-		}
-		for(int i = 0; i < 2; i++)
-		{
-			String[] valueElement = values[i].split("-");
-			if(valueElement.length != 3)
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-not_3_elements"));
-				event.setCancelled(true);
-				return;
-			}
-			try
-			{
-				if(i == 0)
-				{
-					for(int j = 0; j < 3; j++)
-					{
-						chance[j] = Double.parseDouble(valueElement[j]);
-					}
-				} else
-				{
-					for(int j = 0; j < 3; j++)
-					{
-						multiplicators[j] = Double.parseDouble(valueElement[j]);
-					}
-				}
-			} catch (NumberFormatException e)
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-value_is_not_valid"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-		
-		if(getAmountOfPlayerSigns(event.getPlayer(), GameMode.SLOTS) >= maxSignsSlots && maxSignsSlots != -1)
-		{
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-reached_max_amount"));
-			event.setCancelled(true);
-			return;
-		}
-		
-		
-		
-		String plusinformations = String.format(
-				"%s-%s-%s;%s-%s-%s;%s-%s-%s", symbols[0], multiplicators[0], chance[0], symbols[1], multiplicators[1], chance[1], symbols[2], multiplicators[2], chance[2]);
-	
-		if(event.getLine(0).contains(";server") || event.getLine(0).contains(";s"))
-		{
-			
-			//server signs
-			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
-			{
-				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Slots, bet, plusinformations);
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-server-successful"));
-				exportSigns();
-			}
-			else
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-		else
-		{
-			//server signs
-			if(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin"))
-			{
-				
-				PlayerSignsConfiguration newSign = new PlayerSignsConfiguration(event.getBlock().getLocation(), GameMode.Slots, event.getPlayer(), bet, plusinformations);
-				playerSigns.put(newSign.getLocation(), newSign);
-				
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-creation-slots-successful"));
-				
-				exportSigns();	
-			}
-			
-			else
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
-				event.setCancelled(true);
-				return;
-			}
-		}
-	}
 	/**
 	 * get amount of signs the player currently has
 	 * @param player {@link Player} instance of player
 	 * @param gameMode {@link GameMode} instance of gamemode
 	 * @return count as int
 	 */
-	private static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
+	public static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
 	{
-		return playerSigns.values().stream()
+		return (int) playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
-				.collect(Collectors.toList()).size();
+				.count();
 	}
 	
 	/**
@@ -959,15 +473,53 @@ public class PlayerSignsManager implements Listener {
 		return new ArrayList<>(playerSigns.values());
 	}
 
+	/**
+	 * add a new {@link PlayerSignsConfiguration} in the system
+	 * @param conf instance of the player sign
+	 */
 	public static void addPlayerSign(PlayerSignsConfiguration conf)
 	{
-		playerSigns.put(conf.getLocation(), conf);
-		CasinoManager.playerSignsManager.exportSigns();
+		if(Validator.validate(conf))
+		{
+			playerSigns.put(conf.getLocation(), conf);
+			CasinoManager.playerSignsManager.exportSigns();
+		}
+
 	}
 
-	public static double getMaxBetDice() {return maxBetDice;}
-	public static double getMaxBetSlots() {return maxBetSlots;}
-	public static double getMaxBetBlackjack() {return maxBetBlackjack;}
+	/**
+	 *
+	 * @return the max bet set for dice signs
+	 */
+	public static double getMaxBetDice()
+	{
+		return maxBetDice;
+	}
+
+	/**
+	 *
+	 * @return the max bet set for slots signs
+	 */
+	public static double getMaxBetSlots()
+	{
+		return maxBetSlots;
+	}
+
+	/**
+	 *
+	 * @return the max bet set for blackjack signs
+	 */
+	public static double getMaxBetBlackjack()
+	{
+		return maxBetBlackjack;
+	}
+
+	/**
+	 * check if the player can create a sign from game mode without getting over the limit
+	 * @param player instance of the player
+	 * @param gamemode which mode should be checked
+	 * @return true if the player can create a new sign of the game mode without getting over the limit
+	 */
 	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
 		switch (gamemode)
@@ -1014,28 +566,25 @@ public class PlayerSignsManager implements Listener {
 			
 			switch (cnf.gamemode)
 			{
-			case BLACKJACK:
-				
-					Main.getInstance().getServer().getScheduler().
-					runTask(Main.getInstance(), 
+				case BLACKJACK:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
 					
-				break;
-			case SLOTS:
-				Main.getInstance().getServer().getScheduler()
-				.runTask(Main.getInstance(), 
-						new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
-				break;
-			case DICE:
-				Main.getInstance().getServer().getScheduler()
-				.runTask(Main.getInstance(), 
-						new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
-				break;
-			default:
-				cnf.isRunning = false;
-				break;
+					break;
+				case SLOTS:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
+							new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+					break;
+				case DICE:
+					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
+							new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+					break;
+				default:
+					cnf.isRunning = false;
+					break;
 			}
 		}
+
 		/**
 		 * start the Manager
 		 */
@@ -1050,7 +599,12 @@ public class PlayerSignsManager implements Listener {
 		{
 			Main.getInstance().getServer().getScheduler().cancelTask(currentID);
 		}
-		private static Runnable task = new Runnable()
+
+		/**
+		 * the runnable which contains the functionality of the manager
+		 * the runnable will be called every x ticks (configurable in the config) to do his work
+		 */
+		private final static Runnable task = new Runnable()
 		{
 			
 			@Override
@@ -1063,24 +617,24 @@ public class PlayerSignsManager implements Listener {
 						CasinoManager.Debug(this.getClass(), sign.gamemode + " is running");
 						continue;
 					}
-					
+
+					//check if a player is in the range of a sign
+					//if yes, execute the idle animation
+					//to ensure that only loaded signs has a idle animation = better performance
 					if(isPlayerInRange(sign.getLocation()))
 					{
 						switch (sign.gamemode)
 						{
 						case BLACKJACK:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Blackjack(sign.getSign(), sign));
 							break;
 						case SLOTS:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Slots(sign.getSign(), sign));
 							break;
 						case DICE:
-							Main.getInstance().getServer().getScheduler()
-							.runTask(Main.getInstance(), 
+							Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
 									new Dice(sign.getSign(), sign));
 							break;
 						default:

@@ -60,7 +60,7 @@ public class CasinoManager {
 		new PlayerJoinListener(main);
 		new CasinoChatListener(main);
 		signsManager = new SignsManager(main);
-		playerSignsManager = new PlayerSignsManager(main);
+		playerSignsManager = new PlayerSignsManager();
 		rollCommand = new RollCommand(main);
 		slotChestManager = new SlotChestsManager(main);
 		leaderboardManager = new LeaderboardsignsManager(main);
