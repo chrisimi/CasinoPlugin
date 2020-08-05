@@ -5,6 +5,17 @@ import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 public class Validator
 {
+    /**
+     * check two strings for their equality in many ways
+     * @param check String to check
+     * @param with String to check with
+     * @return true if they are equal, false if not
+     */
+    public static boolean is(String check, String with)
+    {
+        return check.equals(with) || check.equalsIgnoreCase(with) || check.toLowerCase().equals(with.toLowerCase()) || check.contains(with) || with.contains(check);
+    }
+
     public static boolean validate(PlayerSignsConfiguration conf)
     {
         switch(conf.gamemode)

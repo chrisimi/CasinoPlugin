@@ -292,101 +292,63 @@ public class PlayerSignsManager implements Listener {
 	}
 	
 	@EventHandler
-	public void onSignsPlace(SignChangeEvent event) {
-		
-		/*
-		 * 0: casino prefix
-		 * 1: dice
-		 * 2: bet
-		 * 3: win chances: 1-100 or 60-100
-		 */
-		
+	public void onSignsPlace(SignChangeEvent event)
+	{
 		String[] lines = event.getLines();
-		if(!(lines[0].contains("casino") || lines[0].equalsIgnoreCase("casino") || lines[0].equalsIgnoreCase("slots") || lines[0].contains("slots"))) return;
 
-		if(lines[0].contains("casino") && lines[1].contains("dice"))
+		//check if the first line contains casino
+		if(!Validator.is(lines[0], "casino")) return;
+
+		if(Validator.is(lines[1], "dice"))
 		{
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
-		} else if(lines[0].contains("casino") && lines[1].contains("blackjack"))
+		} else if(Validator.is(lines[1], "blackjack"))
 		{
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
-		} else if(lines[0].contains("casino") && lines[1].contains("slots"))
+		} else if(Validator.is(lines[1], "slots"))
 		{
 			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-			return;
 		}
-
-
-		if(lines[1].length() == 0) return;
-		if(lines[2].length() == 0) return;
-		if(lines[3].length() == 0) return;
-		
-		if(lines[1].contains("dice") || lines[1].equalsIgnoreCase("dice")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.dice.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-dicesign"));
-				return;
-			}
-			createDiceSign(event);
-		} else if(lines[1].contains("blackjack") || lines[1].equalsIgnoreCase("blackjack")) {
-			if(!(Main.perm.has(event.getPlayer(), "casino.blackjack.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns"))) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-blackjacksign"));
-				return;
-			}
-			createBlackjackSign(event);
-		} else if(lines[0].contains("slots") || lines[0].equalsIgnoreCase("slots"))
-		{
-			if(!(Main.perm.has(event.getPlayer(), "casino.slots.create") || Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.serversigns")))
-			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-slotssign"));
-				return;
-			}
-			createSlotsSign(event);
-		}
-		
 	}
 
 	@EventHandler
-	public void onSignsBreak(BlockBreakEvent event) {
-		if(!(event.getBlock().getType().toString().contains("SIGN"))) return;
+	public void onSignsBreak(BlockBreakEvent event)
+	{
+		if (!(event.getBlock().getType().toString().contains("SIGN"))) return;
 		Sign sign = (Sign) event.getBlock().getState();
-		
-		if(sign.getLine(3).length() > 2) {
-			
-			PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
-			if(thisSign == null) return;
-			
-			if(thisSign.isRunning) {
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_running"));
+
+		PlayerSignsConfiguration thisSign = playerSigns.get(sign.getLocation());
+		if (thisSign == null) return;
+
+		//cancel break because sign is currently running
+		if (thisSign.isRunning)
+		{
+			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_running"));
+			event.setCancelled(true);
+			return;
+		}
+
+		//check if player has permission to break the sign
+		if (!(Main.perm.has(event.getPlayer(), "casino.admin")))
+		{
+			if (thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
+				event.setCancelled(true);
+				return;
+			} else if (!thisSign.isServerOwner() && !(thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
 				event.setCancelled(true);
 				return;
 			}
-			
-			
-			
-			if(!(Main.perm.has(event.getPlayer(), "casino.admin")))
-			{
-				if(thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
-				{
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
-					event.setCancelled(true);
-					return;
-				} else if(!thisSign.isServerOwner() && !(thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())))
-				{
-					//it a player sign and the breaker is not the owner of the sign
-					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
-					event.setCancelled(true);
-					return;
-				}
-			}
-
-
-			playerSigns.remove(sign.getLocation());
-			exportSigns();
-			
-			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode.toString()));
 		}
+
+		//remove sign from the list
+		playerSigns.remove(sign.getLocation());
+		exportSigns();
+
+		event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_destroyed_sign").replace("%gamemode%", thisSign.gamemode.toString()));
 	}
 	
 	@EventHandler
