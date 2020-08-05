@@ -364,133 +364,106 @@ public class PlayerSignsManager implements Listener {
 		
 		Sign sign = (Sign) event.getClickedBlock().getState();
 		if(sign == null) return;
-		
-		if(sign.getLine(0).contains("Dice"))
-		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
-				new DiceCreationMenu(thisSign, event.getPlayer());
-			else
-				onDiceSignClick(sign, thisSign, player);
 
-		}
-		else if(sign.getLine(0).contains("Blackjack"))
+		//check for some various options
+		if(thisSign.isRunning)
 		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
-				new BlackjackCreationMenu(thisSign, event.getPlayer());
-			else
-				onBlackjackSignClick(sign, thisSign, player);
-		}
-		else if(sign.getLine(0).contains("Slots"))
-		{
-			if(event.getPlayer().isSneaking() && ((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-					(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))))
-				new SlotsCreationMenu(thisSign, player);
-			else
-				onSlotsSignClick(sign, thisSign, player);
-		}
-		else
-		{
-			return;
-		}
-		
-		
-		rollCount++;
-	}
-	private void onDiceSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player) { // continue log/error methode
-		if(!(Main.perm.has(player, "casino.dice.use") || Main.perm.has(player, "casino.admin"))) {
-			
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-dicesigns"));
-			return;
-		}
-		
-		if(thisSign.isRunning) {
-			
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-sign_is_ingame"));
 			return;
-		}
-		if(thisSign.isSignDisabled()) {
+		} else if(thisSign.isSignDisabled())
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
 			return;
-		}
-		
-		if(thisSign.hasOwnerEnoughMoney() == false) {
+		} else if(!thisSign.hasOwnerEnoughMoney())
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
 			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
+		} else if(!(Main.econ.has(player, thisSign.bet)))
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-player_lacks_money"));
 			return;
 		}
-		
-		//when more gamemodes think about different sigens if(gamemode = dice)
-		
-		Manager.onSignClick(sign.getLocation(), player);
+
+
+		//check if player is sneaking and has permission for this sign (check if it's a server sign and he has server sign permission or if it's his sign)
+		if(event.getPlayer().isSneaking() &&
+				((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
+				(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
+		{
+			switch(thisSign.gamemode)
+			{
+				case DICE:
+				case Dice:
+					new DiceCreationMenu(thisSign, event.getPlayer());
+					break;
+				case BLACKJACK:
+				case Blackjack:
+					new BlackjackCreationMenu(thisSign, event.getPlayer());
+					break;
+				case SLOTS:
+				case Slots:
+					new SlotsCreationMenu(thisSign, event.getPlayer());
+			}
+		}
+		else
+		{
+			switch(thisSign.gamemode)
+			{
+				case DICE:
+				case Dice:
+					if(onDiceSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+				case BLACKJACK:
+				case Blackjack:
+					if(onBlackjackSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+				case SLOTS:
+				case Slots:
+					if(onSlotsSignClick(sign, thisSign, player))
+						Manager.onSignClick(sign.getLocation(), player);
+					break;
+			}
+		}
+		rollCount++;
 	}
-	private void onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player) {
-		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin"))) {
+
+	//check some cases for dice signs
+	private boolean onDiceSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+	{
+		if(!(Main.perm.has(player, "casino.dice.use") || Main.perm.has(player, "casino.admin")))
+		{
+			
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-dicesigns"));
+			return false;
+		}
+
+		return true;
+	}
+
+	//check some cases for blackjack signs
+	private boolean onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+	{
+		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin")))
+		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-blackjacksigns"));
-			return;
+			return false;
 		}
-		
-		if(thisSign.isRunning) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-blackjack-sign_is_ingame"));
-			return;
-		}
-		
-		if(thisSign.isSignDisabled()) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
-			return;
-		}
-		if(!(thisSign.hasOwnerEnoughMoney(thisSign.blackjackGetMaxBet()*thisSign.blackjackGetMultiplicand()))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
-			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_lacks_money"));
-			return;
-		}
-		
-		//main.getServer().getScheduler().cancelTask(updateTasks.get(thisSign));
-		//updateTasks.remove(thisSign);
-		
-		//int taskNumber = main.getServer().getScheduler().runTask(main, new BlackjackAnimation(main, thisSign, player, this)).getTaskId();
-		
-		
-		
-		//signTasks.put(thisSign, taskNumber); ignored
-		
-		Manager.onSignClick(thisSign.getLocation(), player);
+
+		return true;
 	}
-	private void onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
+
+	//check some cases for slots signs
+	private boolean onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
 		if(!(Main.perm.has(player, "casino.slots.use") || Main.perm.has(player, "casino.admin")))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-slotssigns"));
-			return;
+			return false;
 		}
-		
-		if(thisSign.isRunning)
-		{
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-sign_is_ingame"));
-			return;
-		}
-		
-		if(thisSign.isSignDisabled()) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
-			return;
-		}
-		if(!(thisSign.hasOwnerEnoughMoney(thisSign.getSlotsHighestPayout()))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
-			return;
-		}
-		if(!(Main.econ.has(player, thisSign.bet))) {
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player_lacks_money"));
-			return;
-		}
-		
-		Manager.onSignClick(sign.getLocation(), player);
+
+		return true;
 	}
 
 
