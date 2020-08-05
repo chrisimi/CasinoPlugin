@@ -51,13 +51,11 @@ public class PlayerSignsManager implements Listener {
 	/**
 	 * map which contains all player signs keyed with their location
 	 */
-	private static HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<Location, PlayerSignsConfiguration>();
+	private static final HashMap<Location, PlayerSignsConfiguration> playerSigns = new HashMap<>();
 	
-	public static HashMap<OfflinePlayer, Double> playerWonWhileOffline = new HashMap<OfflinePlayer, Double>(); 
-	
-	private GsonBuilder builder;
-	private Gson gson;
-	private Main main;
+	public static final HashMap<OfflinePlayer, Double> playerWonWhileOffline = new HashMap<>();
+
+	private final Gson gson;
 	private static Double maxBetDice = 200.0;
 	private static Double maxBetBlackjack = 200.0;
 	private static Double maxBetSlots = 200.0;
@@ -68,14 +66,16 @@ public class PlayerSignsManager implements Listener {
 	
 	private int managerUpdateCycle = 120;
 	private int managerDistance = 16;
-	
-	private int updateTask = 0;
-	public PlayerSignsManager(Main main) {
-		this.main = main;
-		main.getServer().getPluginManager().registerEvents(this, main);
-		
-		builder = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls();
-		gson = builder.create();
+
+	public PlayerSignsManager()
+	{
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
+
+		gson = new GsonBuilder()
+				.setPrettyPrinting()
+				.excludeFieldsWithoutExposeAnnotation()
+				.serializeNulls()
+				.create();
 		
 		configureVariables();
 		importSigns();
@@ -83,13 +83,9 @@ public class PlayerSignsManager implements Listener {
 		
 		Manager.start(this);
 	}
-	private void updateSignsJson() {
-		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			@Override
-			public void run() {
-				exportSigns();
-			}
-		}, 12000, 12000);
+	private void updateSignsJson()
+	{
+		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), this::exportSigns, 12000, 12000);
 	}
 	
 	public void serverClose() {
@@ -99,15 +95,7 @@ public class PlayerSignsManager implements Listener {
 	public void reload() {
 		configureVariables();
 	}
-	public void addOfflinePlayerWinOrLose(double amount, OfflinePlayer player) {
-		
-		if(playerWonWhileOffline.containsKey(player)) {
-			playerWonWhileOffline.compute(player, (p, m) ->  m + amount );
-		} else {
-			playerWonWhileOffline.put(player, amount);
-		}
-	}
-	
+
 	private void configureVariables()
 	{
 		maxBetDice = Double.parseDouble(UpdateManager.getValue("dice-max-bet", 200.0).toString());
@@ -124,7 +112,7 @@ public class PlayerSignsManager implements Listener {
 	
 	private void importSigns()
 	{
-		String line = "";
+		String line;
 		StringBuilder sb = new StringBuilder();
 
 		//read all characters from the file
@@ -150,7 +138,7 @@ public class PlayerSignsManager implements Listener {
 
 			return;
 		}
-		ArrayList<PlayerSignsConfiguration> signs = null;
+		ArrayList<PlayerSignsConfiguration> signs;
 		try
 		{
 			signs = gson.fromJson(sb.toString(), PlayerSigns.class).playerSigns;
@@ -190,10 +178,6 @@ public class PlayerSignsManager implements Listener {
 
 				if(cnf.plusinformations.contains("disabled"))
 				{
-					String[] values = cnf.plusinformations.split(";");
-
-					/* cnf.plusinformations = values[0] + ";" + values[1]; - old code */
-
 					cnf.disabled = true;
 				} else if(cnf.disabled == null)
 					cnf.disabled = false;
@@ -209,7 +193,7 @@ public class PlayerSignsManager implements Listener {
 		//go through all signs and check if a sign exists on the location
 		//if not add it to the map and don't import it = remove on the next export
 		
-		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<Location, PlayerSignsConfiguration>();
+		Map<Location, PlayerSignsConfiguration> signsToDelete = new HashMap<>();
 		for(Entry<Location, PlayerSignsConfiguration> entry : playerSigns.entrySet())
 		{
 			if(!(Bukkit.getWorld(entry.getValue().worldname).getBlockAt(entry.getKey()).getState() instanceof Sign)) 
@@ -435,9 +419,9 @@ public class PlayerSignsManager implements Listener {
 	 */
 	public static int getAmountOfPlayerSigns(OfflinePlayer player, GameMode gameMode)
 	{
-		return playerSigns.values().stream()
+		return (int) playerSigns.values().stream()
 				.filter(a -> !a.isServerOwner() && a.getOwner().getUniqueId().equals(player.getUniqueId()) && a.gamemode == gameMode)
-				.collect(Collectors.toList()).size();
+				.count();
 	}
 	
 	/**
@@ -620,7 +604,7 @@ public class PlayerSignsManager implements Listener {
 		 * the runnable which contains the functionality of the manager
 		 * the runnable will be called every x ticks (configurable in the config) to do his work
 		 */
-		private static Runnable task = new Runnable()
+		private final static Runnable task = new Runnable()
 		{
 			
 			@Override
