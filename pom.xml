@@ -3,9 +3,23 @@
   <groupId>com.chrisimi</groupId>
   <artifactId>CasinoPlugin</artifactId>
   <version>3.7.1</version>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<output-directory>D:/MinecraftServers/minecraft 1.14.4 version Spigot/plugins/CasinoPlugin-${project.version}.jar</output-directory>
+			</properties>
+		</profile>
+		<profile>
+			<id>publish</id>
+		</profile>
+	</profiles>
+
   <build>
     <sourceDirectory>src</sourceDirectory>
-    
+
+
     <resources>
     	<resource>
     		<directory>${project.basedir}</directory>
@@ -25,12 +39,12 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-      
+
       <plugin>
       	<groupId>org.apache.maven.plugins</groupId>
       	<artifactId>maven-shade-plugin</artifactId>
       	<version>3.1.0</version>
-      	
+
       	<configuration>
       		<createDependencyReducedPom>false</createDependencyReducedPom>
       		<artifactSet>
@@ -47,8 +61,9 @@
       				<goal>shade</goal>
       				
       			</goals>
+
       			<configuration>
-      				<outputFile>D:/MinecraftServers/minecraft 1.14.4 version Spigot/plugins/CasinoPlugin-${project.version}.jar</outputFile>
+      				<outputFile>${output-directory}</outputFile>
       			</configuration>
       		</execution>
       		
