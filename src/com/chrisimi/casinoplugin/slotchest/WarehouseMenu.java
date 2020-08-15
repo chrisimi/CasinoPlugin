@@ -93,6 +93,7 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 		int taskId = Main.getInstance().getServer()
 				.getScheduler()
 				.scheduleSyncRepeatingTask(Main.getInstance(), warehouseRunnable, 10L, 10L);
+		tasks.put(bukkitInventory, taskId);
 	}
 
 	private Runnable warehouseRunnable = new Runnable()
