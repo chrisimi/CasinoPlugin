@@ -30,8 +30,6 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	 * Interface for the Owner, to configure his chest!
 	 */
 
-	//TODO rewrite to use new InventoryAPI
-
 	private Player owner;
 	private Main main;
 	private SlotChest slotChest;

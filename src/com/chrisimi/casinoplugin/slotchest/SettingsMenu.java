@@ -2,6 +2,10 @@ package com.chrisimi.casinoplugin.slotchest;
 
 import java.util.ArrayList;
 
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,85 +21,74 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationFactory;
 
-public class SettingsMenu implements Listener{
-
-	//TODO rewrite to use new InventoryAPI
+public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements Listener, IInventoryAPI
+{
 
 	private final Main main;
 	private final SlotChest slotChest;
 	private final Player owner;
-	private final Inventory inventory;
+
+	private ItemStack changeRollAnimationBlock = ItemAPI.createItem("Change the roll animation of this SlotChest", Material.STONE_BUTTON);
 	
-	private ItemStack changeRollAnimationBlock;
-	
-	public SettingsMenu(Main main, SlotChest slotChest, Player owner) {
+	public SettingsMenu(Main main, SlotChest slotChest, Player owner)
+	{
+		super(owner, 9, Main.getInstance(), "Settings");
 		this.main = main;
 		this.slotChest = slotChest;
 		this.owner = owner;
 		
 		main.getServer().getPluginManager().registerEvents(this, main);
-		inventory = Bukkit.createInventory(owner, 9*1, "Settings");
-		owner.openInventory(inventory);
-		
+		openInventory();
+		addEvents(this);
+
 		initialize();
 	}
 	
 	
-	private void initialize() {
-		
+	private void initialize()
+	{
 		updateInventory();
-		
-		
 	}
-	private void updateInventory() {
-		changeRollAnimationBlock = new ItemStack(Material.STONE_BUTTON);
-		ItemMeta meta = changeRollAnimationBlock.getItemMeta();
-		meta.setDisplayName("Change the roll animation of this chest");
-		meta.setLore(getLoreForAnimations());
-		changeRollAnimationBlock.setItemMeta(meta);
-		inventory.setItem(0, changeRollAnimationBlock);
+	private void updateInventory()
+	{
+		ItemAPI.setLore(changeRollAnimationBlock, getLoreForAnimations());
+		bukkitInventory.setItem(0, changeRollAnimationBlock);
 	}
 	
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if(event.getCurrentItem() == null) return;
-		if(!(event.getInventory().equals(inventory))) return;
-		
-		if(event.getCurrentItem().equals(changeRollAnimationBlock)) {
-			
-			slotChest.animationID++;
-			if(slotChest.animationID> RollAnimationFactory.getNameOfAllAnimations().length)
-				slotChest.animationID = 1;
+	@EventMethodAnnotation
+	public void clickEvent(ClickEvent event)
+	{
+		if(event.getClicked().equals(changeRollAnimationBlock))
+		{
+			//move to the next animation
+			slotChest.animationID = (slotChest.animationID > RollAnimationFactory.getNameOfAllAnimations().length - 1) ? 1 : slotChest.animationID + 1;
 			updateInventory();
 		}
-		event.setCancelled(true);
 	}
 	
 	@EventHandler
-	public void onInventoryLeave(InventoryCloseEvent event) {
-		if(!(event.getInventory().equals(inventory))) return;
+	public void onInventoryLeave(InventoryCloseEvent event)
+	{
+		if(!(event.getInventory().equals(bukkitInventory))) return;
 		
 		CasinoManager.slotChestManager.save();
 	}
-	
-	
-	
-	
-	
-	
-	
-	private ArrayList<String> getLoreForAnimations() {
+
+	private ArrayList<String> getLoreForAnimations()
+	{
 		String[] lores = RollAnimationFactory.getNameOfAllAnimations();
-		for(int i = 0; i < lores.length; i++) {
-			if(i == slotChest.animationID-1) {
+		for(int i = 0; i < lores.length; i++)
+		{
+			if(i == slotChest.animationID-1)
 				lores[i] = "§6" + lores[i];
-			} else {
-				lores[i] = "§8" + lores[i]; 
-			}
+			else
+				lores[i] = "§8" + lores[i];
 		}
+
 		ArrayList<String> loresList = new ArrayList<String>(lores.length);
 		for(String a : lores)
 			loresList.add(a);
+
 		return loresList;
 	}
 }
