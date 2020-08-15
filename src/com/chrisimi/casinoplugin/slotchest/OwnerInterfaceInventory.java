@@ -4,6 +4,10 @@ package com.chrisimi.casinoplugin.slotchest;
 
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -20,7 +24,8 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 
-public class OwnerInterfaceInventory implements Listener{
+public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI, Listener
+{
 	/*
 	 * Interface for the Owner, to configure his chest!
 	 */
@@ -30,150 +35,112 @@ public class OwnerInterfaceInventory implements Listener{
 	private Player owner;
 	private Main main;
 	private SlotChest slotChest;
+
+	private ItemStack warehouseItem = ItemAPI.createItem("§bWarehouse", Material.CHEST);
+	private ItemStack winningsItem = ItemAPI.createItem("§awinnings", Material.DIAMOND);
+	private ItemStack betItem = ItemAPI.createItem("§6bet", Material.GOLD_INGOT);
+	private ItemStack settingsItem = ItemAPI.createItem("§fsettings", Material.IRON_NUGGET);
 	
-	private Inventory ownerInterface;
-	private ItemStack warehouseItem;
-	private ItemStack winningsItem;
-	private ItemStack betItem;
-	private ItemStack settingsItem;
-	
-	private ItemStack disableItem;
-	private ItemStack enableItem;
+	private ItemStack disableItem = ItemAPI.createItem("§4disable", Material.RED_WOOL);
+	private ItemStack enableItem = ItemAPI.createItem("§2enable", Material.GREEN_WOOL);
+
 	public OwnerInterfaceInventory(Player owner, Main main, SlotChest chest) {
+		super(owner, 9, Main.getInstance(), "Owner Interface");
 		this.owner = owner;
 		this.main = main;
 		this.slotChest = chest;
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		initialize();
 	}
 	private void initialize() {
 		slotChest.maintenance = true;
 		createInventory();
-		owner.openInventory(ownerInterface);
-	}
-	public void openInventory() {
-		owner.closeInventory();
-		owner.openInventory(ownerInterface);
+		this.addEvents(this);
+		openInventory();
 	}
 	
 	
 	
-	//--------------------------------------------------------------
-	//initialize methods
-	private void createInventory() {
-		ownerInterface = Bukkit.createInventory(owner, 9*1, "Owner Interface");
-		
-		warehouseItem = new ItemStack(Material.CHEST, 1);
-		ItemMeta meta = warehouseItem.getItemMeta();
-		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§bwarehouse");
-		warehouseItem.setItemMeta(meta);
-		ownerInterface.setItem(0, warehouseItem);
-		
-		winningsItem = new ItemStack(Material.DIAMOND, 1);
-		meta = winningsItem.getItemMeta();
-		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§awinnings");
-		winningsItem.setItemMeta(meta);
-		ownerInterface.setItem(1, winningsItem);
-		
-		disableItem = new ItemStack(Material.RED_WOOL, 1);
-		meta = disableItem.getItemMeta();
-		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§4disable");
-		disableItem.setItemMeta(meta);
-		
-		settingsItem = new ItemStack(Material.IRON_NUGGET);
-		meta = settingsItem.getItemMeta();
-		meta.setDisplayName("§fsettings");
-		settingsItem.setItemMeta(meta);
-		ownerInterface.setItem(6, settingsItem);
-		
-		enableItem = new ItemStack(Material.GREEN_WOOL);
-		meta = enableItem.getItemMeta();
-		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§2enable");
-		enableItem.setItemMeta(meta);
-		
-		
-		betItem = new ItemStack(Material.GOLD_INGOT, 1);
-		meta = betItem.getItemMeta();
-		meta.addEnchant(Enchantment.LUCK, 2, true);
-		meta.setDisplayName("§6bet");
-		betItem.setItemMeta(meta);
-		ownerInterface.setItem(4, betItem);
-		
-		if(slotChest.enabled)
-			ownerInterface.setItem(8, disableItem);
-		else
-			ownerInterface.setItem(8, enableItem);
-		
+	//region initialize
+	private void createInventory()
+	{
+		//put the items into the inventory
+		bukkitInventory.setItem(0, warehouseItem);
+		bukkitInventory.setItem(1, winningsItem);
+		bukkitInventory.setItem(6, settingsItem);
+		bukkitInventory.setItem(4, betItem);
+		bukkitInventory.setItem(8, (slotChest.enabled) ? disableItem : enableItem);
 	}
+	//endregion
 
-	//--------------------------------------------------------------
-	//EventHandlers
+	//region EventHandlers
 	
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if(event.getInventory() != ownerInterface) return;
-		if(event.getCurrentItem() == null) return;
-	
-		if(event.getCurrentItem().equals(warehouseItem)) openWarehouseMenu();
-		else if(event.getCurrentItem().equals(winningsItem)) openWinningsMenu();
-		else if(event.getCurrentItem().equals(disableItem)) disableChest();
-		else if(event.getCurrentItem().equals(enableItem)) enableChest();
-		else if(event.getCurrentItem().equals(betItem)) openBetMenu();
-		else if(event.getCurrentItem().equals(settingsItem)) openSettingsMenu();
-		
-		event.setCancelled(true);
+	@EventMethodAnnotation
+	public void clickEvent(ClickEvent event) {
+
+		if(event.getClicked().equals(warehouseItem)) openWarehouseMenu();
+		else if(event.getClicked().equals(winningsItem)) openWinningsMenu();
+		else if(event.getClicked().equals(disableItem)) disableChest();
+		else if(event.getClicked().equals(enableItem)) enableChest();
+		else if(event.getClicked().equals(betItem)) openBetMenu();
+		else if(event.getClicked().equals(settingsItem)) openSettingsMenu();
+
 	}
 	
 	@EventHandler
 	public void onInventoryLeave(InventoryCloseEvent event) {
-		if(!(event.getInventory().equals(ownerInterface))) return;
+		if(!(event.getInventory().equals(bukkitInventory))) return;
 		
 		slotChest.maintenance = false;
 	}
-	
-	//-------------------------------------------------------------
-	//Opening other Inventories
-	private void openWarehouseMenu() {
-		owner.closeInventory();
+	//endregion
+
+	//region click events
+	private void openWarehouseMenu()
+	{
+		closeInventory();
 		new WarehouseMenu(main, slotChest, owner);
 	}
-	private void openWinningsMenu() {
-		owner.closeInventory();
+	private void openWinningsMenu()
+	{
+		closeInventory();
 		new WinningsMenu(main, owner, slotChest);
 	}
-	private void openBetMenu() {
-		owner.closeInventory();
+	private void openBetMenu()
+	{
+		closeInventory();
 		new BetMenu(main, owner, slotChest, this);
 		
 	}
-	private void openSettingsMenu() {
-		owner.closeInventory();
+	private void openSettingsMenu()
+	{
+		closeInventory();
 		new SettingsMenu(main, slotChest, owner);
 	}
 	
-	private void disableChest() {
+	private void disableChest()
+	{
 		this.slotChest.enabled = false;
-		ownerInterface.setItem(8, enableItem);
+		bukkitInventory.setItem(8, enableItem);
 		CasinoManager.slotChestManager.save();
 	}
-	private void enableChest() {
-		Boolean breakOp = false;
-		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
-			if(slotChest.itemIsOnForbiddenList(entry.getKey().getType())) {
-//				owner.sendMessage(CasinoManager.getPrefix() + "§4Can't activate SlotChest! " + entry.getKey().getType().toString() + " is forbidden on this server!");
+
+	private void enableChest()
+	{
+		boolean hasForbiddenItem = false;
+		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet())
+		{
+			if(slotChest.itemIsOnForbiddenList(entry.getKey().getType()))
+			{
 				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-ownerinterface-cant_activate_forbidden_item").replace("%item%", entry.getKey().getType().toString()));
-				breakOp = true;
+				hasForbiddenItem = true;
 			}
 		}
 		
-		if(breakOp) return;
+		if(hasForbiddenItem) return;
 		
 		this.slotChest.enabled = true;
-		ownerInterface.setItem(8, disableItem);
+		bukkitInventory.setItem(8, disableItem);
 		CasinoManager.slotChestManager.save();
 	}
 	
