@@ -104,7 +104,8 @@ public class SlotChest {
 			itemsToWin = getItemsToWinFromData();
 		
 	}
-	public void save() {
+	public void save()
+	{
 		if(itemsToWin != null && itemsToWin.size() != 0) {
 			_itemsToWin = new HashMap<String, Double>();
 			for(Entry<ItemStack, Double> entry : itemsToWin.entrySet()) {
@@ -112,10 +113,11 @@ public class SlotChest {
 				_itemsToWin.put(inputString, entry.getValue());
 			}
 		}
-		if(lager != null && lager.size() != 0) {
+		if(lager != null && lager.size() != 0)
+		{
 			_lager = new HashMap<String, Integer>();
-			for(ItemStack item : lager) {
-				_lager.put(item.getType().toString(), item.getAmount());
+			for(Entry<Material, Integer> entry : getLagerWithNumbers().entrySet()) {
+				_lager.put(entry.getKey().toString(), entry.getValue());
 			}
 		}
 	}
@@ -190,10 +192,18 @@ public class SlotChest {
 	
 	private ArrayList<ItemStack> getLagerFromData() {
 		ArrayList<ItemStack> returnValue = new ArrayList<ItemStack>();
-		for(Entry<String, Integer> entries : _lager.entrySet()) {
-			ItemStack item = new ItemStack(Enum.valueOf(Material.class, entries.getKey()), entries.getValue());
-			returnValue.add(item);
+		for(Entry<String, Integer> entries : _lager.entrySet())
+		{
+			Material material = Enum.valueOf(Material.class, entries.getKey());
+			int amount = entries.getValue();
+			while(amount > 0)
+			{
+				ItemStack itemStack = new ItemStack(material, (amount > material.getMaxStackSize()) ?  material.getMaxStackSize() : amount);
+				amount -= material.getMaxStackSize();
+				returnValue.add(itemStack);
+			}
 		}
+
 		return returnValue;
 	}
 	private HashMap<ItemStack, Double> getItemsToWinFromData() {

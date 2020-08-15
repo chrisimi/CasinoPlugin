@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.utils;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -41,6 +42,20 @@ public class ItemAPI {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setLore(elements);
         itemStack.setItemMeta(meta);
+    }
+
+    /**
+     * tries to put a item into the inventory of the player, if the inventory is full, the item will be dropped above him
+     * @param itemStack {@linkplain ItemStack} instance to drop
+     * @param player {@linkplain Player} player who should get the item
+     */
+    public static void putItemInInventory(ItemStack itemStack, Player player)
+    {
+        int slot = player.getInventory().first(Material.AIR);
+        if(slot == -1)
+            player.getWorld().dropItem(player.getLocation().add(0, 3, 0), itemStack);
+        else
+            player.getInventory().setItem(slot, itemStack);
     }
 
 }
