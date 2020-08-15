@@ -10,21 +10,30 @@ public class RollAnimationFactory {
 
 	//TODO fix switch issue and add documentation
 
+	/**
+	 * get the RollAnimation for the slotchest
+	 * @param main instance of the main class
+	 * @param slotChest instance of the slot chest
+	 * @param player player
+	 * @return a IRollAnimation implementation
+	 */
 	public static IRollAnimation GetRollAnimation(Main main, SlotChest slotChest, Player player)
 	{
 		switch(slotChest.animationID) {
 		case 0:
+		case 2:
 			return new NormalLeftToRightAnimation(main, slotChest, player);
 		case 1:
 			return new NormalRightToLeftAnimation(main, slotChest, player);
-			
-		case 2:
-			return new NormalLeftToRightAnimation(main, slotChest, player);
 		}
 		return null;
 		
 	}
-	
+
+	/**
+	 * get the name of all animations to use for example for lores
+	 * @return {@linkplain String} array containg the names of the animations
+	 */
 	public static String[] getNameOfAllAnimations() {
 		return new String[] {"RightToLeft", "LeftToRight"};
 	}
