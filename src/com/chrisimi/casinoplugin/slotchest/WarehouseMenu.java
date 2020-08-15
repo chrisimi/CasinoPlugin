@@ -55,7 +55,6 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 		main.getServer().getPluginManager().registerEvents(this, main);
 		initialize();
 		addEvents(this);
-		setCancelClickEvent(false);
 		openInventory();
 
 		initializeInventoryUpdateRunnable();
