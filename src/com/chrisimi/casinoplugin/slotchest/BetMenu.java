@@ -5,8 +5,14 @@ import java.util.concurrent.ForkJoinPool.ManagedBlocker;
 
 import javax.swing.text.GapContent;
 
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ChatEvent;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,85 +26,57 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 
-public class BetMenu implements Listener{
+public class BetMenu extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI, Listener
+{
 
-	//TODO rewrite to use new InventoryAPI
-
-	public static HashMap<Player, BetMenu> waitingForChatInputTasks = new HashMap<>();
+	private ItemStack inputsign = ItemAPI.createItem("Write bet in chat", Material.SIGN);
+	private ItemStack backButton = ItemAPI.createItem("§bBack", Material.STONE_BUTTON);
+	private ItemStack currentBetsign = ItemAPI.createItem("§6Current bet: ", Material.SIGN);
 	
-	public Inventory inventory;
-	
-	private ItemStack inputsign;
-	private ItemStack backButton;
-	private ItemStack currentBetsign;
-	
-	private ItemStack minusBet1;
-	private ItemStack minusBet2;
-	private ItemStack minusBet3;
-	private ItemStack minusBet4;
-	private ItemStack plusBet1;
-	private ItemStack plusBet2;
-	private ItemStack plusBet3;
-	private ItemStack plusBet4;
+	private ItemStack[] plusBet = new ItemStack[4];
+	private ItemStack[] minusBet = new ItemStack[4];
 	
 	private double[] minusBetValues = new double[4];
 	private double[] plusBetValues = new double[4];
-	
-	private Material minusBlockMaterial = Material.RED_WOOL;
-	private Material plusBlockMaterial = Material.GREEN_WOOL;
-	
+	private final double[] multiplicators =  {1.0, 2.0, 5.0, 10.0};
+
+	private static Material minusBlockMaterial = Material.RED_WOOL;
+	private static Material plusBlockMaterial = Material.GREEN_WOOL;
+
 	private final Main main;
 	private final Player player;
 	private final SlotChest slotChest;
 	private final OwnerInterfaceInventory ownerInterfaceInventory;
-	public BetMenu(Main main, Player owner, SlotChest slotchest, OwnerInterfaceInventory oii) {
+	public BetMenu(Main main, Player owner, SlotChest slotchest, OwnerInterfaceInventory oii)
+	{
+		super(owner, 9*3, Main.getInstance(), "BetMenu");
 		this.main = main;
 		this.player = owner;
 		this.slotChest = slotchest;
 		this.ownerInterfaceInventory = oii;
-		main.getServer().getPluginManager().registerEvents(this, main);
+
+		addEvents(this);
+		openInventory();
+
 		initialize();
 	}
-	private void initialize() {
-		minusBet1 = new ItemStack(minusBlockMaterial);
-		minusBet2 = new ItemStack(minusBlockMaterial);
-		minusBet3 = new ItemStack(minusBlockMaterial);
-		minusBet4 = new ItemStack(minusBlockMaterial);
-		plusBet1 = new ItemStack(plusBlockMaterial);
-		plusBet2 = new ItemStack(plusBlockMaterial);
-		plusBet3 = new ItemStack(plusBlockMaterial);
-		plusBet4 = new ItemStack(plusBlockMaterial);
-		
-		inventory = Bukkit.createInventory(player, 9*3, "setup your bet!");
-		
-		inputsign = new ItemStack(Material.SIGN);
-		ItemMeta meta = inputsign.getItemMeta();
-		meta.setDisplayName("Write bet in chat");
-		inputsign.setItemMeta(meta);
-		inventory.setItem(22, inputsign);
-		
-		backButton = new ItemStack(Material.STONE_BUTTON);
-		meta = backButton.getItemMeta();
-		meta.setDisplayName("§bBack");
-		backButton.setItemMeta(meta);
-		inventory.setItem(18, backButton);
-		
-		currentBetsign = new ItemStack(Material.SIGN);
-		meta = currentBetsign.getItemMeta();
-		meta.setDisplayName("§6Current bet: " + Main.econ.format(slotChest.bet));
-		currentBetsign.setItemMeta(meta);
-		inventory.setItem(4, currentBetsign);
-		
-		player.openInventory(inventory);
-		
+	private void initialize()
+	{
+		for(int i = 0; i < plusBet.length; i++)
+		{
+			plusBet[i] = new ItemStack(plusBlockMaterial);
+			minusBet[i] = new ItemStack(minusBlockMaterial);
+		}
+
+		bukkitInventory.setItem(22, inputsign);
+		bukkitInventory.setItem(18, backButton);
+
 		managePlusMinusBlocks();
 	}
 	public void updateInventory() {
-		currentBetsign = new ItemStack(Material.SIGN);
-		ItemMeta meta = currentBetsign.getItemMeta();
-		meta.setDisplayName("§6current bet: " + Main.econ.format(slotChest.bet));
-		currentBetsign.setItemMeta(meta);
-		inventory.setItem(4, currentBetsign);
+		ItemAPI.changeName(currentBetsign, "§6Current bet: " + Main.econ.format(slotChest.bet));
+		bukkitInventory.setItem(4, currentBetsign);
+
 		managePlusMinusBlocks();
 		
 		CasinoManager.slotChestManager.save();
@@ -112,148 +90,94 @@ public class BetMenu implements Listener{
 		 */
 		for(int i = 0; i < 9; i++) {
 			if(i == 4) continue;
-			inventory.setItem(i, new ItemStack(Material.AIR));
+			bukkitInventory.setItem(i, null);
 		}
-		
-		if(slotChest.bet > 0) {
-			createNewBlock(minusBet4, slotChest.bet);
-			minusBetValues[0] = slotChest.bet;
-			createNewBlock(minusBet3, slotChest.bet/2);
-			minusBetValues[1] = slotChest.bet/2;
-			createNewBlock(minusBet2, slotChest.bet/5);
-			minusBetValues[2] = slotChest.bet/5;
-			createNewBlock(minusBet1, slotChest.bet/20);
-			minusBetValues[3] = slotChest.bet/20;
-			
-			inventory.setItem(0, minusBet4);
-			inventory.setItem(1, minusBet3);
-			inventory.setItem(2, minusBet2);
-			inventory.setItem(3, minusBet1);
+
+		//calculate the bet for every minusBet block
+		if(slotChest.bet > 0)
+		{
+			for(int i = 0; i < 4; i++)
+			{
+				double bet = Math.round(slotChest.bet / multiplicators[i] * 100.0) / 100.0;
+				createNewBlock(minusBet[i], bet * -1);
+				bukkitInventory.setItem(i, minusBet[i]);
+				minusBetValues[i] = bet;
+			}
 		}
-		
-		if(playerbalance >= slotChest.bet) {
-			createNewBlock(plusBet4, playerbalance);
-			plusBetValues[0] = playerbalance;
-			createNewBlock(plusBet3, playerbalance/2);
-			plusBetValues[1] = playerbalance/2.0;
-			createNewBlock(plusBet2, playerbalance/5);
-			plusBetValues[2] = playerbalance/5.0;
-			createNewBlock(plusBet1, playerbalance/20);
-			plusBetValues[3] = playerbalance/20.0;
-			
-			
-			inventory.setItem(5, plusBet1);
-			inventory.setItem(6, plusBet2);
-			inventory.setItem(7, plusBet3);
-			inventory.setItem(8, plusBet4);
+
+		//calculate the bet for every plusBet block
+		if(playerbalance >= slotChest.bet)
+		{
+			for(int i = 0; i < 4; i++)
+			{
+				double bet = Math.round(playerbalance / multiplicators[i] * 100.0) / 100.0;
+				createNewBlock(plusBet[i], bet);
+				bukkitInventory.setItem(i + 5, plusBet[i]);
+				plusBetValues[i] = bet;
+			}
 		}
 	}
-	private void createNewBlock(ItemStack item, double bet) {
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(bet>=1 ? String.format("§2Increase your bet by §6%s", Main.econ.format(bet)) : String.format("§4Decrease your bet by §6%s", Main.econ.format(bet)));
-		item.setItemMeta(meta);
+	private void createNewBlock(ItemStack item, double bet)
+	{
+		ItemAPI.changeName(item, bet>=1 ? String.format("§2Increase your bet by §6%s", Main.econ.format(bet)) : String.format("§4Decrease your bet by §6%s", Main.econ.format(bet)));
 	}
-	
-	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
-		if(event.getInventory() == null) return;
-		if(event.getCurrentItem() == null) return;
-		
-		if(!(event.getInventory().equals(inventory))) return;
-		
-		if(event.getCurrentItem().equals(backButton)) goBack();
-		else if(event.getCurrentItem().equals(inputsign)) inputWithChat();
-		else if(event.getCurrentItem().getType().equals(minusBlockMaterial)) clickedOnMinusBlock(event);
-		else if(event.getCurrentItem().getType().equals(plusBlockMaterial)) clickedOnPlusBlock(event);
-		
-		event.setCancelled(true);
+
+	@EventMethodAnnotation
+	public void clickEvent(ClickEvent event)
+	{
+		if(event.getClicked().equals(backButton)) goBack();
+		else if(event.getClicked().equals(inputsign))
+		{
+			waitforChatInput(player);
+			closeInventory();
+			player.sendMessage("\n\n"+CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_message"));
+		}
+		else if(event.getClicked().getType() == minusBlockMaterial) clickedOnMinusBlock(event.getPos());
+		else if(event.getClicked().getType() == plusBlockMaterial) clickedOnPlusBlock(event.getPos());
+
 		updateInventory();
 	}
-	@EventHandler
-	public void onChat(AsyncPlayerChatEvent event) {
-		if(!(waitingForChatInputTasks.containsKey(event.getPlayer()))) return;
-		
-		if(event.isAsynchronous()) {
-			main.getServer().getScheduler().runTask(main, new Runnable() {
-				
-				@Override
-				public void run() {
-					input(event.getMessage());
-				}
-			});
-		} else {
-			input(event.getMessage());
-		}
-		event.setCancelled(true);
-	}
-	
-	private void goBack() {
-		ownerInterfaceInventory.openInventory();
-	}
-	private void inputWithChat() {
-		waitingForChatInputTasks.put(player, this);
-		player.sendMessage("\n\n"+CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_message"));
-		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
-			
-			
-			@Override
-			public void run() {
-				if(waitingForChatInputTasks.containsKey(player)) {
-					player.sendMessage(CasinoManager.getPrefix() + "§4Time for writing the input expired! Try it again!");
-					waitingForChatInputTasks.remove(player);
-				}
-				
-			}
-		}, 20*120);
-		
-		player.closeInventory();
-	}
-	
-	private void clickedOnMinusBlock(InventoryClickEvent event) {
-		ItemStack clickedOn = event.getCurrentItem();
-		ItemStack[] blocks = new ItemStack[] {minusBet4, minusBet3, minusBet2, minusBet1};
-		for(int i = 0; i < 4; i++) {
-			if(clickedOn.equals(blocks[i])) {
-				slotChest.bet -= minusBetValues[i];
-//				player.sendMessage(CasinoManager.getPrefix() + "You decreased your bet by " + Main.econ.format(minusBetValues[i]));
-				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_decrease").replace("%amount%", Main.econ.format(minusBetValues[i])));
-				return;
-			}
-		}
-	}
-	private void clickedOnPlusBlock(InventoryClickEvent event) {
-		ItemStack clickedOn = event.getCurrentItem();
-		ItemStack[] blocks = new ItemStack[] {plusBet4, plusBet3, plusBet2, plusBet1};
-		for(int i = 0; i < 4; i++) {
-			if(clickedOn.equals(blocks[i])) {
-				slotChest.bet += plusBetValues[i];
-//				player.sendMessage(CasinoManager.getPrefix() + "You increased your bet by " + Main.econ.format(plusBetValues[i]));
-				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amount%", Main.econ.format(plusBetValues[i])));
-				CasinoManager.Debug(this.getClass(), "bet: " + plusBetValues[i]);
-				return;
-			}
-		}
-	}
-	private void input(String message) {
-		if(!(waitingForChatInputTasks.containsKey(player))) return;
-		Double input = null;
-		try {
-			input = Double.parseDouble(message);
-		} catch (NumberFormatException e) {
+
+	@EventMethodAnnotation
+	public void onChat(ChatEvent event)
+	{
+		try
+		{
+			slotChest.bet = Double.parseDouble(event.getMessage());
+		} catch (Exception e) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_input_invalid"));
 			return;
 		}
-		if(input <= 0) {
+		if(slotChest.bet <= 0) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_input_lower_than_0"));
 			return;
 		}
-		
-//		player.sendMessage(CasinoManager.getPrefix() + "§6" + Main.econ.format(input) + " is the new bet!");
-		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_new_bet_message").replace("%amount%", Main.econ.format(input)));
-		waitingForChatInputTasks.remove(player);
-		slotChest.bet = input;
+
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_new_bet_message").replace("%amount%", Main.econ.format(slotChest.bet)));
+
 		slotChest.save();
-		this.updateInventory();
-		player.openInventory(inventory);
+		updateInventory();
+		openInventory();
 	}
+
+	private void goBack()
+	{
+		ownerInterfaceInventory.openInventory();
+	}
+	
+	private void clickedOnMinusBlock(int pos)
+	{
+		if(pos >= 4) return;
+
+		slotChest.bet -= minusBetValues[pos];
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_decrease").replace("%amount%", Main.econ.format(minusBetValues[pos])));
+	}
+	private void clickedOnPlusBlock(int pos)
+	{
+		if(pos <= 4 || pos >= 9) return;
+
+		slotChest.bet += plusBetValues[pos - 5];
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_increase").replace("%amount%", Main.econ.format(plusBetValues[pos - 5])));
+	}
+
 }
