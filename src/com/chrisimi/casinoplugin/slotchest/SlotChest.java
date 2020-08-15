@@ -71,7 +71,7 @@ public class SlotChest {
 	public int animationID;
 	
 	/**
-	 * when owner is in the OwnerInterface, this SlotChest will be in 
+	 * when owner is in the OwnerInterface, this SlotChest will be true
 	 */
 	public Boolean maintenance = false;
 	
@@ -205,7 +205,7 @@ public class SlotChest {
 			if(splited.length != 2) Bukkit.getLogger().info("Error: WinningsItem format not correct!");
 			
 			Material material = Enum.valueOf(Material.class, splited[0]);
-			int amount = Integer.valueOf(splited[1]);
+			int amount = Integer.parseInt(splited[1]);
 			
 			returnValue.put(new ItemStack(material, amount), entry.getValue());
 		}
@@ -224,7 +224,7 @@ public class SlotChest {
 			}
 		};
 		ArrayList<Entry<ItemStack, Double>> sortedList = new ArrayList<Entry<ItemStack, Double>>(itemsToWin.entrySet());
-		Collections.sort(sortedList, comparator);
+		sortedList.sort(comparator);
 		LinkedHashMap<ItemStack, Double> linkedList = new LinkedHashMap<>();
 		for(Entry<ItemStack, Double> entry : sortedList) {
 			linkedList.put(entry.getKey(), entry.getValue());
@@ -287,12 +287,7 @@ public class SlotChest {
 	@SuppressWarnings("unchecked") 
 	public boolean itemIsOnForbiddenList(Material itemStack) {
 		ArrayList<String> inputList = new ArrayList<>();
-		try {
-			inputList = (ArrayList<String>) UpdateManager.getValue("slotchest-list-of-banned-items", new ArrayList<String>());
-		} catch(Exception e) {
-			CasinoManager.LogWithColor(org.bukkit.ChatColor.RED + "Error occured while trying to get list of banned items: values are invalid!");
-			e.printStackTrace();
-		}
+		inputList = (ArrayList<String>) UpdateManager.getValue("slotchest-list-of-banned-items", new ArrayList<String>());
 		
 		ArrayList<Material> bannedList = new ArrayList<>();
 		for(String string : inputList) {

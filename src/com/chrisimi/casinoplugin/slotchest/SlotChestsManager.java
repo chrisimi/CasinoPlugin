@@ -38,7 +38,7 @@ public class SlotChestsManager implements Listener{
 	/* when owner clicks on slotchest, a interface will pop up where he can configure the chest
 	 * 9 slots with items to win and to bet
 	 * 
-	 * upgrades to get more space in warehouse and winnings menu
+	 * TODO upgrades to get more space in warehouse and winnings menu
 	 * 
 	 */
 	private static HashMap<Location, SlotChest> slotChests = new HashMap<Location, SlotChest>();
@@ -46,8 +46,7 @@ public class SlotChestsManager implements Listener{
 	
 	private static int configMaxAmount;
 	private static Boolean configOpUnlimited;
-	private static Boolean configEnableChatMessages;
-	
+
 	private Main main;
 	private GsonBuilder builder;
 	private Gson gson;
@@ -67,24 +66,14 @@ public class SlotChestsManager implements Listener{
 		
 	}
 	
-	private void updateConfigValues() {
-		try {
-			configMaxAmount = Integer.valueOf(UpdateManager.getValue("slotchest-max-amount").toString());
-		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get max-amount for SlotChest! Value is not a valid number! Set to default value: 5");
-			//main.getLogger().info("CONFIG-ERROR: While trying to configure );
-			configMaxAmount = 5;
-		}
-		try {
-			configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest-op-unlimited").toString());
-		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get op-unlimited for SlotChest! Value is not a valid boolean (true/false)! Set to default value: false");
-			configOpUnlimited = false;
-		}
+	private void updateConfigValues()
+	{
+		configMaxAmount = Integer.parseInt(UpdateManager.getValue("slotchest-max-amount", 5).toString());
+		configOpUnlimited = Boolean.valueOf(UpdateManager.getValue("slotchest-op-unlimited", true).toString());
 	}
 	private void importChests() throws IOException {
 		slotChests.clear();
-		String json = "";
+		StringBuilder json = new StringBuilder();
 		String line = "";
 		BufferedReader reader = null;
 		try {
@@ -97,7 +86,7 @@ public class SlotChestsManager implements Listener{
 		}
 		
 		while((line = reader.readLine()) != null) {
-			json += line;
+			json.append(line);
 		}
 		reader.close();
 		if(json.length() < 24)
@@ -105,7 +94,7 @@ public class SlotChestsManager implements Listener{
 
 		SlotChestsJson slotChestsJson = null;
 		try {
-			slotChestsJson = gson.fromJson(json, SlotChestsJson.class);
+			slotChestsJson = gson.fromJson(json.toString(), SlotChestsJson.class);
 		} catch(JsonSyntaxException jse) {
 			CasinoManager.LogWithColor(ChatColor.RED + "An Error occured while trying to import SlotChests from json: Invalid Json file!");
 			CasinoManager.LogWithColor(ChatColor.BLUE + "2 things you can do:\n1. check the json file on your own after errors or use https://jsonlint.com \n2. SAVE! the json file with an other name and let the plugin create a new json file!");
@@ -155,7 +144,9 @@ public class SlotChestsManager implements Listener{
 		String json = gson.toJson(jsonObject, SlotChestsJson.class);
 		writer.write(json);
 		writer.close();
-		//CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully saved SlotChests!");
+
+		if(CasinoManager.configEnableConsoleMessages)
+			CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully saved SlotChests!");
 		
 	}
 	public void reload() {
@@ -179,7 +170,8 @@ public class SlotChestsManager implements Listener{
 	//EventHandlers
 	
 	@EventHandler
-	public void onChestClick(PlayerInteractEvent event) {
+	public void onChestClick(PlayerInteractEvent event)
+	{
 		if(event.getClickedBlock() == null || event.getClickedBlock().getType() == Material.AIR) return;
 		if(!(event.getClickedBlock().getType().toString().contains("CHEST"))) return;
 		
@@ -215,13 +207,12 @@ public class SlotChestsManager implements Listener{
 		
 		if(event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			openOwnerInterface(event);
-			
-			event.setCancelled(true);
+
 		} else {
 			openWarehouseDirectly(event);
-			event.setCancelled(true);
 		}
-		
+		event.setCancelled(true);
+
 	}
 	
 	@EventHandler
