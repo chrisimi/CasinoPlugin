@@ -26,16 +26,16 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 
 	private final Main main;
 	private final SlotChest slotChest;
-	private final Player owner;
 
 	private ItemStack changeRollAnimationBlock = ItemAPI.createItem("Change the roll animation of this SlotChest", Material.STONE_BUTTON);
-	
+	private ItemStack changeToServerSign = ItemAPI.createItem("§6to server slot chest", Material.GOLD_BLOCK);
+	private ItemStack changeToPlayerSign = ItemAPI.createItem("§6to player slot chest", Material.COAL_BLOCK);
+
 	public SettingsMenu(Main main, SlotChest slotChest, Player owner)
 	{
 		super(owner, 9, Main.getInstance(), "Settings");
 		this.main = main;
 		this.slotChest = slotChest;
-		this.owner = owner;
 		
 		main.getServer().getPluginManager().registerEvents(this, main);
 		openInventory();
@@ -53,6 +53,11 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	{
 		ItemAPI.setLore(changeRollAnimationBlock, getLoreForAnimations());
 		bukkitInventory.setItem(0, changeRollAnimationBlock);
+
+		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.slotchest.server"))
+		{
+			bukkitInventory.setItem(2, (slotChest.isServerOwner()) ? changeToPlayerSign : changeToServerSign);
+		}
 	}
 	
 	@EventMethodAnnotation
@@ -63,7 +68,10 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 			//move to the next animation
 			slotChest.animationID = (slotChest.animationID > RollAnimationFactory.getNameOfAllAnimations().length - 1) ? 1 : slotChest.animationID + 1;
 			updateInventory();
-		}
+		} else if(event.getClicked().equals(changeToPlayerSign))
+			slotChest.ownerUUID = player.getUniqueId().toString();
+		else if(event.getClicked().equals(changeToServerSign))
+			slotChest.ownerUUID = "server";
 	}
 	
 	@EventHandler

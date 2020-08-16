@@ -63,7 +63,11 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	private void createInventory()
 	{
 		//put the items into the inventory
-		bukkitInventory.setItem(0, warehouseItem);
+
+		//warehouse is not needed for a server slot chest
+		if(!slotChest.isServerOwner())
+			bukkitInventory.setItem(0, warehouseItem);
+
 		bukkitInventory.setItem(1, winningsItem);
 		bukkitInventory.setItem(6, settingsItem);
 		bukkitInventory.setItem(4, betItem);

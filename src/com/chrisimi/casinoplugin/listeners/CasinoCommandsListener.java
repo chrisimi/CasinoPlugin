@@ -93,7 +93,13 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 					
 				} else
-				createSlotChest(player);
+				createSlotChest(player, false);
+			} else if(args[0].equalsIgnoreCase("createserverchest"))
+			{
+				if(!Main.perm.has(sender, "casino.slotchest.server"))
+					player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+				else
+					createSlotChest(player, true);
 			} else if(args[0].equalsIgnoreCase("save")) {
 				CasinoManager.slotChestManager.save();
 			} else if(args[0].equalsIgnoreCase("chestlocations")) {
@@ -323,7 +329,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-sign_reset_successful"));
 	}
 
-	private void createSlotChest(Player player) {
+	private void createSlotChest(Player player, boolean serverSlotChest) {
 		if(!(Main.perm.has(player, "casino.slotchest.create") || Main.perm.has(player, "casino.admin"))) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 			return;
@@ -347,9 +353,21 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-slotchest_chest_not_empty"));
 			return;
 		}
-		SlotChestsManager.createSlotChest(chest.getLocation(), player);
+
+		if(serverSlotChest && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.slotchest.server")))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+			return;
+		}
+
+		if(serverSlotChest)
+			SlotChestsManager.createSlotChest(chest.getLocation(), player, true);
+		else
+			SlotChestsManager.createSlotChest(chest.getLocation(), player, false);
 		
 	}
+
+
 	private Boolean chestEmpty(Chest chest) {
 		for(int i = 0; i < chest.getInventory().getSize(); i++) {
 			if(chest.getInventory().getItem(i) != null)

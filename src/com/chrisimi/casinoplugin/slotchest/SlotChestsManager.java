@@ -186,11 +186,14 @@ public class SlotChestsManager implements Listener{
 		if(chest == null) {
 			return;
 		}
-		if(!(slotChests.containsKey(chest.getLocation()))) {
+		if(!(slotChests.containsKey(chest.getLocation())))
 			return;
-		}
-		if(event.getAction() == Action.LEFT_CLICK_BLOCK) {
-			if(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()) && event.getPlayer().isSneaking()) {
+
+		SlotChest slotChest = slotChests.get(chest.getLocation());
+
+		if(event.getAction() == Action.LEFT_CLICK_BLOCK)
+		{
+			if(isPermitted(event.getPlayer(), slotChest) && event.getPlayer().isSneaking()) {
 				event.setCancelled(false);
 				return;
 			}
@@ -199,7 +202,8 @@ public class SlotChestsManager implements Listener{
 			return;
 		}
 		
-		if(!(event.getPlayer().equals(slotChests.get(chest.getLocation()).getOwner().getPlayer()))) {
+		if(!isPermitted(event.getPlayer(), slotChest))
+		{
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation-not_your_chest"));
 			event.setCancelled(true);
 			return;
@@ -214,18 +218,24 @@ public class SlotChestsManager implements Listener{
 		event.setCancelled(true);
 
 	}
-	
+
+	private boolean isPermitted(Player player, SlotChest slotChest)
+	{
+		return (slotChest.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.slotchest.server"))) ||
+				(!slotChest.isServerOwner() && player.getUniqueId().equals(slotChest.getOwner().getUniqueId()));
+	}
+
 	@EventHandler
 	public void onChestBreak(BlockBreakEvent event) {
 		if(!(slotChests.containsKey(event.getBlock().getLocation()))) return;
 		
 		SlotChest slotChest = slotChests.get(event.getBlock().getLocation());
-		if(!(event.getPlayer().equals(slotChest.getOwner().getPlayer()))) {
+		if(!isPermitted(event.getPlayer(), slotChest)) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_not_your_chest"));
 			event.setCancelled(true);
 			return;
 		}
-		if(slotChest.lager.size() >= 1) {
+		if(slotChest.lager.size() >= 1 && !slotChest.isServerOwner()) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-break_inventory_not_empty"));
 			event.setCancelled(true);
 			return;
@@ -239,7 +249,8 @@ public class SlotChestsManager implements Listener{
 	//-------------------------------------------------------------------------------
 	//EventActions
 	
-	private void clickOnChest(PlayerInteractEvent event) {
+	private void clickOnChest(PlayerInteractEvent event)
+	{
 		SlotChest slotChest = slotChests.get(event.getClickedBlock().getLocation());
 		if(!(slotChest.enabled)) {
 			event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest_is_disabled"));
@@ -279,30 +290,43 @@ public class SlotChestsManager implements Listener{
 		}
 		return returnValue;
 	}
-	public static void createSlotChest(Location lrc, Player owner) {
-		if(slotChests.containsKey(lrc)) {
-			owner.sendMessage(CasinoManager.getPrefix() + "§4This is a SlotChest");
+	public static void createSlotChest(Location lrc, Player creator, boolean serverSign)
+	{
+		if(slotChests.containsKey(lrc))
+		{
+			creator.sendMessage(CasinoManager.getPrefix() + "§4This is a SlotChest");
 			return;
 		}
-		if(getAmountForPlayer(owner) >= configMaxAmount) {
-			
-			if(!(owner.isOp() && configOpUnlimited)) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_exceed_limit").replace("%limit%", String.valueOf(configMaxAmount)));
+
+		if(!serverSign && getAmountForPlayer(creator) >= configMaxAmount)
+		{
+			if(!(creator.isOp() && configOpUnlimited))
+			{
+				creator.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_exceed_limit").replace("%limit%", String.valueOf(configMaxAmount)));
 				return;
 			}
 		}
-		slotChests.put(lrc, new SlotChest(owner, lrc));
-		try {
+
+		if(serverSign)
+			slotChests.put(lrc, new SlotChest(lrc));
+		else
+			slotChests.put(lrc, new SlotChest(creator, lrc));
+
+		try
+		{
 			CasinoManager.slotChestManager.exportChests();
-			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation-successful"));
+			creator.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation-successful"));
+
 			for(int i = 0; i < 50; i++)
 				lrc.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, lrc, 5, null);
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			e.printStackTrace();
-			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_error"));
+			creator.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-creation_error"));
 		}
 		
 	}
+
 	public static ArrayList<SlotChest> getSlotChestsFromPlayer(Player player){
 		ArrayList<SlotChest> chestList = new ArrayList<SlotChest>();
 		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {

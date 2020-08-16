@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
+import com.chrisimi.casinoplugin.main.Main;
 import org.apache.commons.lang.math.DoubleRange;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -81,9 +82,15 @@ public class SlotChest {
 	public HashMap<ItemStack, Double> itemsToWin = new HashMap<>();
 	
 	public SlotChest() {}
-	public SlotChest(Player owner, Location lrc) {
+
+	/**
+	 * use this constructor to create a server slot chest
+	 * @param lrc {@linkplain Location} of the slot chest
+	 */
+	public SlotChest(Location lrc)
+	{
 		enabled = false;
-		ownerUUID = owner.getUniqueId().toString();
+
 		_itemsToWin = new HashMap<String, Double>();
 		_lager = new HashMap<String, Integer>();
 		warehouseLevel = 0;
@@ -93,8 +100,21 @@ public class SlotChest {
 		z = lrc.getZ();
 		worldname = lrc.getWorld().getName();
 		animationID = 1;
-		
+
+		ownerUUID = "server";
+
 		initialize();
+	}
+
+	/**
+	 * use this constructor to create a player slot chest
+	 * @param owner Owner of the slot chest
+	 * @param lrc {@linkplain Location} of the slot chest
+	 */
+	public SlotChest(Player owner, Location lrc)
+	{
+		this(lrc);
+		ownerUUID = owner.getUniqueId().toString();
 	}
 	
 	public void initialize() {
@@ -128,6 +148,25 @@ public class SlotChest {
 		}
 		return false;
 	}
+
+	public boolean isServerOwner()
+	{
+		return this.ownerUUID.equalsIgnoreCase("server");
+	}
+
+	/**
+	 * deposit money to the owner
+	 * does also work if it's a server slot chest
+	 * @param amount to deposit
+	 */
+	public void giveOwnerMoney(double amount)
+	{
+		if(!isServerOwner())
+		{
+			Main.econ.depositPlayer(getOwner(), amount);
+		}
+	}
+
 	/**
 	 * Get the Weight of all elements
 	 * @return gesamtGewicht
@@ -154,8 +193,9 @@ public class SlotChest {
 		}
 		return new Location(world, x, y, z);
 	}
-	public OfflinePlayer getOwner() {
-		return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
+	public OfflinePlayer getOwner()
+	{
+		return (isServerOwner()) ? null : Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
 	}
 	public HashMap<Material, Integer> getLagerWithNumbers() {
 		HashMap<Material, Integer> returnValue = new HashMap<>();

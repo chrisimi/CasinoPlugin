@@ -29,8 +29,6 @@ import com.chrisimi.casinoplugin.slotchest.SlotChest;
 public class RollAnimationManager implements Runnable, Listener
 {
 
-	//TODO rewrite to use new InventoryAPI
-
 	public static int rollsGlobal = 0;
 	
 	private final OfflinePlayer owner;
@@ -83,7 +81,7 @@ public class RollAnimationManager implements Runnable, Listener
 			return;
 		}
 
-		if(!slotChest.hasChestEnough()) {
+		if(!slotChest.hasChestEnough() && !slotChest.isServerOwner()) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-not_enough_items"));
 			return;
 		}
@@ -101,9 +99,9 @@ public class RollAnimationManager implements Runnable, Listener
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 		
 		Main.econ.withdrawPlayer(player, slotChest.bet);
-		Main.econ.depositPlayer(owner, slotChest.bet);
-		
-		if(owner.isOnline())
+		slotChest.giveOwnerMoney(slotChest.bet);
+
+		if(!slotChest.isServerOwner() && owner.isOnline())
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 
 		rollAnimation.initialize();
@@ -114,10 +112,7 @@ public class RollAnimationManager implements Runnable, Listener
 		slotChest.running = true;
 		Random random = new Random();
 		rolls = random.nextInt(30) + 20;
-		
-		Main.econ.withdrawPlayer(player, slotChest.bet);
-		Main.econ.depositPlayer(owner, slotChest.bet);
-		
+
 		main.getServer().getScheduler().runTask(main, new Runnable()
 		{
 			int rollsToSkip = 0;
@@ -158,7 +153,8 @@ public class RollAnimationManager implements Runnable, Listener
 		slotChest.running = false;
 
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_won").replace("%item_count%", String.valueOf(wonItem.getAmount())).replace("%item_type%", wonItem.getType().toString()));
-		slotChest.RemoveItemsFromWarehouse(wonItem);
+		if(!slotChest.isServerOwner())
+			slotChest.RemoveItemsFromWarehouse(wonItem);
 		
 		ItemAPI.putItemInInventory(wonItem, player);
 

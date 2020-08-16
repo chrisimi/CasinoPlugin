@@ -57,6 +57,10 @@ commands:
     description: create a new SlotChest while looking onto it
     usage: /casino createchest
     permission: casino.slotchest.create
+  casino createserverchest:
+    description: create a new server slot chest while looking onto it
+    usage: /casino createserverchest
+    permission: casino.slotchest.server
   casino chestlocations:
     description: get the locations from all SlotChest you made
     usage: /casino chestlocations
