@@ -166,8 +166,8 @@ public class SlotChestsManager implements Listener{
 			e.printStackTrace();
 		}
 	}
-	//-----------------------------------------------------------------------------
-	//EventHandlers
+
+	//region event handlers
 	
 	@EventHandler
 	public void onChestClick(PlayerInteractEvent event)
@@ -246,8 +246,8 @@ public class SlotChestsManager implements Listener{
 		reload();
 		
 	}
-	//-------------------------------------------------------------------------------
-	//EventActions
+	//endregion
+	//region event methods
 	
 	private void clickOnChest(PlayerInteractEvent event)
 	{
@@ -268,29 +268,55 @@ public class SlotChestsManager implements Listener{
 		event.setCancelled(true);
 		return;
 	}
-	
-	private void startAnimation(Player player, SlotChest slotchest) {
+
+	/**
+	 * start the {@link RollAnimationManager} when a player want's to play on the slot chest
+	 * @param player {@linkplain Player} instance of whom want's to play
+	 * @param slotchest {@linkplain SlotChest} instance of the used slot chest
+	 */
+	private void startAnimation(Player player, SlotChest slotchest)
+	{
 		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new RollAnimationManager(player, slotchest, main), 0L);
 	}
-	
-	private void openWarehouseDirectly(PlayerInteractEvent event) {
+
+	/**
+	 * open the warehouse directly
+	 * @param event {@linkplain PlayerInteractEvent} instance
+	 */
+	private void openWarehouseDirectly(PlayerInteractEvent event)
+	{
 		SlotChest chest = slotChests.get(event.getClickedBlock().getLocation());
 		new WarehouseMenu(main, chest, event.getPlayer());
 	}
-	private void openOwnerInterface(PlayerInteractEvent event) {
+
+	/**
+	 * open the owner interface
+	 * @param event {@linkplain PlayerInteractEvent} instance
+	 */
+	private void openOwnerInterface(PlayerInteractEvent event)
+	{
 		SlotChest chest = slotChests.get(event.getClickedBlock().getLocation());
 		new OwnerInterfaceInventory(event.getPlayer(), main, chest);
 	}
-	
-	private static int getAmountForPlayer(Player player) {
-		int returnValue = 0;
-		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {
-			if(entry.getValue().getOwner().equals(player))
-				returnValue++;
-		}
-		return returnValue;
+	//endregion
+
+	/**
+	 * get the amount of slot chests a player owns
+	 * @param player {@linkplain Player} instance which should be the owner
+	 * @return the amount of slot chests
+	 */
+	private static int getAmountForPlayer(Player player)
+	{
+		return getSlotChestsFromPlayer(player).size();
 	}
-	public static void createSlotChest(Location lrc, Player creator, boolean serverSign)
+
+	/**
+	 * create a new slot chest
+	 * @param lrc {@linkplain Location} location of the new slot chest
+	 * @param creator {@linkplain Player} the new owner of the slotchest or if it's a server sign the player who is currently working on it
+	 * @param serverSlotChest if it's a server slot chest or not
+	 */
+	public static void createSlotChest(Location lrc, Player creator, boolean serverSlotChest)
 	{
 		if(slotChests.containsKey(lrc))
 		{
@@ -298,7 +324,8 @@ public class SlotChestsManager implements Listener{
 			return;
 		}
 
-		if(!serverSign && getAmountForPlayer(creator) >= configMaxAmount)
+		//so that player cannot exceed limit of slot chests
+		if(!serverSlotChest && getAmountForPlayer(creator) >= configMaxAmount)
 		{
 			if(!(creator.isOp() && configOpUnlimited))
 			{
@@ -307,7 +334,7 @@ public class SlotChestsManager implements Listener{
 			}
 		}
 
-		if(serverSign)
+		if(serverSlotChest)
 			slotChests.put(lrc, new SlotChest(lrc));
 		else
 			slotChests.put(lrc, new SlotChest(creator, lrc));
@@ -327,6 +354,11 @@ public class SlotChestsManager implements Listener{
 		
 	}
 
+	/**
+	 * get all slot chest a player owns
+	 * @param player {@linkplain Player} instance which should be the owner of the slot chests
+	 * @return a {@linkplain ArrayList} containing {@linkplain SlotChest} instances which belongs to the player, empty if the player does not owns a slot chest
+	 */
 	public static ArrayList<SlotChest> getSlotChestsFromPlayer(Player player){
 		ArrayList<SlotChest> chestList = new ArrayList<SlotChest>();
 		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {
