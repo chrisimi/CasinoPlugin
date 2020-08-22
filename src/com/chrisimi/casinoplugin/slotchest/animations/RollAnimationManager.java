@@ -42,9 +42,11 @@ public class RollAnimationManager implements Runnable, Listener
 	private ItemStack fillMaterial;
 	
 	int rollThreadID = 0; //set to 0 to simulate no rolling
-	private ItemStack[] currentItems = new ItemStack[5];
 	private int rolls = 0;
-	
+
+	/**
+	 * instance of the roll animation which will be played
+	 */
 	private IRollAnimation rollAnimation;
 	
 	public RollAnimationManager(Player player, SlotChest slotChest, Main main)
@@ -74,8 +76,10 @@ public class RollAnimationManager implements Runnable, Listener
 		beginButton = ItemAPI.createItem("§6§lROLL", Material.STONE_BUTTON);
 		inventory.setItem(13, beginButton);
 	}
+
 	private void startBeginAnimation()
 	{
+		//test for various cases
 		if(slotChest.running) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-is_currently_running"));
 			return;
@@ -107,6 +111,10 @@ public class RollAnimationManager implements Runnable, Listener
 		rollAnimation.initialize();
 		startRollingAnimation();
 	}
+
+	/**
+	 * start the roll animation
+	 */
 	private void startRollingAnimation()
 	{
 		slotChest.running = true;
@@ -152,6 +160,7 @@ public class RollAnimationManager implements Runnable, Listener
 		ItemStack wonItem = rollAnimation.finish();
 		slotChest.running = false;
 
+		//only remove items from the warehouse when it's a player managed slot chest
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_won").replace("%item_count%", String.valueOf(wonItem.getAmount())).replace("%item_type%", wonItem.getType().toString()));
 		if(!slotChest.isServerOwner())
 			slotChest.RemoveItemsFromWarehouse(wonItem);
@@ -183,6 +192,5 @@ public class RollAnimationManager implements Runnable, Listener
 			rollThreadID = 0;
 			simulateEnding();
 		}
-		
 	}
 }
