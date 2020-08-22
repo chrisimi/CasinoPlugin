@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
+import com.chrisimi.casinoplugin.main.Main;
 import org.apache.commons.lang.math.DoubleRange;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -71,7 +72,7 @@ public class SlotChest {
 	public int animationID;
 	
 	/**
-	 * when owner is in the OwnerInterface, this SlotChest will be in 
+	 * when owner is in the OwnerInterface, this SlotChest will be true
 	 */
 	public Boolean maintenance = false;
 	
@@ -81,9 +82,15 @@ public class SlotChest {
 	public HashMap<ItemStack, Double> itemsToWin = new HashMap<>();
 	
 	public SlotChest() {}
-	public SlotChest(Player owner, Location lrc) {
+
+	/**
+	 * use this constructor to create a server slot chest
+	 * @param lrc {@linkplain Location} of the slot chest
+	 */
+	public SlotChest(Location lrc)
+	{
 		enabled = false;
-		ownerUUID = owner.getUniqueId().toString();
+
 		_itemsToWin = new HashMap<String, Double>();
 		_lager = new HashMap<String, Integer>();
 		warehouseLevel = 0;
@@ -93,8 +100,21 @@ public class SlotChest {
 		z = lrc.getZ();
 		worldname = lrc.getWorld().getName();
 		animationID = 1;
-		
+
+		ownerUUID = "server";
+
 		initialize();
+	}
+
+	/**
+	 * use this constructor to create a player slot chest
+	 * @param owner Owner of the slot chest
+	 * @param lrc {@linkplain Location} of the slot chest
+	 */
+	public SlotChest(Player owner, Location lrc)
+	{
+		this(lrc);
+		ownerUUID = owner.getUniqueId().toString();
 	}
 	
 	public void initialize() {
@@ -104,7 +124,8 @@ public class SlotChest {
 			itemsToWin = getItemsToWinFromData();
 		
 	}
-	public void save() {
+	public void save()
+	{
 		if(itemsToWin != null && itemsToWin.size() != 0) {
 			_itemsToWin = new HashMap<String, Double>();
 			for(Entry<ItemStack, Double> entry : itemsToWin.entrySet()) {
@@ -112,10 +133,11 @@ public class SlotChest {
 				_itemsToWin.put(inputString, entry.getValue());
 			}
 		}
-		if(lager != null && lager.size() != 0) {
+		if(lager != null && lager.size() != 0)
+		{
 			_lager = new HashMap<String, Integer>();
-			for(ItemStack item : lager) {
-				_lager.put(item.getType().toString(), item.getAmount());
+			for(Entry<Material, Integer> entry : getLagerWithNumbers().entrySet()) {
+				_lager.put(entry.getKey().toString(), entry.getValue());
 			}
 		}
 	}
@@ -126,6 +148,25 @@ public class SlotChest {
 		}
 		return false;
 	}
+
+	public boolean isServerOwner()
+	{
+		return this.ownerUUID.equalsIgnoreCase("server");
+	}
+
+	/**
+	 * deposit money to the owner
+	 * does also work if it's a server slot chest
+	 * @param amount to deposit
+	 */
+	public void giveOwnerMoney(double amount)
+	{
+		if(!isServerOwner())
+		{
+			Main.econ.depositPlayer(getOwner(), amount);
+		}
+	}
+
 	/**
 	 * Get the Weight of all elements
 	 * @return gesamtGewicht
@@ -152,8 +193,9 @@ public class SlotChest {
 		}
 		return new Location(world, x, y, z);
 	}
-	public OfflinePlayer getOwner() {
-		return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
+	public OfflinePlayer getOwner()
+	{
+		return (isServerOwner()) ? null : Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
 	}
 	public HashMap<Material, Integer> getLagerWithNumbers() {
 		HashMap<Material, Integer> returnValue = new HashMap<>();
@@ -190,10 +232,18 @@ public class SlotChest {
 	
 	private ArrayList<ItemStack> getLagerFromData() {
 		ArrayList<ItemStack> returnValue = new ArrayList<ItemStack>();
-		for(Entry<String, Integer> entries : _lager.entrySet()) {
-			ItemStack item = new ItemStack(Enum.valueOf(Material.class, entries.getKey()), entries.getValue());
-			returnValue.add(item);
+		for(Entry<String, Integer> entries : _lager.entrySet())
+		{
+			Material material = Enum.valueOf(Material.class, entries.getKey());
+			int amount = entries.getValue();
+			while(amount > 0)
+			{
+				ItemStack itemStack = new ItemStack(material, (amount > material.getMaxStackSize()) ?  material.getMaxStackSize() : amount);
+				amount -= material.getMaxStackSize();
+				returnValue.add(itemStack);
+			}
 		}
+
 		return returnValue;
 	}
 	private HashMap<ItemStack, Double> getItemsToWinFromData() {
@@ -205,7 +255,7 @@ public class SlotChest {
 			if(splited.length != 2) Bukkit.getLogger().info("Error: WinningsItem format not correct!");
 			
 			Material material = Enum.valueOf(Material.class, splited[0]);
-			int amount = Integer.valueOf(splited[1]);
+			int amount = Integer.parseInt(splited[1]);
 			
 			returnValue.put(new ItemStack(material, amount), entry.getValue());
 		}
@@ -224,7 +274,7 @@ public class SlotChest {
 			}
 		};
 		ArrayList<Entry<ItemStack, Double>> sortedList = new ArrayList<Entry<ItemStack, Double>>(itemsToWin.entrySet());
-		Collections.sort(sortedList, comparator);
+		sortedList.sort(comparator);
 		LinkedHashMap<ItemStack, Double> linkedList = new LinkedHashMap<>();
 		for(Entry<ItemStack, Double> entry : sortedList) {
 			linkedList.put(entry.getKey(), entry.getValue());
@@ -287,12 +337,7 @@ public class SlotChest {
 	@SuppressWarnings("unchecked") 
 	public boolean itemIsOnForbiddenList(Material itemStack) {
 		ArrayList<String> inputList = new ArrayList<>();
-		try {
-			inputList = (ArrayList<String>) UpdateManager.getValue("slotchest-list-of-banned-items", new ArrayList<String>());
-		} catch(Exception e) {
-			CasinoManager.LogWithColor(org.bukkit.ChatColor.RED + "Error occured while trying to get list of banned items: values are invalid!");
-			e.printStackTrace();
-		}
+		inputList = (ArrayList<String>) UpdateManager.getValue("slotchest-list-of-banned-items", new ArrayList<String>());
 		
 		ArrayList<Material> bannedList = new ArrayList<>();
 		for(String string : inputList) {

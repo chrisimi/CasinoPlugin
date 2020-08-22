@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import org.bukkit.Bukkit;
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ChatEvent;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,11 +29,14 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
  * @author chris
  *
  */
-public class WinningsMenu implements Listener {
+public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI, Listener {
 
-	//TODO rewrite to use new InventoryAPI
-
-	public static HashMap<Player, WinningsMenu> waitingForEingabe = new HashMap<>();
+	private enum WaitingFor
+	{
+		NONE,
+		AMOUNT,
+		WEIGHT
+	}
 	
 	public static HashMap<WinningsMenu, Integer> inventoryReadingTasks = new HashMap<>();
 	
@@ -39,35 +45,35 @@ public class WinningsMenu implements Listener {
 	private Player owner;
 	private SlotChest slotChest;
 	
-	private ItemStack fillMaterial;
-	public Inventory inventory;
-	
-	
-	//input
-	public Boolean waitingForAmount = false;
-	public Boolean waitingForWeight = false;
-	public Boolean eingabeFinished = false;
-	
+	private ItemStack placeHolder = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
+
 	private int newItemAmount = 0;
 	private double newItemWeight = 0;
 	private Material newItemMaterial = null;
-	
+	private WaitingFor waitingFor = WaitingFor.NONE;
+
 	public WinningsMenu instance = this;
 	public WinningsMenu(Main main, Player owner, SlotChest slotChest) {
+		super(owner, 9*5, Main.getInstance(), "Winnings Menu");
 		this.main = main;
 		this.owner = owner;
 		this.slotChest = slotChest;
-		main.getServer().getPluginManager().registerEvents(this, main);
+
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
+		this.addEvents(this);
+		cancelEventWhenClickEvent(false);
+		openInventory();
+
 		initialize();
 	}
 	
-	private void initialize() {
-		inventory = Bukkit.createInventory(owner, 9*5, "WinningsMenu");
-		owner.openInventory(inventory);
-		fillMaterial = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
-		for(int i = 0; i < 9*5; i++) {
+	private void initialize()
+	{
+		for(int i = 0; i < 9*5; i++)
+		{
+			//ignore slot 40
 			if(i == 40) continue;
-			inventory.setItem(i, fillMaterial);
+			bukkitInventory.setItem(i, placeHolder);
 		}
 		
 		
@@ -75,132 +81,165 @@ public class WinningsMenu implements Listener {
 		initializeInventoryReadingTask();
 		updateInventory();
 	}
+
 	/**
 	 * start the background task which tracks the input from the player
 	 */
-	private void initializeInventoryReadingTask() {
-		int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
-			
-			//@SuppressWarnings("unlikely-arg-type")
-			@Override
-			public void run() {			
-				ItemStack check = inventory.getItem(40);
-				if(check != null) {
-					Material itemStack = check.getType(); 
-					if(itemStack != Material.AIR && itemStack != fillMaterial.getType()) {
-						
-						if(slotChest.lager.size() >= 9*5) {
-							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_reached_limit"));
-							inventory.setItem(40, new ItemStack(Material.AIR));
-							int slot = owner.getInventory().first(Material.AIR);
-							if(slot == -1)
-								owner.getWorld().dropItem(owner.getLocation(), check);
-							else
-								owner.getInventory().setItem(slot, check);
-						}
-						
-						if(slotChest.itemstoWinContains(itemStack)) {
-							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_exists"));
-							inventory.setItem(40, new ItemStack(Material.AIR));
-							int slot = owner.getInventory().first(Material.AIR);
-							if(slot == -1) {
-								owner.getWorld().dropItem(owner.getLocation(), check);
-							} else {
-								owner.getInventory().setItem(slot, check);
-							}
-							
-						} else if(slotChest.itemIsOnForbiddenList(itemStack)) {
-							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_forbidden_item"));
-							inventory.setItem(40, new ItemStack(Material.AIR));
-							int slot = owner.getInventory().first(Material.AIR);
-							if(slot == -1)
-								owner.getWorld().dropItem(owner.getLocation(), check);
-							else
-								owner.getInventory().setItem(slot, check);
-							
-							
-						} else {
-							//ein Spieler hat ein Item reingelegt
-							main.getServer().getScheduler().cancelTask(inventoryReadingTasks.get(instance));
-							inventoryReadingTasks.remove(instance);
-							
-							waitingForEingabe.put(owner, instance);
-							waitingForAmount = true;
-							waitingForWeight = true;
-							
-//							owner.sendMessage(String.format(CasinoManager.getPrefix() + "Adding Informations to your winning: \nType in the amount of %s the player should win", itemStack.toString()));
-							owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_amount_message").replace("%item%", itemStack.toString()));
-							newItemMaterial = itemStack;
-							owner.closeInventory();
-						}
-						
-						
-					}
-				}
-				
+
+	private Runnable inventoryReadingTask = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			ItemStack check = bukkitInventory.getItem(40);
+
+			//validate if it's a valid item and can be used further
+			if(check == null || check == placeHolder || check.getType() == Material.AIR) return;
+
+			//check so that there are no duplicates
+			if(slotChest.itemstoWinContains(check.getType()))
+			{
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_exists"));
+				ItemAPI.putItemInInventory(check, owner);
+				bukkitInventory.setItem(40, null);
+				return;
 			}
 
-			
-		}, 10, 10);
+			//check if there is enough space to prevent overflow
+			if(slotChest.itemsToWin.size() >= 9*5)
+			{
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_reached_limit"));
+				ItemAPI.putItemInInventory(check, owner);
+				bukkitInventory.setItem(40, null);
+				return;
+			}
+
+			//check if item is on the forbidden list to prevent player adding forbidden item in the slot chest
+			if(slotChest.itemIsOnForbiddenList(check.getType()))
+			{
+				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_forbidden_item"));
+				ItemAPI.putItemInInventory(check, owner);
+				bukkitInventory.setItem(40, null);
+				return;
+			}
+
+			Main.getInstance().getServer().getScheduler().cancelTask(inventoryReadingTasks.get(instance));
+			inventoryReadingTasks.remove(instance);
+
+			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_amount_message").replace("%item%", check.getType().toString()));
+			newItemMaterial = check.getType();
+			owner.closeInventory();
+
+			instance.waitforChatInput(player);
+			waitingFor = WaitingFor.AMOUNT;
+		}
+	};
+
+	private void initializeInventoryReadingTask() {
+		int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, inventoryReadingTask, 10L, 10L);
 		inventoryReadingTasks.put(this, taskNumber);
 	}
 
 	
 	//
 	//EventHandler
-	@EventHandler
-	public void onPlayerWrite(AsyncPlayerChatEvent event) {
-		if(!(waitingForEingabe.containsKey(event.getPlayer()))) return;
-		
-		if(event.isAsynchronous()) {
-			main.getServer().getScheduler().runTask(main, new Runnable() {
-				
-				@Override
-				public void run() {
-					playerEingabe(event.getMessage());
-					
+
+	@EventMethodAnnotation
+	public void onChat(ChatEvent event)
+	{
+		switch(waitingFor)
+		{
+			case AMOUNT:
+			{
+				try
+				{
+					newItemAmount = Integer.parseInt(event.getMessage());
+					if(newItemAmount <= 0)
+					{
+						owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-amount_lower_0"));
+						stop();
+						return;
+					}
+
+					owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_message").replace("%total_weight%", String.format("%.1f", slotChest.getGesamtGewicht())));
+					waitingFor = WaitingFor.WEIGHT;
+					waitforChatInput(owner);
+				} catch(Exception e)
+				{
+					owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-double_invalid"));
+					stop();
 				}
-			});
-		} else 
-			playerEingabe(event.getMessage());
-		
-		event.setCancelled(true);
+
+				return;
+			}
+			case WEIGHT:
+			{
+				try
+				{
+					newItemWeight = Double.parseDouble(event.getMessage());
+					if(newItemWeight <= 0.0)
+					{
+						owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_lower_0"));
+						stop();
+						return;
+					}
+
+					newItem();
+					openInventory();
+				} catch(Exception e)
+				{
+					owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_not_number"));
+					stop();
+				}
+
+				return;
+			}
+		}
 	}
+
+	private void stop()
+	{
+		newItemWeight = 0.0;
+		newItemAmount = 0;
+		newItemMaterial = Material.AIR;
+		waitingFor = WaitingFor.NONE;
+
+		openInventory();
+	}
+
+	@EventMethodAnnotation
+	public void clickEvent(ClickEvent event)
+	{
+
+	}
+
 	@EventHandler
-	public void onInventoryClick(InventoryClickEvent event) {
+	public void onInventoryClick(InventoryClickEvent event)
+	{
 		if(event.getCurrentItem() == null) return;
-		if(!(event.getInventory().equals(inventory))) return;
+		if(!(event.getInventory().equals(bukkitInventory))) return;
 		
-		if(event.getCurrentItem().equals(new ItemStack(Material.PINK_STAINED_GLASS_PANE))) {
+		if(event.getCurrentItem().equals(placeHolder))
+		{
 			event.setCancelled(true);
 			return;
 		}
 		
 		HashMap<ItemStack, Double> newHashMap = new HashMap<>(); 
 		
-		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
-			if(entry.getKey().equals(event.getCurrentItem())) {
+		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet())
+		{
+			if(entry.getKey().equals(event.getCurrentItem()))
+			{
 				removeItemToWin(entry.getKey());
-				inventory.setItem(event.getSlot(), new ItemStack(Material.AIR));
+				bukkitInventory.setItem(event.getSlot(), null);
+				System.out.println("cancel");
 				event.setCancelled(true);
 			} else
 				newHashMap.put(entry.getKey(), entry.getValue());
 			
 		}
-		
-		/*
-		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
-			System.out.println(entry.getKey().toString() + " " + entry.getKey().hashCode());
-			if(entry.getKey().getType().equals(event.getCurrentItem().getType()) && entry.getKey().getAmount() == event.getCurrentItem().getAmount()) {
-				
-				
-				
-				System.out.println("toremove: " + entry.getKey().toString() + " " + entry.getKey().hashCode());
-				System.out.println(slotChest.itemsToWin.remove(entry.getKey()));
-				break;
-			}
-		}
-		*/
+
 		slotChest.itemsToWin = newHashMap;
 		updateInventory();
 		
@@ -210,97 +249,44 @@ public class WinningsMenu implements Listener {
 	 * remove a item from the list of items to win (winnable items)
 	 * @param item item to remove 
 	 */
-	private void removeItemToWin(ItemStack item) {
+	private void removeItemToWin(ItemStack item)
+	{
 		int itemsInWarehouse = 0;
 		ArrayList<ItemStack> itemLagerToRemove = new ArrayList<>(); 
-		for(ItemStack itemStack : slotChest.lager) {
-			if(itemStack.getType().equals(item.getType())) {
+		for(ItemStack itemStack : slotChest.lager)
+		{
+			//iterate through the sorted lager and make a list from all itemstacks which are the same type as the one to delete
+			if(itemStack.getType().equals(item.getType()))
+			{
 				itemsInWarehouse += itemStack.getAmount();
 				itemLagerToRemove.add(itemStack);
-				
+
+				//drop the owner the items
+				ItemAPI.putItemInInventory(itemStack, owner);
 			}
 		}
+
 		slotChest.lager.removeAll(itemLagerToRemove);
-		while(itemsInWarehouse > 0) {
-			if(itemsInWarehouse >= 64) {
-				int slot = owner.getInventory().first(Material.AIR);
-				if(slot == -1)
-					owner.getWorld().dropItem(owner.getLocation().add(0, 2, 0), new ItemStack(item.getType(), 64));
-				else
-					owner.getInventory().setItem(slot, new ItemStack(item.getType(), 64));
-				itemsInWarehouse -= 64;
-			} else {
-				int slot = owner.getInventory().first(Material.AIR);
-				if(slot == -1)
-					owner.getWorld().dropItem(owner.getLocation().add(0,2,0), new ItemStack(item.getType(), itemsInWarehouse));
-				else
-					owner.getInventory().setItem(slot, new ItemStack(item.getType(), itemsInWarehouse));
-				itemsInWarehouse = 0;
-			}
-			
-		}
 		
 		slotChest.save();
 		updateInventory();
-//		owner.sendMessage(CasinoManager.getPrefix() + "You successfully removed " + item.getType().toString() + " from your winnings list");
 		owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_successful_remove").replace("%item%", item.getType().toString()));
 	}
-	/**
-	 * manage a player input 
-	 * @param message raw message from player
-	 */
-	private void playerEingabe(String message) {
-		if(waitingForAmount) {
-			int amount = 0;
-			try {
-				amount = Integer.parseInt(message);
-			} catch (NumberFormatException e) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-amount_not_number"));
-				return;
-			}
-			if(amount <= 0) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-amount_lower_0"));
-				return;
-			}
-			waitingForAmount = false;
-			newItemAmount = amount;
-//			owner.sendMessage(String.format(CasinoManager.getPrefix() + "Type in the weight of this win! Total weight: %.1f",slotChest.getGesamtGewicht()));
-			owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings_weight_message").replace("%total_weight%", String.format("%.1f", slotChest.getGesamtGewicht())));
-		} else if(waitingForWeight) {
-			double amount = 0.0;
-			try {
-				amount = Double.parseDouble(message);
-			} catch (NumberFormatException e) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_not_number"));
-				return;
-			}
-			if(amount == 0.0) {
-				owner.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-winnings-weight_lower_0"));
-				return;
-			}
-			waitingForWeight = false;
-			newItemWeight = amount;
-			eingabeFinished = true;
-			newItem();
-			owner.openInventory(inventory);
-			
-			waitingForEingabe.remove(owner);
-		}
-	}
 	
-	
-	
-	private void newItem() {
+	private void newItem()
+	{
 		ItemStack newItem = new ItemStack(newItemMaterial, newItemAmount);
 		slotChest.itemsToWin.put(newItem, newItemWeight);
-		
-		if(inventoryReadingTasks.containsKey(this)) {
+
+		if(inventoryReadingTasks.containsKey(this))
+		{
 			main.getServer().getScheduler().cancelTask(inventoryReadingTasks.get(this));
 			inventoryReadingTasks.remove(this);
 		}
-		//move item player wanted to input in his inventory
-		slotChest.lager.add(inventory.getItem(40));
-		inventory.setItem(40, new ItemStack(Material.AIR));
+
+		//move item input into the warehouse of the slot chest
+		slotChest.lager.add(bukkitInventory.getItem(40));
+		bukkitInventory.setItem(40, null);
 		
 		
 		
@@ -309,29 +295,31 @@ public class WinningsMenu implements Listener {
 		updateInventory();
 	}
 	
-	private void updateInventory() {
-		for(int i = 0; i < 9*4; i++) inventory.setItem(i, new ItemStack(Material.AIR));
+	private void updateInventory()
+	{
+		for(int i = 0; i < 9*4; i++) bukkitInventory.setItem(i, null);
 		
 		int index = 0;
-		if(slotChest.itemsToWin.size() == 0) {
-			for(int i = 0; i < 4*9; i++) inventory.setItem(i, fillMaterial);
-			
+		if(slotChest.itemsToWin.size() == 0)
+		{
+			for(int i = 0; i < 4*9; i++) bukkitInventory.setItem(i, placeHolder);
+
 			return;
 		}
-		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet()) {
+
+		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet())
+		{
 			
 			if(index >= 9*4) return;
 			
 			ItemStack item = entry.getKey();
-			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(String.format("§5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100));
-			item.setItemMeta(meta);
-			entry.getKey().setItemMeta(meta);
-			inventory.setItem(index, item);
+			ItemAPI.changeName(item, String.format("§5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100));
+			bukkitInventory.setItem(index, item);
 			
 			index++;
 		}
-		for(int i = index; i < 9*4; i++) inventory.setItem(i, new ItemStack(Material.PINK_STAINED_GLASS_PANE));
+		for(int i = index; i < 9*4; i++) bukkitInventory.setItem(i, placeHolder);
+
 		CasinoManager.slotChestManager.save();
 	}
 }

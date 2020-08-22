@@ -11,7 +11,11 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.slotchest.SlotChest;
 
-public class NormalLeftToRightAnimation implements IRollAnimation{
+/**
+ * implementation of IRollAnimation which animate the roll from left to right
+ */
+public class NormalLeftToRightAnimation implements IRollAnimation
+{
 
 	private final Inventory inventory;
 	private final Main main;
@@ -25,7 +29,8 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 	private int rollsToSkip = 0;
 	private int rollSkipMaximum = 0;
 	private ItemStack[] currentItems = new ItemStack[5];
-	public NormalLeftToRightAnimation(Main main, SlotChest slotChest, Player player) {
+	public NormalLeftToRightAnimation(Main main, SlotChest slotChest, Player player)
+	{
 		this.main = main;
 		this.slotChest = slotChest;
 		this.player = player;
@@ -33,6 +38,7 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 		
 		fillmaterial = new ItemStack(Material.PINK_STAINED_GLASS_PANE);
 	}
+
 	@Override
 	public void initialize() {
 		for(int i = 0; i < 9*3; i++)
@@ -60,31 +66,34 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 		} else {
 			//get items
 			for(int i = 11; i < 16; i++)
-				currentItems[i-11] = inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR ? new ItemStack(Material.AIR) : inventory.getItem(i);
+				currentItems[i-11] = (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR) ? null : inventory.getItem(i);
+
 			for(int i = 4; i > 0; i--) //move items one back
 				currentItems[i] = currentItems[i-1];
+
+			//get the new item
 			currentItems[0] = slotChest.getRandomItem();
+
+			//set all items to the inventory
 			for(int i = 0; i < 5; i++)
 				inventory.setItem(i+11, currentItems[i]);
+
 			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, org.bukkit.SoundCategory.AMBIENT, 4, 3);
 			
-			if(rollsLeft <= 10) {
+			if(rollsLeft <= 10)
 				rollSkipMaximum = 2;
-			}
-			else if(rollsLeft <= 15) {
+			else if(rollsLeft <= 15)
 				rollSkipMaximum = 3;
-			
-			}
-			
+
 			return true;
 		}
-		
 	}
 
 	@Override
-	public ItemStack finish() {
-		
-		for(int i = 11; i < 16; i++) {
+	public ItemStack finish()
+	{
+		for(int i = 11; i < 16; i++)
+		{
 			if(i == 13) continue;
 			inventory.setItem(i, fillmaterial);
 		}
@@ -92,24 +101,26 @@ public class NormalLeftToRightAnimation implements IRollAnimation{
 	}
 
 	@Override
-	public void simulateEnding(int rollsLeft) {
-			for(; rollsLeft > 0; rollsLeft--) {
-			
+	public void simulateEnding(int rollsLeft)
+	{
+		for(; rollsLeft > 0; rollsLeft--)
+		{
 			for(int i = 4; i > 0; i--)
 				currentItems[i] = currentItems[i-1];
+
 			currentItems[0] = slotChest.getRandomItem();
-			
 		}
-		
 	}
 
 	@Override
-	public int getAnimationID() {
+	public int getAnimationID()
+	{
 		return 2;
 	}
 
 	@Override
-	public int getInventorySize() {
+	public int getInventorySize()
+	{
 		return inventorySize;
 	}
 
