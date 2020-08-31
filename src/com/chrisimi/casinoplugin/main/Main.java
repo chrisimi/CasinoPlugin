@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import com.chrisimi.casinoplugin.scripts.*;
+import com.chrisimi.versionchecker.VersionChecker;
+import com.chrisimi.versionchecker.VersionResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -24,17 +26,10 @@ public class Main extends JavaPlugin {
 	public static Economy econ = null;
 	public static Permission perm = null;
 
-	/**
-	 * config version in jar
-	 */
-	public static String configVersion = "3.7.1"; //version in jar
-	public static Boolean isConfigUpdated = true;
-	
-	public static String pluginVersion = "3.7.1";
-	public static Boolean isPluginUpdated = true;
-	
+	public static VersionResult result = null;
 	public static boolean development = false;
-	
+
+
 	public static File configYml;
 	
 	public static File signsYml;
@@ -82,9 +77,11 @@ public class Main extends JavaPlugin {
 		//new ConfigurationManager(this);
 		casinoManager.prefixYml();
 		casinoManager.initialize();
-		versionManager();
-		VersionManager.CheckForNewVersion(pluginVersion, this);
-		
+
+
+
+		checkVersion();
+
 		//getLogger().info("Minecraft Server version: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
 		
 		activateEconomySystem();
@@ -102,7 +99,26 @@ public class Main extends JavaPlugin {
 		
 		InventoryAPI.initiate(this);
 	}
-	
+
+	private void checkVersion()
+	{
+		result = VersionChecker.getStatus(this, "71898");
+
+		switch(result.getStatus())
+		{
+			case OUTDATED:
+				CasinoManager.LogWithColor(String.format(ChatColor.YELLOW + "Your plugin is not up to date. Your current version is %s and the newest version is %s", result.getLocalPluginVersion(), result.getSpigotPluginVersion()));
+				break;
+			case UP_TO_DATE:
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Plugin is up to date.");
+				break;
+			case ERROR:
+			default:
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "An error occured while trying to fetch version from spigot. Error can be ignored if it's happening for the first or second time. If this error happens more often make sure to manually check the spigot site for new updates");
+				break;
+		}
+	}
+
 	@Override
 	public void onDisable()
 	{
@@ -114,7 +130,7 @@ public class Main extends JavaPlugin {
 	
 
 
-
+	/*
 	private void versionManager() {
 		String versionLocal = UpdateManager.getValue("version").toString();
 		
@@ -124,7 +140,7 @@ public class Main extends JavaPlugin {
 			isConfigUpdated = false;
 		}
 	}
-
+	*/
 	
 	
 	private void getPathToFolderOfPlugin() {

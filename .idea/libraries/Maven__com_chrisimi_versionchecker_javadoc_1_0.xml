@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.chrisimi:versionchecker:javadoc:1.0">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/chrisimi/versionchecker/1.0/versionchecker-1.0-javadoc.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/chrisimi/versionchecker/1.0/versionchecker-1.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/chrisimi/versionchecker/1.0/versionchecker-1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

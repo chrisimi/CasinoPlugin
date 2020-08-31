@@ -533,7 +533,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor {
 		player.sendMessage("");
 		player.sendMessage("");
 		player.sendMessage(CasinoManager.getPrefix());
-		player.sendMessage("§2CasinoPlugin Version " + Main.pluginVersion + " by chrisimi");
+		player.sendMessage("§2CasinoPlugin Version " + Main.result.getLocalPluginVersion() + " by chrisimi");
 		player.sendMessage("§6/casino gui§8- open the casino GUI");
 		player.sendMessage("§6/casino admin §8- admin help command");
 		player.sendMessage("");
