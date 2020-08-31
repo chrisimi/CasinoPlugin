@@ -26,16 +26,9 @@ public class Main extends JavaPlugin {
 	public static Economy econ = null;
 	public static Permission perm = null;
 
-	/**
-	 * config version in jar
-	 */
-	public static String configVersion = "3.7.1"; //version in jar
-	public static Boolean isConfigUpdated = true;
-
-	public static String pluginVersion = "3.7.1";
-	public static Boolean isPluginUpdated = true;
-
+	public static VersionResult result = null;
 	public static boolean development = false;
+
 
 	public static File configYml;
 	
@@ -109,12 +102,12 @@ public class Main extends JavaPlugin {
 
 	private void checkVersion()
 	{
-		VersionResult result = VersionChecker.getStatus(this, "71898");
+		result = VersionChecker.getStatus(this, "71898");
 
 		switch(result.getStatus())
 		{
 			case OUTDATED:
-				CasinoManager.LogWithColor(String.format(ChatColor.YELLOW + "Your plugin is not up to date. Your current version is %s where the newest version is %s", result.getLocalPluginVersion(), result.getSpigotPluginVersion()));
+				CasinoManager.LogWithColor(String.format(ChatColor.YELLOW + "Your plugin is not up to date. Your current version is %s and the newest version is %s", result.getLocalPluginVersion(), result.getSpigotPluginVersion()));
 				break;
 			case UP_TO_DATE:
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Plugin is up to date.");

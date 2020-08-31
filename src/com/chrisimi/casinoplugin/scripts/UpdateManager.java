@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,6 +32,8 @@ import com.chrisimi.casinoplugin.main.Main;
  *
  */
 public class UpdateManager {
+
+	private static String[] bannedTags = {"version"};
 
 	public static Map<String, Object> configValues = new HashMap<String, Object>();
 	
@@ -76,7 +79,7 @@ public class UpdateManager {
 		
 		for(Entry<String, Object> entry : values.entrySet())
 		{
-			if(cofn.contains(entry.getKey()))
+			if(cofn.contains(entry.getKey()) && !Arrays.asList(bannedTags).contains(entry.getKey()))
 			{
 				cofn.set(entry.getKey(), entry.getValue());
 			}
