@@ -31,12 +31,12 @@ public class Main extends JavaPlugin {
 	 */
 	public static String configVersion = "3.7.1"; //version in jar
 	public static Boolean isConfigUpdated = true;
-	
+
 	public static String pluginVersion = "3.7.1";
 	public static Boolean isPluginUpdated = true;
-	
+
 	public static boolean development = false;
-	
+
 	public static File configYml;
 	
 	public static File signsYml;
@@ -84,12 +84,10 @@ public class Main extends JavaPlugin {
 		//new ConfigurationManager(this);
 		casinoManager.prefixYml();
 		casinoManager.initialize();
-		versionManager();
-		VersionManager.CheckForNewVersion(pluginVersion, this);
 
-		VersionResult result = VersionChecker.getStatus(this, "71898");
 
-		System.out.println(result.getLocalPluginVersion() + " " + result.getSpigotPluginVersion() + " " + result.getStatus().toString());
+
+		checkVersion();
 
 		//getLogger().info("Minecraft Server version: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
 		
@@ -108,7 +106,25 @@ public class Main extends JavaPlugin {
 		
 		InventoryAPI.initiate(this);
 	}
-	
+
+	private void checkVersion()
+	{
+		VersionResult result = VersionChecker.getStatus(this, "71898");
+
+		switch(result.getStatus())
+		{
+			case OUTDATED:
+				CasinoManager.LogWithColor(String.format(ChatColor.YELLOW + "Your plugin is not up to date. Your current version is %s where the newest version is %s", result.getLocalPluginVersion(), result.getSpigotPluginVersion()));
+				break;
+			case UP_TO_DATE:
+				CasinoManager.LogWithColor(ChatColor.GREEN + "Plugin is up to date.");
+				break;
+			case ERROR:
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "An error occured while trying to fetch version from spigot. Error can be ignored if it's happening for the first or second time. If this error happens more often make sure to manually check the spigot site for new updates");
+				break;
+		}
+	}
+
 	@Override
 	public void onDisable()
 	{
@@ -120,7 +136,7 @@ public class Main extends JavaPlugin {
 	
 
 
-
+	/*
 	private void versionManager() {
 		String versionLocal = UpdateManager.getValue("version").toString();
 		
@@ -130,7 +146,7 @@ public class Main extends JavaPlugin {
 			isConfigUpdated = false;
 		}
 	}
-
+	*/
 	
 	
 	private void getPathToFolderOfPlugin() {

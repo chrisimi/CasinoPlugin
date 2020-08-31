@@ -50,7 +50,7 @@ public class VersionManager {
 			newestVersion = data;
 			
 			Boolean isPluginUpdated = currentVersion.equals(data);
-			Main.isPluginUpdated = isPluginUpdated;
+			//Main.isPluginUpdated = isPluginUpdated;
 			
 			if(isPluginUpdated) {
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Newest Version: " + data + ", current version: " + currentVersion + " - Plugin is updated!");
