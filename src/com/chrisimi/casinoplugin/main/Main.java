@@ -113,6 +113,7 @@ public class Main extends JavaPlugin {
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Plugin is up to date.");
 				break;
 			case ERROR:
+			default:
 				CasinoManager.LogWithColor(ChatColor.YELLOW + "An error occured while trying to fetch version from spigot. Error can be ignored if it's happening for the first or second time. If this error happens more often make sure to manually check the spigot site for new updates");
 				break;
 		}
