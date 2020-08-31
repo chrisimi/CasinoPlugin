@@ -6,6 +6,8 @@ import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import com.chrisimi.casinoplugin.scripts.*;
+import com.chrisimi.versionchecker.VersionChecker;
+import com.chrisimi.versionchecker.VersionResult;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
@@ -84,7 +86,11 @@ public class Main extends JavaPlugin {
 		casinoManager.initialize();
 		versionManager();
 		VersionManager.CheckForNewVersion(pluginVersion, this);
-		
+
+		VersionResult result = VersionChecker.getStatus(this, "71898");
+
+		System.out.println(result.getLocalPluginVersion() + " " + result.getSpigotPluginVersion() + " " + result.getStatus().toString());
+
 		//getLogger().info("Minecraft Server version: " + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3]);
 		
 		activateEconomySystem();
