@@ -137,8 +137,14 @@
 	<dependency>
 		<groupId>com.chrisimi</groupId>
 		<artifactId>versionchecker</artifactId>
-		<version>1.0-pre</version>
+		<version>1.0</version>
 		<scope>compile</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>versionchecker</artifactId>
+		<version>1.0</version>
+		<classifier>javadoc</classifier>
 	</dependency>
 
 </dependencies>
