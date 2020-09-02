@@ -26,10 +26,10 @@ public class MessageManager
 	public File messagesFolder = null;
 	public static File defaultLanguageFile = null;
 	public static File chosenLanguageFile = null;
-	private Main main;
+
 	public MessageManager(Main main)
 	{
-		this.main = main;
+		main;
 		
 		
 		

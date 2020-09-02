@@ -76,10 +76,10 @@ public class HologramSystem
 		return _instance;
 	}
 	
-	private Main main;
+
 	private HologramSystem()
 	{
-		this.main = Main.getInstance();
+		Main.getInstance();
 		initializeConfigValues();
 		
 		

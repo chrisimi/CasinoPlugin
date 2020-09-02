@@ -30,7 +30,7 @@ public class NormalRightToLeftAnimation implements IRollAnimation
 
 	public NormalRightToLeftAnimation(Main main, SlotChest slotChest, Player player)
 	{
-		this.main = main;
+		main;
 		this.slotChest = slotChest;
 		this.player = player;
 

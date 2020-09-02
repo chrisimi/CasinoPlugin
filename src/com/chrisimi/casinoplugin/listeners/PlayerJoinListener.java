@@ -15,10 +15,10 @@ import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 
 public class PlayerJoinListener implements Listener {
 
-	private Main main;
+
 	public PlayerJoinListener(Main main) {
-		this.main = main;
-		Bukkit.getPluginManager().registerEvents(this, main);
+		main;
+		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 	}
 	
 	

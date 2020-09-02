@@ -47,12 +47,12 @@ public class SlotChestsManager implements Listener{
 	private static int configMaxAmount;
 	private static Boolean configOpUnlimited;
 
-	private Main main;
+
 	private GsonBuilder builder;
 	private Gson gson;
 	public SlotChestsManager(Main main) {
-		this.main = main;
-		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
+		main;
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		builder = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting();
 		gson = builder.create();
 		

@@ -16,9 +16,9 @@ public class RollCommand {
 	public static int rollAmount = 0;
 	private static int playerRange;
 	
-	private Main main;
+
 	public RollCommand(Main main) {
-		this.main = main;
+		main;
 		configureVariables();
 	}
 	

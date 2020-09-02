@@ -42,7 +42,7 @@ public class LeaderboardsignAnimation implements Runnable
 	
 	public LeaderboardsignAnimation(Main main, Leaderboardsign sign, Sign signBlock)
 	{
-		this.main = main;
+		main;
 		this.sign = sign;
 		this.signBlock = signBlock;
 	}

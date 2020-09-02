@@ -31,7 +31,7 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	 */
 
 	private Player owner;
-	private Main main;
+
 	private SlotChest slotChest;
 
 	private ItemStack warehouseItem = ItemAPI.createItem("§bWarehouse", Material.CHEST);
@@ -45,7 +45,7 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	public OwnerInterfaceInventory(Player owner, Main main, SlotChest chest) {
 		super(owner, 9, Main.getInstance(), "Owner Interface");
 		this.owner = owner;
-		this.main = main;
+		main;
 		this.slotChest = chest;
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		initialize();

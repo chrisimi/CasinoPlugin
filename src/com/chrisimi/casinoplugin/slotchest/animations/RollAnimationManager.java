@@ -53,11 +53,10 @@ public class RollAnimationManager implements Runnable, Listener
 		this.owner = slotChest.getOwner();
 		this.player = player;
 		this.slotChest = slotChest;
-		this.main = main;
 		
 		rollAnimation = RollAnimationFactory.GetRollAnimation(Main.getInstance(), slotChest, player);
 		inventory = rollAnimation.getInventory();
-		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 	}
 	@Override
 	public void run()

@@ -49,7 +49,7 @@ public class SignsManager implements Listener {
 	
 	private Material[] signs = new Material[] {Material.SIGN, Material.SIGN};
 	
-	private Main main;
+
 	
 	private GsonBuilder builder;
 	private Gson gson;
@@ -62,14 +62,14 @@ public class SignsManager implements Listener {
 	private static double maxBet;
 
 	public SignsManager(Main main) {
-		this.main = main;
+		main;
 		
 		builder = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls();
 		gson = builder.create();
 		
 		updateVariables();
 		
-		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		
 		importSignsYml();
 	}

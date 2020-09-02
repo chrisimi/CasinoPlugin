@@ -29,7 +29,7 @@ public class SlotsAnimation implements Runnable
 	
 	public SlotsAnimation(Main main, PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager)
 	{
-		this.main = main;
+		main;
 		this.thisSign = thisSign;
 		this.player = player;
 		this.owner = thisSign.getOwner();

@@ -41,7 +41,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	public static HashMap<WinningsMenu, Integer> inventoryReadingTasks = new HashMap<>();
 	
 	
-	private Main main;
+
 	private Player owner;
 	private SlotChest slotChest;
 	
@@ -55,7 +55,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	public WinningsMenu instance = this;
 	public WinningsMenu(Main main, Player owner, SlotChest slotChest) {
 		super(owner, 9*5, Main.getInstance(), "Winnings Menu");
-		this.main = main;
+		main;
 		this.owner = owner;
 		this.slotChest = slotChest;
 

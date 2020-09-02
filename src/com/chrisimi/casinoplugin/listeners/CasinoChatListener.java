@@ -13,10 +13,10 @@ import com.chrisimi.inventoryapi.InventoryAPI;
 
 public class CasinoChatListener implements Listener {
 
-	private Main main;
+
 	public CasinoChatListener(Main main) {
-		this.main = main;
-		Bukkit.getPluginManager().registerEvents(this, main);
+		main;
+		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 	}
 	
 	@EventHandler

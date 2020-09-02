@@ -49,7 +49,7 @@ public class BetMenu extends com.chrisimi.inventoryapi.Inventory implements IInv
 	public BetMenu(Main main, Player owner, SlotChest slotchest, OwnerInterfaceInventory oii)
 	{
 		super(owner, 9*3, Main.getInstance(), "BetMenu");
-		this.main = main;
+		main;
 		this.player = owner;
 		this.slotChest = slotchest;
 		this.ownerInterfaceInventory = oii;

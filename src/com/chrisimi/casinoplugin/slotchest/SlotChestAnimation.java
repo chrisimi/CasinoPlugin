@@ -19,7 +19,7 @@ public class SlotChestAnimation implements Listener{
 	 */
 	public SlotChestAnimation(Main main, SlotChest slotChest, Player whoClicked) {
 		this.slotChest = slotChest;
-		this.main = main;
+		main;
 		
 		owner = slotChest.getOwner();
 		isOwnerOffline = (slotChest.getOwner() instanceof Player) ? true : false; 

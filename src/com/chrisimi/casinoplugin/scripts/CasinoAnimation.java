@@ -22,7 +22,7 @@ public class CasinoAnimation {
 	public static int rollCount = 0;
 	
 	
-	private Main main;
+
 	public int einsatz;
 	private Inventory inv;
 	private Player player;
@@ -47,7 +47,7 @@ public class CasinoAnimation {
 	public CasinoAnimation(Main main, Player player, int einsatz) {
 		
 		this.player = player;
-		this.main = main;
+		main;
 		this.einsatz = einsatz;
 		inv = Bukkit.createInventory(player, 5*9);
 		

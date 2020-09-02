@@ -56,8 +56,8 @@ public class LeaderboardsignsManager implements Listener {
 	private static Boolean signsenable = false;
 
 	public LeaderboardsignsManager(Main main) {
-		this.main = main;
-		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
+		main;
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 		
 		reload(); //get variables from config.yml

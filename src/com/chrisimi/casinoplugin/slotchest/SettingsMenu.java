@@ -32,10 +32,10 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	public SettingsMenu(Main main, SlotChest slotChest, Player owner)
 	{
 		super(owner, 9, Main.getInstance(), "Settings");
-		this.main = main;
+		main;
 		this.slotChest = slotChest;
 		
-		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		openInventory();
 		addEvents(this);
 
