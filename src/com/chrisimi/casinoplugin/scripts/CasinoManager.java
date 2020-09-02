@@ -18,9 +18,8 @@ import com.chrisimi.casinoplugin.listeners.PlayerJoinListener;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.slotchest.SlotChestsManager;
 
-public class CasinoManager {
-
-	public static Main main;
+public class CasinoManager
+{
 	private static String prefix = "§9[§6Casino§9] §a";
 	
 	private static SignsManager signsManager;
@@ -33,11 +32,12 @@ public class CasinoManager {
 	
 	public static File debugfile;
 	
-	public CasinoManager(Main main) {
-		debugfile = new File(main.getDataFolder(), "debug.log");
-		this.main = main;
+	public CasinoManager()
+	{
+		debugfile = new File(Main.getInstance().getDataFolder(), "debug.log");
 	}
-	public void prefixYml() {
+	public void prefixYml()
+	{
 		try {
 			String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix").replaceAll("&", "§");
 			if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
@@ -55,7 +55,7 @@ public class CasinoManager {
 	}
 	public void initialize() {
 		
-		new CasinoCommandsListener(main);
+		new CasinoCommandsListener();
 		new InventoryClickListener(main);
 		new PlayerJoinListener(main);
 		new CasinoChatListener(main);

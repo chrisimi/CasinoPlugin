@@ -72,10 +72,8 @@ public class InventoryClickListener implements Listener{
 			if(event.getCurrentItem().getType() == Material.STONE_BUTTON) {
 				if(event.getSlot() == 36) {
 					CasinoAnimation.playerExit(player);
-					new CasinoGUI(main, player);
-					
-					
-					
+					new CasinoGUI(player);
+
 					
 				} else {
 					CasinoAnimation a = CasinoAnimation.getAnimationClass((Player) event.getWhoClicked());

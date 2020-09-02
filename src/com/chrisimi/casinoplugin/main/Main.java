@@ -52,7 +52,7 @@ public class Main extends JavaPlugin {
 		configYml = new File(pathToFolderOfPlugin, "config.yml");
 		createFile(configYml);
 
-		CasinoManager casinoManager = new CasinoManager(this);
+		CasinoManager casinoManager = new CasinoManager();
 		createFiles();
 
 
