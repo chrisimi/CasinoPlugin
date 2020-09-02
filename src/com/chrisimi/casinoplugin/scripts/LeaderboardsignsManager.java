@@ -55,8 +55,7 @@ public class LeaderboardsignsManager implements Listener {
 	private static int reloadTime = 0;
 	private static Boolean signsenable = false;
 
-	public LeaderboardsignsManager(Main main) {
-		main;
+	public LeaderboardsignsManager() {
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 		
@@ -329,7 +328,7 @@ public class LeaderboardsignsManager implements Listener {
 		Random rnd = new Random();
 		
 		int randomWaitTime = rnd.nextInt(200);
-		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new LeaderboardsignAnimation(Main.getInstance(), LBsign, sign),
+		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new LeaderboardsignAnimation(LBsign, sign),
 				(long)randomWaitTime, (long)reloadTime);
 		if(taskID == -1) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error occured while trying to animate sign!");
@@ -627,7 +626,7 @@ public class LeaderboardsignsManager implements Listener {
 		CasinoManager.leaderboardManager.exportData();
 		CasinoManager.LogWithColor(ChatColor.GREEN + "You successfully reset data.yml!");
 	}
-	public static void reloadData(Main main)
+	public static void reloadData()
 	{
 		//1. stop all runnables
 		//2. reload data

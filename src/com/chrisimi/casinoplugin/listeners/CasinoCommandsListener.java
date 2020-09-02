@@ -45,7 +45,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor
      *
      */
 
-    public CasinoCommandsListener(Main main)
+    public CasinoCommandsListener()
     {
         Bukkit.getServer().getPluginCommand("casino").setExecutor(this);
     }

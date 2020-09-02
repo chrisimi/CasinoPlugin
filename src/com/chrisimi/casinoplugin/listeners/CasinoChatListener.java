@@ -14,7 +14,7 @@ import com.chrisimi.inventoryapi.InventoryAPI;
 public class CasinoChatListener implements Listener {
 
 
-	public CasinoChatListener(Main main) {
+	public CasinoChatListener() {
 		main;
 		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 	}

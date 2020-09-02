@@ -105,11 +105,9 @@ public class HologramSystem
 		}
 	}
 	
-	public void startSystem(Plugin plugin)
+	public void startSystem()
 	{
-		
-		
-		hologramsjson = new File(plugin.getDataFolder(), "holograms.json");
+		hologramsjson = new File(Main.getInstance().getDataFolder(), "holograms.json");
 		createFiles();
 		
 		gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();

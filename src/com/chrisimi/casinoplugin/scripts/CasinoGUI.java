@@ -292,12 +292,9 @@ public class CasinoGUI
 
     public static void startAnimation(Player player)
     {
-
         int einsatz = guis.get(player).einsatz;
         player.closeInventory();
-        new CasinoAnimation(Main.getInstance(), player, einsatz);
-
-
+        new CasinoAnimation(player, einsatz);
     }
 
     public static void subEinsatz(int amount, Player player)

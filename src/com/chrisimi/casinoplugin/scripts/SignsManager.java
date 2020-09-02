@@ -61,7 +61,7 @@ public class SignsManager implements Listener {
 	private static ArrayList<Double> chances;
 	private static double maxBet;
 
-	public SignsManager(Main main) {
+	public SignsManager() {
 		main;
 		
 		builder = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls();

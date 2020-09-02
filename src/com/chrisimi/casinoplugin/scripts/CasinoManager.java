@@ -43,7 +43,7 @@ public class CasinoManager
 			if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
 				LogWithColor(org.bukkit.ChatColor.YELLOW + "no prefix in config.yml... using default one!");
 			} else {
-				main.getLogger().info(String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
+				CasinoManager.LogWithColor(ChatColor.GREEN + String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
 				prefix = prefixFromYml;
 			}
 		} catch(Exception e)
@@ -56,14 +56,14 @@ public class CasinoManager
 	public void initialize() {
 		
 		new CasinoCommandsListener();
-		new InventoryClickListener(Main.getInstance());
-		new PlayerJoinListener(Main.getInstance());
-		new CasinoChatListener(Main.getInstance());
-		signsManager = new SignsManager(Main.getInstance());
+		new InventoryClickListener();
+		new PlayerJoinListener();
+		new CasinoChatListener();
+		signsManager = new SignsManager();
 		playerSignsManager = new PlayerSignsManager();
-		rollCommand = new RollCommand(Main.getInstance());
-		slotChestManager = new SlotChestsManager(Main.getInstance());
-		leaderboardManager = new LeaderboardsignsManager(Main.getInstance());
+		rollCommand = new RollCommand();
+		slotChestManager = new SlotChestsManager();
+		leaderboardManager = new LeaderboardsignsManager();
 		
 		try 
 		{

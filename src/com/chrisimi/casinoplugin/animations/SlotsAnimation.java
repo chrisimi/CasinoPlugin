@@ -27,9 +27,8 @@ public class SlotsAnimation implements Runnable
 	private int bukkitTaskId = 0;
 	private double winAmount = 0;
 	
-	public SlotsAnimation(Main main, PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager)
+	public SlotsAnimation(PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager)
 	{
-		main;
 		this.thisSign = thisSign;
 		this.player = player;
 		this.owner = thisSign.getOwner();

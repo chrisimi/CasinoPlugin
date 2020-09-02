@@ -23,7 +23,7 @@ public class VersionManager {
 	 * @return 
 	 */
 	public static String newestVersion = "";
-	public static void CheckForNewVersion(String currentVersion, Main main) {
+	public static void CheckForNewVersion(String currentVersion, ) {
 		if(currentVersion.contains("b")) {
 			main.getLogger().info("This is a Development build, so no version check!");
 			return;

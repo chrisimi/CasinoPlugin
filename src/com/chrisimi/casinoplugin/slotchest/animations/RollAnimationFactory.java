@@ -12,19 +12,18 @@ public class RollAnimationFactory {
 
 	/**
 	 * get the RollAnimation for the slotchest
-	 * @param main instance of the main class
 	 * @param slotChest instance of the slot chest
 	 * @param player player
 	 * @return a IRollAnimation implementation
 	 */
-	public static IRollAnimation GetRollAnimation(Main main, SlotChest slotChest, Player player)
+	public static IRollAnimation GetRollAnimation(SlotChest slotChest, Player player)
 	{
 		switch(slotChest.animationID) {
 		case 0:
 		case 2:
-			return new NormalLeftToRightAnimation(Main.getInstance(), slotChest, player);
+			return new NormalLeftToRightAnimation(slotChest, player);
 		case 1:
-			return new NormalRightToLeftAnimation(Main.getInstance(), slotChest, player);
+			return new NormalRightToLeftAnimation(slotChest, player);
 		}
 		return null;
 		

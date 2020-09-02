@@ -50,8 +50,7 @@ public class SlotChestsManager implements Listener{
 
 	private GsonBuilder builder;
 	private Gson gson;
-	public SlotChestsManager(Main main) {
-		main;
+	public SlotChestsManager() {
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		builder = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting();
 		gson = builder.create();
@@ -276,7 +275,7 @@ public class SlotChestsManager implements Listener{
 	 */
 	private void startAnimation(Player player, SlotChest slotchest)
 	{
-		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new RollAnimationManager(player, slotchest, main), 0L);
+		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new RollAnimationManager(player, slotchest), 0L);
 	}
 
 	/**
@@ -286,7 +285,7 @@ public class SlotChestsManager implements Listener{
 	private void openWarehouseDirectly(PlayerInteractEvent event)
 	{
 		SlotChest chest = slotChests.get(event.getClickedBlock().getLocation());
-		new WarehouseMenu(Main.getInstance(), chest, event.getPlayer());
+		new WarehouseMenu(chest, event.getPlayer());
 	}
 
 	/**
@@ -296,7 +295,7 @@ public class SlotChestsManager implements Listener{
 	private void openOwnerInterface(PlayerInteractEvent event)
 	{
 		SlotChest chest = slotChests.get(event.getClickedBlock().getLocation());
-		new OwnerInterfaceInventory(event.getPlayer(), main, chest);
+		new OwnerInterfaceInventory(event.getPlayer(), chest);
 	}
 	//endregion
 

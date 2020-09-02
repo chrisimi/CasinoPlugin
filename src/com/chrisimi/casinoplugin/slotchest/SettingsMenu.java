@@ -29,10 +29,9 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	private ItemStack changeToServerSign = ItemAPI.createItem("§6to server slot chest", Material.GOLD_BLOCK);
 	private ItemStack changeToPlayerSign = ItemAPI.createItem("§6to player slot chest", Material.COAL_BLOCK);
 
-	public SettingsMenu(Main main, SlotChest slotChest, Player owner)
+	public SettingsMenu(SlotChest slotChest, Player owner)
 	{
 		super(owner, 9, Main.getInstance(), "Settings");
-		main;
 		this.slotChest = slotChest;
 		
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());

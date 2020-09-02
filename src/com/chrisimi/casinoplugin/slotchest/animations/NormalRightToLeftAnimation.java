@@ -28,9 +28,8 @@ public class NormalRightToLeftAnimation implements IRollAnimation
 	private int rollSkipMaximum = 0;
 	private ItemStack[] currentItems = new ItemStack[5];
 
-	public NormalRightToLeftAnimation(Main main, SlotChest slotChest, Player player)
+	public NormalRightToLeftAnimation(SlotChest slotChest, Player player)
 	{
-		main;
 		this.slotChest = slotChest;
 		this.player = player;
 

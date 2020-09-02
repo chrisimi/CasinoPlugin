@@ -53,7 +53,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	private WaitingFor waitingFor = WaitingFor.NONE;
 
 	public WinningsMenu instance = this;
-	public WinningsMenu(Main main, Player owner, SlotChest slotChest) {
+	public WinningsMenu(, Player owner, SlotChest slotChest) {
 		super(owner, 9*5, Main.getInstance(), "Winnings Menu");
 		main;
 		this.owner = owner;

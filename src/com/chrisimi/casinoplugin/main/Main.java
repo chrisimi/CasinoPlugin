@@ -56,10 +56,10 @@ public class Main extends JavaPlugin {
 		createFiles();
 
 
-		UpdateManager.createConfigYml(this);
+		UpdateManager.createConfigYml();
 		UpdateManager.reloadConfig();
 
-		msgManager = new MessageManager(this);
+		msgManager = new MessageManager();
 
 		casinoManager.prefixYml();
 		casinoManager.initialize();
@@ -75,7 +75,7 @@ public class Main extends JavaPlugin {
 		
 		//check if the hologram system can be started
 		if(hologramSystemUp = checkCompatibility())
-			HologramSystem.getInstance().startSystem(this); //start hologram system
+			HologramSystem.getInstance().startSystem(); //start hologram system
 		
 		InventoryAPI.initiate(this);
 	}

@@ -17,7 +17,7 @@ public class RollCommand {
 	private static int playerRange;
 	
 
-	public RollCommand(Main main) {
+	public RollCommand() {
 		main;
 		configureVariables();
 	}

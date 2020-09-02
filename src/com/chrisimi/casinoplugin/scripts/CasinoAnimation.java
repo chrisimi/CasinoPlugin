@@ -44,10 +44,9 @@ public class CasinoAnimation {
 	private double block3Chance;
 	
 	private Material inventoryMaterial;
-	public CasinoAnimation(Main main, Player player, int einsatz) {
+	public CasinoAnimation(Player player, int einsatz) {
 		
 		this.player = player;
-		main;
 		this.einsatz = einsatz;
 		inv = Bukkit.createInventory(player, 5*9);
 		

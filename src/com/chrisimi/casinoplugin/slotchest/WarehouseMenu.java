@@ -46,10 +46,9 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 	private Boolean sortByID = true;
 	private ItemStack sortButton = ItemAPI.createItem("§6SORT", Material.STONE_BUTTON);
 	
-	public WarehouseMenu(Main main, SlotChest slotChest, Player owner)
+	public WarehouseMenu(SlotChest slotChest, Player owner)
 	{
 		super(owner, 9*6, Main.getInstance(), "Warehouse");
-		main;
 		this.slotChest = slotChest;
 		this.owner = owner;
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
