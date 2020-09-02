@@ -13,10 +13,9 @@ import com.chrisimi.inventoryapi.InventoryAPI;
 
 public class CasinoChatListener implements Listener {
 
-	private Main main;
-	public CasinoChatListener(Main main) {
-		this.main = main;
-		Bukkit.getPluginManager().registerEvents(this, main);
+
+	public CasinoChatListener() {
+		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 	}
 	
 	@EventHandler
@@ -24,7 +23,7 @@ public class CasinoChatListener implements Listener {
 		
 		Player player = event.getPlayer();
 		if(BlackjackAnimation.IsBlackJackAnimationWaitingForUserInput(player)) {
-			main.getServer().getScheduler().runTask(main, new Runnable() {
+			Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(), new Runnable() {
 				@Override
 				public void run() {
 					BlackjackAnimation.userInput(event.getMessage(), player);

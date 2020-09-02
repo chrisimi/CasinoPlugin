@@ -16,7 +16,6 @@ import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 public class SlotsAnimation implements Runnable
 {
-	private final Main main;
 	private PlayerSignsConfiguration thisSign = new PlayerSignsConfiguration();
 	private final Player player;
 	private final OfflinePlayer owner;
@@ -28,9 +27,8 @@ public class SlotsAnimation implements Runnable
 	private int bukkitTaskId = 0;
 	private double winAmount = 0;
 	
-	public SlotsAnimation(Main main, PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager)
+	public SlotsAnimation(PlayerSignsConfiguration thisSign, Player player, PlayerSignsManager manager)
 	{
-		this.main = main;
 		this.thisSign = thisSign;
 		this.player = player;
 		this.owner = thisSign.getOwner();
@@ -66,7 +64,7 @@ public class SlotsAnimation implements Runnable
 		}
 		sign.update(true);
 		
-		bukkitTaskId = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, animation, 0, 5L);
+		bukkitTaskId = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), animation, 0, 5L);
 	}
 
 	//main animation runnable which will be called every update
@@ -103,9 +101,9 @@ public class SlotsAnimation implements Runnable
 				String editedLine = "> " + lines[line] + " §0<";
 				sign.setLine(line, editedLine);
 				sign.update(true);
-				main.getServer().getScheduler().cancelTask(bukkitTaskId);
+				Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskId);
 				
-				main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+				Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable()
 				{
 					
 					@Override
@@ -254,8 +252,8 @@ public class SlotsAnimation implements Runnable
 	}
 	private void finish()
 	{
-		main.getServer().getScheduler().cancelTask(bukkitTaskId);
-		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskId);
+		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable()
 		{
 			
 			@Override

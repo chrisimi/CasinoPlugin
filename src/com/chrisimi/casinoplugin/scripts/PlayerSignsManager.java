@@ -568,16 +568,16 @@ public class PlayerSignsManager implements Listener {
 			{
 				case BLACKJACK:
 					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
-							new BlackjackAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+							new BlackjackAnimation(cnf, player, CasinoManager.playerSignsManager));
 					
 					break;
 				case SLOTS:
 					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
-							new SlotsAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+							new SlotsAnimation(cnf, player, CasinoManager.playerSignsManager));
 					break;
 				case DICE:
 					Main.getInstance().getServer().getScheduler().runTask(Main.getInstance(),
-							new DiceAnimation(Main.getInstance(), cnf, player, CasinoManager.playerSignsManager));
+							new DiceAnimation(cnf, player, CasinoManager.playerSignsManager));
 					break;
 				default:
 					cnf.isRunning = false;

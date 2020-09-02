@@ -31,7 +31,7 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	 */
 
 	private Player owner;
-	private Main main;
+
 	private SlotChest slotChest;
 
 	private ItemStack warehouseItem = ItemAPI.createItem("§bWarehouse", Material.CHEST);
@@ -42,10 +42,9 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	private ItemStack disableItem = ItemAPI.createItem("§4disable", Material.RED_WOOL);
 	private ItemStack enableItem = ItemAPI.createItem("§2enable", Material.GREEN_WOOL);
 
-	public OwnerInterfaceInventory(Player owner, Main main, SlotChest chest) {
+	public OwnerInterfaceInventory(Player owner, SlotChest chest) {
 		super(owner, 9, Main.getInstance(), "Owner Interface");
 		this.owner = owner;
-		this.main = main;
 		this.slotChest = chest;
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		initialize();
@@ -101,23 +100,23 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	private void openWarehouseMenu()
 	{
 		closeInventory();
-		new WarehouseMenu(main, slotChest, owner);
+		new WarehouseMenu(slotChest, owner);
 	}
 	private void openWinningsMenu()
 	{
 		closeInventory();
-		new WinningsMenu(main, owner, slotChest);
+		new WinningsMenu(owner, slotChest);
 	}
 	private void openBetMenu()
 	{
 		closeInventory();
-		new BetMenu(main, owner, slotChest, this);
+		new BetMenu(owner, slotChest, this);
 		
 	}
 	private void openSettingsMenu()
 	{
 		closeInventory();
-		new SettingsMenu(main, slotChest, owner);
+		new SettingsMenu(slotChest, owner);
 	}
 	
 	private void disableChest()

@@ -43,14 +43,12 @@ public class BetMenu extends com.chrisimi.inventoryapi.Inventory implements IInv
 	private static Material minusBlockMaterial = Material.RED_WOOL;
 	private static Material plusBlockMaterial = Material.GREEN_WOOL;
 
-	private final Main main;
 	private final Player player;
 	private final SlotChest slotChest;
 	private final OwnerInterfaceInventory ownerInterfaceInventory;
-	public BetMenu(Main main, Player owner, SlotChest slotchest, OwnerInterfaceInventory oii)
+	public BetMenu(Player owner, SlotChest slotchest, OwnerInterfaceInventory oii)
 	{
 		super(owner, 9*3, Main.getInstance(), "BetMenu");
-		this.main = main;
 		this.player = owner;
 		this.slotChest = slotchest;
 		this.ownerInterfaceInventory = oii;

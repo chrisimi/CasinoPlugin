@@ -76,10 +76,10 @@ public class HologramSystem
 		return _instance;
 	}
 	
-	private Main main;
+
 	private HologramSystem()
 	{
-		this.main = Main.getInstance();
+		Main.getInstance();
 		initializeConfigValues();
 		
 		
@@ -105,11 +105,9 @@ public class HologramSystem
 		}
 	}
 	
-	public void startSystem(Plugin plugin)
+	public void startSystem()
 	{
-		
-		
-		hologramsjson = new File(plugin.getDataFolder(), "holograms.json");
+		hologramsjson = new File(Main.getInstance().getDataFolder(), "holograms.json");
 		createFiles();
 		
 		gson = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
@@ -219,7 +217,7 @@ public class HologramSystem
 	
 	private void loadPlaceholders()
 	{
-		HologramsAPI.registerPlaceholder(main, "%total_signs%", 10.0, new PlaceholderReplacer()
+		HologramsAPI.registerPlaceholder(Main.getInstance(), "%total_signs%", 10.0, new PlaceholderReplacer()
 		{
 			
 			@Override

@@ -22,7 +22,7 @@ public class CasinoAnimation {
 	public static int rollCount = 0;
 	
 	
-	private Main main;
+
 	public int einsatz;
 	private Inventory inv;
 	private Player player;
@@ -44,10 +44,9 @@ public class CasinoAnimation {
 	private double block3Chance;
 	
 	private Material inventoryMaterial;
-	public CasinoAnimation(Main main, Player player, int einsatz) {
+	public CasinoAnimation(Player player, int einsatz) {
 		
 		this.player = player;
-		this.main = main;
 		this.einsatz = einsatz;
 		inv = Bukkit.createInventory(player, 5*9);
 		
@@ -111,15 +110,15 @@ public class CasinoAnimation {
 		final int minDuration = (int) UpdateManager.getValue("animation-min-duration");
 		if(minDuration <= 0) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get min-duration: min-duration is lower or equal 0 !!!");
-			Bukkit.getPluginManager().disablePlugin(main);
+			Bukkit.getPluginManager().disablePlugin(Main.getInstance());
 		}
 		final int maxDuration = (int) UpdateManager.getValue("animation-max-duration");
 		if(maxDuration < minDuration) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-duration: max-duration is lower than min-duration!!!");
-			Bukkit.getPluginManager().disablePlugin(main);
+			Bukkit.getPluginManager().disablePlugin(Main.getInstance());
 		}
 		
-		int value = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		int value = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
 			
 			
 			int round = 0;

@@ -21,18 +21,13 @@ public class MessageManager
 {
 	public static HashMap<String, String> defaultLanguageFilePack = new HashMap<>();
 	public static HashMap<String, String> chosenLanguageFilePack = new HashMap<>();
-	
-	
+
 	public File messagesFolder = null;
 	public static File defaultLanguageFile = null;
 	public static File chosenLanguageFile = null;
-	private Main main;
-	public MessageManager(Main main)
+
+	public MessageManager()
 	{
-		this.main = main;
-		
-		
-		
 		initializeFiles();
 		getLanguageFiles();
 		checkForDefaultUpdate();
@@ -47,7 +42,7 @@ public class MessageManager
 	//create the messages folder and EN_default.yml
 	private void initializeFiles()
 	{
-		messagesFolder = new File(main.getDataFolder(), "messages");
+		messagesFolder = new File(Main.getInstance().getDataFolder(), "messages");
 		try 
 		{
 			if(!(messagesFolder.exists()))
@@ -63,7 +58,7 @@ public class MessageManager
 		{
 			if(!(defaultLanguageFile.exists()))
 			{
-				InputStream inputStream = main.getResource("EN_default.yml");
+				InputStream inputStream = Main.getInstance().getResource("EN_default.yml");
 			
 				if(inputStream == null)
 				{
@@ -141,7 +136,7 @@ public class MessageManager
 		File tempFile = new File(messagesFolder, "temp.yml");
 		try
 		{
-			InputStream inputStream = main.getResource("EN_default.yml");
+			InputStream inputStream = Main.getInstance().getResource("EN_default.yml");
 			
 			if(inputStream == null)
 			{

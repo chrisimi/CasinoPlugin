@@ -38,7 +38,7 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 	public static HashMap<Inventory, Integer> tasks = new HashMap<>();
 	
 	
-	private Main main;
+
 	private SlotChest slotChest;
 	private Player owner;
 	
@@ -46,13 +46,12 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 	private Boolean sortByID = true;
 	private ItemStack sortButton = ItemAPI.createItem("§6SORT", Material.STONE_BUTTON);
 	
-	public WarehouseMenu(Main main, SlotChest slotChest, Player owner)
+	public WarehouseMenu(SlotChest slotChest, Player owner)
 	{
 		super(owner, 9*6, Main.getInstance(), "Warehouse");
-		this.main = main;
 		this.slotChest = slotChest;
 		this.owner = owner;
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		initialize();
 		addEvents(this);
 		openInventory();

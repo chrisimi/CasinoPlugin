@@ -23,21 +23,18 @@ import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationFactory;
 
 public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements Listener, IInventoryAPI
 {
-
-	private final Main main;
 	private final SlotChest slotChest;
 
 	private ItemStack changeRollAnimationBlock = ItemAPI.createItem("Change the roll animation of this SlotChest", Material.STONE_BUTTON);
 	private ItemStack changeToServerSign = ItemAPI.createItem("§6to server slot chest", Material.GOLD_BLOCK);
 	private ItemStack changeToPlayerSign = ItemAPI.createItem("§6to player slot chest", Material.COAL_BLOCK);
 
-	public SettingsMenu(Main main, SlotChest slotChest, Player owner)
+	public SettingsMenu(SlotChest slotChest, Player owner)
 	{
 		super(owner, 9, Main.getInstance(), "Settings");
-		this.main = main;
 		this.slotChest = slotChest;
 		
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		openInventory();
 		addEvents(this);
 

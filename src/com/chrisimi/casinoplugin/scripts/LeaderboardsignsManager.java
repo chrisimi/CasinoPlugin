@@ -54,11 +54,9 @@ public class LeaderboardsignsManager implements Listener {
 	
 	private static int reloadTime = 0;
 	private static Boolean signsenable = false;
-	
-	private final Main main;
-	public LeaderboardsignsManager(Main main) {
-		this.main = main;
-		main.getServer().getPluginManager().registerEvents(this, main);
+
+	public LeaderboardsignsManager() {
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 		
 		reload(); //get variables from config.yml
@@ -92,7 +90,7 @@ public class LeaderboardsignsManager implements Listener {
 			importData();
 		} else 
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Leaderboard signs are disabled!");
-		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable()
 		{
 			
 			@Override
@@ -289,7 +287,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		synchronized (leaderboardsigns)
 		{
-			main.getServer().getScheduler().cancelTask(leaderboardsignRunnableTaskID.remove(sign));
+			Main.getInstance().getServer().getScheduler().cancelTask(leaderboardsignRunnableTaskID.remove(sign));
 			return leaderboardsigns.remove(sign.getLocation()) != null;
 		}
 	}
@@ -330,7 +328,7 @@ public class LeaderboardsignsManager implements Listener {
 		Random rnd = new Random();
 		
 		int randomWaitTime = rnd.nextInt(200);
-		int taskID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new LeaderboardsignAnimation(main, LBsign, sign), 
+		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new LeaderboardsignAnimation(LBsign, sign),
 				(long)randomWaitTime, (long)reloadTime);
 		if(taskID == -1) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error occured while trying to animate sign!");
@@ -628,7 +626,7 @@ public class LeaderboardsignsManager implements Listener {
 		CasinoManager.leaderboardManager.exportData();
 		CasinoManager.LogWithColor(ChatColor.GREEN + "You successfully reset data.yml!");
 	}
-	public static void reloadData(Main main)
+	public static void reloadData()
 	{
 		//1. stop all runnables
 		//2. reload data
@@ -637,7 +635,7 @@ public class LeaderboardsignsManager implements Listener {
 		//1. stop all runnables
 		for(int taskID : leaderboardsignRunnableTaskID.values()) 
 		{
-			main.getServer().getScheduler().cancelTask(taskID);
+			Main.getInstance().getServer().getScheduler().cancelTask(taskID);
 		}
 		leaderboardsignRunnableTaskID.clear();
 		

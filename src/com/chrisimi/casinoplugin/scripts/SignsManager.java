@@ -49,7 +49,7 @@ public class SignsManager implements Listener {
 	
 	private Material[] signs = new Material[] {Material.SIGN, Material.SIGN};
 	
-	private Main main;
+
 	
 	private GsonBuilder builder;
 	private Gson gson;
@@ -61,15 +61,14 @@ public class SignsManager implements Listener {
 	private static ArrayList<Double> chances;
 	private static double maxBet;
 
-	public SignsManager(Main main) {
-		this.main = main;
+	public SignsManager() {
 		
 		builder = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls();
 		gson = builder.create();
 		
 		updateVariables();
 		
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 		
 		importSignsYml();
 	}
@@ -361,7 +360,7 @@ public class SignsManager implements Listener {
 	private void playAnimationServerSigns(Sign sign, Double bet, Player player) {
 		playCount++;
 		
-		int taskint = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		int taskint = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
 			String wonSymbol = "";
 			int wonSymbolIndex = 0;
 			
@@ -434,7 +433,7 @@ public class SignsManager implements Listener {
 						}
 					}
 					sign.update(true);
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 
 						@Override
 						public void run() {
@@ -467,7 +466,7 @@ public class SignsManager implements Listener {
 							}
 							
 							sign.update(true);
-							Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+							Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 								@Override
 								public void run() {
 									signToNormal(sign, bet);
@@ -498,7 +497,7 @@ public class SignsManager implements Listener {
 	}
 	
 	private void signToNormal(Sign sign, Double bet) { //normal sign layout
-		Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 
 			@Override
 			public void run() {

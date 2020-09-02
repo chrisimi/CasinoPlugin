@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.chrisimi.casinoplugin.main.Main;
@@ -16,9 +17,8 @@ public class RollCommand {
 	public static int rollAmount = 0;
 	private static int playerRange;
 	
-	private Main main;
-	public RollCommand(Main main) {
-		this.main = main;
+
+	public RollCommand() {
 		configureVariables();
 	}
 	
@@ -76,7 +76,7 @@ public class RollCommand {
 		try {
 			playerRange = Integer.parseInt(UpdateManager.getValue("rollcommand-range").toString());
 		} catch(NumberFormatException e) {
-			main.getLogger().warning("roll command range is not a valid value!!! it have to be a full number like 2 or 3!");
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "roll command range is not a valid value!!! it have to be a full number like 2 or 3!");
 		} finally {
 			playerRange = 30;
 		}

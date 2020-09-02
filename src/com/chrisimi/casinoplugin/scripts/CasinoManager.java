@@ -18,9 +18,8 @@ import com.chrisimi.casinoplugin.listeners.PlayerJoinListener;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.slotchest.SlotChestsManager;
 
-public class CasinoManager {
-
-	public static Main main;
+public class CasinoManager
+{
 	private static String prefix = "§9[§6Casino§9] §a";
 	
 	private static SignsManager signsManager;
@@ -33,17 +32,18 @@ public class CasinoManager {
 	
 	public static File debugfile;
 	
-	public CasinoManager(Main main) {
-		debugfile = new File(main.getDataFolder(), "debug.log");
-		this.main = main;
+	public CasinoManager()
+	{
+		debugfile = new File(Main.getInstance().getDataFolder(), "debug.log");
 	}
-	public void prefixYml() {
+	public void prefixYml()
+	{
 		try {
 			String prefixFromYml = YamlConfiguration.loadConfiguration(Main.configYml).getString("prefix").replaceAll("&", "§");
 			if(prefixFromYml == "" || prefixFromYml.equalsIgnoreCase("default")) {
 				LogWithColor(org.bukkit.ChatColor.YELLOW + "no prefix in config.yml... using default one!");
 			} else {
-				main.getLogger().info(String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
+				CasinoManager.LogWithColor(ChatColor.GREEN + String.format("Found prefix %s in config.yml... changed to new prefix!", prefixFromYml));
 				prefix = prefixFromYml;
 			}
 		} catch(Exception e)
@@ -55,15 +55,15 @@ public class CasinoManager {
 	}
 	public void initialize() {
 		
-		new CasinoCommandsListener(main);
-		new InventoryClickListener(main);
-		new PlayerJoinListener(main);
-		new CasinoChatListener(main);
-		signsManager = new SignsManager(main);
+		new CasinoCommandsListener();
+		new InventoryClickListener();
+		new PlayerJoinListener();
+		new CasinoChatListener();
+		signsManager = new SignsManager();
 		playerSignsManager = new PlayerSignsManager();
-		rollCommand = new RollCommand(main);
-		slotChestManager = new SlotChestsManager(main);
-		leaderboardManager = new LeaderboardsignsManager(main);
+		rollCommand = new RollCommand();
+		slotChestManager = new SlotChestsManager();
+		leaderboardManager = new LeaderboardsignsManager();
 		
 		try 
 		{
@@ -85,7 +85,8 @@ public class CasinoManager {
 	
 	public static void LogWithColor(String message) {
 		try {
-			main.getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('�', prefix) + message);
+			Main.getInstance().getServer()
+					.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('§', prefix) + message);
 			
 		} catch(Exception e) {
 			if(message == null) return;

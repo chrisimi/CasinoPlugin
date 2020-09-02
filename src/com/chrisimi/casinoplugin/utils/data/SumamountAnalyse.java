@@ -15,7 +15,7 @@ import com.chrisimi.casinoplugin.serializables.PlayData;
 /**
  * class for analysing data 
  * current mode: Sumamount
- * {@link Mode}
+ *
  * 
  * @author chris
  *

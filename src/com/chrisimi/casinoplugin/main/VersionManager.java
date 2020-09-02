@@ -14,6 +14,7 @@ import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+@Deprecated
 public class VersionManager {
 
 	private static final String URL = "https://api.spigotmc.org/legacy/update.php?resource=71898";
@@ -23,9 +24,9 @@ public class VersionManager {
 	 * @return 
 	 */
 	public static String newestVersion = "";
-	public static void CheckForNewVersion(String currentVersion, Main main) {
+	public static void CheckForNewVersion(String currentVersion) {
 		if(currentVersion.contains("b")) {
-			main.getLogger().info("This is a Development build, so no version check!");
+			//main.getLogger().info("This is a Development build, so no version check!");
 			return;
 		}
 		

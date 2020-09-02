@@ -39,12 +39,12 @@ public class UpdateManager {
 	
 	
 	
-	public static void createConfigYml(Main main) {
+	public static void createConfigYml() {
 		
 		try {
 			Main.configYml.createNewFile();
 			
-			InputStream iStream = main.getResource("config.yml");
+			InputStream iStream = Main.getInstance().getResource("config.yml");
 			if(iStream == null) {
 				CasinoManager.LogWithColor(ChatColor.RED + "can't read config.yml from jar");
 				return;
@@ -64,14 +64,14 @@ public class UpdateManager {
 		}
 	}
 	
-	public static void updateConfigYml(Main mainInstance) {
+	public static void updateConfigYml() {
 		//get configs from old config
 		
 		Map<String, Object> values = new HashMap<>();
 		YamlConfiguration cofn = YamlConfiguration.loadConfiguration(Main.configYml);
 		values = cofn.getValues(true);
 		
-		createConfigYml(mainInstance);
+		createConfigYml();
 		
 		
 		changeCommandsToPoints();
@@ -237,7 +237,7 @@ public class UpdateManager {
 			
 			
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get values from config.yml... recreating config.yml!");
-			createConfigYml(CasinoManager.main);
+			createConfigYml();
 		}
 		
 		Object o = configValues.get(path);

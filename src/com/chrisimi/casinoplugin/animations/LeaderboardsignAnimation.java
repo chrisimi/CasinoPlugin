@@ -30,7 +30,6 @@ import com.chrisimi.casinoplugin.utils.CycleHelper;
 
 public class LeaderboardsignAnimation implements Runnable
 {
-	public final Main main;
 	public final Sign signBlock;
 	public final Leaderboardsign sign;
 	
@@ -40,9 +39,8 @@ public class LeaderboardsignAnimation implements Runnable
 	private OfflinePlayer currentPlayer = null;
 
 	
-	public LeaderboardsignAnimation(Main main, Leaderboardsign sign, Sign signBlock)
+	public LeaderboardsignAnimation(Leaderboardsign sign, Sign signBlock)
 	{
-		this.main = main;
 		this.sign = sign;
 		this.signBlock = signBlock;
 	}

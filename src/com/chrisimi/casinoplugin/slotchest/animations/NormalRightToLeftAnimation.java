@@ -18,7 +18,6 @@ import com.chrisimi.casinoplugin.slotchest.SlotChest;
 public class NormalRightToLeftAnimation implements IRollAnimation
 {
 	private final Inventory inventory;
-	private final Main main;
 	private final SlotChest slotChest;
 	private final Player player;
 	private final int inventorysize = 9*3;
@@ -29,9 +28,8 @@ public class NormalRightToLeftAnimation implements IRollAnimation
 	private int rollSkipMaximum = 0;
 	private ItemStack[] currentItems = new ItemStack[5];
 
-	public NormalRightToLeftAnimation(Main main, SlotChest slotChest, Player player)
+	public NormalRightToLeftAnimation(SlotChest slotChest, Player player)
 	{
-		this.main = main;
 		this.slotChest = slotChest;
 		this.player = player;
 
