@@ -136,7 +136,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	};
 
 	private void initializeInventoryReadingTask() {
-		int taskNumber = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, inventoryReadingTask, 10L, 10L);
+		int taskNumber = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, inventoryReadingTask, 10L, 10L);
 		inventoryReadingTasks.put(this, taskNumber);
 	}
 
@@ -280,7 +280,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 
 		if(inventoryReadingTasks.containsKey(this))
 		{
-			main.getServer().getScheduler().cancelTask(inventoryReadingTasks.get(this));
+			Main.getInstance().getServer().getScheduler().cancelTask(inventoryReadingTasks.get(this));
 			inventoryReadingTasks.remove(this);
 		}
 

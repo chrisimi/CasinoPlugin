@@ -52,7 +52,7 @@ public class SlotChestsManager implements Listener{
 	private Gson gson;
 	public SlotChestsManager(Main main) {
 		this.main = main;
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
 		builder = new GsonBuilder().serializeNulls().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting();
 		gson = builder.create();
 		
@@ -276,7 +276,7 @@ public class SlotChestsManager implements Listener{
 	 */
 	private void startAnimation(Player player, SlotChest slotchest)
 	{
-		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new RollAnimationManager(player, slotchest, main), 0L);
+		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(main, new RollAnimationManager(player, slotchest, main), 0L);
 	}
 
 	/**

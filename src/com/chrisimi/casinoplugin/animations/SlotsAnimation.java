@@ -65,7 +65,7 @@ public class SlotsAnimation implements Runnable
 		}
 		sign.update(true);
 		
-		bukkitTaskId = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, animation, 0, 5L);
+		bukkitTaskId = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, animation, 0, 5L);
 	}
 
 	//main animation runnable which will be called every update
@@ -102,9 +102,9 @@ public class SlotsAnimation implements Runnable
 				String editedLine = "> " + lines[line] + " §0<";
 				sign.setLine(line, editedLine);
 				sign.update(true);
-				main.getServer().getScheduler().cancelTask(bukkitTaskId);
+				Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskId);
 				
-				main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+				Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 				{
 					
 					@Override
@@ -253,8 +253,8 @@ public class SlotsAnimation implements Runnable
 	}
 	private void finish()
 	{
-		main.getServer().getScheduler().cancelTask(bukkitTaskId);
-		main.getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskId);
+		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(main, new Runnable()
 		{
 			
 			@Override

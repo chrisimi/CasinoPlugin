@@ -24,7 +24,7 @@ public class CasinoChatListener implements Listener {
 		
 		Player player = event.getPlayer();
 		if(BlackjackAnimation.IsBlackJackAnimationWaitingForUserInput(player)) {
-			main.getServer().getScheduler().runTask(main, new Runnable() {
+			Main.getInstance().getServer().getScheduler().runTask(main, new Runnable() {
 				@Override
 				public void run() {
 					BlackjackAnimation.userInput(event.getMessage(), player);

@@ -69,7 +69,7 @@ public class SignsManager implements Listener {
 		
 		updateVariables();
 		
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
 		
 		importSignsYml();
 	}

@@ -52,7 +52,7 @@ public class WarehouseMenu extends com.chrisimi.inventoryapi.Inventory implement
 		this.main = main;
 		this.slotChest = slotChest;
 		this.owner = owner;
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
 		initialize();
 		addEvents(this);
 		openInventory();

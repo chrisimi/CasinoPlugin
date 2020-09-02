@@ -57,7 +57,7 @@ public class RollAnimationManager implements Runnable, Listener
 		
 		rollAnimation = RollAnimationFactory.GetRollAnimation(main, slotChest, player);
 		inventory = rollAnimation.getInventory();
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
 	}
 	@Override
 	public void run()
@@ -120,7 +120,7 @@ public class RollAnimationManager implements Runnable, Listener
 		Random random = new Random();
 		rolls = random.nextInt(30) + 20;
 
-		main.getServer().getScheduler().runTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().runTask(main, new Runnable()
 		{
 			int rollsToSkip = 0;
 			int rollSkipMaximum = 0;
@@ -128,7 +128,7 @@ public class RollAnimationManager implements Runnable, Listener
 			@Override
 			public void run()
 			{
-				rollThreadID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+				rollThreadID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
 				{
 					@Override
 					public void run()
@@ -153,7 +153,7 @@ public class RollAnimationManager implements Runnable, Listener
 	
 	private void finish()
 	{
-		main.getServer().getScheduler().cancelTask(rollThreadID);
+		Main.getInstance().getServer().getScheduler().cancelTask(rollThreadID);
 		rollThreadID = 0;
 
 		ItemStack wonItem = rollAnimation.finish();
@@ -187,7 +187,7 @@ public class RollAnimationManager implements Runnable, Listener
 		
 		if(rollThreadID != 0)
 		{
-			main.getServer().getScheduler().cancelTask(rollThreadID);
+			Main.getInstance().getServer().getScheduler().cancelTask(rollThreadID);
 			rollThreadID = 0;
 			simulateEnding();
 		}

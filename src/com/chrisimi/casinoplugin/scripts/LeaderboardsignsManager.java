@@ -57,7 +57,7 @@ public class LeaderboardsignsManager implements Listener {
 
 	public LeaderboardsignsManager(Main main) {
 		this.main = main;
-		main.getServer().getPluginManager().registerEvents(this, main);
+		Main.getInstance().getServer().getPluginManager().registerEvents(this, main);
 		gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 		
 		reload(); //get variables from config.yml
@@ -91,7 +91,7 @@ public class LeaderboardsignsManager implements Listener {
 			importData();
 		} else 
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Leaderboard signs are disabled!");
-		main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
 		{
 			
 			@Override
@@ -288,7 +288,7 @@ public class LeaderboardsignsManager implements Listener {
 	{
 		synchronized (leaderboardsigns)
 		{
-			main.getServer().getScheduler().cancelTask(leaderboardsignRunnableTaskID.remove(sign));
+			Main.getInstance().getServer().getScheduler().cancelTask(leaderboardsignRunnableTaskID.remove(sign));
 			return leaderboardsigns.remove(sign.getLocation()) != null;
 		}
 	}
@@ -329,7 +329,7 @@ public class LeaderboardsignsManager implements Listener {
 		Random rnd = new Random();
 		
 		int randomWaitTime = rnd.nextInt(200);
-		int taskID = main.getServer().getScheduler().scheduleSyncRepeatingTask(main, new LeaderboardsignAnimation(main, LBsign, sign), 
+		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, new LeaderboardsignAnimation(main, LBsign, sign),
 				(long)randomWaitTime, (long)reloadTime);
 		if(taskID == -1) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error occured while trying to animate sign!");
@@ -636,7 +636,7 @@ public class LeaderboardsignsManager implements Listener {
 		//1. stop all runnables
 		for(int taskID : leaderboardsignRunnableTaskID.values()) 
 		{
-			main.getServer().getScheduler().cancelTask(taskID);
+			Main.getInstance().getServer().getScheduler().cancelTask(taskID);
 		}
 		leaderboardsignRunnableTaskID.clear();
 		
