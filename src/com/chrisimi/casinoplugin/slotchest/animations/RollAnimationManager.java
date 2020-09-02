@@ -34,7 +34,6 @@ public class RollAnimationManager implements Runnable, Listener
 	private final OfflinePlayer owner;
 	private final Player player;
 	private final SlotChest slotChest;
-	private final Main main;
 	
 	private Inventory inventory;
 	private ItemStack beginInformationSign; //shows information about the bet etc.

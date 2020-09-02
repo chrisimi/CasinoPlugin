@@ -43,7 +43,6 @@ public class BetMenu extends com.chrisimi.inventoryapi.Inventory implements IInv
 	private static Material minusBlockMaterial = Material.RED_WOOL;
 	private static Material plusBlockMaterial = Material.GREEN_WOOL;
 
-	private final Main main;
 	private final Player player;
 	private final SlotChest slotChest;
 	private final OwnerInterfaceInventory ownerInterfaceInventory;

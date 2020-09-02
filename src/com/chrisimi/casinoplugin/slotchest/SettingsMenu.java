@@ -23,8 +23,6 @@ import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationFactory;
 
 public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements Listener, IInventoryAPI
 {
-
-	private final Main main;
 	private final SlotChest slotChest;
 
 	private ItemStack changeRollAnimationBlock = ItemAPI.createItem("Change the roll animation of this SlotChest", Material.STONE_BUTTON);

@@ -54,8 +54,7 @@ public class LeaderboardsignsManager implements Listener {
 	
 	private static int reloadTime = 0;
 	private static Boolean signsenable = false;
-	
-	private final Main main;
+
 	public LeaderboardsignsManager(Main main) {
 		this.main = main;
 		main.getServer().getPluginManager().registerEvents(this, main);

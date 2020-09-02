@@ -18,7 +18,6 @@ public class NormalLeftToRightAnimation implements IRollAnimation
 {
 
 	private final Inventory inventory;
-	private final Main main;
 	private final Player player;
 	private final SlotChest slotChest;
 	

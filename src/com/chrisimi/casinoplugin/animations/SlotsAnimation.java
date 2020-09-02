@@ -16,7 +16,6 @@ import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 public class SlotsAnimation implements Runnable
 {
-	private final Main main;
 	private PlayerSignsConfiguration thisSign = new PlayerSignsConfiguration();
 	private final Player player;
 	private final OfflinePlayer owner;
