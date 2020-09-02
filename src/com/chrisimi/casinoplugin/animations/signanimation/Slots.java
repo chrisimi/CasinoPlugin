@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.animations.signanimation;
 
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.block.Sign;
 
 import com.chrisimi.casinoplugin.main.Main;
@@ -35,8 +36,8 @@ public class Slots implements Runnable
             if (thisSign.hasOwnerEnoughMoney(thisSign.getSlotsHighestPayout()))
             {
                 //owner has enough money
-                sign.setLine(2, "§6" + Main.econ.format(thisSign.bet));
-                sign.setLine(3, "3x " + thisSign.getColorCodesSlots()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + Main.econ.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
+                sign.setLine(2, "§6" + NumberFormatter.format(thisSign.bet));
+                sign.setLine(3, "3x " + thisSign.getColorCodesSlots()[thisSign.currentSignAnimation] + thisSign.getSlotsSymbols()[thisSign.currentSignAnimation] + " : " + NumberFormatter.format(thisSign.bet * thisSign.getSlotsMultiplicators()[thisSign.currentSignAnimation]));
             } else
             {
                 if ((thisSign.currentSignAnimation % 2) == 1)

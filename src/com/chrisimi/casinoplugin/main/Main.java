@@ -58,7 +58,7 @@ public class Main extends JavaPlugin {
 		createFiles();
 
 
-		UpdateManager.createConfigYml();
+
 		UpdateManager.reloadConfig();
 
 		msgManager = new MessageManager();
@@ -214,6 +214,7 @@ public class Main extends JavaPlugin {
 			if(!file.exists() && file.createNewFile())
 			{
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully created " + file.getName());
+				UpdateManager.createConfigYml();
 			}
 		} catch (IOException e)
 		{
