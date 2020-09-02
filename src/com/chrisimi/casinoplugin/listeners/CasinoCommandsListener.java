@@ -657,7 +657,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor
     {
         if (Main.perm.has(player, "casino.admin"))
         {
-            LeaderboardsignsManager.reloadData(Main.getInstance());
+            LeaderboardsignsManager.reloadData();
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reload_data"));
         } else
         {

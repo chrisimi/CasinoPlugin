@@ -15,7 +15,6 @@ public class CasinoChatListener implements Listener {
 
 
 	public CasinoChatListener() {
-		main;
 		Bukkit.getPluginManager().registerEvents(this, Main.getInstance());
 	}
 	

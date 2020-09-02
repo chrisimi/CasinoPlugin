@@ -48,13 +48,13 @@ public class RollAnimationManager implements Runnable, Listener
 	 */
 	private IRollAnimation rollAnimation;
 	
-	public RollAnimationManager(Player player, SlotChest slotChest, )
+	public RollAnimationManager(Player player, SlotChest slotChest)
 	{
 		this.owner = slotChest.getOwner();
 		this.player = player;
 		this.slotChest = slotChest;
 		
-		rollAnimation = RollAnimationFactory.GetRollAnimation(Main.getInstance(), slotChest, player);
+		rollAnimation = RollAnimationFactory.GetRollAnimation(slotChest, player);
 		inventory = rollAnimation.getInventory();
 		Main.getInstance().getServer().getPluginManager().registerEvents(this, Main.getInstance());
 	}
