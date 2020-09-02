@@ -147,6 +147,19 @@
 		<classifier>javadoc</classifier>
 	</dependency>
 
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>numberformatter</artifactId>
+		<version>1.0</version>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>numberformatter</artifactId>
+		<version>1.0</version>
+		<classifier>javadoc</classifier>
+	</dependency>
+
 </dependencies>
  
 </project>
