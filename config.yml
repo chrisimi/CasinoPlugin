@@ -33,6 +33,16 @@ prefix: default
 # use default for the default language file
 language: default
 
+# currency settings
+# set the currency for this server
+# use a whitespace for a space between number and symbol
+currency: ' $'
+
+# set if the currency should be before the number or after
+# true: before the number like $ 150
+# false: after the number like 150 $
+currency-at-the-begin: false
+
 # ----------
 # CASINO-GUI
 # ----------
