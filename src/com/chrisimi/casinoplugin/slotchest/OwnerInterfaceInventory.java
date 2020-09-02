@@ -101,23 +101,23 @@ public class OwnerInterfaceInventory extends com.chrisimi.inventoryapi.Inventory
 	private void openWarehouseMenu()
 	{
 		closeInventory();
-		new WarehouseMenu(main, slotChest, owner);
+		new WarehouseMenu(Main.getInstance(), slotChest, owner);
 	}
 	private void openWinningsMenu()
 	{
 		closeInventory();
-		new WinningsMenu(main, owner, slotChest);
+		new WinningsMenu(Main.getInstance(), owner, slotChest);
 	}
 	private void openBetMenu()
 	{
 		closeInventory();
-		new BetMenu(main, owner, slotChest, this);
+		new BetMenu(Main.getInstance(), owner, slotChest, this);
 		
 	}
 	private void openSettingsMenu()
 	{
 		closeInventory();
-		new SettingsMenu(main, slotChest, owner);
+		new SettingsMenu(Main.getInstance(), slotChest, owner);
 	}
 	
 	private void disableChest()

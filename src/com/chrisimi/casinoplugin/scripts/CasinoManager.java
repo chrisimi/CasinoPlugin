@@ -56,14 +56,14 @@ public class CasinoManager
 	public void initialize() {
 		
 		new CasinoCommandsListener();
-		new InventoryClickListener(main);
-		new PlayerJoinListener(main);
-		new CasinoChatListener(main);
-		signsManager = new SignsManager(main);
+		new InventoryClickListener(Main.getInstance());
+		new PlayerJoinListener(Main.getInstance());
+		new CasinoChatListener(Main.getInstance());
+		signsManager = new SignsManager(Main.getInstance());
 		playerSignsManager = new PlayerSignsManager();
-		rollCommand = new RollCommand(main);
-		slotChestManager = new SlotChestsManager(main);
-		leaderboardManager = new LeaderboardsignsManager(main);
+		rollCommand = new RollCommand(Main.getInstance());
+		slotChestManager = new SlotChestsManager(Main.getInstance());
+		leaderboardManager = new LeaderboardsignsManager(Main.getInstance());
 		
 		try 
 		{

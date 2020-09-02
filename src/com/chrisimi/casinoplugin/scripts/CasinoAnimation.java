@@ -111,15 +111,15 @@ public class CasinoAnimation {
 		final int minDuration = (int) UpdateManager.getValue("animation-min-duration");
 		if(minDuration <= 0) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get min-duration: min-duration is lower or equal 0 !!!");
-			Bukkit.getPluginManager().disablePlugin(main);
+			Bukkit.getPluginManager().disablePlugin(Main.getInstance());
 		}
 		final int maxDuration = (int) UpdateManager.getValue("animation-max-duration");
 		if(maxDuration < minDuration) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to get max-duration: max-duration is lower than min-duration!!!");
-			Bukkit.getPluginManager().disablePlugin(main);
+			Bukkit.getPluginManager().disablePlugin(Main.getInstance());
 		}
 		
-		int value = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		int value = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
 			
 			
 			int round = 0;

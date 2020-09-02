@@ -295,7 +295,7 @@ public class CasinoGUI
 
         int einsatz = guis.get(player).einsatz;
         player.closeInventory();
-        new CasinoAnimation(main, player, einsatz);
+        new CasinoAnimation(Main.getInstance(), player, einsatz);
 
 
     }

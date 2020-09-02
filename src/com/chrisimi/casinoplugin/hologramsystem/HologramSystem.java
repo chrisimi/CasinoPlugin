@@ -219,7 +219,7 @@ public class HologramSystem
 	
 	private void loadPlaceholders()
 	{
-		HologramsAPI.registerPlaceholder(main, "%total_signs%", 10.0, new PlaceholderReplacer()
+		HologramsAPI.registerPlaceholder(Main.getInstance(), "%total_signs%", 10.0, new PlaceholderReplacer()
 		{
 			
 			@Override

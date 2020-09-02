@@ -22,9 +22,9 @@ public class RollAnimationFactory {
 		switch(slotChest.animationID) {
 		case 0:
 		case 2:
-			return new NormalLeftToRightAnimation(main, slotChest, player);
+			return new NormalLeftToRightAnimation(Main.getInstance(), slotChest, player);
 		case 1:
-			return new NormalRightToLeftAnimation(main, slotChest, player);
+			return new NormalRightToLeftAnimation(Main.getInstance(), slotChest, player);
 		}
 		return null;
 		

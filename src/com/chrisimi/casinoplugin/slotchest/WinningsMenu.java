@@ -136,7 +136,7 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	};
 
 	private void initializeInventoryReadingTask() {
-		int taskNumber = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, inventoryReadingTask, 10L, 10L);
+		int taskNumber = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), inventoryReadingTask, 10L, 10L);
 		inventoryReadingTasks.put(this, taskNumber);
 	}
 

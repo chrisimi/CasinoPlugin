@@ -91,7 +91,7 @@ public class LeaderboardsignsManager implements Listener {
 			importData();
 		} else 
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Leaderboard signs are disabled!");
-		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, new Runnable()
+		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable()
 		{
 			
 			@Override
@@ -329,7 +329,7 @@ public class LeaderboardsignsManager implements Listener {
 		Random rnd = new Random();
 		
 		int randomWaitTime = rnd.nextInt(200);
-		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(main, new LeaderboardsignAnimation(main, LBsign, sign),
+		int taskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new LeaderboardsignAnimation(Main.getInstance(), LBsign, sign),
 				(long)randomWaitTime, (long)reloadTime);
 		if(taskID == -1) {
 			CasinoManager.LogWithColor(ChatColor.RED + "Error occured while trying to animate sign!");

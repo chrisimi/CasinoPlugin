@@ -47,7 +47,7 @@ public class MessageManager
 	//create the messages folder and EN_default.yml
 	private void initializeFiles()
 	{
-		messagesFolder = new File(main.getDataFolder(), "messages");
+		messagesFolder = new File(Main.getInstance().getDataFolder(), "messages");
 		try 
 		{
 			if(!(messagesFolder.exists()))

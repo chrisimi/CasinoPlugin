@@ -276,7 +276,7 @@ public class SlotChestsManager implements Listener{
 	 */
 	private void startAnimation(Player player, SlotChest slotchest)
 	{
-		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(main, new RollAnimationManager(player, slotchest, main), 0L);
+		Main.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new RollAnimationManager(player, slotchest, main), 0L);
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class SlotChestsManager implements Listener{
 	private void openWarehouseDirectly(PlayerInteractEvent event)
 	{
 		SlotChest chest = slotChests.get(event.getClickedBlock().getLocation());
-		new WarehouseMenu(main, chest, event.getPlayer());
+		new WarehouseMenu(Main.getInstance(), chest, event.getPlayer());
 	}
 
 	/**

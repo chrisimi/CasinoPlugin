@@ -361,7 +361,7 @@ public class SignsManager implements Listener {
 	private void playAnimationServerSigns(Sign sign, Double bet, Player player) {
 		playCount++;
 		
-		int taskint = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() {
+		int taskint = Bukkit.getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable() {
 			String wonSymbol = "";
 			int wonSymbolIndex = 0;
 			
@@ -434,7 +434,7 @@ public class SignsManager implements Listener {
 						}
 					}
 					sign.update(true);
-					Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+					Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 
 						@Override
 						public void run() {
@@ -467,7 +467,7 @@ public class SignsManager implements Listener {
 							}
 							
 							sign.update(true);
-							Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+							Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 								@Override
 								public void run() {
 									signToNormal(sign, bet);
@@ -498,7 +498,7 @@ public class SignsManager implements Listener {
 	}
 	
 	private void signToNormal(Sign sign, Double bet) { //normal sign layout
-		Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(Main.getInstance(), new Runnable() {
 
 			@Override
 			public void run() {
