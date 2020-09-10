@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.chrisimi.casinoplugin.scripts.*;
+import com.chrisimi.numberformatter.Configuration;
+import com.chrisimi.numberformatter.NumberFormatter;
 import com.chrisimi.versionchecker.VersionChecker;
 import com.chrisimi.versionchecker.VersionResult;
 import org.bukkit.Bukkit;
@@ -56,7 +58,7 @@ public class Main extends JavaPlugin {
 		createFiles();
 
 
-		UpdateManager.createConfigYml();
+
 		UpdateManager.reloadConfig();
 
 		msgManager = new MessageManager();
@@ -78,6 +80,36 @@ public class Main extends JavaPlugin {
 			HologramSystem.getInstance().startSystem(); //start hologram system
 		
 		InventoryAPI.initiate(this);
+
+		setUpNumberFormatter();
+	}
+
+	private void setUpNumberFormatter()
+	{
+		boolean atTheBegin = false;
+		try
+		{
+			atTheBegin = Boolean.parseBoolean(UpdateManager.getValue("currency-at-the-begin", false).toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to parse currency-at-the-begin. Using default value: false");
+		}
+
+		String currency = " $";
+		try
+		{
+			currency = UpdateManager.getValue("currency", currency).toString();
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Error while trying to parse currency. Using default value: ' $'");
+		}
+
+		Configuration conf = new Configuration()
+				.withCurrency(currency, atTheBegin)
+				.withDiv(1000)
+				.withSymbols(new String[] {"k", "M", "B", "T", "Q"});
+
+		NumberFormatter.setConfiguration(conf);
 	}
 
 	private void checkVersion()
@@ -182,6 +214,7 @@ public class Main extends JavaPlugin {
 			if(!file.exists() && file.createNewFile())
 			{
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully created " + file.getName());
+				UpdateManager.createConfigYml();
 			}
 		} catch (IOException e)
 		{

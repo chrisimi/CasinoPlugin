@@ -51,6 +51,7 @@
       			<includes>
       				<include>com.chrisimi:InventoryAPI</include>
 					<include>com.chrisimi:versionchecker</include>
+					<include>com.chrisimi:numberformatter</include>
       			</includes>
       		</artifactSet>
       		
@@ -143,6 +144,19 @@
 	<dependency>
 		<groupId>com.chrisimi</groupId>
 		<artifactId>versionchecker</artifactId>
+		<version>1.0</version>
+		<classifier>javadoc</classifier>
+	</dependency>
+
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>numberformatter</artifactId>
+		<version>1.0</version>
+		<scope>compile</scope>
+	</dependency>
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>numberformatter</artifactId>
 		<version>1.0</version>
 		<classifier>javadoc</classifier>
 	</dependency>

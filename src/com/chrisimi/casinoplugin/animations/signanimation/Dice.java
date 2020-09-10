@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.animations.signanimation;
 
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.block.Sign;
 
 import com.chrisimi.casinoplugin.main.Main;
@@ -37,10 +38,10 @@ public class Dice implements Runnable
         {
             if (thisSign.currentSignAnimation == 1)
             {
-                sign.setLine(2, "§6bet: " + Main.econ.format(thisSign.bet));
+                sign.setLine(2, "§6bet: " + NumberFormatter.format(thisSign.bet));
             } else
             {
-                sign.setLine(2, "§awin: " + Main.econ.format(thisSign.winMultiplicatorDice() * thisSign.bet));
+                sign.setLine(2, "§awin: " + NumberFormatter.format(thisSign.winMultiplicatorDice() * thisSign.bet));
             }
             //playersign is enabled
             if (!(thisSign.hasOwnerEnoughMoney()))

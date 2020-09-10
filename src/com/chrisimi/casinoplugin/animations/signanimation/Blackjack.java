@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.animations.signanimation;
 
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.block.Sign;
 
 import com.chrisimi.casinoplugin.main.Main;
@@ -37,12 +38,13 @@ public class Blackjack implements Runnable
             {
                 if (thisSign.currentSignAnimation == 0)
                 {
-                    sign.setLine(2, "§l§6min: " + Main.econ.format(thisSign.blackjackGetMinBet()));
+                    sign.setLine(2, "§l§6min: " + NumberFormatter.format(thisSign.blackjackGetMinBet()));
+
 
                     if (thisSign.plusinformations.contains("to"))
                         sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
                     else
-                        sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackGetMultiplicand() * thisSign.bet));
+                        sign.setLine(3, "§awin: " + NumberFormatter.format(thisSign.blackjackGetMultiplicand() * thisSign.bet));
 
                 } else
                 {
@@ -50,12 +52,12 @@ public class Blackjack implements Runnable
                     if (thisSign.isServerOwner() && thisSign.unlimitedBet())
                         sign.setLine(2, "§l§6max: §f§linfinite");
                     else
-                        sign.setLine(2, "§l§6max: " + Main.econ.format(thisSign.blackjackGetMaxBet()));
+                        sign.setLine(2, "§l§6max: " + NumberFormatter.format(thisSign.blackjackGetMaxBet()));
 
                     if (thisSign.plusinformations.contains("to"))
                         sign.setLine(3, "§a" + thisSign.plusinformations.split(";")[1]);
                     else
-                        sign.setLine(3, "§awin: " + Main.econ.format(thisSign.blackjackGetMultiplicand() * thisSign.blackjackGetMaxBet()));
+                        sign.setLine(3, "§awin: " + NumberFormatter.format(thisSign.blackjackGetMultiplicand() * thisSign.blackjackGetMaxBet()));
                 }
             } else
             {
