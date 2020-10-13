@@ -87,12 +87,12 @@
 		</repository>
 			
 		<repository>
-			<id>chrisi-jenkins</id>
-			<url>http://mittermaier.ddns.net:8080/plugin/repository/everything/</url>
+			<id>nexus</id>
+			<url>http://mittermaier.ddns.net:8082/repository/maven-snapshots/</url>
 		</repository>
 		<repository>
-		        <id>spigot-repo</id>
-		        <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 	    </repository>
 </repositories>
 <dependencies>
@@ -158,6 +158,19 @@
 		<groupId>com.chrisimi</groupId>
 		<artifactId>numberformatter</artifactId>
 		<version>1.0</version>
+		<classifier>javadoc</classifier>
+	</dependency>
+
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>commands</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</dependency>
+
+	<dependency>
+		<groupId>com.chrisimi</groupId>
+		<artifactId>commands</artifactId>
+		<version>1.0-SNAPSHOT</version>
 		<classifier>javadoc</classifier>
 	</dependency>
 
