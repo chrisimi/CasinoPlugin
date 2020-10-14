@@ -40,12 +40,14 @@ public class EditHologramCommand extends Command
             return;
         }
 
+        //check if it's a server hologram and the player has sufficient permission
         if (holo.isServerHologram() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server")))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;
         }
 
+        //check if it's a player hologram and afterwards if the player is admin or the owner of the hologram
         if (!holo.isServerHologram() && !(holo.getOwner().getUniqueId().equals(player.getUniqueId())) && !(Main.perm.has(player, "casino.admin")))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
