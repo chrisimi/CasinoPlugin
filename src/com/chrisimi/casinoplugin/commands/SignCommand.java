@@ -15,6 +15,7 @@ public class SignCommand extends Command
         this.description = "display information about the sign you are looking at";
         this.permissions = new String[] {"casino.dice.use", "casino.blackjack.use", "casino.slots.use"};
         this.permissionType = PermissionType.OR;
+        this.subCommands = new Command[] {new SignEnableCommand(), new SignDisableCommand()};
     }
 
     @Override
