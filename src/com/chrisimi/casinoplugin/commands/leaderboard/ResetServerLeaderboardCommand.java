@@ -1,6 +1,5 @@
-package com.chrisimi.casinoplugin.commands;
+package com.chrisimi.casinoplugin.commands.leaderboard;
 
-import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
@@ -12,15 +11,15 @@ import com.chrisimi.commands.UsageType;
 import org.bukkit.entity.Player;
 
 /**
- * the command instance for commmand /casino resetleaderboard
+ * the command instance for commmand /casino resetserverleaderboard
  */
-public class ResetLeaderboardCommand extends Command
+public class ResetServerLeaderboardCommand extends Command
 {
-    public ResetLeaderboardCommand()
+    public ResetServerLeaderboardCommand()
     {
         this.command = "resetleaderboard";
-        this.description = "reset all leaderboards in range (blocks) or only with a specific mode [sumamount, highestamount, sumloss, highestloss, count]";
-        this.permissions = new String[] {"casino.admin", "casino.serversigns", "casino.leaderboard.create"};
+        this.description = "reset all server leaderboards in range (blocks) or only with a specific mode [sumamount, highestamount, sumloss, highestloss, count]";
+        this.permissions = new String[] {"casino.admin", "casino.serversigns"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
         this.usageType = UsageType.PLAYER;
@@ -63,6 +62,7 @@ public class ResetLeaderboardCommand extends Command
         }
 
         //finish command
-        LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == -1, rangeBlocks, chosenMode == null, chosenMode);
+        LeaderboardsignsManager.resetServerLeaderboard(player, rangeBlocks == -1, rangeBlocks, chosenMode == null, chosenMode);
     }
 }
+

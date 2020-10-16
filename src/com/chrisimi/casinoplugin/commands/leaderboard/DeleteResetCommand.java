@@ -1,4 +1,4 @@
-package com.chrisimi.casinoplugin.commands;
+package com.chrisimi.casinoplugin.commands.leaderboard;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
