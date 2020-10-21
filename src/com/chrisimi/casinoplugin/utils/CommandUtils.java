@@ -8,6 +8,7 @@ import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -77,5 +78,15 @@ public class CommandUtils
             return null;
         }
         return leaderboardsign;
+    }
+
+    public static boolean isChestEmpty(Chest chest)
+    {
+        for (int i = 0; i < chest.getInventory().getSize(); i++)
+        {
+            if (chest.getInventory().getItem(i) != null)
+                return false;
+        }
+        return true;
     }
 }
