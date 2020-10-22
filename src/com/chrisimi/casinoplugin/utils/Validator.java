@@ -1,10 +1,24 @@
 package com.chrisimi.casinoplugin.utils;
 
+import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
+import org.bukkit.entity.Player;
 
 public class Validator
 {
+    public static boolean isHologramSystemUp(Player player)
+    {
+        if (!Main.hologramSystemUp)
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-holograms-disabled"));
+            return false;
+        }
+        return true;
+    }
+
     /**
      * check two strings for their equality in many ways
      * @param check String to check
