@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -16,6 +17,9 @@ public class Jackpot
     @Expose
     public String ownerUUID;
 
+    /**
+     * must be unique
+     */
     @Expose
     public String name;
 
@@ -100,5 +104,11 @@ public class Jackpot
         public double winMultiplicator;
         @Expose
         public Material material;
+    }
+
+    public static class JackpotContainer
+    {
+        @Expose
+        public List<Jackpot> jackpots = new ArrayList<>();
     }
 }
