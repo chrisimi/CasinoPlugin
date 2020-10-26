@@ -96,6 +96,16 @@ public class Jackpot
         return Bukkit.getOfflinePlayer(UUID.fromString(this.ownerUUID));
     }
 
+    public Location getLocation1()
+    {
+        return new Location(Bukkit.getWorld(world), x1, y1, z1);
+    }
+
+    public Location getLocation2()
+    {
+        return new Location(Bukkit.getWorld(world), x2, y2, z2);
+    }
+
     public class JackpotElement
     {
         @Expose

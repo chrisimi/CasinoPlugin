@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.scripts;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.casinoplugin.utils.Validator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.bukkit.ChatColor;
@@ -54,10 +55,13 @@ public class JackpotManager
                 return;
             }
 
-            //TODO add valid check
-
             for(Jackpot jackpot : container.jackpots)
             {
+                if(!Validator.validateJackpot(jackpot))
+                {
+                    CasinoManager.LogWithColor(ChatColor.RED + "Error while import jackpot data... one data is not valid: " + jackpot.name);
+                }
+
                 //when there is the same jackpot... just rename it
                 if(jackpotHashMap.containsKey(jackpot.name))
                 {
