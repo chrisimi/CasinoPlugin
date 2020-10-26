@@ -22,15 +22,13 @@ import com.chrisimi.commands.Commands;
 import com.chrisimi.commands.CommandsAPI;
 import com.chrisimi.commands.domain.MessageType;
 import com.chrisimi.commands.domain.PermSystem;
-import com.sun.istack.internal.NotNull;
-import com.sun.org.glassfish.external.statistics.annotations.Reset;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandsControl
 {
     public static CommandsAPI api;
     //init and manage the commands classes
-    public static void init(@NotNull JavaPlugin plugin)
+    public static void init(JavaPlugin plugin)
     {
         api = new Commands(plugin)
                 .setBaseCommand(new BaseCommand())
