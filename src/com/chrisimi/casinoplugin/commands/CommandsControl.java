@@ -51,12 +51,6 @@ public class CommandsControl
                 .addCommand(new ResetServerLeaderboardCommand())
                 .addCommand(new SetDateCommand())
 
-                //playersigns package
-                .addCommand(new BlackjackHelpCommand())
-                .addCommand(new DiceHelpCommand())
-                .addCommand(new LeaderboardHelpCommand())
-                .addCommand(new SlotsHelpCommand())
-
                 //slotchests package
                 .addCommand(new ChestLocationsCommand())
                 .addCommand(new CreateChestCommand())
