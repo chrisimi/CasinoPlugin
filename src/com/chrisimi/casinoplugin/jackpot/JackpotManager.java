@@ -113,8 +113,8 @@ public class JackpotManager
 
     /**
      * add a created jackpot to the system
-     * @param jackpot
-     * @return
+     * @param jackpot jackpot instance
+     * @return true if it was successful, false if not
      */
     public static boolean addJackpot(Jackpot jackpot)
     {
