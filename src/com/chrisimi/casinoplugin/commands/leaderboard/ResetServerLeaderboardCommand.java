@@ -17,7 +17,7 @@ public class ResetServerLeaderboardCommand extends Command
 {
     public ResetServerLeaderboardCommand()
     {
-        this.command = "resetleaderboard";
+        this.command = "resetserverleaderboard";
         this.description = "reset all server leaderboards in range (blocks) or only with a specific mode [sumamount, highestamount, sumloss, highestloss, count]";
         this.permissions = new String[] {"casino.admin", "casino.serversigns"};
         this.permissionType = PermissionType.OR;

@@ -37,7 +37,7 @@ public class SignEnableCommand extends Command
             return;
         }
 
-        if (cnf.isSignDisabled())
+        if (!cnf.isSignDisabled())
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player-playersigns_is_enabled"));
         } else

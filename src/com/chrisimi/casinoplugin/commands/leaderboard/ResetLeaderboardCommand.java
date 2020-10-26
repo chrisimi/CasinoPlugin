@@ -64,5 +64,6 @@ public class ResetLeaderboardCommand extends Command
 
         //finish command
         LeaderboardsignsManager.resetLeaderboard(player, rangeBlocks == -1, rangeBlocks, chosenMode == null, chosenMode);
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-sign_reset_successful"));
     }
 }

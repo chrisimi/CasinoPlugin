@@ -361,7 +361,7 @@ public class SlotChestsManager implements Listener{
 	public static ArrayList<SlotChest> getSlotChestsFromPlayer(Player player){
 		ArrayList<SlotChest> chestList = new ArrayList<SlotChest>();
 		for(Entry<Location, SlotChest> entry : slotChests.entrySet()) {
-			if(entry.getValue().getOwner().equals(player))
+			if(!entry.getValue().isServerOwner() && entry.getValue().getOwner().equals(player))
 				chestList.add(entry.getValue());
 		}
 		return chestList;
