@@ -1,6 +1,7 @@
-package com.chrisimi.casinoplugin.scripts;
+package com.chrisimi.casinoplugin.jackpot;
 
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.Validator;
 import com.google.gson.Gson;
