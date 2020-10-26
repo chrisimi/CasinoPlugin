@@ -110,4 +110,24 @@ public class JackpotManager
             CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to export jackpot data: " + e.getMessage());
         }
     }
+
+    /**
+     * add a created jackpot to the system
+     * @param jackpot
+     * @return
+     */
+    public static boolean addJackpot(Jackpot jackpot)
+    {
+        if(jackpotHashMap.containsKey(jackpot.name) || Validator.validateJackpot(jackpot))
+            return false;
+
+        jackpotHashMap.put(jackpot.name, jackpot);
+
+        JackpotSystem.initJackpot(jackpot);
+
+        //save
+        CasinoManager.jackpotManager.exportJackpots();
+
+        return true;
+    }
 }
