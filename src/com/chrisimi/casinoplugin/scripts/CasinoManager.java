@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 
+import com.chrisimi.casinoplugin.commands.CommandsControl;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -55,7 +56,8 @@ public class CasinoManager
 	}
 	public void initialize() {
 		
-		new CasinoCommandsListener();
+		//new CasinoCommandsListener();
+		CommandsControl.init(Main.getInstance());
 		new InventoryClickListener();
 		new PlayerJoinListener();
 		new CasinoChatListener();
