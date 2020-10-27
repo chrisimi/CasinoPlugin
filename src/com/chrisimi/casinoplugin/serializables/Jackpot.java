@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.serializables;
 
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.google.gson.annotations.Expose;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -58,6 +59,8 @@ public class Jackpot
     @Expose
     public List<JackpotElement> elements;
 
+    Hologram hologramInstance;
+
     public Jackpot(Location lrc1, Location lrc2, boolean isServerOwner, Player owner)
     {
         setLocation1(lrc1);
@@ -78,6 +81,13 @@ public class Jackpot
         this.x2 = lrc.getBlockX();
         this.y2 = lrc.getBlockY();
         this.z2 = lrc.getBlockZ();
+    }
+
+    public void setLocationHologram(Location lrc)
+    {
+        this.x3 = lrc.getBlockX();
+        this.y3 = lrc.getBlockY();
+        this.z3 = lrc.getBlockZ();
     }
 
     public void setServerOwner()
@@ -108,6 +118,11 @@ public class Jackpot
     public Location getLocation2()
     {
         return new Location(Bukkit.getWorld(world), x2, y2, z2);
+    }
+
+    public Location getLocationHologram()
+    {
+        return new Location(Bukkit.getWorld(world), x3, y3, z3);
     }
 
     public class JackpotElement
