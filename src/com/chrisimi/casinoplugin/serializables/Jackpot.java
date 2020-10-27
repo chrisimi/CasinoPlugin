@@ -132,6 +132,8 @@ public class Jackpot
         @Expose
         public double winMultiplicator;
         @Expose
+        public double weight;
+        @Expose
         public Material material;
     }
 
