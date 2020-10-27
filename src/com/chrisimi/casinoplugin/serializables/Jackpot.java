@@ -39,6 +39,14 @@ public class Jackpot
     @Expose
     public int z2;
 
+    //location of the jackpot hologram
+    @Expose
+    public int x3;
+    @Expose
+    public int y3;
+    @Expose
+    public int z3;
+
     @Expose
     public String world;
 
@@ -46,11 +54,7 @@ public class Jackpot
     public double bet;
     @Expose
     public double jackpotValue;
-    /**
-     * the elements to use
-     * double: the multiplicator if the win condition with this element is correct
-     * material: the material of the element
-     */
+
     @Expose
     public List<JackpotElement> elements;
 
