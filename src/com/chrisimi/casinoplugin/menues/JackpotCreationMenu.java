@@ -33,9 +33,11 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private Location pos1 = null;
     private Location pos2 = null;
     private String name = null;
-    private List<Jackpot.JackpotElement> elementList = new ArrayList<>();
+    public List<Jackpot.JackpotElement> elementList = new ArrayList<>();
 
     private WaitingFor waitingFor = WaitingFor.NONE;
+
+    private JackpotElementCreationMenu jackpotElementCreationMenu = null;
 
     /**
      * the create constructor
@@ -45,6 +47,6 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     {
         super(player, 9, Main.getInstance(), "Jackpot creation menu");
 
-
+        addEvents(this);
     }
 }
