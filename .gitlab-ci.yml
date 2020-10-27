@@ -1,0 +1,37 @@
+image: maven:3-openjdk-8
+
+variables:
+    MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+    MAVEN_OPTS: "-DMaven.repo.local=.m2/repository"
+
+cache:
+    paths:
+        - target/
+        - .m2/repository
+
+stages:
+    - build
+    - test
+    - deploy
+
+build:
+    stage: build
+    script:
+        - mvn $MAVEN_CLI_OPTS compile
+    artifacts:
+        paths:
+            - target/CasinoPlugin-*.jar
+        expire_in: 1 week
+
+test:
+    stage: test
+    script:
+        - mvn $MAVEN_CLI_OPTS test
+
+
+deploy:
+    stage: deploy
+    script:
+        - mvn $MAVEN_CLI_OPTS clean deploy -Dmaven.test.skip=true
+    only:
+        - master
