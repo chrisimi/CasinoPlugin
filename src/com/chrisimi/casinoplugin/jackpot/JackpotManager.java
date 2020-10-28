@@ -142,6 +142,20 @@ public class JackpotManager
         return true;
     }
 
+    public static boolean removeJackpot(Jackpot jackpot)
+    {
+        if(JackpotSystem.deleteJackpot(jackpot.name))
+        {
+            jackpotHashMap.remove(jackpot.name);
+
+            CasinoManager.jackpotManager.exportJackpots();
+
+            return true;
+        }
+
+        return false;
+    }
+
     public static boolean doesNameExists(String name)
     {
         return jackpotHashMap.get(name) != null;

@@ -59,7 +59,7 @@ public class Jackpot
     @Expose
     public List<JackpotElement> elements;
 
-    Hologram hologramInstance;
+    public Hologram hologramInstance;
 
     public Jackpot(Location lrc1, Location lrc2, boolean isServerOwner, Player owner)
     {
