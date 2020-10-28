@@ -131,6 +131,17 @@ public class JackpotManager
         return true;
     }
 
+    public static boolean updateJackpot(Jackpot jackpot)
+    {
+        jackpotHashMap.put(jackpot.name, jackpot);
+
+        JackpotSystem.initJackpot(jackpot);
+
+        CasinoManager.jackpotManager.exportJackpots();
+
+        return true;
+    }
+
     public static boolean doesNameExists(String name)
     {
         return jackpotHashMap.get(name) != null;

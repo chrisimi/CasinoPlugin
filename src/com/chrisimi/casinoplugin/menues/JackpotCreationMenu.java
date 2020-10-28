@@ -22,12 +22,14 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         NONE,
         POS_1,
         POS_2,
-        NAME
+        NAME,
+        BET
     }
 
     private final ItemStack setPos1 = ItemAPI.createItem("§6set position 1 of the jackpot area", Material.GOLD_INGOT);
     private final ItemStack setPos2 = ItemAPI.createItem("§6set position 2 of the jackpot area", Material.GOLD_INGOT);
     private final ItemStack setName = ItemAPI.createItem("§6set the name", Material.SIGN);
+    private final ItemStack setBet = ItemAPI.createItem("§6set bet", Material.GOLD_NUGGET);
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
     private final ItemStack setServerJackpot = ItemAPI.createItem("§6make jackpot server-managed", Material.GOLD_BLOCK);
     private final ItemStack setPlayerJackpot = ItemAPI.createItem("§6make jackpot player-managed", Material.COAL_BLOCK);
@@ -38,7 +40,10 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private Location pos2 = null;
     private String name = null;
     private boolean isServerJackpot = false;
+    private double bet = 0.0;
+
     private Jackpot editingJackpot = null;
+
     public List<Jackpot.JackpotElement> elementList = new ArrayList<>();
 
     private WaitingFor waitingFor = WaitingFor.NONE;
@@ -59,6 +64,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
         getInventory().setItem(0, setPos1);
         getInventory().setItem(1, setPos2);
+        getInventory().setItem(2, setBet);
         getInventory().setItem(3, setName);
         getInventory().setItem(5, openElementInventory);
         getInventory().setItem(8, finishButton);
@@ -73,9 +79,13 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         pos1 = jackpot.getLocation1();
         pos2 = jackpot.getLocation2();
         name = jackpot.name;
+        bet = jackpot.bet;
         isServerJackpot = jackpot.getOwner() == null;
         elementList = jackpot.elements;
         editingJackpot = jackpot;
+
+        //the player is not allowed to change the name
+        getInventory().setItem(3, null);
     }
 
     @EventMethodAnnotation
@@ -91,15 +101,61 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         }
         else if(event.getClicked().equals(setPos1)) setPos1();
         else if(event.getClicked().equals(setPos2)) setPos2();
+        else if(event.getClicked().equals(setBet)) setBet();
         else if(event.getClicked().equals(setName)) setName();
         else if(event.getClicked().equals(finishButton)) finish();
+    }
+
+    private void setBet()
+    {
+        waitingFor = WaitingFor.BET;
+        closeInventory();
+        waitforChatInput(player);
+        player.sendMessage("Type in the bet to roll for the jackpot!");
     }
 
     private void finish()
     {
         if(!allValuesCorrect) return;
 
-        //TODO add finish button
+        if(editingJackpot == null)
+        {
+            Jackpot jackpot = new Jackpot(pos1, pos2, isServerJackpot, player);
+            jackpot.name = name;
+            jackpot.bet = bet;
+            jackpot.elements = elementList;
+
+            if(JackpotManager.addJackpot(jackpot))
+            {
+                closeInventory();
+                player.sendMessage("You successfully added a new jackpot named " + jackpot.name);
+            }
+            else
+            {
+                player.sendMessage("§4An error occured while trying to add the new jackpot to the system");
+            }
+        }
+        else
+        {
+            editingJackpot.setLocation1(pos1);
+            editingJackpot.setLocation2(pos2);
+            editingJackpot.bet = bet;
+            editingJackpot.elements = elementList;
+
+            if(isServerJackpot) editingJackpot.setServerOwner();
+            else
+                editingJackpot.setOwner(player);
+
+            if(JackpotManager.updateJackpot(editingJackpot))
+            {
+                closeInventory();
+                player.sendMessage("You successfully added a new jackpot named " + editingJackpot.name);
+            }
+            else
+            {
+                player.sendMessage("§4An error occured while trying to add the new jackpot to the system");
+            }
+        }
     }
 
     private void setName()
@@ -153,9 +209,26 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                 {
                     player.sendMessage("Name does exists! Try again or exit with 'exit'");
                     waitforChatInput(player);
+                    return;
+                }
+            }
+            case BET:
+            {
+                try
+                {
+
+                    this.bet = Double.parseDouble(event.getMessage());
+                } catch(Exception e)
+                {
+                    player.sendMessage("this is not a valid number. Try again or exit with 'exit'");
+                    waitforChatInput(player);
+                    return;
                 }
             }
         }
+
+        openInventory();
+        waitingFor = WaitingFor.NONE;
     }
 
     private void updateInventory()
