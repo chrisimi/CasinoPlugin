@@ -125,7 +125,7 @@ public class Jackpot
         return new Location(Bukkit.getWorld(world), x3, y3, z3);
     }
 
-    public class JackpotElement
+    public static class JackpotElement
     {
         @Expose
         public boolean triggerJackpot;

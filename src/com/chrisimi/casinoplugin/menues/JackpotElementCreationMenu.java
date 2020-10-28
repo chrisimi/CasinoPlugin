@@ -2,13 +2,14 @@ package com.chrisimi.casinoplugin.menues;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
-import com.chrisimi.inventoryapi.ChatEvent;
-import com.chrisimi.inventoryapi.EventMethodAnnotation;
-import com.chrisimi.inventoryapi.IInventoryAPI;
-import com.chrisimi.inventoryapi.Inventory;
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.*;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -35,12 +36,19 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
 
     private final JackpotCreationMenu jackpotCreationMenu;
 
+    private List<ItemStack> itemStacks = new ArrayList<>();
+    private final ItemStack backButton = ItemAPI.createItem("§2back", Material.STONE_BUTTON);
+    private final ItemStack fillMaterial = ItemAPI.createItem("", Material.PINK_STAINED_GLASS_PANE);
+
     public JackpotElementCreationMenu(Player player, JackpotCreationMenu jackpotCreationMenu)
     {
         super(player, 9*6, Main.getInstance(), "jackpot element creation menu");
         this.jackpotCreationMenu = jackpotCreationMenu;
 
         addEvents(this);
+        updateInventory();
+
+        getInventory().setItem(45, backButton);
     }
 
     //runnable which checks the 49th slot because of the input
@@ -49,7 +57,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         @Override
         public void run()
         {
-            if(getInventory().getItem(49) != null && !containsMaterial(jackpotCreationMenu.elementList, getInventory().getItem(49).getType()))
+            if(itemStacks.size() <= LIMIT && getInventory().getItem(49) != null && !containsMaterial(jackpotCreationMenu.elementList, getInventory().getItem(49).getType()))
             {
                 //add item as element
                 waitforChatInput(player);
@@ -127,9 +135,72 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         }
     }
 
+    @EventMethodAnnotation
+    public void onClick(ClickEvent event)
+    {
+        if(event.getClicked().equals(backButton))
+        {
+            closeInventory();
+            jackpotCreationMenu.openInventory();
+        }
+    }
+
     private void addNewItem()
     {
+        Jackpot.JackpotElement element = new Jackpot.JackpotElement();
+        element.material = newElementMaterial;
+        element.triggerJackpot = newElementIsJackpotTrigger;
+        element.weight = newElementWeight;
+        element.winMultiplicator = newElementWinMultiplicator;
+        jackpotCreationMenu.elementList.add(element);
 
+        updateInventory();
+    }
+
+
+    private void updateInventory()
+    {
+        updateItems();
+
+        for(int i = 0; i < LIMIT; i++)
+        {
+            if(itemStacks.get(i) != null)
+                getInventory().setItem(i, itemStacks.get(i));
+            else
+                getInventory().setItem(i, fillMaterial);
+        }
+    }
+
+    private void updateItems()
+    {
+        itemStacks.clear();
+        //sort
+        jackpotCreationMenu.elementList.sort(new Comparator<Jackpot.JackpotElement>()
+        {
+            @Override
+            public int compare(Jackpot.JackpotElement o1, Jackpot.JackpotElement o2)
+            {
+                if(o1.triggerJackpot && !o2.triggerJackpot) return 1;
+                else if (o2.triggerJackpot && !o1.triggerJackpot) return -1;
+                else
+                    return 0;
+            }
+        });
+
+        for(Jackpot.JackpotElement element : jackpotCreationMenu.elementList)
+        {
+            ItemStack itemStack = null;
+            if(element.triggerJackpot)
+                itemStack = ItemAPI.createItem("§6jackpot-trigger", element.material);
+            else
+                itemStack = ItemAPI.createItem("§6" + element.winMultiplicator + "x the bet", element.material);
+
+            List<String> lore = new ArrayList<>();
+            lore.add("chance: " + Math.round((element.weight / totalWeight(jackpotCreationMenu.elementList)) * 100) / 100);
+            ItemAPI.setLore(itemStack, lore);
+
+            itemStacks.add(itemStack);
+        }
     }
 
     private boolean containsMaterial(List<Jackpot.JackpotElement> elementList, Material material)
