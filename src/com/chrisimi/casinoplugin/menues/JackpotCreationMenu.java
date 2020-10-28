@@ -3,8 +3,7 @@ package com.chrisimi.casinoplugin.menues;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
-import com.chrisimi.inventoryapi.IInventoryAPI;
-import com.chrisimi.inventoryapi.Inventory;
+import com.chrisimi.inventoryapi.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,7 +35,10 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     public List<Jackpot.JackpotElement> elementList = new ArrayList<>();
 
     private WaitingFor waitingFor = WaitingFor.NONE;
+    private boolean allValuesCorrect = false;
 
+
+    //TODO add possibility for server jackpot
     private JackpotElementCreationMenu jackpotElementCreationMenu = null;
 
     /**
@@ -48,5 +50,63 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         super(player, 9, Main.getInstance(), "Jackpot creation menu");
 
         addEvents(this);
+    }
+    //TODO add constructor for edditing an existing jackpot
+
+    @EventMethodAnnotation
+    public void onClick(ClickEvent event)
+    {
+        if(event.getClicked().equals(openElementInventory))
+        {
+            if(jackpotElementCreationMenu == null)
+                jackpotElementCreationMenu = new JackpotElementCreationMenu(player, this);
+
+            closeInventory();
+            jackpotElementCreationMenu.openInventory();
+        }
+        else if(event.getClicked().equals(setPos1)) setPos1();
+        else if(event.getClicked().equals(setPos2)) setPos2();
+        else if(event.getClicked().equals(setName)) setName();
+        else if(event.getClicked().equals(finishButton)) finish();
+    }
+
+    private void finish()
+    {
+        if(!allValuesCorrect) return;
+
+        //TODO add finish button
+    }
+
+    private void setName()
+    {
+        waitingFor = WaitingFor.NAME;
+        closeInventory();
+        waitforChatInput(player);
+        player.sendMessage("Type in the name of the jackpt - it must be unique!");
+    }
+
+    private void setPos2()
+    {
+        waitingFor = WaitingFor.POS_2;
+        closeInventory();
+        waitforChatInput(player);
+        player.sendMessage("Go to the bottom right block of your jackpot display. When you look at the bock type something in the chat.");
+    }
+
+    private void setPos1()
+    {
+        waitingFor = WaitingFor.POS_1;
+        closeInventory();
+        waitforChatInput(player);
+        player.sendMessage("Go to the top left block of your jackpot display. When you look at the block type something in the chat.");
+    }
+
+    @EventMethodAnnotation
+    public void onChat(ChatEvent event)
+    {
+        switch(waitingFor)
+        {
+
+        }
     }
 }
