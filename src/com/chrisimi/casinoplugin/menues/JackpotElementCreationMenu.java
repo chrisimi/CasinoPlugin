@@ -8,9 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * the inventory to manage the elements of a jackpot
@@ -36,7 +34,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
 
     private final JackpotCreationMenu jackpotCreationMenu;
 
-    private List<ItemStack> itemStacks = new ArrayList<>();
+    private Map<Jackpot.JackpotElement, ItemStack> itemStacks = new HashMap<>();
     private final ItemStack backButton = ItemAPI.createItem("§2back", Material.STONE_BUTTON);
     private final ItemStack fillMaterial = ItemAPI.createItem("", Material.PINK_STAINED_GLASS_PANE);
 
@@ -199,7 +197,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
             lore.add("chance: " + Math.round((element.weight / totalWeight(jackpotCreationMenu.elementList)) * 100) / 100);
             ItemAPI.setLore(itemStack, lore);
 
-            itemStacks.add(itemStack);
+            itemStacks.put(element, itemStack);
         }
     }
 
