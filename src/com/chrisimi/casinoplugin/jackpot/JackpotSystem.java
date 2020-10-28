@@ -1,7 +1,9 @@
 package com.chrisimi.casinoplugin.jackpot;
 
+import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,13 +13,56 @@ public class JackpotSystem
 {
     private static Map<String, Jackpot> activeJackpots = new HashMap<String, Jackpot>();
 
+    private static int bukkitTaskID = 0;
+
+    public static void initSystem()
+    {
+        if(bukkitTaskID == 0)
+            bukkitTaskID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), systemRunnable, 20L, 20L * 60 * 2);
+        else
+        {
+            stopSystem();
+            initSystem();
+        }
+    }
+
+    public static void stopSystem()
+    {
+        Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskID);
+        bukkitTaskID = 0;
+    }
+
+    private static Runnable systemRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            for(Jackpot jackpot : activeJackpots.values())
+            {
+                updateJackpot(jackpot);
+            }
+        }
+    };
+
+    private static void updateJackpot(Jackpot jackpot)
+    {
+        if(jackpot.hologramInstance != null)
+            jackpot.hologramInstance.delete();
+
+        jackpot.hologramInstance = createHologram(jackpot);
+    }
+
     /**
      * init the jackpot - create the hologram etc...
      * @param jackpot
      */
     public static void initJackpot(Jackpot jackpot)
     {
-
+        if(!activeJackpots.containsKey(jackpot.name))
+        {
+            jackpot.hologramInstance = createHologram(jackpot);
+            activeJackpots.put(jackpot.name, jackpot);
+        }
     }
 
     /**
@@ -29,7 +74,7 @@ public class JackpotSystem
     {
         if(!activeJackpots.containsKey(name)) return false;
 
-        Jackpot jackpot = activeJackpots.get(name);
+        Jackpot jackpot = activeJackpots.remove(name);
 
         //remove the jackpot hologram
         jackpot.hologramInstance.delete();
@@ -39,6 +84,12 @@ public class JackpotSystem
 
     private static Hologram createHologram(Jackpot jackpot)
     {
-        return null;
+        Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), jackpot.getLocationHologram());
+
+        hologram.appendTextLine("§l§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
+        hologram.appendTextLine("");
+        hologram.appendTextLine("Try it now with the bet of " + Main.econ.format(jackpot.bet));
+
+        return hologram;
     }
 }
