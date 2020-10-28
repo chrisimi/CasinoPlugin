@@ -29,18 +29,21 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private final ItemStack setPos2 = ItemAPI.createItem("§6set position 2 of the jackpot area", Material.GOLD_INGOT);
     private final ItemStack setName = ItemAPI.createItem("§6set the name", Material.SIGN);
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
+    private final ItemStack setServerJackpot = ItemAPI.createItem("§6make jackpot server-managed", Material.GOLD_BLOCK);
+    private final ItemStack setPlayerJackpot = ItemAPI.createItem("§6make jackpot player-managed", Material.COAL_BLOCK);
+
     private final ItemStack openElementInventory = ItemAPI.createItem("§6edit elements", Material.BOOK);
 
     private Location pos1 = null;
     private Location pos2 = null;
     private String name = null;
+    private boolean isServerJackpot = false;
     public List<Jackpot.JackpotElement> elementList = new ArrayList<>();
 
     private WaitingFor waitingFor = WaitingFor.NONE;
     private boolean allValuesCorrect = false;
 
 
-    //TODO add possibility for server jackpot
     private JackpotElementCreationMenu jackpotElementCreationMenu = null;
 
     /**
@@ -52,6 +55,12 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         super(player, 9, Main.getInstance(), "Jackpot creation menu");
 
         addEvents(this);
+
+        getInventory().setItem(0, setPos1);
+        getInventory().setItem(1, setPos2);
+        getInventory().setItem(3, setName);
+        getInventory().setItem(5, openElementInventory);
+        getInventory().setItem(8, finishButton);
     }
     //TODO add constructor for edditing an existing jackpot
 
@@ -132,6 +141,14 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                     waitforChatInput(player);
                 }
             }
+        }
+    }
+
+    private void updateInventory()
+    {
+        if(Main.perm.has(player, "casino.jackpot.server") || Main.perm.has(player, "casino.admin"))
+        {
+            getInventory().setItem(8, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
         }
     }
 
