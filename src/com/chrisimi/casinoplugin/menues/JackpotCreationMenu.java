@@ -38,6 +38,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private Location pos2 = null;
     private String name = null;
     private boolean isServerJackpot = false;
+    private Jackpot editingJackpot = null;
     public List<Jackpot.JackpotElement> elementList = new ArrayList<>();
 
     private WaitingFor waitingFor = WaitingFor.NONE;
@@ -61,8 +62,21 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         getInventory().setItem(3, setName);
         getInventory().setItem(5, openElementInventory);
         getInventory().setItem(8, finishButton);
+
+        updateInventory();
     }
-    //TODO add constructor for edditing an existing jackpot
+
+    public JackpotCreationMenu(Player player, Jackpot jackpot)
+    {
+        this(player);
+
+        pos1 = jackpot.getLocation1();
+        pos2 = jackpot.getLocation2();
+        name = jackpot.name;
+        isServerJackpot = jackpot.getOwner() == null;
+        elementList = jackpot.elements;
+        editingJackpot = jackpot;
+    }
 
     @EventMethodAnnotation
     public void onClick(ClickEvent event)
