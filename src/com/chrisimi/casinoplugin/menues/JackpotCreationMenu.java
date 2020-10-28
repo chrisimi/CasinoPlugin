@@ -6,6 +6,7 @@ import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.CommandUtils;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,6 +18,8 @@ import java.util.List;
 
 public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 {
+    //TODO add message.yml integration
+
     private enum WaitingFor
     {
         NONE,
@@ -67,11 +70,15 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         getInventory().setItem(2, setBet);
         getInventory().setItem(3, setName);
         getInventory().setItem(5, openElementInventory);
-        getInventory().setItem(8, finishButton);
 
         updateInventory();
     }
 
+    /**
+     * the constructor for updating this jackpot through the creation menu
+     * @param player the player who want to edit the jackpot
+     * @param jackpot the jackpot instance
+     */
     public JackpotCreationMenu(Player player, Jackpot jackpot)
     {
         this(player);
@@ -231,12 +238,37 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.NONE;
     }
 
+    private void setFinishButtonLore()
+    {
+        boolean allValuesValid = false;
+
+        List<String> lore = new ArrayList<>();
+
+        lore.add((pos1 != null) ? "- §aposition 1 set" : "- §4position 1 not set");
+        lore.add((pos2 != null) ? "- §aposition 2 set" : "- §4position 2 not set");
+        lore.add((bet != 0.0) ? "- §abet set to " + NumberFormatter.format(bet) : "- §4bet not set");
+        lore.add((elementList.size() >= 3) ? "- §a" + elementList.size() + " elements set" : "- §4not enough elements set");
+        lore.add((name != null) ? "- §aname set to §l" + name : "- §4no name set");
+        lore.add((isServerJackpot) ? "- §eis a server-managed jackpot" : "- §eis a player-managed jackpot");
+
+        allValuesValid = pos1 != null && pos2 != null && bet != 0.0 && elementList.size() >= 3 && name != null;
+
+        ItemAPI.changeName(finishButton, (allValuesValid) ? "§acreate or update jackpot" : "§4jackpot not correctly set up");
+        ItemAPI.setLore(finishButton, lore);
+
+        allValuesCorrect = allValuesValid;
+    }
+
     private void updateInventory()
     {
         if(Main.perm.has(player, "casino.jackpot.server") || Main.perm.has(player, "casino.admin"))
         {
             getInventory().setItem(8, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
         }
+
+        //update finish button and set it in the inventory
+        setFinishButtonLore();
+        getInventory().setItem(8, finishButton);
     }
 
     private Location getTargetLocation()
