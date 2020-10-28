@@ -1,11 +1,14 @@
 package com.chrisimi.casinoplugin.menues;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.casinoplugin.utils.CommandUtils;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,8 +22,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         NONE,
         POS_1,
         POS_2,
-        NAME,
-        WEIGHT, //when editing -> when player writes delete instead of the new weight, delete this jackpot element
+        NAME
     }
 
     private final ItemStack setPos1 = ItemAPI.createItem("§6set position 1 of the jackpot area", Material.GOLD_INGOT);
@@ -106,7 +108,38 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     {
         switch(waitingFor)
         {
+            case POS_1:
+                pos1 = getTargetLocation();
+                break;
+            case POS_2:
+                pos2 = getTargetLocation();
+                break;
+            case NAME:
+            {
+                if(event.getMessage().equalsIgnoreCase("exit"))
+                {
+                    waitingFor = WaitingFor.NONE;
+                    openInventory();
+                }
 
+                if(!JackpotManager.doesNameExists(event.getMessage()))
+                {
+                    name = event.getMessage();
+                }
+                else
+                {
+                    player.sendMessage("Name does exists! Try again or exit with 'exit'");
+                    waitforChatInput(player);
+                }
+            }
         }
+    }
+
+    private Location getTargetLocation()
+    {
+        Block block = player.getTargetBlock(null, 10);
+        if(block != null) return block.getLocation();
+
+        return null;
     }
 }
