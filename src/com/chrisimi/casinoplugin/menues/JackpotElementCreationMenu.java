@@ -31,6 +31,8 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
     private double newElementWinMultiplicator = 0.0;
     private Material newElementMaterial = null;
     private boolean newElementIsJackpotTrigger = false;
+    private Jackpot.JackpotElement elementToEdit = null;
+
 
     private final JackpotCreationMenu jackpotCreationMenu;
 
@@ -58,11 +60,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
             if(itemStacks.size() <= LIMIT && getInventory().getItem(49) != null && !containsMaterial(jackpotCreationMenu.elementList, getInventory().getItem(49).getType()))
             {
                 //add item as element
-                waitforChatInput(player);
-                waitingFor = WaitingFor.WEIGHT;
-                closeInventory();
-                player.sendMessage("type in the weight, total weight " + String.format("#.##", totalWeight(jackpotCreationMenu.elementList)));
-                newElementMaterial = getInventory().getItem(49).getType();
+                startNewItemEvent();
             }
         }
     };
@@ -136,23 +134,67 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
     @EventMethodAnnotation
     public void onClick(ClickEvent event)
     {
+
+        for(Map.Entry<Jackpot.JackpotElement, ItemStack> elementItemStackEntry : itemStacks.entrySet())
+        {
+            if(event.getClicked().equals(elementItemStackEntry.getValue()))
+            {
+                if(player.isSneaking())
+                {
+                    //delete element
+                    jackpotCreationMenu.elementList.remove(elementItemStackEntry.getKey());
+                    updateInventory();
+                }
+                else
+                {
+                    //edit block
+                    elementToEdit = elementItemStackEntry.getKey();
+                    startNewItemEvent();
+                }
+                break;
+            }
+        }
+
         if(event.getClicked().equals(backButton))
         {
             closeInventory();
             jackpotCreationMenu.openInventory();
         }
+
+
+    }
+
+    private void startNewItemEvent()
+    {
+        waitforChatInput(player);
+        waitingFor = WaitingFor.WEIGHT;
+        closeInventory();
+        player.sendMessage("type in the weight, total weight " + String.format("#.##", totalWeight(jackpotCreationMenu.elementList)));
+        newElementMaterial = getInventory().getItem(49).getType();
     }
 
     private void addNewItem()
     {
-        Jackpot.JackpotElement element = new Jackpot.JackpotElement();
-        element.material = newElementMaterial;
-        element.triggerJackpot = newElementIsJackpotTrigger;
-        element.weight = newElementWeight;
-        element.winMultiplicator = newElementWinMultiplicator;
-        jackpotCreationMenu.elementList.add(element);
+        if(elementToEdit != null)
+        {
+            elementToEdit.material = newElementMaterial;
+            elementToEdit.triggerJackpot = newElementIsJackpotTrigger;
+            elementToEdit.weight = newElementWeight;
+            elementToEdit.winMultiplicator = newElementWinMultiplicator;
+        }
+        else
+        {
+            Jackpot.JackpotElement element = new Jackpot.JackpotElement();
+            element.material = newElementMaterial;
+            element.triggerJackpot = newElementIsJackpotTrigger;
+            element.weight = newElementWeight;
+            element.winMultiplicator = newElementWinMultiplicator;
+            jackpotCreationMenu.elementList.add(element);
+        }
 
         updateInventory();
+
+        elementToEdit = null;
     }
 
 
