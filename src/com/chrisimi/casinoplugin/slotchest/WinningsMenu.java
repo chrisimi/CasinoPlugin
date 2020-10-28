@@ -3,6 +3,8 @@ package com.chrisimi.casinoplugin.slotchest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.chrisimi.casinoplugin.utils.ItemAPI;
@@ -39,8 +41,13 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	}
 	
 	public static HashMap<WinningsMenu, Integer> inventoryReadingTasks = new HashMap<>();
-	
-	
+
+	/**
+	 * stores which itemstack display which itemstack
+	 * key: displayed
+	 * value: to display
+	 */
+	private static Map<ItemStack, ItemStack> itemStackItemStackMap = new HashMap<>();
 
 	private Player owner;
 	private SlotChest slotChest;
@@ -224,19 +231,20 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 			return;
 		}
 		
-		HashMap<ItemStack, Double> newHashMap = new HashMap<>(); 
-		
-		for(Entry<ItemStack, Double> entry : slotChest.itemsToWin.entrySet())
+		HashMap<ItemStack, Double> newHashMap = new HashMap<>();
+
+		for(Entry<ItemStack, ItemStack> entry : itemStackItemStackMap.entrySet())
 		{
 			if(entry.getKey().equals(event.getCurrentItem()))
 			{
-				removeItemToWin(entry.getKey());
-				bukkitInventory.setItem(event.getSlot(), null);
-				System.out.println("cancel");
-				event.setCancelled(true);
-			} else
-				newHashMap.put(entry.getKey(), entry.getValue());
-			
+				if(entry.getKey().equals(event.getCurrentItem()))
+				{
+					removeItemToWin(entry.getValue());
+					bukkitInventory.setItem(event.getSlot(), null);
+					event.setCancelled(true);
+				} else
+					newHashMap.put(entry.getKey(), slotChest.itemsToWin.get(entry.getValue()));
+			}
 		}
 
 		slotChest.itemsToWin = newHashMap;
@@ -296,6 +304,8 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 	
 	private void updateInventory()
 	{
+		itemStackItemStackMap.clear();
+
 		for(int i = 0; i < 9*4; i++) bukkitInventory.setItem(i, null);
 		
 		int index = 0;
@@ -311,9 +321,25 @@ public class WinningsMenu extends com.chrisimi.inventoryapi.Inventory implements
 			
 			if(index >= 9*4) return;
 			
-			ItemStack item = entry.getKey();
-			ItemAPI.changeName(item, String.format("§5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100));
+			ItemStack item2 = entry.getKey();
+			ItemStack item = item2.clone();
+
+			String chanceString = String.format("§r§5weight: " + entry.getValue() + " ( %.2f %% )", (entry.getValue()/slotChest.getGesamtGewicht())*100);
+			if(item.getItemMeta().getLore() == null || item.getItemMeta().getLore().size() == 0)
+			{
+				List<String> a = new ArrayList<>();
+				a.add(chanceString);
+				ItemAPI.setLore(item, a);
+			}
+			else if(item.getItemMeta().getLore() != null && !item.getItemMeta().getLore().contains(chanceString))
+			{
+				ItemMeta meta = item.getItemMeta();
+				meta.getLore().add(chanceString);
+				item.setItemMeta(meta);
+			}
+
 			bukkitInventory.setItem(index, item);
+			itemStackItemStackMap.put(item, item2);
 			
 			index++;
 		}
