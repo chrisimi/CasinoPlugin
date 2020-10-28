@@ -26,11 +26,12 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         POS_1,
         POS_2,
         NAME,
-        BET
+        HOLOGRAM_POS, BET
     }
 
     private final ItemStack setPos1 = ItemAPI.createItem("§6set position 1 of the jackpot area", Material.GOLD_INGOT);
     private final ItemStack setPos2 = ItemAPI.createItem("§6set position 2 of the jackpot area", Material.GOLD_INGOT);
+    private final ItemStack setHologramPos = ItemAPI.createItem("§6set position of the hologram", Material.SIGN);
     private final ItemStack setName = ItemAPI.createItem("§6set the name", Material.SIGN);
     private final ItemStack setBet = ItemAPI.createItem("§6set bet", Material.GOLD_NUGGET);
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
@@ -41,6 +42,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
     private Location pos1 = null;
     private Location pos2 = null;
+    private Location hologramPos = null;
     private String name = null;
     private boolean isServerJackpot = false;
     private double bet = 0.0;
@@ -69,6 +71,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         getInventory().setItem(1, setPos2);
         getInventory().setItem(2, setBet);
         getInventory().setItem(3, setName);
+        getInventory().setItem(4, setHologramPos);
         getInventory().setItem(5, openElementInventory);
 
         updateInventory();
@@ -85,6 +88,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
         pos1 = jackpot.getLocation1();
         pos2 = jackpot.getLocation2();
+        hologramPos = jackpot.getLocationHologram();
         name = jackpot.name;
         bet = jackpot.bet;
         isServerJackpot = jackpot.getOwner() == null;
@@ -108,9 +112,18 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         }
         else if(event.getClicked().equals(setPos1)) setPos1();
         else if(event.getClicked().equals(setPos2)) setPos2();
+        else if(event.getClicked().equals(setHologramPos)) setHologramPos();
         else if(event.getClicked().equals(setBet)) setBet();
         else if(event.getClicked().equals(setName)) setName();
         else if(event.getClicked().equals(finishButton)) finish();
+    }
+
+    private void setHologramPos()
+    {
+        waitingFor = WaitingFor.HOLOGRAM_POS;
+        closeInventory();
+        waitforChatInput(player);
+        player.sendMessage("Go to the position where you want to have your hologram");
     }
 
     private void setBet()
@@ -131,6 +144,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
             jackpot.name = name;
             jackpot.bet = bet;
             jackpot.elements = elementList;
+            jackpot.setLocationHologram(hologramPos);
 
             if(JackpotManager.addJackpot(jackpot))
             {
@@ -148,6 +162,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
             editingJackpot.setLocation2(pos2);
             editingJackpot.bet = bet;
             editingJackpot.elements = elementList;
+            editingJackpot.setLocationHologram(hologramPos);
 
             if(isServerJackpot) editingJackpot.setServerOwner();
             else
@@ -232,6 +247,9 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                     return;
                 }
             }
+            case HOLOGRAM_POS:
+                hologramPos = player.getLocation();
+                break;
         }
 
         openInventory();
@@ -246,12 +264,13 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
         lore.add((pos1 != null) ? "- §aposition 1 set" : "- §4position 1 not set");
         lore.add((pos2 != null) ? "- §aposition 2 set" : "- §4position 2 not set");
+        lore.add((hologramPos != null) ? "- §ahologram position set" : "- §4hologram position not set");
         lore.add((bet != 0.0) ? "- §abet set to " + NumberFormatter.format(bet) : "- §4bet not set");
         lore.add((elementList.size() >= 3) ? "- §a" + elementList.size() + " elements set" : "- §4not enough elements set");
         lore.add((name != null) ? "- §aname set to §l" + name : "- §4no name set");
         lore.add((isServerJackpot) ? "- §eis a server-managed jackpot" : "- §eis a player-managed jackpot");
 
-        allValuesValid = pos1 != null && pos2 != null && bet != 0.0 && elementList.size() >= 3 && name != null;
+        allValuesValid = pos1 != null && pos2 != null && hologramPos != null && bet != 0.0 && elementList.size() >= 3 && name != null;
 
         ItemAPI.changeName(finishButton, (allValuesValid) ? "§acreate or update jackpot" : "§4jackpot not correctly set up");
         ItemAPI.setLore(finishButton, lore);
