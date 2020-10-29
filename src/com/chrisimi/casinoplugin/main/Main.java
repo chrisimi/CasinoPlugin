@@ -34,7 +34,8 @@ public class Main extends JavaPlugin {
 	public static File playerSignsYml;
 	public static File dataYml;
 	public static File leaderboardSignsYml;
-	
+	public static File jackpotJson;
+
 	public static File slotChestsYml;
 	
 	private static String pathToFolderOfPlugin; //.../plugins/CasinoPlugin/
@@ -167,6 +168,9 @@ public class Main extends JavaPlugin {
 
 		slotChestsYml = new File(pathToFolderOfPlugin, "slotchests.json");
 		createFile(slotChestsYml);
+
+		jackpotJson = new File(pathToFolderOfPlugin, "jackpot.json");
+		createFile(jackpotJson);
 	}
 
 	private void activateEconomySystem()

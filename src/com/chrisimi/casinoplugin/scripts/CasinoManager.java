@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 import com.chrisimi.casinoplugin.commands.CommandsControl;
+import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,7 +29,8 @@ public class CasinoManager
 	private static RollCommand rollCommand;
 	public static SlotChestsManager slotChestManager;
 	public static LeaderboardsignsManager leaderboardManager;
-	
+	public static JackpotManager jackpotManager;
+
 	public static Boolean configEnableConsoleMessages = true;
 	
 	public static File debugfile;
@@ -66,6 +68,7 @@ public class CasinoManager
 		rollCommand = new RollCommand();
 		slotChestManager = new SlotChestsManager();
 		leaderboardManager = new LeaderboardsignsManager();
+		jackpotManager = new JackpotManager();
 		
 		try 
 		{

@@ -4,6 +4,7 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
+import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import org.bukkit.entity.Player;
 
@@ -98,5 +99,27 @@ public class Validator
 
         return conf.getSlotsWeight().length == 3 && conf.getSlotsSymbols().length == 3
         && conf.bet <= PlayerSignsManager.getMaxBetSlots();
+    }
+
+    /**
+     * validate if a jackpot has valid values
+     * @param jackpot the jackpot to check
+     * @return true if the jackpot is valid, false if not
+     */
+    public static boolean validateJackpot(Jackpot jackpot)
+    {
+        try
+        {
+            if(jackpot.getLocation1() == null || jackpot.getLocation2() == null)
+                throw new Exception();
+
+            if(jackpot.name.isEmpty())
+                throw new Exception();
+        } catch(Exception e)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
