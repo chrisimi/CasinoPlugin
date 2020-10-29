@@ -160,6 +160,11 @@ public class JackpotManager
         return false;
     }
 
+    public static void save()
+    {
+        CasinoManager.jackpotManager.exportJackpots();
+    }
+
     public static boolean doesNameExists(String name)
     {
         return jackpotHashMap.get(name) != null;

@@ -55,6 +55,7 @@ public class JackpotSystem
             jackpot.hologramInstance.delete();
 
         jackpot.hologramInstance = createHologram(jackpot);
+        JackpotManager.save();
     }
 
     /**
@@ -92,14 +93,14 @@ public class JackpotSystem
         Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), jackpot.getLocationHologram());
 
         if(Main.econ == null)
-            hologram.appendTextLine("§l§nJACKPOT: " + jackpot.jackpotValue);
+            hologram.appendTextLine("§l§6§nJACKPOT: " + jackpot.jackpotValue);
         else
-            hologram.appendTextLine("§l§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
+            hologram.appendTextLine("§l§6§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
         hologram.appendTextLine("");
         if(Main.econ == null)
-            hologram.appendTextLine("Try it now with the bet of " + jackpot.bet);
+            hologram.appendTextLine("§6Try it now with the bet of " + jackpot.bet);
         else
-            hologram.appendTextLine("Try it now with the bet of " + Main.econ.format(jackpot.bet));
+            hologram.appendTextLine("§6Try it now with the bet of " + Main.econ.format(jackpot.bet));
 
         return hologram;
     }
@@ -132,6 +133,7 @@ public class JackpotSystem
         jackpot.jackpotValue += jackpot.bet;
 
         jackpot.isRunning = true;
+        updateJackpot(jackpot);
         new SimpleJackpotAnimation(jackpot, player).run();
 
     }
