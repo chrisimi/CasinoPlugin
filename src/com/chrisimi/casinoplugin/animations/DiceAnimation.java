@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.animations;
 
 import java.util.Random;
 
+import com.chrisimi.casinoplugin.scripts.*;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
@@ -9,11 +10,6 @@ import org.bukkit.entity.Player;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
-import com.chrisimi.casinoplugin.scripts.CasinoManager;
-import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
-import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
-import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
-import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 /**
@@ -113,7 +109,7 @@ public class DiceAnimation implements Runnable
             Main.econ.depositPlayer(player, wonamount);
             //Main.econ.withdrawPlayer(owner, wonamount);
             thisSign.withdrawOwner(wonamount);
-            if (!thisSign.isServerOwner() && owner.isOnline())
+            if (!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
             {
                 //owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§4%s won %s at your Dice sign.", player.getName(), Main.econ.format(wonamount)));
                 owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(wonamount)));
@@ -128,7 +124,7 @@ public class DiceAnimation implements Runnable
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_lost").replace("%amount%", Main.econ.format(thisSign.bet)));
 
             LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
-            if (!thisSign.isServerOwner() && owner.isOnline())
+            if (!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
             {
                 //owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));
                 owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-owner-player_lost").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(thisSign.bet)));

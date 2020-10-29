@@ -13,7 +13,6 @@ import java.util.UUID;
 public class NotificationManager
 {
     //TODO
-    // dice
     // slots
     // slotchest
     // blackjack
