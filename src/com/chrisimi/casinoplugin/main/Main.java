@@ -35,6 +35,7 @@ public class Main extends JavaPlugin {
 	public static File dataYml;
 	public static File leaderboardSignsYml;
 	public static File jackpotJson;
+	public static File notificationsYml;
 
 	public static File slotChestsYml;
 	
@@ -152,8 +153,6 @@ public class Main extends JavaPlugin {
 
 	private void createFiles()
 	{
-
-
 		signsYml = new File(pathToFolderOfPlugin,"signs.json");
 		createFile(signsYml);
 
@@ -171,6 +170,9 @@ public class Main extends JavaPlugin {
 
 		jackpotJson = new File(pathToFolderOfPlugin, "jackpot.json");
 		createFile(jackpotJson);
+
+		notificationsYml = new File(pathToFolderOfPlugin, "notifications.yml");
+		createFile(notificationsYml);
 	}
 
 	private void activateEconomySystem()
