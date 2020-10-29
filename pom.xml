@@ -169,7 +169,7 @@
         <dependency>
             <groupId>com.chrisimi</groupId>
             <artifactId>InventoryAPI</artifactId>
-            <version>0.1.1</version>
+            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
 
