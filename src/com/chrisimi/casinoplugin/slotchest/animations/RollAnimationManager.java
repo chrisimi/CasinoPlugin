@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.management.modelmbean.ModelMBeanAttributeInfo;
 
+import com.chrisimi.casinoplugin.scripts.NotificationManager;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -103,7 +104,7 @@ public class RollAnimationManager implements Runnable, Listener
 		Main.econ.withdrawPlayer(player, slotChest.bet);
 		slotChest.giveOwnerMoney(slotChest.bet);
 
-		if(!slotChest.isServerOwner() && owner.isOnline())
+		if(!slotChest.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-owner_pay_message").replace("%amount%", Main.econ.format(slotChest.bet)));
 
 		rollAnimation.initialize();

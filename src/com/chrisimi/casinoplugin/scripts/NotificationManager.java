@@ -12,9 +12,7 @@ import java.util.UUID;
 
 public class NotificationManager
 {
-    //TODO
-    // slotchest
-    // blackjack
+    //TODO jackpot
 
 
     /**
