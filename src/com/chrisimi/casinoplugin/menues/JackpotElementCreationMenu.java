@@ -256,7 +256,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         return false;
     }
 
-    public double totalWeight(List<Jackpot.JackpotElement> elements)
+    public static double totalWeight(List<Jackpot.JackpotElement> elements)
     {
         double result = 0.0;
         for(Jackpot.JackpotElement element : elements)
