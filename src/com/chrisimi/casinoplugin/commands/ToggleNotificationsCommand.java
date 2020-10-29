@@ -1,5 +1,8 @@
 package com.chrisimi.casinoplugin.commands;
 
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.NotificationManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
 
@@ -23,6 +26,17 @@ public class ToggleNotificationsCommand extends Command
     @Override
     public void execute(Event event)
     {
-        //TODO implement logic
+        if(NotificationManager.hasNotificationsDisabled(event.getPlayer()))
+        {
+            NotificationManager.enableNotifications(event.getPlayer());
+
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("notifications-enable"));
+        }
+        else
+        {
+            NotificationManager.disableNotifications(event.getPlayer());
+
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("notifications-disable"));
+        }
     }
 }
