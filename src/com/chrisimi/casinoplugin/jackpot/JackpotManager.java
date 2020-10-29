@@ -48,7 +48,7 @@ public class JackpotManager
                 sb.append(line);
 
             //extract data
-            if(line.length() <= 24) return;
+            if(sb.toString().length() <= 24) return;
 
             Jackpot.JackpotContainer container = gson.fromJson(sb.toString(), Jackpot.JackpotContainer.class);
             if(container == null)
@@ -72,6 +72,7 @@ public class JackpotManager
                 }
 
                 jackpotHashMap.put(jackpot.name, jackpot);
+                JackpotSystem.initJackpot(jackpot);
             }
 
             if(CasinoManager.configEnableConsoleMessages)

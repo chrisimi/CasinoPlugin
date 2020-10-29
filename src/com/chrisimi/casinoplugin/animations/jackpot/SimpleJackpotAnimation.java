@@ -41,7 +41,7 @@ public class SimpleJackpotAnimation implements Runnable
         @Override
         public void run()
         {
-            if(rolls >= 0)
+            if(rolls <= 0)
             {
                 Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskID);
                 finish();
