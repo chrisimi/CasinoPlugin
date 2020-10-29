@@ -3,6 +3,7 @@ package com.chrisimi.casinoplugin.jackpot;
 import com.chrisimi.casinoplugin.animations.jackpot.SimpleJackpotAnimation;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
 import org.bukkit.entity.Player;
@@ -88,9 +89,15 @@ public class JackpotSystem
     {
         Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), jackpot.getLocationHologram());
 
-        hologram.appendTextLine("§l§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
+        if(Main.econ == null)
+            hologram.appendTextLine("§l§nJACKPOT: " + jackpot.jackpotValue);
+        else
+            hologram.appendTextLine("§l§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
         hologram.appendTextLine("");
-        hologram.appendTextLine("Try it now with the bet of " + Main.econ.format(jackpot.bet));
+        if(Main.econ == null)
+            hologram.appendTextLine("Try it now with the bet of " + jackpot.bet);
+        else
+            hologram.appendTextLine("Try it now with the bet of " + Main.econ.format(jackpot.bet));
 
         return hologram;
     }
