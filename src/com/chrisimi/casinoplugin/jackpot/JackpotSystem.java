@@ -107,7 +107,6 @@ public class JackpotSystem
 
     public static void runJackpot(String name, Player player)
     {
-        //TODO add money to pay system
         Jackpot jackpot = activeJackpots.get(name);
         if(jackpot == null) return;
 

@@ -5,6 +5,7 @@ import com.chrisimi.casinoplugin.commands.holograms.CreateHologramCommand;
 import com.chrisimi.casinoplugin.commands.holograms.EditHologramCommand;
 import com.chrisimi.casinoplugin.commands.holograms.MyHologramsCommand;
 import com.chrisimi.casinoplugin.commands.jackpot.CreateJackpotCommand;
+import com.chrisimi.casinoplugin.commands.jackpot.EditJackpotCommand;
 import com.chrisimi.casinoplugin.commands.jackpot.RunJackpotCommand;
 import com.chrisimi.casinoplugin.commands.leaderboard.DeleteResetCommand;
 import com.chrisimi.casinoplugin.commands.leaderboard.ResetLeaderboardCommand;
@@ -61,6 +62,7 @@ public class CommandsControl
                 //jackpot package
                 .addCommand(new CreateJackpotCommand())
                 .addCommand(new RunJackpotCommand())
+                .addCommand(new EditJackpotCommand())
 
                 //rest
                 .addCommand(new RollCommand())

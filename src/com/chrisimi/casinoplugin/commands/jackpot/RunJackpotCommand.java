@@ -19,6 +19,7 @@ public class RunJackpotCommand extends Command
     @Override
     public void execute(Event event)
     {
-        JackpotSystem.runJackpot(event.getArgs()[0], event.getPlayer());
+        if(event.getArgs().length >= 1)
+            JackpotSystem.runJackpot(event.getArgs()[0], event.getPlayer());
     }
 }
