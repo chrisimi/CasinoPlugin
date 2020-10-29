@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.serializables;
 
+import com.chrisimi.casinoplugin.main.Main;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.google.gson.annotations.Expose;
 import org.bukkit.Bukkit;
@@ -129,6 +130,17 @@ public class Jackpot
         return new Location(Bukkit.getWorld(world), x3, y3, z3);
     }
 
+    public JackpotElement getJackpotElement(Material material)
+    {
+        for(JackpotElement element : elements)
+        {
+            if(element.material.equals(material))
+                return element;
+        }
+
+        return null;
+    }
+
     public static class JackpotElement
     {
         @Expose
@@ -145,5 +157,19 @@ public class Jackpot
     {
         @Expose
         public List<Jackpot> jackpots = new ArrayList<>();
+    }
+
+    public void payOwner(double amount, Player player)
+    {
+        if(!isServerOwner())
+            Main.econ.depositPlayer(getOwner(), amount);
+        Main.econ.withdrawPlayer(player, amount);
+    }
+
+    public void payPlayer(double amount, Player player)
+    {
+        if(!isServerOwner())
+            Main.econ.withdrawPlayer(getOwner(), amount);
+        Main.econ.depositPlayer(player, amount);
     }
 }

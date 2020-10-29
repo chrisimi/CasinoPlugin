@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.animations.jackpot;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.menues.JackpotElementCreationMenu;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
@@ -114,12 +115,26 @@ public class SimpleJackpotAnimation implements Runnable
 
     private void finish()
     {
-        //TODO add money payout/jackpot payout
         int zHeight = (int) ((yDifference % 2 == 1) ? Math.floor((yDifference / 2) + 1) : yDifference / 2);
 
-        if(hasPlayerWon(zHeight).getKey())
+        Map.Entry<Boolean, Material> entry = hasPlayerWon(zHeight);
+
+        if(entry.getKey())
         {
-            player.sendMessage("you have won");
+            Jackpot.JackpotElement element = jackpot.getJackpotElement(entry.getValue());
+
+            if(element.triggerJackpot)
+            {
+                player.sendMessage("You banged the jackpot. You won " + jackpot.jackpotValue);
+                jackpot.payPlayer(jackpot.jackpotValue, player);
+                jackpot.jackpotValue = 0.0;
+            }
+            else
+            {
+                player.sendMessage("You won but not banged the jackpot... You won " + jackpot.bet * element.winMultiplicator);
+                jackpot.payPlayer(jackpot.bet * element.winMultiplicator, player);
+                jackpot.jackpotValue -= jackpot.bet * element.winMultiplicator;
+            }
         }
         else
         {
@@ -127,6 +142,7 @@ public class SimpleJackpotAnimation implements Runnable
         }
 
         jackpot.isRunning = false;
+        JackpotSystem.updateJackpot(jackpot);
     }
 
     private Map.Entry<Boolean, Material> hasPlayerWon(int zheight)

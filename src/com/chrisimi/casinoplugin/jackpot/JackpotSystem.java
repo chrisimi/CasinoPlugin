@@ -49,7 +49,7 @@ public class JackpotSystem
         }
     };
 
-    private static void updateJackpot(Jackpot jackpot)
+    public static void updateJackpot(Jackpot jackpot)
     {
         if(jackpot.hologramInstance != null)
             jackpot.hologramInstance.delete();
@@ -115,6 +115,21 @@ public class JackpotSystem
             player.sendMessage("jackpot is running");
             return;
         }
+
+        if(Main.econ.getBalance(player) < jackpot.bet)
+        {
+            player.sendMessage("You don't have enough money");
+            return;
+        }
+
+        if(!jackpot.isServerOwner() && Main.econ.getBalance(jackpot.getOwner()) < jackpot.jackpotValue)
+        {
+            player.sendMessage("Owner don't have enough money");
+            return;
+        }
+
+        jackpot.payOwner(jackpot.bet, player);
+        jackpot.jackpotValue += jackpot.bet;
 
         jackpot.isRunning = true;
         new SimpleJackpotAnimation(jackpot, player).run();
