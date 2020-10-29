@@ -232,5 +232,5 @@ messages:
 
    creationmenu-error-message: "An error occurred. {error}"
 
-   notifications-enable: "Notifications are now §lenabled!"
-   notifications-disable: "Notifications are now §ldisabled!"
+   notifications-enable: "Notifications are now &lenabled!"
+   notifications-disable: "Notifications are now &ldisabled!"

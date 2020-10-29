@@ -29,7 +29,7 @@ public class NotificationManager
             yamlConfiguration = YamlConfiguration.loadConfiguration(Main.notificationsYml);
         } catch(Exception e)
         {
-            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to open notifcation.yml: " + e.getMessage());
+            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to open notifications.yml: " + e.getMessage());
             e.printStackTrace(CasinoManager.getPrintWriterForDebug());
         }
 
@@ -71,6 +71,7 @@ public class NotificationManager
                 toExport.add(uuid.toString());
 
             yamlConfiguration.set("notification-disabled", toExport);
+            yamlConfiguration.save(Main.notificationsYml);
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to export the notification settings: " + e.getMessage());
@@ -97,7 +98,7 @@ public class NotificationManager
     {
         if(hasNotificationsDisabled(player))
         {
-            disabledNotifications.add(player.getUniqueId());
+            disabledNotifications.remove(player.getUniqueId());
             export();
         }
     }
@@ -110,7 +111,7 @@ public class NotificationManager
     {
         if(!hasNotificationsDisabled(player))
         {
-            disabledNotifications.remove(player.getUniqueId());
+            disabledNotifications.add(player.getUniqueId());
             export();
         }
     }
