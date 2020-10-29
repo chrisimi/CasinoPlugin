@@ -285,7 +285,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     {
         if(Main.perm.has(player, "casino.jackpot.server") || Main.perm.has(player, "casino.admin"))
         {
-            getInventory().setItem(8, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
+            getInventory().setItem(7, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
         }
 
         //update finish button and set it in the inventory
