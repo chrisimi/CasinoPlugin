@@ -75,6 +75,7 @@ public class Jackpot
         this.x1 = lrc.getBlockX();
         this.y1 = lrc.getBlockY();
         this.z1 = lrc.getBlockZ();
+        this.world = lrc.getWorld().getName();
     }
 
     public void setLocation2(Location lrc)
@@ -82,6 +83,7 @@ public class Jackpot
         this.x2 = lrc.getBlockX();
         this.y2 = lrc.getBlockY();
         this.z2 = lrc.getBlockZ();
+        this.world = lrc.getWorld().getName();
     }
 
     public void setLocationHologram(Location lrc)
@@ -89,6 +91,7 @@ public class Jackpot
         this.x3 = lrc.getBlockX();
         this.y3 = lrc.getBlockY();
         this.z3 = lrc.getBlockZ();
+        this.world = lrc.getWorld().getName();
     }
 
     public void setServerOwner()

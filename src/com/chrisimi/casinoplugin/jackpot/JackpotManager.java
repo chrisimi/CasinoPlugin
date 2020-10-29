@@ -9,6 +9,7 @@ import com.google.gson.GsonBuilder;
 import org.bukkit.ChatColor;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,6 +77,7 @@ public class JackpotManager
             if(CasinoManager.configEnableConsoleMessages)
                 CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + container.jackpots.size() + " jackpots");
 
+            rb.close();
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to import jackpot data: " + e.getMessage());
@@ -92,7 +94,7 @@ public class JackpotManager
             bw = new BufferedWriter(new FileWriter(Main.jackpotJson));
 
             Jackpot.JackpotContainer container = new Jackpot.JackpotContainer();
-            container.jackpots = (List<Jackpot>) jackpotHashMap.values();
+            container.jackpots = new ArrayList<>(jackpotHashMap.values());
 
             String json = gson.toJson(container);
 
@@ -101,6 +103,8 @@ public class JackpotManager
 
             //write new
             bw.write(json);
+
+            bw.close();
 
             if(CasinoManager.configEnableConsoleMessages)
                 CasinoManager.LogWithColor(ChatColor.GREEN + "Successully exported " + container.jackpots.size() + " jackpots");
@@ -118,7 +122,7 @@ public class JackpotManager
      */
     public static boolean addJackpot(Jackpot jackpot)
     {
-        if(jackpotHashMap.containsKey(jackpot.name) || Validator.validateJackpot(jackpot))
+        if(jackpotHashMap.containsKey(jackpot.name) || !Validator.validateJackpot(jackpot))
             return false;
 
         jackpotHashMap.put(jackpot.name, jackpot);

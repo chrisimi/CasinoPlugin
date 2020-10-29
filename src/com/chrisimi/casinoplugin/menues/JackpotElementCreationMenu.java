@@ -61,6 +61,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
             {
                 //add item as element
                 startNewItemEvent();
+                newElementMaterial = getInventory().getItem(49).getType();
             }
         }
     };
@@ -134,7 +135,6 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
     @EventMethodAnnotation
     public void onClick(ClickEvent event)
     {
-
         for(Map.Entry<Jackpot.JackpotElement, ItemStack> elementItemStackEntry : itemStacks.entrySet())
         {
             if(event.getClicked().equals(elementItemStackEntry.getValue()))
@@ -151,7 +151,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
                     elementToEdit = elementItemStackEntry.getKey();
                     startNewItemEvent();
                 }
-                break;
+                return;
             }
         }
 
@@ -159,9 +159,18 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         {
             closeInventory();
             jackpotCreationMenu.openInventory();
+            return;
         }
 
-
+        //add item if not in the same inventory
+        if(!event.getClicked().equals(fillMaterial))
+        {
+            if(itemStacks.size() <= LIMIT && !containsMaterial(jackpotCreationMenu.elementList, event.getClicked().getType()))
+            {
+                startNewItemEvent();
+                newElementMaterial = event.getClicked().getType();
+            }
+        }
     }
 
     private void startNewItemEvent()
@@ -170,7 +179,6 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         waitingFor = WaitingFor.WEIGHT;
         closeInventory();
         player.sendMessage("type in the weight, total weight " + String.format("#.##", totalWeight(jackpotCreationMenu.elementList)));
-        newElementMaterial = getInventory().getItem(49).getType();
     }
 
     private void addNewItem()
@@ -202,13 +210,18 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
     {
         updateItems();
 
-        for(int i = 0; i < LIMIT; i++)
+        int index = 0;
+
+        for(Map.Entry<Jackpot.JackpotElement, ItemStack> entry : itemStacks.entrySet())
         {
-            if(itemStacks.get(i) != null)
-                getInventory().setItem(i, itemStacks.get(i));
-            else
-                getInventory().setItem(i, fillMaterial);
+            if(index >= LIMIT) continue;
+
+            getInventory().setItem(index, entry.getValue());
+            index++;
         }
+
+        for(int i = index; i < LIMIT; i++)
+            getInventory().setItem(i, fillMaterial);
     }
 
     private void updateItems()

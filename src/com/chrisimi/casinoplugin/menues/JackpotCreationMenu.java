@@ -75,6 +75,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         getInventory().setItem(5, openElementInventory);
 
         updateInventory();
+        openInventory();
     }
 
     /**
@@ -233,6 +234,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                     waitforChatInput(player);
                     return;
                 }
+                break;
             }
             case BET:
             {
@@ -253,6 +255,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         }
 
         openInventory();
+        updateInventory();
         waitingFor = WaitingFor.NONE;
     }
 
