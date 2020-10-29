@@ -21,35 +21,59 @@ public class NotificationManager
 
     public NotificationManager()
     {
-        yamlConfiguration = YamlConfiguration.loadConfiguration(Main.notificationsYml);
+        try
+        {
+            yamlConfiguration = YamlConfiguration.loadConfiguration(Main.notificationsYml);
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to open notifcation.yml: " + e.getMessage());
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+        }
+
         importData();
     }
 
     private static synchronized void importData()
     {
-        List<String> list = (List<String>) yamlConfiguration.getList("notification-disabled");
-
-        for(String string : list)
+        try
         {
-            try
+            List<String> list = (List<String>) yamlConfiguration.getList("notification-disabled");
+
+            for(String string : list)
             {
-                UUID uuid = UUID.fromString(string);
-                disabledNotifications.add(uuid);
-            } catch(Exception e)
-            {
-                CasinoManager.LogWithColor(ChatColor.RED + "One player UUID is not valid!");
+                try
+                {
+                    UUID uuid = UUID.fromString(string);
+                    disabledNotifications.add(uuid);
+                } catch(Exception e)
+                {
+                    CasinoManager.LogWithColor(ChatColor.RED + "One player UUID is not valid!");
+                }
             }
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to import notification settings: " + e.getMessage());
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
         }
+
     }
 
     private static synchronized void export()
     {
-        List<String> toExport = new ArrayList<>();
+        try
+        {
+            List<String> toExport = new ArrayList<>();
 
-        for(UUID uuid : disabledNotifications)
-            toExport.add(uuid.toString());
+            for(UUID uuid : disabledNotifications)
+                toExport.add(uuid.toString());
 
-        yamlConfiguration.set("notification-disabled", toExport);
+            yamlConfiguration.set("notification-disabled", toExport);
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.RED + "Error while trying to export the notification settings: " + e.getMessage());
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+        }
+
     }
 
     /**
@@ -75,6 +99,10 @@ public class NotificationManager
         }
     }
 
+    /**
+     * disable notifications for the player
+     * @param player the player for whom to deactivate the notifications
+     */
     public static void disableNotifications(OfflinePlayer player)
     {
         if(!hasNotificationsDisabled(player))
