@@ -74,6 +74,8 @@ public class SimpleJackpotAnimation implements Runnable
             nextLrc.getBlock().setType(currLrc.getBlock().getType());
         }
     }
+    //TODO overwork randomness?? looks sometimes weird?
+
 
     private Material getRandomBlock()
     {
@@ -112,6 +114,7 @@ public class SimpleJackpotAnimation implements Runnable
 
     private void finish()
     {
+        //TODO add money payout/jackpot payout
         int zHeight = (int) ((yDifference % 2 == 1) ? Math.floor((yDifference / 2) + 1) : yDifference / 2);
 
         if(hasPlayerWon(zHeight).getKey())

@@ -15,12 +15,11 @@ import java.util.List;
 
 public class JackpotManager
 {
+
+    //TODO add editing command etc.
     private static final HashMap<String, Jackpot> jackpotHashMap = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 
-    //TODO import/export
-    //TODO creation handeling
-    //TODO player handeling
     public JackpotManager()
     {
         init();

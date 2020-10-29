@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class JackpotSystem
 {
+
+    //TODO add messageManager integration
     private static Map<String, Jackpot> activeJackpots = new HashMap<String, Jackpot>();
 
     private static int bukkitTaskID = 0;
@@ -104,6 +106,7 @@ public class JackpotSystem
 
     public static void runJackpot(String name, Player player)
     {
+        //TODO add money to pay system
         Jackpot jackpot = activeJackpots.get(name);
         if(jackpot == null) return;
 
@@ -113,6 +116,8 @@ public class JackpotSystem
             return;
         }
 
+        jackpot.isRunning = true;
         new SimpleJackpotAnimation(jackpot, player).run();
+
     }
 }
