@@ -1,9 +1,11 @@
 package com.chrisimi.casinoplugin.jackpot;
 
+import com.chrisimi.casinoplugin.animations.jackpot.SimpleJackpotAnimation;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,5 +93,19 @@ public class JackpotSystem
         hologram.appendTextLine("Try it now with the bet of " + Main.econ.format(jackpot.bet));
 
         return hologram;
+    }
+
+    public static void runJackpot(String name, Player player)
+    {
+        Jackpot jackpot = activeJackpots.get(name);
+        if(jackpot == null) return;
+
+        if(jackpot.isRunning)
+        {
+            player.sendMessage("jackpot is running");
+            return;
+        }
+
+        new SimpleJackpotAnimation(jackpot, player).run();
     }
 }

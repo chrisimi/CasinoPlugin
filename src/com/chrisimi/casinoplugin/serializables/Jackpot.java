@@ -60,6 +60,7 @@ public class Jackpot
     public List<JackpotElement> elements;
 
     public Hologram hologramInstance;
+    public boolean isRunning = false;
 
     public Jackpot(Location lrc1, Location lrc2, boolean isServerOwner, Player owner)
     {

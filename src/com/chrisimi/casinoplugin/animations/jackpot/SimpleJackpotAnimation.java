@@ -122,6 +122,8 @@ public class SimpleJackpotAnimation implements Runnable
         {
             player.sendMessage("you lost");
         }
+
+        jackpot.isRunning = false;
     }
 
     private Map.Entry<Boolean, Material> hasPlayerWon(int zheight)
