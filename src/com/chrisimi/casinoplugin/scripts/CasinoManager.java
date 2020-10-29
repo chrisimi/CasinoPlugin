@@ -30,6 +30,7 @@ public class CasinoManager
 	public static SlotChestsManager slotChestManager;
 	public static LeaderboardsignsManager leaderboardManager;
 	public static JackpotManager jackpotManager;
+	public static NotificationManager notificationManager;
 
 	public static Boolean configEnableConsoleMessages = true;
 	
@@ -69,7 +70,8 @@ public class CasinoManager
 		slotChestManager = new SlotChestsManager();
 		leaderboardManager = new LeaderboardsignsManager();
 		jackpotManager = new JackpotManager();
-		
+		notificationManager = new NotificationManager();
+
 		try 
 		{
 			configEnableConsoleMessages = Boolean.valueOf(UpdateManager.getValue("enable-console-messages").toString());

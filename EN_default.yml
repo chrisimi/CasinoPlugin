@@ -231,3 +231,6 @@ messages:
    creationmenu-creation-slots_successful: "You successfully created or updated a slots sign!"
 
    creationmenu-error-message: "An error occurred. {error}"
+
+   notifications-enable: "Notifications are now &lenabled!"
+   notifications-disable: "Notifications are now &ldisabled!"

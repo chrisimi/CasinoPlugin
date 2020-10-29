@@ -2,16 +2,13 @@ package com.chrisimi.casinoplugin.animations;
 
 import java.util.Random;
 
+import com.chrisimi.casinoplugin.scripts.*;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
-import com.chrisimi.casinoplugin.scripts.CasinoManager;
-import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
-import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
-import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 
 public class SlotsAnimation implements Runnable
@@ -50,7 +47,7 @@ public class SlotsAnimation implements Runnable
 		Main.econ.withdrawPlayer(player, bet);
 		thisSign.depositOwner(bet);
 		
-		if(!thisSign.isServerOwner() && owner.isOnline())
+		if(!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-owner_message_player_is_playing").replace("%playername%", player.getName()).replace("%money%", Main.econ.format(bet)));
 		startAnimation();
 	}
@@ -223,7 +220,7 @@ public class SlotsAnimation implements Runnable
 	private void playerLost()
 	{
 		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
-		if(!thisSign.isServerOwner() && owner.isOnline())
+		if(!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_lost").replace("%playername%", player.getDisplayName()));
 		if(!thisSign.isServerOwner() && !owner.isOnline())
 		{
@@ -236,7 +233,7 @@ public class SlotsAnimation implements Runnable
 	private void playerWon()
 	{
 		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, winAmount);
-		if(!thisSign.isServerOwner() && owner.isOnline())
+		if(!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won").replace("%playername%", player.getDisplayName()));
 		Main.econ.depositPlayer(player, winAmount + thisSign.bet);
 		thisSign.withdrawOwner(winAmount + thisSign.bet);
