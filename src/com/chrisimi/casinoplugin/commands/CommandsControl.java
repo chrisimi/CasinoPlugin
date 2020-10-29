@@ -68,6 +68,7 @@ public class CommandsControl
                 .addCommand(new RollCommand())
                 .addCommand(new SignCommand())
                 .addCommand(new SlotsCommand())
+                .addCommand(new ToggleNotificationsCommand())
                 .generateHelpCommand(
                         new BlackjackHelpCommand(),
                         new DiceHelpCommand(),
