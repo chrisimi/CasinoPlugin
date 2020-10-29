@@ -19,11 +19,11 @@ public class SimpleJackpotAnimation implements Runnable
     private final Player player;
 
     private int bukkitTaskID = 0;
-    private int rolls = 10;
+    private int rolls = 100;
 
     private int xDirection = 0;
-    private int yDirection = 0;
-    private int zDifference = 0;
+    private int zDirection = 0;
+    private int yDifference = 0;
 
     public SimpleJackpotAnimation(Jackpot jackpot, Player player)
     {
@@ -112,7 +112,7 @@ public class SimpleJackpotAnimation implements Runnable
 
     private void finish()
     {
-        int zHeight = (int) ((zDifference % 2 == 1) ? Math.floor((zDifference / 2) + 1) : zDifference / 2);
+        int zHeight = (int) ((yDifference % 2 == 1) ? Math.floor((yDifference / 2) + 1) : yDifference / 2);
 
         if(hasPlayerWon(zHeight).getKey())
         {
@@ -149,19 +149,19 @@ public class SimpleJackpotAnimation implements Runnable
         Map<Location, List<Location>> result = new HashMap<>();
 
         xDirection = 0;
-        yDirection = 0;
-        zDifference = jackpot.getLocation1().getBlockZ() - jackpot.getLocation2().getBlockZ();
+        zDirection = 0;
+        yDifference = jackpot.getLocation1().getBlockY() - jackpot.getLocation2().getBlockY();
 
         if(jackpot.getLocation1().getBlockX() != jackpot.getLocation2().getBlockX())
         {
             xDirection = (jackpot.getLocation1().getBlockX() > jackpot.getLocation2().getBlockX()) ? -1 : 1;
 
-            for(int x = jackpot.getLocation1().getBlockX(); x >= jackpot.getLocation2().getBlockX(); x += xDirection)
+            for(int x = jackpot.getLocation1().getBlockX(); x <= jackpot.getLocation2().getBlockX(); x += xDirection)
             {
                 List<Location> blocks = new ArrayList<>();
-                for(int i = 0; i < zDifference; i++)
+                for(int i = 0; i <= yDifference; i++)
                 {
-                    blocks.add(new Location(jackpot.getLocation1().getWorld(), x, jackpot.getLocation1().getBlockY(), jackpot.getLocation1().getBlockZ() - i));
+                    blocks.add(new Location(jackpot.getLocation1().getWorld(), x, jackpot.getLocation1().getBlockY() - i, jackpot.getLocation1().getBlockZ()));
                 }
 
                 result.put(blocks.get(0), blocks);
@@ -169,14 +169,14 @@ public class SimpleJackpotAnimation implements Runnable
         }
         else
         {
-            yDirection = (jackpot.getLocation1().getBlockY() > jackpot.getLocation2().getBlockY()) ? -1 : 1;
+            zDirection = (jackpot.getLocation1().getBlockZ() > jackpot.getLocation2().getBlockZ()) ? -1 : 1;
 
-            for(int y = jackpot.getLocation1().getBlockY(); y >= jackpot.getLocation2().getBlockY(); y += yDirection)
+            for(int z = jackpot.getLocation1().getBlockZ(); z <= jackpot.getLocation2().getBlockZ(); z += zDirection)
             {
                 List<Location> blocks = new ArrayList<>();
-                for(int i = 0; i < zDifference; i++)
+                for(int i = 0; i <= yDifference; i++)
                 {
-                    blocks.add(new Location(jackpot.getLocation1().getWorld(), jackpot.getLocation1().getBlockX(), y, jackpot.getLocation1().getBlockZ() - i));
+                    blocks.add(new Location(jackpot.getLocation1().getWorld(), jackpot.getLocation1().getBlockX(), jackpot.getLocation1().getBlockY() - i, z));
                 }
 
                 result.put(blocks.get(0), blocks);
