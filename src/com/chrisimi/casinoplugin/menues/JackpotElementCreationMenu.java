@@ -182,7 +182,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         waitingFor = WaitingFor.WEIGHT;
         closeInventory();
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-weight")
-                .replaceAll("%total_weight%", NumberFormatter.format(totalWeight(jackpotCreationMenu.elementList))));
+                .replace("%total_weight%", NumberFormatter.format(totalWeight(jackpotCreationMenu.elementList))));
     }
 
     private void addNewItem()
