@@ -21,8 +21,6 @@ import java.util.List;
 
 public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 {
-    //TODO add message.yml integration
-
     private enum WaitingFor
     {
         NONE,

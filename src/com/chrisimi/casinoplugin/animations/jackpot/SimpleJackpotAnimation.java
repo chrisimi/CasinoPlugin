@@ -2,8 +2,11 @@ package com.chrisimi.casinoplugin.animations.jackpot;
 
 import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.menues.JackpotElementCreationMenu;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -125,20 +128,28 @@ public class SimpleJackpotAnimation implements Runnable
 
             if(element.triggerJackpot)
             {
-                player.sendMessage("You banged the jackpot. You won " + jackpot.jackpotValue);
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-win")
+                        .replaceAll("%jackpot%", NumberFormatter.format(jackpot.jackpotValue, false)));
                 jackpot.payPlayer(jackpot.jackpotValue, player);
                 jackpot.jackpotValue = 0.0;
             }
             else
             {
-                player.sendMessage("You won but not banged the jackpot... You won " + jackpot.bet * element.winMultiplicator);
-                jackpot.payPlayer(jackpot.bet * element.winMultiplicator, player);
-                jackpot.jackpotValue -= jackpot.bet * element.winMultiplicator;
+                double wonAmount = jackpot.bet * element.winMultiplicator;
+
+                if(wonAmount >= jackpot.jackpotValue)
+                    wonAmount = jackpot.jackpotValue;
+
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-win_without_trigger")
+                        .replaceAll("%won_amount%", NumberFormatter.format(wonAmount, false)));
+
+                jackpot.payPlayer(wonAmount, player);
+                jackpot.jackpotValue -= wonAmount;
             }
         }
         else
         {
-            player.sendMessage("you lost");
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-lose"));
         }
 
         jackpot.isRunning = false;

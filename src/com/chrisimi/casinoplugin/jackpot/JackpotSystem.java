@@ -16,8 +16,6 @@ import java.util.Map;
 
 public class JackpotSystem
 {
-
-    //TODO add messageManager integration
     private static Map<String, Jackpot> activeJackpots = new HashMap<String, Jackpot>();
 
     private static int bukkitTaskID = 0;
