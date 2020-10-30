@@ -2,6 +2,8 @@ package com.chrisimi.casinoplugin.menues;
 
 import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.CommandUtils;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
@@ -12,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import sun.plugin2.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +127,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.HOLOGRAM_POS;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage("Go to the position where you want to have your hologram");
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-location_hologram"));
     }
 
     private void setBet()
@@ -132,7 +135,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.BET;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage("Type in the bet to roll for the jackpot!");
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-bet"));
     }
 
     private void finish()
@@ -150,11 +153,12 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
             if(JackpotManager.addJackpot(jackpot))
             {
                 closeInventory();
-                player.sendMessage("You successfully added a new jackpot named " + jackpot.name);
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-success")
+                        .replaceAll("%name%", jackpot.name));
             }
             else
             {
-                player.sendMessage("§4An error occured while trying to add the new jackpot to the system");
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-error"));
             }
         }
         else
@@ -172,11 +176,12 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
             if(JackpotManager.updateJackpot(editingJackpot))
             {
                 closeInventory();
-                player.sendMessage("You successfully added a new jackpot named " + editingJackpot.name);
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-success")
+                        .replaceAll("%name%", editingJackpot.name));
             }
             else
             {
-                player.sendMessage("§4An error occured while trying to add the new jackpot to the system");
+                player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-error"));
             }
         }
     }
@@ -186,7 +191,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.NAME;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage("Type in the name of the jackpt - it must be unique!");
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-name"));
     }
 
     private void setPos2()
@@ -194,7 +199,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.POS_2;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage("Go to the bottom right block of your jackpot display. When you look at the bock type something in the chat.");
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-location2"));
     }
 
     private void setPos1()
@@ -202,7 +207,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.POS_1;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage("Go to the top left block of your jackpot display. When you look at the block type something in the chat.");
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-location1"));
     }
 
     @EventMethodAnnotation
@@ -230,7 +235,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                 }
                 else
                 {
-                    player.sendMessage("Name does exists! Try again or exit with 'exit'");
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-name_exists"));
                     waitforChatInput(player);
                     return;
                 }
@@ -244,7 +249,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                     this.bet = Double.parseDouble(event.getMessage());
                 } catch(Exception e)
                 {
-                    player.sendMessage("this is not a valid number. Try again or exit with 'exit'");
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-error_invalid_number"));
                     waitforChatInput(player);
                     return;
                 }
