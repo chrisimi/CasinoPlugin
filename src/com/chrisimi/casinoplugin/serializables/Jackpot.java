@@ -172,7 +172,7 @@ public class Jackpot
             OfflineEarnManager.getInstance().addEarning(getOwner(), amount);
             if(getOwner().isOnline() && !NotificationManager.hasNotificationsDisabled(getOwner()))
                 getOwner().getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-owner_earn")
-                        .replaceAll("%amount%", NumberFormatter.format(amount, false)));
+                        .replace("%amount%", NumberFormatter.format(amount, false)));
         }
         Main.econ.withdrawPlayer(player, amount);
     }
@@ -186,7 +186,7 @@ public class Jackpot
             OfflineEarnManager.getInstance().addLoss(getOwner(), amount);
             if(getOwner().isOnline() && !NotificationManager.hasNotificationsDisabled(getOwner()))
                 getOwner().getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-owner_lost")
-                        .replaceAll("%amount%", NumberFormatter.format(amount, false)));
+                        .replace("%amount%", NumberFormatter.format(amount, false)));
         }
         Main.econ.depositPlayer(player, amount);
     }

@@ -252,3 +252,5 @@ messages:
    jackpot-lose: "You lost."
    jackpot-owner_earn: "You earned %amount% from your Jackpot!"
    jackpot-owner_lost: "You lost %amount% from your Jackpot!"
+   jackpot-edit-error: "&4You need to write the name of jackpot in the chat!"
+   jackpot-edit-error2: "&4This is not an existing Jackpot!"

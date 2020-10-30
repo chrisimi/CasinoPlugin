@@ -117,6 +117,10 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         else if(event.getClicked().equals(setBet)) setBet();
         else if(event.getClicked().equals(setName)) setName();
         else if(event.getClicked().equals(finishButton)) finish();
+        else if(event.getClicked().equals(setPlayerJackpot)) isServerJackpot = false;
+        else if(event.getClicked().equals(setServerJackpot)) isServerJackpot = true;
+
+        updateInventory();
     }
 
     private void setHologramPos()
