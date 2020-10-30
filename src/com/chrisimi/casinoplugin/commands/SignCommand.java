@@ -4,6 +4,7 @@ import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.utils.CommandUtils;
+import com.chrisimi.casinoplugin.utils.Validator;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
 import com.chrisimi.commands.PermissionType;
@@ -34,6 +35,12 @@ public class SignCommand extends Command
             return;
         }
 
+        if(!Validator.validate(psc))
+        {
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-sign_not_valid"));
+            return;
+        }
+
         event.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("Information about sign at X: %s, Y: %s, Z: " + psc.getLocation().getBlockX(),
                 psc.getLocation().getBlockY(), psc.getLocation().getBlockZ()));
         event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§6type: " + psc.gamemode.toString());
@@ -46,7 +53,21 @@ public class SignCommand extends Command
                 break;
             case SLOTS:
                 showSlotsInformation(psc, event.getPlayer());
+                break;
+            case BLACKJACK:
+                showBlackjackInformation(psc, event.getPlayer());
+                break;
         }
+    }
+
+    private void showBlackjackInformation(PlayerSignsConfiguration psc, Player player)
+    {
+        player.sendMessage(CasinoManager.getPrefix() + "§6bet between §e" + NumberFormatter.format(psc.blackjackGetMinBet(), false)
+                + " §6and §e" + NumberFormatter.format(psc.blackjackGetMaxBet(), false));
+
+        player.sendMessage(CasinoManager.getPrefix() + "payout:");
+        player.sendMessage(CasinoManager.getPrefix() + "     Blackjack (21): x" + psc.blackjackGetMultiplicand());
+        player.sendMessage(CasinoManager.getPrefix() + "     win: 1x");
     }
 
     private void showSlotsInformation(PlayerSignsConfiguration psc, Player player)
