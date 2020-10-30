@@ -3,6 +3,7 @@ package com.chrisimi.casinoplugin.main;
 import java.io.File;
 import java.io.IOException;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.scripts.*;
 import com.chrisimi.numberformatter.Configuration;
 import com.chrisimi.numberformatter.NumberFormatter;
@@ -79,7 +80,10 @@ public class Main extends JavaPlugin {
 		
 		//check if the hologram system can be started
 		if(hologramSystemUp = checkCompatibility())
+		{
 			HologramSystem.getInstance().startSystem(); //start hologram system
+			CasinoManager.jackpotManager = new JackpotManager(); //start jackpot system
+		}
 		
 		InventoryAPI.initiate(this);
 

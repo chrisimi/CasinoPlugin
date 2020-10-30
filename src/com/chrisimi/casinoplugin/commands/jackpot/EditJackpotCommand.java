@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.commands.jackpot;
 
 import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
+import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.menues.JackpotCreationMenu;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
@@ -27,16 +28,22 @@ public class EditJackpotCommand extends Command
     @Override
     public void execute(Event event)
     {
+        if(CasinoManager.jackpotManager == null)
+        {
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-disabled"));
+            return;
+        }
+
         if(event.getArgs().length <= 0)
         {
-            event.getPlayer().sendMessage("You need to write the name of the jackpot");
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-edit-error"));
             return;
         }
 
         Jackpot jackpot = JackpotManager.byName(event.getArgs()[0]);
         if(jackpot == null)
         {
-            event.getPlayer().sendMessage("This is not an existing jackpot");
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-edit-error2"));
             return;
         }
 
@@ -44,6 +51,15 @@ public class EditJackpotCommand extends Command
         {
             event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;
+        }
+
+        if(jackpot.isServerOwner())
+        {
+            if(!(Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.jackpot.server")))
+            {
+                event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+                return;
+            }
         }
 
         new JackpotCreationMenu(event.getPlayer(), jackpot);

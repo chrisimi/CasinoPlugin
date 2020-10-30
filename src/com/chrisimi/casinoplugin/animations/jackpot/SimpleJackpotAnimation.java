@@ -129,7 +129,7 @@ public class SimpleJackpotAnimation implements Runnable
             if(element.triggerJackpot)
             {
                 player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-win")
-                        .replaceAll("%jackpot%", NumberFormatter.format(jackpot.jackpotValue, false)));
+                        .replace("%jackpot%", NumberFormatter.format(jackpot.jackpotValue, false)));
                 jackpot.payPlayer(jackpot.jackpotValue, player);
                 jackpot.jackpotValue = 0.0;
             }
@@ -141,7 +141,7 @@ public class SimpleJackpotAnimation implements Runnable
                     wonAmount = jackpot.jackpotValue;
 
                 player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-win_without_trigger")
-                        .replaceAll("%won_amount%", NumberFormatter.format(wonAmount, false)));
+                        .replace("%won_amount%", NumberFormatter.format(wonAmount, false)));
 
                 jackpot.payPlayer(wonAmount, player);
                 jackpot.jackpotValue -= wonAmount;

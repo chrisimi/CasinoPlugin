@@ -69,7 +69,6 @@ public class CasinoManager
 		rollCommand = new RollCommand();
 		slotChestManager = new SlotChestsManager();
 		leaderboardManager = new LeaderboardsignsManager();
-		jackpotManager = new JackpotManager();
 		notificationManager = new NotificationManager();
 
 		try 
