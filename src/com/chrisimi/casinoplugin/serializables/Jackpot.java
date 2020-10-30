@@ -1,6 +1,11 @@
 package com.chrisimi.casinoplugin.serializables;
 
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.NotificationManager;
+import com.chrisimi.casinoplugin.scripts.OfflineEarnManager;
+import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.google.gson.annotations.Expose;
 import org.bukkit.Bukkit;
@@ -11,7 +16,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 public class Jackpot
@@ -162,14 +166,28 @@ public class Jackpot
     public void payOwner(double amount, Player player)
     {
         if(!isServerOwner())
+        {
             Main.econ.depositPlayer(getOwner(), amount);
+
+            OfflineEarnManager.getInstance().addEarning(getOwner(), amount);
+            if(getOwner().isOnline() && !NotificationManager.hasNotificationsDisabled(getOwner()))
+                getOwner().getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-owner_earn")
+                        .replaceAll("%amount%", NumberFormatter.format(amount, false)));
+        }
         Main.econ.withdrawPlayer(player, amount);
     }
 
     public void payPlayer(double amount, Player player)
     {
         if(!isServerOwner())
+        {
             Main.econ.withdrawPlayer(getOwner(), amount);
+
+            OfflineEarnManager.getInstance().addLoss(getOwner(), amount);
+            if(getOwner().isOnline() && !NotificationManager.hasNotificationsDisabled(getOwner()))
+                getOwner().getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-owner_lost")
+                        .replaceAll("%amount%", NumberFormatter.format(amount, false)));
+        }
         Main.econ.depositPlayer(player, amount);
     }
 }

@@ -91,12 +91,13 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         hologramPos = jackpot.getLocationHologram();
         name = jackpot.name;
         bet = jackpot.bet;
-        isServerJackpot = jackpot.getOwner() == null;
+        isServerJackpot = jackpot.isServerOwner();
         elementList = jackpot.elements;
         editingJackpot = jackpot;
 
         //the player is not allowed to change the name
         getInventory().setItem(3, null);
+        updateInventory();
     }
 
     @EventMethodAnnotation

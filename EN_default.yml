@@ -250,3 +250,5 @@ messages:
    jackpot-win: "You won the jackpot of %jackpot%!"
    jackpot-win_without_trigger: "You did not won the jackpot but still get %won_amount%!"
    jackpot-lose: "You lost."
+   jackpot-owner_earn: "You earned %amount% from your Jackpot!"
+   jackpot-owner_lost: "You lost %amount% from your Jackpot!"
