@@ -14,6 +14,7 @@ public class RunJackpotCommand extends Command
         this.command = "runjackpot";
         this.description = "run jackpot";
         this.enableArguments = true;
+        this.permissions = new String[] {"casino.jackpot.use", "casino.jackpot.server", "casino.admin", "casino.jackpot.*"};
     }
 
     @Override

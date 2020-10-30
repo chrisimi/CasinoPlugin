@@ -14,6 +14,7 @@ public class CreateJackpotCommand extends Command
     {
         this.command = "createjackpot";
         this.description = "create a new jackpot";
+        this.permissions = new String[] {"casino.jackpot.create", "casino.jackpot.server", "casino.admin"};
     }
 
     @Override
