@@ -1,9 +1,12 @@
 package com.chrisimi.casinoplugin.menues;
 
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -91,11 +94,11 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
 
                     waitingFor = WaitingFor.WIN_MULTIPLICATOR;
                     waitforChatInput(player);
-                    player.sendMessage("type in the win multiplicand for this block... if you want to trigger the jackpot type '§etrigger'");
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-win_multiplicand"));
                     return;
                 } catch(Exception e)
                 {
-                    player.sendMessage("This is not a valid number. Try it again or exit with 'exit'");
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-error_invalid_number"));
                     waitforChatInput(player);
                     return;
                 }
@@ -123,7 +126,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
                          addNewItem();
                     } catch(Exception e)
                     {
-                        player.sendMessage("This is not a valid number. Try it again or exit with §e'exit'");
+                        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-error_invalid_number"));
                         waitforChatInput(player);
                         return;
                     }
@@ -178,7 +181,8 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         waitforChatInput(player);
         waitingFor = WaitingFor.WEIGHT;
         closeInventory();
-        player.sendMessage("type in the weight, total weight " + String.format("#.##", totalWeight(jackpotCreationMenu.elementList)));
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-weight")
+                .replaceAll("%total_weight%", NumberFormatter.format(totalWeight(jackpotCreationMenu.elementList))));
     }
 
     private void addNewItem()

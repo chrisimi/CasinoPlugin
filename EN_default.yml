@@ -243,5 +243,7 @@ messages:
    jackpot-creation-location_hologram: "Go to the position where you want to have your hologram and type anything in the chat."
    jackpot-creation-location1: "Go to the top left block of your Jackpot display. When you look at the block type anything in the chat."
    jackpot-creation-location2: "Go to the bottom right block of your Jackpot display. When you look at the block type anything in the chat."
+   jackpot-creation-element-win_multiplicand: "Type the win multiplicand for this block in the chat. If you want to trigger the Jackpot with that block use 'trigger' instead."
+   jackpot-creation-element-weight: "Type the weight for this block in the chat. Total weight: %total_weight%!"
    jackpot-creation-success: "You successfully created or updated the jackpot %name%!"
    jackpot-creation-error: "&4An error occured while trying to add the new jackpot to the system!"
