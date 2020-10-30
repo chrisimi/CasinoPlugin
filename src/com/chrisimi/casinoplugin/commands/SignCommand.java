@@ -43,6 +43,24 @@ public class SignCommand extends Command
         {
             case DICE:
                 showDiceInformation(psc, event.getPlayer());
+                break;
+            case SLOTS:
+                showSlotsInformation(psc, event.getPlayer());
+        }
+    }
+
+    private void showSlotsInformation(PlayerSignsConfiguration psc, Player player)
+    {
+        player.sendMessage(CasinoManager.getPrefix() + "§6bet: §e" + NumberFormatter.format(psc.bet, false));
+        player.sendMessage(CasinoManager.getPrefix() + "elements:");
+
+        for(int i = 0; i < 3; i++)
+        {
+            double chance = (double)(Math.round((psc.getSlotsWeight()[i] / psc.getSlotsWeightSum() ) * 10000.0)) / 100.0;
+            player.sendMessage(CasinoManager.getPrefix() + String.format("     %s: chance: %s %% payout: %s",
+                    psc.getSlotsSymbols()[i],
+                    chance,
+                    NumberFormatter.format(psc.getSlotsMultiplicators()[i] * psc.bet, false)));
         }
     }
 
