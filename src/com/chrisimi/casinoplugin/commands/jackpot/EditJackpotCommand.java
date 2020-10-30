@@ -28,6 +28,12 @@ public class EditJackpotCommand extends Command
     @Override
     public void execute(Event event)
     {
+        if(CasinoManager.jackpotManager == null)
+        {
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-disabled"));
+            return;
+        }
+
         if(event.getArgs().length <= 0)
         {
             event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-edit-error"));

@@ -254,3 +254,4 @@ messages:
    jackpot-owner_lost: "You lost %amount% from your Jackpot!"
    jackpot-edit-error: "&4You need to write the name of jackpot in the chat!"
    jackpot-edit-error2: "&4This is not an existing Jackpot!"
+   jackpot-disabled: "Jackpots are disabled. Please enable holograms on your server."
