@@ -5,7 +5,6 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
-import com.chrisimi.casinoplugin.utils.CommandUtils;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
 import com.chrisimi.numberformatter.NumberFormatter;
@@ -14,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import sun.plugin2.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
