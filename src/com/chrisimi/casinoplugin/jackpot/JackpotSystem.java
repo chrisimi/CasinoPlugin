@@ -2,6 +2,8 @@ package com.chrisimi.casinoplugin.jackpot;
 
 import com.chrisimi.casinoplugin.animations.jackpot.SimpleJackpotAnimation;
 import com.chrisimi.casinoplugin.main.Main;
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
@@ -14,8 +16,6 @@ import java.util.Map;
 
 public class JackpotSystem
 {
-
-    //TODO add messageManager integration
     private static Map<String, Jackpot> activeJackpots = new HashMap<String, Jackpot>();
 
     private static int bukkitTaskID = 0;
@@ -112,19 +112,19 @@ public class JackpotSystem
 
         if(jackpot.isRunning)
         {
-            player.sendMessage("jackpot is running");
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-error-is_running"));
             return;
         }
 
         if(Main.econ.getBalance(player) < jackpot.bet)
         {
-            player.sendMessage("You don't have enough money");
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-player_not_enough_money"));
             return;
         }
 
         if(!jackpot.isServerOwner() && Main.econ.getBalance(jackpot.getOwner()) < jackpot.jackpotValue)
         {
-            player.sendMessage("Owner don't have enough money");
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
             return;
         }
 
