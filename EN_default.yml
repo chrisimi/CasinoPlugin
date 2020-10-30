@@ -234,3 +234,4 @@ messages:
 
    notifications-enable: "Notifications are now &lenabled!"
    notifications-disable: "Notifications are now &ldisabled!"
+   jackpot-error-is_running: "&4The Slot is currently running!"
