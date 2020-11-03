@@ -77,6 +77,8 @@ public class CommandsControl
                 .setPermissionSystem(PermSystem.VAULT)
                 .setCustomMessage(MessageType.PREFIX, CasinoManager.getPrefix())
                 .setCustomMessage(MessageType.NOT_ENOUGH_PERMISSION, "§4You don't have enough permission to use this command")
+                .setChatClickEvent(true)
+                .setDisplayCommandsWherePlayerHasPermission(true)
                 .build(plugin, "casino");
     }
 }
