@@ -39,9 +39,12 @@ language: default
 currency: ' $'
 
 # set if the currency should be before the number or after
-# true: before the number like $ 150
-# false: after the number like 150 $
+# true - before the number like $ 150
+# false - after the number like 150 $
 currency-at-the-begin: false
+
+# enable hover-messages and the click event in the help command
+enable-hover-and-click: true
 
 # ----------
 # CASINO-GUI

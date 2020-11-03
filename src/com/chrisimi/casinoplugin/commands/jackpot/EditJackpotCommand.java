@@ -19,7 +19,8 @@ public class EditJackpotCommand extends Command
     public EditJackpotCommand()
     {
         this.command = "editjackpot";
-        this.description = "Edit an existing jackpot by using it's unique name";
+        this.description = "Edits an existing jackpot by using it's unique name";
+        this.argumentsDescription = "[name]";
         this.permissions = new String[] {"casino.jackpot.create", "casino.jackpot.server", "casino.admin"};
         this.enableArguments = true;
         this.usageType = UsageType.PLAYER;

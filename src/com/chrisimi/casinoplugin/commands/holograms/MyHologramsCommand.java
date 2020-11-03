@@ -20,12 +20,12 @@ public class MyHologramsCommand extends Command
     public MyHologramsCommand()
     {
         this.command = "myholograms";
-        this.description = "get the name of all your holograms and their coordinates";
+        this.description = "Displays the coordinates and names of all your holograms.";
         this.aliases = new String[] {"holograms"};
         this.permissions = new String[] {"casino.admin", "casino.hologram.server", "casino.hologram.create"};
         this.permissionType = PermissionType.OR;
-
     }
+
     @Override
     public void execute(Event event)
     {
