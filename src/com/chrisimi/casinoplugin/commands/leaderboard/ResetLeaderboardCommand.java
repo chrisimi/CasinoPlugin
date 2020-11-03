@@ -20,7 +20,7 @@ public class ResetLeaderboardCommand extends Command
     {
         this.command = "resetleaderboard";
         this.description = "Resets all leaderboards in range (blocks) or only with a specific mode [sumamount, highestamount, sumloss, highestloss, count]";
-        this.parametersDescription = "[range in blocks/all] [(optional) mode]";
+        this.argumentsDescription = "[range in blocks/all] [(optional) mode]";
         this.permissions = new String[] {"casino.admin", "casino.serversigns", "casino.leaderboard.create"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
