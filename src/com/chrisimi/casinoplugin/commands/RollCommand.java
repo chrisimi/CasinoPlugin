@@ -13,7 +13,8 @@ public class RollCommand extends Command
     public RollCommand()
     {
         this.command = "roll";
-        this.description = "[minimum] [maximum] [player (not needed)] roll a random number which will be sent to nearby players or to the mentioned player";
+        this.description = "Rolls a random number which will be sent to nearby players or to the mentioned player.";
+        this.parametersDescription = "[minimum] [maximum] [(optional) player]";
         this.permissions = new String[] {"casino.admin", "casino.roll"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
