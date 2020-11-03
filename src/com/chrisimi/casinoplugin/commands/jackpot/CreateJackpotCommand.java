@@ -15,7 +15,7 @@ public class CreateJackpotCommand extends Command
     public CreateJackpotCommand()
     {
         this.command = "createjackpot";
-        this.description = "Open the creation menu to create a new Jackpot";
+        this.description = "Opens the Jackpot creation menu to create a new Jackpot";
         this.permissions = new String[] {"casino.jackpot.create", "casino.jackpot.server", "casino.admin"};
     }
 
