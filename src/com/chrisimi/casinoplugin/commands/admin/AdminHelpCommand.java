@@ -32,5 +32,6 @@ public class AdminHelpCommand extends Command
         player.sendMessage("§6/casino resetdata §8- deletes all roll-data from player-managed-signs (data.yml)");
         player.sendMessage("§6/casino reloaddata §8- reload all leaderboard signs and data.yml. Could lag a bit!");
         player.sendMessage("§6/casino resetsign §8- reset the sign your are look onto it. Use it when the sign is bugging");
+        player.sendMessage("§6/casino updateconfig §8- Updates the config. Save your config.yml before using this command to prevent lose of your config.");
     }
 }

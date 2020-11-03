@@ -20,11 +20,13 @@ import com.chrisimi.casinoplugin.commands.slotchests.CreateChestCommand;
 import com.chrisimi.casinoplugin.commands.slotchests.CreateServerChestCommand;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Commands;
 import com.chrisimi.commands.CommandsAPI;
 import com.chrisimi.commands.domain.MessageType;
 import com.chrisimi.commands.domain.PermSystem;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandsControl
@@ -33,6 +35,16 @@ public class CommandsControl
     //init and manage the commands classes
     public static void init(JavaPlugin plugin)
     {
+        boolean enableEvents = true;
+        try
+        {
+            enableEvents = Boolean.parseBoolean(UpdateManager.getValue("enable-hover-and-click", true).toString());
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get value enable-hover-and-click. Set to default value: true");
+            enableEvents = true;
+        }
+
         api = new Commands(plugin)
                 .setBaseCommand(new BaseCommand())
 
@@ -42,6 +54,7 @@ public class CommandsControl
                 .addCommand(new ReloadDataCommand())
                 .addCommand(new ResetDataCommand())
                 .addCommand(new ResetSignCommand())
+                .addCommand(new UpdateConfigCommand())
 
                 //holograms package
                 .addCommand(new CreateHologramCommand())
@@ -79,7 +92,7 @@ public class CommandsControl
                 .setCustomMessage(MessageType.NOT_ENOUGH_PERMISSION, "§4You don't have enough permission to use this command")
                 .setCustomMessage(MessageType.HELP_COMMAND_FORMAT, "§6%command% %param-description%")
                 .setCustomMessage(MessageType.HELP_COMMAND_HEADER, "§6%plugin-name% by %author%, version %plugin-version%")
-                .setChatClickEvent(true)
+                .setChatClickEvent(enableEvents)
                 .setDisplayCommandsWherePlayerHasPermission(true)
                 .build(plugin, "casino");
     }
