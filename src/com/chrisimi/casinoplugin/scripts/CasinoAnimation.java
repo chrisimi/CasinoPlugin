@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +19,8 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 
 
-public class CasinoAnimation {
+public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
+{
 
 	public static class SlotsGUIElement
 	{
@@ -69,8 +71,9 @@ public class CasinoAnimation {
 	private double block3Chance;
 	
 	private Material inventoryMaterial;
-	public CasinoAnimation(Player player, int einsatz) {
-		
+	public CasinoAnimation(Player player, List<SlotsGUIElement> elements)
+	{
+		super(player, 5*9, Main.getInstance(), "Casino Slots GUI");
 		this.player = player;
 		this.einsatz = einsatz;
 		inv = Bukkit.createInventory(player, 5*9);

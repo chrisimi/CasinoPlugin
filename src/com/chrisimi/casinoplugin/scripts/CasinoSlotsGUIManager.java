@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ChatEvent;
 import com.chrisimi.inventoryapi.ClickEvent;
 import com.chrisimi.inventoryapi.EventMethodAnnotation;
 import com.chrisimi.inventoryapi.IInventoryAPI;
@@ -51,6 +53,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
     {
         super(player, 9*6, Main.getInstance(), "Casino Slots GUI");
         addEvents(this);
+        openInventory();
 
         playerBalance = Main.econ.getBalance(player);
         updateVariables();
@@ -193,13 +196,33 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
         updateInventory();
     }
 
+    @EventMethodAnnotation
+    public void onChat(ChatEvent event)
+    {
+        try
+        {
+            currentBet = Double.parseDouble(event.getMessage());
+        } catch(Exception e)
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("&4This is not a valid number!"));
+        }
+        openInventory();
+    }
+
     private void rollButton()
     {
+        if(casinoAnimation == null)
+            casinoAnimation = new CasinoAnimation(player, elements);
 
+        closeInventory();
+        casinoAnimation.openInventory();
     }
 
     private void setBet()
     {
+        closeInventory();
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("slotchest-bet_message"));
+        waitforChatInput(player);
     }
     /*
     private void addItemsToInv()
