@@ -14,8 +14,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.chrisimi.casinoplugin.listeners.CasinoChatListener;
-import com.chrisimi.casinoplugin.listeners.CasinoCommandsListener;
-import com.chrisimi.casinoplugin.listeners.InventoryClickListener;
 import com.chrisimi.casinoplugin.listeners.PlayerJoinListener;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.slotchest.SlotChestsManager;
@@ -61,7 +59,6 @@ public class CasinoManager
 		
 		//new CasinoCommandsListener();
 		CommandsControl.init(Main.getInstance());
-		new InventoryClickListener();
 		new PlayerJoinListener();
 		new CasinoChatListener();
 		signsManager = new SignsManager();
