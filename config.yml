@@ -85,7 +85,7 @@ gui-animation: [50, 120]
 # waiting time, in ticks, between one "roll" animation. 
 # 1 is very fast and realistic but can make lags on bigger servers
 # 2-5 is some kind of realistic, better for large servers
-animation-animation-cooldown: 5
+gui-animation-cooldown: 5
    
 # ----------------------------------
 # configuration for the roll command

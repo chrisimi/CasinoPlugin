@@ -10,6 +10,7 @@ import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.ClickEvent;
 import com.chrisimi.inventoryapi.EventMethodAnnotation;
 import com.chrisimi.inventoryapi.IInventoryAPI;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,7 +49,18 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 			return result;
 		}
+
+		public static SlotsGUIElement getSlotsElementBy(List<SlotsGUIElement> elements, Material material)
+		{
+			for(SlotsGUIElement element : elements)
+				if(element.material == material)
+					return element;
+
+			return null;
+		}
 	}
+
+	private static Random rnd = new Random();
 
 	private static ItemStack backButton = ItemAPI.createItem("§9back", Material.STONE_BUTTON);
 	private static ItemStack retryButton = ItemAPI.createItem("§2retry", Material.STONE_BUTTON);
@@ -58,6 +70,8 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	private static ItemStack fillItemStack = ItemAPI.createItem("", Material.BLUE_STAINED_GLASS_PANE);
 
 	private static int[] rolls = new int[] {50, 120};
+	private static int animationCooldown = 5;
+	private List<SlotsGUIElement> elements;
 
 	//when created by a CasinoSlotsGUIManager... save the instance to go back later on
 	private CasinoSlotsGUIManager casinoSlotsGUIManager;
@@ -69,6 +83,8 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		addEvents(this);
 
 		this.casinoSlotsGUIManager = casinoSlotsGUIManager;
+		this.elements = elements;
+
 		openInventory();
 		updateVariables();
 		
@@ -104,6 +120,15 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation rolls: " + e.getMessage()
 					+ ". Set to default value: [50, 120]");
 		}
+
+		try
+		{
+			animationCooldown = Integer.parseInt(UpdateManager.getValue("gui-animation-cooldown").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation cooldown: " + e.getMessage()
+					+ ". Set to default value: 5");
+		}
 	}
 
 	private void initialize()
@@ -121,21 +146,135 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	public void onClick(ClickEvent event)
 	{
 		if(event.getClicked().equals(backButton)) backButton();
-		else if(event.getClicked().equals(retryButton)) retryButton();
-		else if(event.getClicked().equals(rollButton)) rollButton();
-	}
-
-	private void rollButton()
-	{
-	}
-
-	private void retryButton()
-	{
+		else if(event.getClicked().equals(retryButton)) startRoll();
+		else if(event.getClicked().equals(rollButton)) startRoll();
 	}
 
 	private void backButton()
 	{
+		if(casinoSlotsGUIManager != null)
+		{
+			closeInventory();
+			casinoSlotsGUIManager.openInventory();
+		}
 	}
+
+	private void startRoll()
+	{
+		//TODO payment to owner
+		//check if the player has enough money
+		if(casinoSlotsGUIManager != null)
+		{
+			if(!Main.econ.has(player, casinoSlotsGUIManager.currentBet))
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
+				return;
+			}
+		}
+		else if(playerSignsConfiguration != null)
+		{
+			if(!Main.econ.has(player, playerSignsConfiguration.bet))
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
+				return;
+			}
+			if(!playerSignsConfiguration.hasOwnerEnoughMoney())
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
+				return;
+			}
+		}
+
+		//remove retry button
+		getInventory().setItem(44, null);
+	}
+
+	private Runnable animation = new Runnable()
+	{
+		int rollsLeft = (int)Math.round((rnd.nextDouble() * rolls[1] + rolls[0]) / (double)(animationCooldown));
+		@Override
+		public void run()
+		{
+			if(rollsLeft > 0)
+			{
+				moveItemsOneTime();
+				generateNewRow();
+			}
+			else
+			{
+				finish();
+			}
+		}
+	};
+
+	private void moveItemsOneTime()
+	{
+		for(int column = 0; column < 3; column++)
+		{
+			for(int row = 3; row >= 0; row++)
+			{
+				//set the block one row underneath
+				getInventory().setItem(column + 4 + 9 * row, getInventory().getItem(column + 3 + 9 * row));
+			}
+		}
+	}
+
+	private void generateNewRow()
+	{
+		for(int i = 0; i < 3; i++)
+		{
+			double chosenWeight = rnd.nextDouble() * SlotsGUIElement.getTotalWeight(elements);
+			double currentWeight = 0.0;
+			SlotsGUIElement currentElement = null;
+			int index = 0;
+
+			while(currentWeight < chosenWeight && index < elements.size())
+			{
+				currentElement = elements.get(index);
+				currentWeight += currentElement.weight;
+				index++;
+			}
+
+			getInventory().setItem(i + 3, new ItemStack(currentElement.material));
+		}
+	}
+
+	private void finish()
+	{
+		if(getInventory().getItem(21).getType().equals(getInventory().getItem(22).getType()) &&
+			getInventory().getItem(21).getType().equals(getInventory().getItem(23).getType()))
+		{
+			SlotsGUIElement element = SlotsGUIElement.getSlotsElementBy(elements, getInventory().getItem(21).getType());
+			if(element == null)
+			{
+				lost();
+				return;
+			}
+
+			won(element.winMultiplicand);
+		}
+	}
+
+	private void lost()
+	{
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-lose"));
+	}
+
+	private void won(double winMultiplicand)
+	{
+		if(casinoSlotsGUIManager != null)
+		{
+			double wonAmount = casinoSlotsGUIManager.currentBet * winMultiplicand;
+			Main.econ.depositPlayer(player, wonAmount);
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won")
+					.replace("%amount%", NumberFormatter.format(wonAmount, false)));
+		}
+		else if(playerSignsConfiguration != null)
+		{
+			//TODO
+		}
+	}
+
 	/*
 	public void startRoll() { //get called when the slot start
 		rollCount++;

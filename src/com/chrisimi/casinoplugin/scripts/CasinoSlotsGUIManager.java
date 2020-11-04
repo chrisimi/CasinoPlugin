@@ -45,7 +45,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
     private static Material minusBlock = Material.RED_WOOL;
 
     private double playerBalance = 0.0;
-    private double currentBet = 0.0;
+    protected double currentBet = 0.0;
 
     private CasinoAnimation casinoAnimation = null;
 
@@ -212,7 +212,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
     private void rollButton()
     {
         if(casinoAnimation == null)
-            casinoAnimation = new CasinoAnimation(player, elements);
+            casinoAnimation = new CasinoAnimation(player, elements, this);
 
         closeInventory();
         casinoAnimation.openInventory();
