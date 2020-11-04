@@ -22,6 +22,14 @@ public class CasinoAnimation {
 
 	public static class SlotsGUIElement
 	{
+		public SlotsGUIElement() {}
+		public SlotsGUIElement(Material material, double winMultiplicand, double weight)
+		{
+			this.material = material;
+			this.winMultiplicand = winMultiplicand;
+			this.weight = weight;
+		}
+
 		public Material material = Material.STONE;
 		public double winMultiplicand = 0.0;
 		public double weight = 0.0;

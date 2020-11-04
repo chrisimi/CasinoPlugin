@@ -28,6 +28,7 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
 {
 
     private static List<CasinoAnimation.SlotsGUIElement> elements = new ArrayList<>();
+    private static Double[] bets = new Double[6];
     private Map<ItemStack, Double> blocks = new HashMap<>();
 
     private static ItemStack fillMaterial = null;
@@ -68,10 +69,46 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
             List<Object> objects = (List<Object>) UpdateManager.getValue("gui-elements");
 
             if(objects.size() < 3) throw new Exception("not enough elements");
+
+
+            //string(material); double(winMutliplicand); double(weight)
+            //TODO rewrite and make it more typesafe
+            for(Object element : objects)
+            {
+                List<Object> list = (List<Object>) element;
+
+                CasinoAnimation.SlotsGUIElement guiElement = new CasinoAnimation.SlotsGUIElement();
+                guiElement.material = Enum.valueOf(Material.class, list.get(0).toString());
+                guiElement.winMultiplicand = Double.parseDouble(list.get(1).toString());
+                guiElement.weight = Double.parseDouble(list.get(2).toString());
+
+                elements.add(guiElement);
+            }
+
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse gui elements: " + e.getMessage()
                     + ". Set to default value.");
+            elements.add(new CasinoAnimation.SlotsGUIElement(Material.REDSTONE_BLOCK, 3.0, 2.0));
+            elements.add(new CasinoAnimation.SlotsGUIElement(Material.DIAMOND_BLOCK, 5.0, 3.0));
+            elements.add(new CasinoAnimation.SlotsGUIElement(Material.EMERALD_BLOCK, 7.0, 5.0));
+        }
+
+        try
+        {
+            String[] elements = (String[])UpdateManager.getValue("gui-list", new String[] {"1.0", "5.0", "10.0", "50.0", "100.0", "500.0"});
+
+            if(elements.length != 6) throw new Exception("there are not 6 elements!");
+
+            for(int i = 0; i < 6; i++)
+            {
+                bets[i] = Double.parseDouble(elements[i]);
+            }
+
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse bet list: " + e.getMessage()
+                    + ". Set to default value");
         }
     }
 
