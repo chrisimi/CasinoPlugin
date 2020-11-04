@@ -69,7 +69,7 @@ gui-fillMaterial: 'BLUE_STAINED_GLASS_PANE'
 
 # the elements which should be used in the standard slots gui
 # you can add as many as you want
-# values: block type, win-multiplicator and the weight
+# values are block type, win-multiplicator and the weight
 gui-elements:
    - ['REDSTONE_BLOCK', 3.0, 2]
    - ['DIAMOND_BLOCK', 5.0, 3]
@@ -79,7 +79,7 @@ gui-elements:
 # for how long the animation should run 
 # (random number between these two values)
 # set both the same value to deactivate randomness
-# values: min, max
+# values are min, max
 gui-animation: [50, 120]
    
 # waiting time, in ticks, between one "roll" animation. 

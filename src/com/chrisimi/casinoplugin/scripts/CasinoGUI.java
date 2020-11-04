@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.scripts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -58,6 +59,7 @@ public class CasinoGUI
 
         inv = Bukkit.createInventory(player, 9 * 6, "Casino GUI");
 
+        /*
         plus1 = (int) UpdateManager.getValue("bet-plus1");
         plus2 = (int) UpdateManager.getValue("bet-plus2");
         plus3 = (int) UpdateManager.getValue("bet-plus3");
@@ -74,6 +76,13 @@ public class CasinoGUI
         minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
         informationBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-informationBlock"));
         gapBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-inventoryMaterial"));
+         */
+
+        List<Object> objects = (List<Object>) UpdateManager.getValue("gui-elements");
+
+        List<Object> a = (List<Object>) objects.get(0);
+
+
         addItemsToInv();
 
         guis.put(player, this);
