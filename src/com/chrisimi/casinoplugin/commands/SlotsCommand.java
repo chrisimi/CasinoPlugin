@@ -1,6 +1,6 @@
 package com.chrisimi.casinoplugin.commands;
 
-import com.chrisimi.casinoplugin.scripts.CasinoGUI;
+import com.chrisimi.casinoplugin.scripts.CasinoSlotsGUIManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
 import com.chrisimi.commands.PermissionType;
@@ -23,6 +23,6 @@ public class SlotsCommand extends Command
     @Override
     public void execute(Event event)
     {
-        new CasinoGUI(event.getPlayer());
+        new CasinoSlotsGUIManager(event.getPlayer());
     }
 }

@@ -14,10 +14,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoAnimation;
-import com.chrisimi.casinoplugin.scripts.CasinoGUI;
+import com.chrisimi.casinoplugin.scripts.CasinoSlotsGUIManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.UpdateManager;
-import com.chrisimi.inventoryapi.InventoryAPI;
 
 public class InventoryClickListener implements Listener
 {
@@ -44,7 +43,7 @@ public class InventoryClickListener implements Listener
     {
         if (event.getCurrentItem() == null) return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getInventory().equals(CasinoGUI.getInv()))
+        if (event.getInventory().equals(CasinoSlotsGUIManager.getInv()))
         {
             if (event.getCurrentItem().getType() == minusBlock)
             {
@@ -54,7 +53,7 @@ public class InventoryClickListener implements Listener
                 String zahl = zahlen[zahlen.length - 1];
                 int zahlint = Integer.parseInt(zahl);
 
-                CasinoGUI.subEinsatz(zahlint, player);
+                CasinoSlotsGUIManager.subEinsatz(zahlint, player);
 
             } else if (event.getCurrentItem().getType() == plusBlock)
             {
@@ -62,11 +61,11 @@ public class InventoryClickListener implements Listener
                 String name = event.getCurrentItem().getItemMeta().getDisplayName();
                 String[] zahlen = name.split("\\+ ");
                 int zahl = Integer.parseInt(zahlen[zahlen.length - 1]);
-                CasinoGUI.addEinsatz(zahl, (Player) event.getWhoClicked());
+                CasinoSlotsGUIManager.addEinsatz(zahl, (Player) event.getWhoClicked());
 
             } else if (event.getCurrentItem().getType() == Material.STONE_BUTTON)
             {
-                CasinoGUI.startAnimation(player);
+                CasinoSlotsGUIManager.startAnimation(player);
             }
 
         } else if (event.getInventory().equals(CasinoAnimation.getInventory(player)))
@@ -76,7 +75,7 @@ public class InventoryClickListener implements Listener
                 if (event.getSlot() == 36)
                 {
                     CasinoAnimation.playerExit(player);
-                    new CasinoGUI(player);
+                    new CasinoSlotsGUIManager(player);
 
 
                 } else
@@ -115,9 +114,9 @@ public class InventoryClickListener implements Listener
     @EventHandler
     public void onInventoryLeave(InventoryCloseEvent event)
     {
-        if (event.getInventory().equals(CasinoGUI.getInv()))
+        if (event.getInventory().equals(CasinoSlotsGUIManager.getInv()))
         {
-            CasinoGUI.removeInventory((Player) event.getPlayer());
+            CasinoSlotsGUIManager.removeInventory((Player) event.getPlayer());
         } else if (event.getInventory().equals(CasinoAnimation.getInventory((Player) event.getPlayer())))
         {
             CasinoAnimation.playerExit((Player) event.getPlayer());

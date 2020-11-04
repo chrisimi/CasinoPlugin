@@ -27,7 +27,7 @@ import com.chrisimi.casinoplugin.main.Main;
  *
  * @author chris
  */
-public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
+public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
 {
 
     private static List<CasinoAnimation.SlotsGUIElement> elements = new ArrayList<>();
@@ -47,7 +47,7 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
 
     private CasinoAnimation casinoAnimation = null;
 
-    public CasinoGUI(Player player)
+    public CasinoSlotsGUIManager(Player player)
     {
         super(player, 9*6, Main.getInstance(), "Casino Slots GUI");
         addEvents(this);
