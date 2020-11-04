@@ -51,67 +51,39 @@ enable-hover-and-click: true
 # ----------
 # change the high of the possible bet's
 
-bet-plusBlock: "GREEN_WOOL"
-   
-# plus 1-6 are the different possibilites in the GUI
-bet-plus1: 1
-bet-plus2: 5
-bet-plus3: 10
-bet-plus4: 50
-bet-plus5: 100
-bet-plus6: 500
-   
-   
-# minusblock is the Block which the player press in the GUI 
-# to lower his bet
-bet-minusBlock: 'RED_WOOL'
-bet-minus1: 1
-bet-minus2: 5
-bet-minus3: 10
-bet-minus4: 50
-bet-minus5: 100
-bet-minus6: 500
-   
+gui-plusBlock: "GREEN_WOOL"
+gui-minusBlock: 'RED_WOOL'
+
+# the bet list, have to be 6 elements
+gui-list: [1, 5, 10, 50, 100, 500]
+
 # informationBlock is the Block in the middle of the GUI within 
 # the plusBlocks and minusBlocks
-bet-informationBlock: 'DIAMOND_BLOCK'
+gui-informationBlock: 'DIAMOND_BLOCK'
 
 # material left and right of the GUI
-bet-inventoryMaterial: 'PINK_STAINED_GLASS_PANE'
+gui-inventoryMaterial: 'PINK_STAINED_GLASS_PANE'
 
-  
 # the material to fill empty gaps in the animation GUI
-animation-inventoryMaterial: 'BLUE_STAINED_GLASS_PANE'   
-  
-   
-# Block*-Type Minecraft name of the block, representing possibility *
-animation-block1-Type: 'REDSTONE_BLOCK'
-   
-# Multiplicator bet * multiplicator = win amount for player with 
-# 3 of the same block
-animation-block1-Multiplicator: 3.0
-   
-# Chance Value which represent the chance in percent
-# Important all Chance-Values together have to be 100
-animation-block1-Chance: 50
-   
-animation-block2-Type: 'DIAMOND_BLOCK'
-animation-block2-Multiplicator: 6.0
-animation-block2-Chance: 30
-   
-animation-block3-Type: 'EMERALD_BLOCK'
-animation-block3-Multiplicator: 9.0
-animation-block3-Chance: 20
-   
+gui-fillMaterial: 'BLUE_STAINED_GLASS_PANE'
+
+# the elements which should be used in the standard slots gui
+# you can add as many as you want
+# values: block type, win-multiplicator and the weight
+gui-elements:
+   - ['REDSTONE_BLOCK', 3.0, 2]
+   - ['DIAMOND_BLOCK', 5.0, 3]
+   - ['EMERALD_BLOCK', 7.0, 5]
+
 # value in ticks (20 ticks = 1 second) 
 # for how long the animation should run 
 # (random number between these two values)
 # set both the same value to deactivate randomness
-animation-min-duration: 60
-animation-max-duration: 180
+# values: min, max
+gui-animation: [50, 120]
    
 # waiting time, in ticks, between one "roll" animation. 
-# 1 is very fast and realistic but can make laggs on bigger servers
+# 1 is very fast and realistic but can make lags on bigger servers
 # 2-5 is some kind of realistic, better for large servers
 animation-animation-cooldown: 5
    
@@ -122,7 +94,6 @@ animation-animation-cooldown: 5
 # set the range for the roll command 
 # where players get a message what the player rolled
 rollcommand-range: 30
-   
    
 # -----------------------------------
 # configurations for Casino-Signs
