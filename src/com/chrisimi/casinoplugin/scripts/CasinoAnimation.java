@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
 import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,82 +50,93 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		}
 	}
 
-	public static int rollCount = 0;
-	
-	
+	private static ItemStack backButton = ItemAPI.createItem("§9back", Material.STONE_BUTTON);
+	private static ItemStack retryButton = ItemAPI.createItem("§2retry", Material.STONE_BUTTON);
+	private static ItemStack rollButton = ItemAPI.createItem("§2Press button to start!", Material.STONE_BUTTON);
+	private static ItemStack winRowSigns = ItemAPI.createItem("", Material.SIGN);
 
-	public int einsatz;
-	private Inventory inv;
-	private Player player;
-	private int period;
-	
-	private static HashMap<Player, Integer> tasksList = new HashMap<Player, Integer>();
-	private static HashMap<Player, CasinoAnimation> guiList = new HashMap<Player, CasinoAnimation>();
-	
-	private Material block1;
-	private double block1Multiplicator;
-	private double block1Chance;
-	
-	private Material block2;
-	private double block2Multiplicator;
-	private double block2Chance;
-	
-	private Material block3;
-	private double block3Multiplicator;
-	private double block3Chance;
-	
-	private Material inventoryMaterial;
-	public CasinoAnimation(Player player, List<SlotsGUIElement> elements)
+	private static ItemStack fillItemStack = ItemAPI.createItem("", Material.BLUE_STAINED_GLASS_PANE);
+
+	private static int[] rolls = new int[] {50, 120};
+
+	//when created by a CasinoSlotsGUIManager... save the instance to go back later on
+	private CasinoSlotsGUIManager casinoSlotsGUIManager;
+	//when created by a PlayerSignsConfiguration (slots sign)... save the instance to get the owner etc.
+	private PlayerSignsConfiguration playerSignsConfiguration;
+	public CasinoAnimation(Player player, List<SlotsGUIElement> elements, CasinoSlotsGUIManager casinoSlotsGUIManager)
 	{
 		super(player, 5*9, Main.getInstance(), "Casino Slots GUI");
-		this.player = player;
-		this.einsatz = einsatz;
-		inv = Bukkit.createInventory(player, 5*9);
+		addEvents(this);
+
+		this.casinoSlotsGUIManager = casinoSlotsGUIManager;
+		openInventory();
+		updateVariables();
 		
-		
-		period = (int) UpdateManager.getValue("animation-animation-cooldown");
-		
-		block1 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block1-Type"));
-		block1Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block1-Multiplicator").toString());
-		block1Chance = Double.parseDouble(UpdateManager.getValue("animation-block1-Chance").toString());
-		
-		block2 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block2-Type"));
-		block2Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block2-Multiplicator").toString());
-		block2Chance = Double.parseDouble(UpdateManager.getValue("animation-block2-Chance").toString());
-		
-		block3 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block3-Type"));
-		block3Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block3-Multiplicator").toString());
-		block3Chance = Double.parseDouble(UpdateManager.getValue("animation-block3-Chance").toString());
-		
-		if(!(block1Chance+block2Chance+block3Chance == 100)) {
-			CasinoManager.LogWithColor(ChatColor.RED + "blockchanceexception: the value of all 3 values isn't 100! (" + (block1Chance+block2Chance+block3Chance) + ")");
-		}
-		
-		inventoryMaterial = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-inventoryMaterial"));
-		
-		createInventory();
-		guiList.put(player, this);
+		initialize();
 	}
-	private void createInventory() {
-		for(int i = 0; i < 45; i++) {
-				ItemStack material = new ItemStack(inventoryMaterial, 1);
-				inv.setItem(i, material);
-		}
-		//23
-		ItemStack material = new ItemStack(Material.STONE_BUTTON, 1);
-		ItemMeta meta = material.getItemMeta();
-		meta.setDisplayName("§2Press Button to start!");
-		
-		material.setItemMeta(meta);
-		inv.setItem(22, material);
-		player.openInventory(inv);
-		
-		meta = material.getItemMeta();
-		meta.setDisplayName("§2Back To Menu");
-		material.setItemMeta(meta);
-		inv.setItem(36, material);
-		
+
+	public CasinoAnimation(Player player, List<SlotsGUIElement> elements, PlayerSignsConfiguration playerSignsConfiguration)
+	{
+		this(player, elements, (CasinoSlotsGUIManager) null);
+		this.playerSignsConfiguration = playerSignsConfiguration;
 	}
+
+	private void updateVariables()
+	{
+		try
+		{
+			fillItemStack = new ItemStack(Enum.valueOf(Material.class, UpdateManager.getValue("gui-fillMaterial").toString()));
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get inventory material: " + e.getMessage()
+					+ ". Set to default value: BLUE_STAINED_GLASS_PANE");
+		}
+
+		try
+		{
+			List<String> values = (List<String>) UpdateManager.getValue("gui-animation");
+			if(values.size() != 2) throw new Exception("There are not 2 valid values!");
+
+			for(int i = 0; i < 2; i++)
+				rolls[i] = Integer.parseInt(values.get(i));
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation rolls: " + e.getMessage()
+					+ ". Set to default value: [50, 120]");
+		}
+	}
+
+	private void initialize()
+	{
+		//only display button when the animation was called from a CasinoSlotsGUIManager instance
+		if(casinoSlotsGUIManager != null)
+			getInventory().setItem(36, backButton);
+
+		getInventory().setItem(44, retryButton);
+		getInventory().setItem(20, winRowSigns);
+		getInventory().setItem(24, winRowSigns);
+	}
+
+	@EventMethodAnnotation
+	public void onClick(ClickEvent event)
+	{
+		if(event.getClicked().equals(backButton)) backButton();
+		else if(event.getClicked().equals(retryButton)) retryButton();
+		else if(event.getClicked().equals(rollButton)) rollButton();
+	}
+
+	private void rollButton()
+	{
+	}
+
+	private void retryButton()
+	{
+	}
+
+	private void backButton()
+	{
+	}
+	/*
 	public void startRoll() { //get called when the slot start
 		rollCount++;
 		
@@ -280,5 +295,5 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 			return null;
 		}
 	}
-	
+	*/
 }
