@@ -1,9 +1,13 @@
 package com.chrisimi.casinoplugin.scripts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.IInventoryAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -16,90 +20,62 @@ import com.chrisimi.casinoplugin.main.Main;
 
 
 /**
- * MENU 1
- * <p>
- * BLABLA
+ * //TODO rename to CasinoSlotsGUIManager
  *
  * @author chris
  */
-public class CasinoGUI
+public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
 {
 
-    private static Inventory inv;
-    @SuppressWarnings("unused")
-    private Player player;
-    private double playerBalance;
+    private static List<CasinoAnimation.SlotsGUIElement> elements = new ArrayList<>();
+    private Map<ItemStack, Double> blocks = new HashMap<>();
 
-    private static HashMap<Player, CasinoGUI> guis = new HashMap<Player, CasinoGUI>();
-
-    private int einsatz = 0;
+    private static ItemStack fillMaterial = null;
+    private static ItemStack rollButton = ItemAPI.createItem("§6roll", Material.STONE_BUTTON);
+    private static ItemStack betSign = ItemAPI.createItem("§6bet: 0.0", Material.SIGN);
 
 
-    private int plus1;
-    private int plus2;
-    private int plus3;
-    private int plus4;
-    private int plus5;
-    private int plus6;
-    private Material plusBlock;
-    private int minus1;
-    private int minus2;
-    private int minus3;
-    private int minus4;
-    private int minus5;
-    private int minus6;
-    private Material minusBlock;
-    private Material informationBlock;
-    private Material gapBlock;
+    private static Material plusBlock = Material.GREEN_WOOL;
+    private static Material minusBlock = Material.RED_WOOL;
 
     public CasinoGUI(Player player)
     {
-        this.player = player;
-        playerBalance = Main.econ.getBalance(player);
-
-        inv = Bukkit.createInventory(player, 9 * 6, "Casino GUI");
-
-        /*
-        plus1 = (int) UpdateManager.getValue("bet-plus1");
-        plus2 = (int) UpdateManager.getValue("bet-plus2");
-        plus3 = (int) UpdateManager.getValue("bet-plus3");
-        plus4 = (int) UpdateManager.getValue("bet-plus4");
-        plus5 = (int) UpdateManager.getValue("bet-plus5");
-        plus6 = (int) UpdateManager.getValue("bet-plus6");
-        plusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-plusBlock"));
-        minus1 = (int) UpdateManager.getValue("bet-minus1");
-        minus2 = (int) UpdateManager.getValue("bet-minus2");
-        minus3 = (int) UpdateManager.getValue("bet-minus3");
-        minus4 = (int) UpdateManager.getValue("bet-minus4");
-        minus5 = (int) UpdateManager.getValue("bet-minus5");
-        minus6 = (int) UpdateManager.getValue("bet-minus6");
-        minusBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-minusBlock"));
-        informationBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-informationBlock"));
-        gapBlock = Enum.valueOf(Material.class, (String) UpdateManager.getValue("bet-inventoryMaterial"));
-         */
-
-        List<Object> objects = (List<Object>) UpdateManager.getValue("gui-elements");
-
-        List<Object> a = (List<Object>) objects.get(0);
+        super(player, 9*6, Main.getInstance(), "Casino Slots GUI");
 
 
-        addItemsToInv();
 
-        guis.put(player, this);
-        openCasinoGUI(player);
+        updateVariables();
+        updateInventory();
     }
 
-    public static void openCasinoGUI(Player player)
+    private void updateInventory()
     {
-        player.openInventory(inv);
 
     }
 
-    public void updateInv()
-    { //aktualisierungs Methode um Inventar zu ver§ndern
-        addItemsToInv();
+    private void updateVariables()
+    {
+        try
+        {
+            fillMaterial = new ItemStack(Enum.valueOf(Material.class, UpdateManager.getValue("gui-inventoryMaterial", Material.PINK_STAINED_GLASS_PANE).toString()));
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse fill material: " + e.getMessage() + ". Set to default value: PINK_STAINED_GLASS_PANE");
+        }
+
+        try
+        {
+            List<Object> objects = (List<Object>) UpdateManager.getValue("gui-elements");
+
+            if(objects.size() < 3) throw new Exception("not enough elements");
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse gui elements: " + e.getMessage()
+                    + ". Set to default value.");
+        }
     }
 
+    /*
     private void addItemsToInv()
     {
         ItemStack sideMaterial = new ItemStack(gapBlock, 1);
@@ -338,5 +314,5 @@ public class CasinoGUI
             guis.remove(entry.getKey());
         }
     }
-
+     */
 }

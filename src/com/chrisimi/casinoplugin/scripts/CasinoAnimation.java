@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.scripts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -18,6 +19,22 @@ import com.chrisimi.casinoplugin.main.MessageManager;
 
 
 public class CasinoAnimation {
+
+	public static class SlotsGUIElement
+	{
+		public Material material = Material.STONE;
+		public double winMultiplicand = 0.0;
+		public double weight = 0.0;
+
+		public static double getTotalWeight(List<SlotsGUIElement> elementList)
+		{
+			double result = 0.0;
+			for(SlotsGUIElement element : elementList)
+				result += element.weight;
+
+			return result;
+		}
+	}
 
 	public static int rollCount = 0;
 	
