@@ -26,6 +26,7 @@ import com.chrisimi.casinoplugin.main.MessageManager;
 
 public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
 {
+	public static int rollCount = 0;
 
 	public static class SlotsGUIElement
 	{
@@ -72,6 +73,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	private static int[] rolls = new int[] {50, 120};
 	private static int animationCooldown = 5;
 	private List<SlotsGUIElement> elements;
+	private int bukkitID = 0;
 
 	//when created by a CasinoSlotsGUIManager... save the instance to go back later on
 	private CasinoSlotsGUIManager casinoSlotsGUIManager;
@@ -187,6 +189,10 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 		//remove retry button
 		getInventory().setItem(44, null);
+		rollCount++;
+
+		bukkitID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(),
+				animation, animationCooldown, animationCooldown);
 	}
 
 	private Runnable animation = new Runnable()
@@ -199,6 +205,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 			{
 				moveItemsOneTime();
 				generateNewRow();
+				rollsLeft--;
 			}
 			else
 			{
@@ -258,6 +265,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	private void lost()
 	{
 		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-lose"));
+		initialize();
 	}
 
 	private void won(double winMultiplicand)
@@ -273,6 +281,8 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		{
 			//TODO
 		}
+
+		initialize();
 	}
 
 	/*
