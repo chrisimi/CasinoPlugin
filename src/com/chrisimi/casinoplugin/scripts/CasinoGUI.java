@@ -7,7 +7,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
 import com.chrisimi.inventoryapi.IInventoryAPI;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,19 +42,66 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
     private static Material plusBlock = Material.GREEN_WOOL;
     private static Material minusBlock = Material.RED_WOOL;
 
+    private double playerBalance = 0.0;
+    private double currentBet = 0.0;
+
+    private CasinoAnimation casinoAnimation = null;
+
     public CasinoGUI(Player player)
     {
         super(player, 9*6, Main.getInstance(), "Casino Slots GUI");
+        addEvents(this);
 
-
-
+        playerBalance = Main.econ.getBalance(player);
         updateVariables();
+        initialize();
+
         updateInventory();
+    }
+
+    private void initialize()
+    {
+        //init bet sign lore
+        List<String> lore = new ArrayList<String>();
+        lore.add("click to manually set the bet");
+        ItemAPI.setLore(betSign, lore);
     }
 
     private void updateInventory()
     {
+        updateBlocks();
+    }
 
+    private void updateBlocks()
+    {
+        blocks.clear();
+
+        //clear blocks
+        int[] slotsToClear = new int[] {1, 2, 3, 5, 6, 7,
+                                        10, 11, 12, 14, 15, 16};
+        for(int slot : slotsToClear) getInventory().setItem(slot, null);
+
+        for(int i = 0; i < bets.length; i++)
+        {
+            ItemStack plusBlockItem = ItemAPI.createItem("§a+ " + NumberFormatter.format(bets[i]), plusBlock);
+
+            if(playerBalance >= bets[i])
+            {
+                getInventory().setItem(((i > 3) ? i + 2 : i + 1), plusBlockItem);
+                blocks.put(plusBlockItem, bets[i]);
+            }
+        }
+
+        for(int i = 0; i < bets.length; i++)
+        {
+            ItemStack minusBlockItem = ItemAPI.createItem("§4- " + NumberFormatter.format(bets[i]), minusBlock);
+
+            if(currentBet >= bets[i])
+            {
+                getInventory().setItem(((i > 3) ? i + 10 : i + 11), minusBlockItem);
+                blocks.put(minusBlockItem, -bets[i]);
+            }
+        }
     }
 
     private void updateVariables()
@@ -62,6 +112,22 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse fill material: " + e.getMessage() + ". Set to default value: PINK_STAINED_GLASS_PANE");
+        }
+
+        try
+        {
+            plusBlock = Enum.valueOf(Material.class, UpdateManager.getValue("gui-plusBlock", Material.GREEN_WOOL).toString());
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse plus block material: " + e.getMessage() + ". Set to default value: GREEN_WOOL");
+        }
+
+        try
+        {
+            minusBlock = Enum.valueOf(Material.class, UpdateManager.getValue("gui-minusBlock", Material.RED_WOOL).toString());
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse minus block material: " + e.getMessage() + ". Set to default value: RED_WOOL");
         }
 
         try
@@ -112,6 +178,29 @@ public class CasinoGUI extends com.chrisimi.inventoryapi.Inventory implements II
         }
     }
 
+    @EventMethodAnnotation
+    public void onClick(ClickEvent event)
+    {
+        if(event.getClicked().equals(betSign)) setBet();
+        else if(event.getClicked().equals(rollButton)) rollButton();
+
+        for(Map.Entry<ItemStack, Double> entry : blocks.entrySet())
+        {
+            if(event.getClicked().equals(entry.getKey()))
+                currentBet += entry.getValue();
+        }
+
+        updateInventory();
+    }
+
+    private void rollButton()
+    {
+
+    }
+
+    private void setBet()
+    {
+    }
     /*
     private void addItemsToInv()
     {
