@@ -75,6 +75,9 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
         updateBlocks();
 
         getInventory().setItem(31, rollButton);
+
+        ItemAPI.changeName(betSign, "§6bet: " + NumberFormatter.format(this.currentBet, false));
+
         getInventory().setItem(30, betSign);
         getInventory().setItem(32, betSign);
         getInventory().setItem(39, betSign);
@@ -106,7 +109,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
 
             if(currentBet >= bets[i])
             {
-                getInventory().setItem(((i > 2) ? i + 10 : i + 11), minusBlockItem);
+                getInventory().setItem(((i > 2) ? i + 11 : i + 10), minusBlockItem);
                 blocks.put(minusBlockItem, -bets[i]);
             }
         }

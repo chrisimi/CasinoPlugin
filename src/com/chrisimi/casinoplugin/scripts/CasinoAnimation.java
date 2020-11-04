@@ -74,6 +74,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	private static int animationCooldown = 5;
 	private List<SlotsGUIElement> elements;
 	private int bukkitID = 0;
+	int rollsLeft = 0;
 
 	//when created by a CasinoSlotsGUIManager... save the instance to go back later on
 	private CasinoSlotsGUIManager casinoSlotsGUIManager;
@@ -91,6 +92,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		updateVariables();
 		
 		initialize();
+		getInventory().setItem(22, rollButton);
 	}
 
 	public CasinoAnimation(Player player, List<SlotsGUIElement> elements, PlayerSignsConfiguration playerSignsConfiguration)
@@ -112,11 +114,11 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 		try
 		{
-			List<String> values = (List<String>) UpdateManager.getValue("gui-animation");
+			List<Integer> values = (List<Integer>) UpdateManager.getValue("gui-animation");
 			if(values.size() != 2) throw new Exception("There are not 2 valid values!");
 
 			for(int i = 0; i < 2; i++)
-				rolls[i] = Integer.parseInt(values.get(i));
+				rolls[i] = values.get(i);
 		} catch(Exception e)
 		{
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation rolls: " + e.getMessage()
@@ -138,6 +140,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		//only display button when the animation was called from a CasinoSlotsGUIManager instance
 		if(casinoSlotsGUIManager != null)
 			getInventory().setItem(36, backButton);
+
 
 		getInventory().setItem(44, retryButton);
 		getInventory().setItem(20, winRowSigns);
@@ -189,18 +192,21 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 		//remove retry button
 		getInventory().setItem(44, null);
+		if(getInventory().getItem(22).equals(rollButton))
+			getInventory().setItem(22, null);
 		rollCount++;
 
+		rollsLeft = (int)Math.round((rnd.nextDouble() * rolls[1] + rolls[0]) / (double)(animationCooldown));
 		bukkitID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(),
 				animation, animationCooldown, animationCooldown);
 	}
 
 	private Runnable animation = new Runnable()
 	{
-		int rollsLeft = (int)Math.round((rnd.nextDouble() * rolls[1] + rolls[0]) / (double)(animationCooldown));
 		@Override
 		public void run()
 		{
+			System.out.println(rollsLeft);
 			if(rollsLeft > 0)
 			{
 				moveItemsOneTime();
@@ -218,10 +224,10 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 	{
 		for(int column = 0; column < 3; column++)
 		{
-			for(int row = 3; row >= 0; row++)
+			for(int row = 3; row >= 0; row--)
 			{
 				//set the block one row underneath
-				getInventory().setItem(column + 4 + 9 * row, getInventory().getItem(column + 3 + 9 * row));
+				getInventory().setItem(column + 3 + 9 * (row + 1), getInventory().getItem(column + 3 + 9 * row));
 			}
 		}
 	}
@@ -248,6 +254,9 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 	private void finish()
 	{
+		Main.getInstance().getServer().getScheduler().cancelTask(bukkitID);
+		bukkitID = 0;
+
 		if(getInventory().getItem(21).getType().equals(getInventory().getItem(22).getType()) &&
 			getInventory().getItem(21).getType().equals(getInventory().getItem(23).getType()))
 		{
@@ -260,6 +269,8 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 			won(element.winMultiplicand);
 		}
+		else
+			lost();
 	}
 
 	private void lost()

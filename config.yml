@@ -80,7 +80,7 @@ gui-elements:
 # (random number between these two values)
 # set both the same value to deactivate randomness
 # values are min, max
-gui-animation: [50.0, 120.0]
+gui-animation: [50, 120]
    
 # waiting time, in ticks, between one "roll" animation. 
 # 1 is very fast and realistic but can make lags on bigger servers
