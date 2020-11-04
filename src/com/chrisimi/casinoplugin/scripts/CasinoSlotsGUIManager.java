@@ -36,10 +36,10 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
     private static Double[] bets = new Double[6];
     private Map<ItemStack, Double> blocks = new HashMap<>();
 
-    private static ItemStack fillMaterial = null;
+    private static ItemStack fillMaterial = ItemAPI.createItem("", Material.PINK_STAINED_GLASS_PANE);
     private static ItemStack rollButton = ItemAPI.createItem("§6roll", Material.STONE_BUTTON);
     private static ItemStack betSign = ItemAPI.createItem("§6bet: 0.0", Material.SIGN);
-
+    private static ItemStack informationBlock = ItemAPI.createItem("§6change your bets by clicking on the blocks", Material.DIAMOND_BLOCK);
 
     private static Material plusBlock = Material.GREEN_WOOL;
     private static Material minusBlock = Material.RED_WOOL;
@@ -73,16 +73,21 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
     private void updateInventory()
     {
         updateBlocks();
+
+        getInventory().setItem(31, rollButton);
+        getInventory().setItem(30, betSign);
+        getInventory().setItem(32, betSign);
+        getInventory().setItem(39, betSign);
+        getInventory().setItem(41, betSign);
+
     }
 
     private void updateBlocks()
     {
         blocks.clear();
 
-        //clear blocks
-        int[] slotsToClear = new int[] {1, 2, 3, 5, 6, 7,
-                                        10, 11, 12, 14, 15, 16};
-        for(int slot : slotsToClear) getInventory().setItem(slot, null);
+        for(int i = 0; i < getInventory().getSize(); i++)
+            getInventory().setItem(i, fillMaterial);
 
         for(int i = 0; i < bets.length; i++)
         {
@@ -90,7 +95,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
 
             if(playerBalance >= bets[i])
             {
-                getInventory().setItem(((i > 3) ? i + 2 : i + 1), plusBlockItem);
+                getInventory().setItem(((i > 2) ? i + 2 : i + 1), plusBlockItem);
                 blocks.put(plusBlockItem, bets[i]);
             }
         }
@@ -101,7 +106,7 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
 
             if(currentBet >= bets[i])
             {
-                getInventory().setItem(((i > 3) ? i + 10 : i + 11), minusBlockItem);
+                getInventory().setItem(((i > 2) ? i + 10 : i + 11), minusBlockItem);
                 blocks.put(minusBlockItem, -bets[i]);
             }
         }
@@ -165,20 +170,23 @@ public class CasinoSlotsGUIManager extends com.chrisimi.inventoryapi.Inventory i
 
         try
         {
-            String[] elements = (String[])UpdateManager.getValue("gui-list", new String[] {"1.0", "5.0", "10.0", "50.0", "100.0", "500.0"});
+            List<Double> elements = (List<Double>)UpdateManager.getValue("gui-list");
 
-            if(elements.length != 6) throw new Exception("there are not 6 elements!");
+            if(elements.size() != 6) throw new Exception("there are not 6 elements!");
 
             for(int i = 0; i < 6; i++)
             {
-                bets[i] = Double.parseDouble(elements[i]);
+                bets[i] = elements.get(i);
             }
 
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to parse bet list: " + e.getMessage()
                     + ". Set to default value");
+            bets = new Double[] {1.0, 5.0, 10.0, 50.0, 100.0, 500.0};
         }
+
+        //TODO add try catch for informationBlock
     }
 
     @EventMethodAnnotation

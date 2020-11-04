@@ -55,7 +55,7 @@ gui-plusBlock: "GREEN_WOOL"
 gui-minusBlock: 'RED_WOOL'
 
 # the bet list, have to be 6 elements
-gui-list: [1, 5, 10, 50, 100, 500]
+gui-list: [1.0, 5.0, 10.0, 50.0, 100.0, 500.0]
 
 # informationBlock is the Block in the middle of the GUI within 
 # the plusBlocks and minusBlocks
@@ -71,16 +71,16 @@ gui-fillMaterial: 'BLUE_STAINED_GLASS_PANE'
 # you can add as many as you want
 # values are block type, win-multiplicator and the weight
 gui-elements:
-   - ['REDSTONE_BLOCK', 3.0, 2]
-   - ['DIAMOND_BLOCK', 5.0, 3]
-   - ['EMERALD_BLOCK', 7.0, 5]
+   - ['REDSTONE_BLOCK', 3.0, 2.0]
+   - ['DIAMOND_BLOCK', 5.0, 3.0]
+   - ['EMERALD_BLOCK', 7.0, 5.0]
 
 # value in ticks (20 ticks = 1 second) 
 # for how long the animation should run 
 # (random number between these two values)
 # set both the same value to deactivate randomness
 # values are min, max
-gui-animation: [50, 120]
+gui-animation: [50.0, 120.0]
    
 # waiting time, in ticks, between one "roll" animation. 
 # 1 is very fast and realistic but can make lags on bigger servers
