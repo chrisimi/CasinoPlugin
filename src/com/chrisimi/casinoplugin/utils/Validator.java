@@ -97,7 +97,7 @@ public class Validator
             if(!PlayerSignsManager.playerCanCreateSign(conf.getOwner(), PlayerSignsConfiguration.GameMode.DICE))
                 return false;
 
-        return conf.getSlotsWeight().length == 3 && conf.getSlotsSymbols().length == 3
+        return conf.getSlotsWeight().length >= 3 && conf.getSlotsSymbols().length >= 3
         && conf.bet <= PlayerSignsManager.getMaxBetSlots();
     }
 
