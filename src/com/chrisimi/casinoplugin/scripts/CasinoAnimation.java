@@ -166,7 +166,6 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 	private void startRoll()
 	{
-		//TODO payment to owner
 		//check if the player has enough money
 		if(casinoSlotsGUIManager != null)
 		{
@@ -175,6 +174,12 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
 				return;
 			}
+			else
+			{
+				Main.econ.withdrawPlayer(player, casinoSlotsGUIManager.currentBet);
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_bet_message")
+						.replace("%amount%", NumberFormatter.format(casinoSlotsGUIManager.currentBet, false)));
+			}
 		}
 		else if(playerSignsConfiguration != null)
 		{
@@ -182,11 +187,17 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 			{
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
 				return;
-			}
-			if(!playerSignsConfiguration.hasOwnerEnoughMoney())
+			} else if(!playerSignsConfiguration.hasOwnerEnoughMoney())
 			{
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
 				return;
+			}
+			else
+			{
+				Main.econ.withdrawPlayer(player, playerSignsConfiguration.bet);
+				playerSignsConfiguration.depositOwner(playerSignsConfiguration.bet);
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_bet_message")
+						.replace("%amount%", NumberFormatter.format(casinoSlotsGUIManager.currentBet, false)));
 			}
 		}
 
@@ -194,6 +205,7 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		getInventory().setItem(44, null);
 		if(getInventory().getItem(22).equals(rollButton))
 			getInventory().setItem(22, null);
+
 		rollCount++;
 
 		rollsLeft = (int)Math.round((rnd.nextDouble() * rolls[1] + rolls[0]) / (double)(animationCooldown));
@@ -206,7 +218,6 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		@Override
 		public void run()
 		{
-			System.out.println(rollsLeft);
 			if(rollsLeft > 0)
 			{
 				moveItemsOneTime();
@@ -275,7 +286,8 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 
 	private void lost()
 	{
-		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-lose"));
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_won_nothing")
+				.replace("%balance%", Main.econ.format(Main.econ.getBalance(player))));
 		initialize();
 	}
 
@@ -290,7 +302,11 @@ public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory impleme
 		}
 		else if(playerSignsConfiguration != null)
 		{
-			//TODO
+			double wonAmount = playerSignsConfiguration.bet * winMultiplicand;
+			Main.econ.depositPlayer(player, wonAmount);
+			playerSignsConfiguration.withdrawOwner(wonAmount);
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won")
+					.replace("%amount%", NumberFormatter.format(wonAmount, false)));
 		}
 
 		initialize();
