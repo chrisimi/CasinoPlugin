@@ -21,8 +21,7 @@ import com.chrisimi.casinoplugin.slotchest.SlotChestsManager;
 public class CasinoManager
 {
 	private static String prefix = "§9[§6Casino§9] §a";
-	
-	private static SignsManager signsManager;
+
 	public static PlayerSignsManager playerSignsManager;
 	private static RollCommand rollCommand;
 	public static SlotChestsManager slotChestManager;
@@ -61,7 +60,6 @@ public class CasinoManager
 		CommandsControl.init(Main.getInstance());
 		new PlayerJoinListener();
 		new CasinoChatListener();
-		signsManager = new SignsManager();
 		playerSignsManager = new PlayerSignsManager();
 		rollCommand = new RollCommand();
 		slotChestManager = new SlotChestsManager();
@@ -79,7 +77,6 @@ public class CasinoManager
 	}
 	
 	public static void reload() {
-		signsManager.reload();
 		playerSignsManager.reload();
 		rollCommand.reload();
 		slotChestManager.reload();
