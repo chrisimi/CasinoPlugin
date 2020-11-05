@@ -1,5 +1,12 @@
 package com.chrisimi.casinoplugin.scripts;
 
+import com.chrisimi.casinoplugin.database.FileDataBase;
+import com.chrisimi.casinoplugin.database.IDataBase;
+import com.chrisimi.casinoplugin.database.MySQLDataBase;
+import org.bukkit.ChatColor;
+
+import java.io.File;
+
 public class DataManager
 {
     public enum DBMode
@@ -9,6 +16,7 @@ public class DataManager
     }
     private static DataManager _instance;
     public static DBMode dbMode;
+    public static IDataBase dataBase;
 
     public static DataManager getInstance()
     {
@@ -26,5 +34,23 @@ public class DataManager
     //init database/file
     private void initialize()
     {
+        try
+        {
+            String data = UpdateManager.getValue("connectiontype", "file").toString();
+            if(data.equalsIgnoreCase("file"))
+                dataBase = new FileDataBase();
+            else if(data.equalsIgnoreCase("mysql"))
+                dataBase = new MySQLDataBase();
+            else
+                throw new Exception("no valid connection type");
+
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to get connectiontype: " + e.getMessage()
+                    + ". Using file system now");
+            dataBase = new FileDataBase();
+        }
+
+        dataBase.init();
     }
 }
