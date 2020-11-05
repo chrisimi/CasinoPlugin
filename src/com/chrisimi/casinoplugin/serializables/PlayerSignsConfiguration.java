@@ -209,8 +209,8 @@ public class PlayerSignsConfiguration {
 	{
 		String[] splits = plusinformations.split(";");
 		String[] values = splits[1].split("to");
-		int a = Integer.parseInt(values[0]);
-		int b = Integer.parseInt(values[1]);
+		int a = Integer.parseInt(values[0].trim());
+		int b = Integer.parseInt(values[1].trim());
 		return new int[] {a, b};
 	}
 

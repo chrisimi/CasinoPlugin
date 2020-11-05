@@ -201,8 +201,8 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
                     try
                     {
                         String[] values = event.getMessage().split("to");
-                        int a = Integer.parseInt(values[0]);
-                        int b = Integer.parseInt(values[1]);
+                        int a = Integer.parseInt(values[0].trim());
+                        int b = Integer.parseInt(values[1].trim());
                         this.winMultiplicand2 = new int[] {a, b};
                         this.winMultiplicand1 = Double.MIN_VALUE;
                     } catch(Exception e)
