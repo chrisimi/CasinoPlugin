@@ -30,8 +30,7 @@ public class Main extends JavaPlugin {
 
 
 	public static File configYml;
-	
-	public static File signsYml;
+
 	public static File playerSignsYml;
 	public static File dataYml;
 	public static File leaderboardSignsYml;
@@ -157,9 +156,6 @@ public class Main extends JavaPlugin {
 
 	private void createFiles()
 	{
-		signsYml = new File(pathToFolderOfPlugin,"signs.json");
-		createFile(signsYml);
-
 		playerSignsYml = new File(pathToFolderOfPlugin, "playersigns.json");
 		createFile(playerSignsYml);
 
