@@ -24,19 +24,6 @@ public class BStatsManager
 
         }));
 
-        //use of the old casino signs (deprecated)
-        metric.addCustomChart(new Metrics.SingleLineChart("use_of_casinosigns", new Callable<Integer>() {
-            @Override
-            public Integer call() throws Exception {
-                int amount = SignsManager.playCount;
-                SignsManager.playCount = 0;
-                CasinoManager.Debug(this.getClass(), "sent use_of_casinosigns with value " + amount);
-                return amount;
-
-            }
-
-        }));
-
         //use of player signs
         metric.addCustomChart(new Metrics.SingleLineChart("use_of_playersigns", new Callable<Integer>() {
 

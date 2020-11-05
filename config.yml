@@ -95,25 +95,6 @@ gui-animation-cooldown: 5
 # where players get a message what the player rolled
 rollcommand-range: 30
    
-# -----------------------------------
-# configurations for Casino-Signs
-# -----------------------------------
-# value in ticks (20 ticks = 1 second) for how long the sign should roll
-sign-min-duration: 30
-sign-max-duration: 50
-   
-# the possibilities to get on the sign   
-sign-possibilities: [R, D, E]
-   
-# multiplicator of the bet if the player wins
-sign-multiplicator: [3.0, 5.0, 7.0]
-   
-# chance for the possibilities
-sign-chance: [50.0, 30.0, 20.0]
-   
-# the maximum amount which the bet can be
-sign-max-bet: 1000.0
-   
 # ------------------------------
 # configurations for PlayerSigns
 # ------------------------------
