@@ -252,7 +252,7 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
 
         if(winMultiplicand1 == Double.MIN_VALUE && winMultiplicand2.length == 0)
         {
-            lore.add("-§a win multiplicand not set");
+            lore.add("-§4 win multiplicand not set");
             valuesValid = false;
         } else
             lore.add("-§a win multiplicand set to " + ((winMultiplicand1 == Double.MIN_VALUE) ? String.format("%s to %s", winMultiplicand2[0], winMultiplicand2[1]) : winMultiplicand1));
