@@ -25,7 +25,7 @@ import com.chrisimi.casinoplugin.hologramsystem.HologramSystem;
 import com.chrisimi.casinoplugin.hologramsystem.LBHologram;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
-import com.chrisimi.casinoplugin.scripts.CasinoGUI;
+import com.chrisimi.casinoplugin.scripts.CasinoSlotsGUIManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
 import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
@@ -633,7 +633,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor
     {
         if (Main.perm.has(sender, "casino.gui") || Main.perm.has(sender, "casino.admin"))
         {
-            new CasinoGUI(sender);
+            new CasinoSlotsGUIManager(sender);
         } else
         {
             sender.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));

@@ -1,9 +1,16 @@
 package com.chrisimi.casinoplugin.scripts;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
+import com.chrisimi.casinoplugin.utils.ItemAPI;
+import com.chrisimi.inventoryapi.ClickEvent;
+import com.chrisimi.inventoryapi.EventMethodAnnotation;
+import com.chrisimi.inventoryapi.IInventoryAPI;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -17,83 +24,295 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 
 
-public class CasinoAnimation {
-
+public class CasinoAnimation extends com.chrisimi.inventoryapi.Inventory implements IInventoryAPI
+{
 	public static int rollCount = 0;
-	
-	
 
-	public int einsatz;
-	private Inventory inv;
-	private Player player;
-	private int period;
-	
-	private static HashMap<Player, Integer> tasksList = new HashMap<Player, Integer>();
-	private static HashMap<Player, CasinoAnimation> guiList = new HashMap<Player, CasinoAnimation>();
-	
-	private Material block1;
-	private double block1Multiplicator;
-	private double block1Chance;
-	
-	private Material block2;
-	private double block2Multiplicator;
-	private double block2Chance;
-	
-	private Material block3;
-	private double block3Multiplicator;
-	private double block3Chance;
-	
-	private Material inventoryMaterial;
-	public CasinoAnimation(Player player, int einsatz) {
-		
-		this.player = player;
-		this.einsatz = einsatz;
-		inv = Bukkit.createInventory(player, 5*9);
-		
-		
-		period = (int) UpdateManager.getValue("animation-animation-cooldown");
-		
-		block1 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block1-Type"));
-		block1Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block1-Multiplicator").toString());
-		block1Chance = Double.parseDouble(UpdateManager.getValue("animation-block1-Chance").toString());
-		
-		block2 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block2-Type"));
-		block2Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block2-Multiplicator").toString());
-		block2Chance = Double.parseDouble(UpdateManager.getValue("animation-block2-Chance").toString());
-		
-		block3 = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-block3-Type"));
-		block3Multiplicator = Double.parseDouble(UpdateManager.getValue("animation-block3-Multiplicator").toString());
-		block3Chance = Double.parseDouble(UpdateManager.getValue("animation-block3-Chance").toString());
-		
-		if(!(block1Chance+block2Chance+block3Chance == 100)) {
-			CasinoManager.LogWithColor(ChatColor.RED + "blockchanceexception: the value of all 3 values isn't 100! (" + (block1Chance+block2Chance+block3Chance) + ")");
+	public static class SlotsGUIElement
+	{
+		public SlotsGUIElement() {}
+		public SlotsGUIElement(Material material, double winMultiplicand, double weight)
+		{
+			this.material = material;
+			this.winMultiplicand = winMultiplicand;
+			this.weight = weight;
 		}
-		
-		inventoryMaterial = Enum.valueOf(Material.class, (String) UpdateManager.getValue("animation-inventoryMaterial"));
-		
-		createInventory();
-		guiList.put(player, this);
-	}
-	private void createInventory() {
-		for(int i = 0; i < 45; i++) {
-				ItemStack material = new ItemStack(inventoryMaterial, 1);
-				inv.setItem(i, material);
+
+		public Material material = Material.STONE;
+		public double winMultiplicand = 0.0;
+		public double weight = 0.0;
+
+		public static double getTotalWeight(List<SlotsGUIElement> elementList)
+		{
+			double result = 0.0;
+			for(SlotsGUIElement element : elementList)
+				result += element.weight;
+
+			return result;
 		}
-		//23
-		ItemStack material = new ItemStack(Material.STONE_BUTTON, 1);
-		ItemMeta meta = material.getItemMeta();
-		meta.setDisplayName("§2Press Button to start!");
-		
-		material.setItemMeta(meta);
-		inv.setItem(22, material);
-		player.openInventory(inv);
-		
-		meta = material.getItemMeta();
-		meta.setDisplayName("§2Back To Menu");
-		material.setItemMeta(meta);
-		inv.setItem(36, material);
-		
+
+		public static SlotsGUIElement getSlotsElementBy(List<SlotsGUIElement> elements, Material material)
+		{
+			for(SlotsGUIElement element : elements)
+				if(element.material == material)
+					return element;
+
+			return null;
+		}
 	}
+
+	private static Random rnd = new Random();
+
+	private static ItemStack backButton = ItemAPI.createItem("§9back", Material.STONE_BUTTON);
+	private static ItemStack retryButton = ItemAPI.createItem("§2retry", Material.STONE_BUTTON);
+	private static ItemStack rollButton = ItemAPI.createItem("§2Press button to start!", Material.STONE_BUTTON);
+	private static ItemStack winRowSigns = ItemAPI.createItem("", Material.SIGN);
+
+	private static ItemStack fillItemStack = ItemAPI.createItem("", Material.BLUE_STAINED_GLASS_PANE);
+
+	private static int[] rolls = new int[] {50, 120};
+	private static int animationCooldown = 5;
+	private List<SlotsGUIElement> elements;
+	private int bukkitID = 0;
+	int rollsLeft = 0;
+
+	//when created by a CasinoSlotsGUIManager... save the instance to go back later on
+	private CasinoSlotsGUIManager casinoSlotsGUIManager;
+	//when created by a PlayerSignsConfiguration (slots sign)... save the instance to get the owner etc.
+	private PlayerSignsConfiguration playerSignsConfiguration;
+	public CasinoAnimation(Player player, List<SlotsGUIElement> elements, CasinoSlotsGUIManager casinoSlotsGUIManager)
+	{
+		super(player, 5*9, Main.getInstance(), "Casino Slots GUI");
+		addEvents(this);
+
+		this.casinoSlotsGUIManager = casinoSlotsGUIManager;
+		this.elements = elements;
+
+		openInventory();
+		updateVariables();
+		
+		initialize();
+		getInventory().setItem(22, rollButton);
+	}
+
+	public CasinoAnimation(Player player, List<SlotsGUIElement> elements, PlayerSignsConfiguration playerSignsConfiguration)
+	{
+		this(player, elements, (CasinoSlotsGUIManager) null);
+		this.playerSignsConfiguration = playerSignsConfiguration;
+	}
+
+	private void updateVariables()
+	{
+		try
+		{
+			fillItemStack = new ItemStack(Enum.valueOf(Material.class, UpdateManager.getValue("gui-fillMaterial").toString()));
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get inventory material: " + e.getMessage()
+					+ ". Set to default value: BLUE_STAINED_GLASS_PANE");
+		}
+
+		try
+		{
+			List<Integer> values = (List<Integer>) UpdateManager.getValue("gui-animation");
+			if(values.size() != 2) throw new Exception("There are not 2 valid values!");
+
+			for(int i = 0; i < 2; i++)
+				rolls[i] = values.get(i);
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation rolls: " + e.getMessage()
+					+ ". Set to default value: [50, 120]");
+		}
+
+		try
+		{
+			animationCooldown = Integer.parseInt(UpdateManager.getValue("gui-animation-cooldown").toString());
+		} catch(Exception e)
+		{
+			CasinoManager.LogWithColor(ChatColor.DARK_RED + "CONFIG_ERROR: Error while trying to get animation cooldown: " + e.getMessage()
+					+ ". Set to default value: 5");
+		}
+	}
+
+	private void initialize()
+	{
+		//only display button when the animation was called from a CasinoSlotsGUIManager instance
+		if(casinoSlotsGUIManager != null)
+			getInventory().setItem(36, backButton);
+
+
+		getInventory().setItem(44, retryButton);
+		getInventory().setItem(20, winRowSigns);
+		getInventory().setItem(24, winRowSigns);
+	}
+
+	@EventMethodAnnotation
+	public void onClick(ClickEvent event)
+	{
+		if(event.getClicked().equals(backButton)) backButton();
+		else if(event.getClicked().equals(retryButton)) startRoll();
+		else if(event.getClicked().equals(rollButton)) startRoll();
+	}
+
+	private void backButton()
+	{
+		if(casinoSlotsGUIManager != null)
+		{
+			closeInventory();
+			casinoSlotsGUIManager.openInventory();
+		}
+	}
+
+	private void startRoll()
+	{
+		//check if the player has enough money
+		if(casinoSlotsGUIManager != null)
+		{
+			if(!Main.econ.has(player, casinoSlotsGUIManager.currentBet))
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
+				return;
+			}
+			else
+			{
+				Main.econ.withdrawPlayer(player, casinoSlotsGUIManager.currentBet);
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_bet_message")
+						.replace("%amount%", NumberFormatter.format(casinoSlotsGUIManager.currentBet, false)));
+			}
+		}
+		else if(playerSignsConfiguration != null)
+		{
+			if(!Main.econ.has(player, playerSignsConfiguration.bet))
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_not_enough_money"));
+				return;
+			} else if(!playerSignsConfiguration.hasOwnerEnoughMoney())
+			{
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
+				return;
+			}
+			else
+			{
+				Main.econ.withdrawPlayer(player, playerSignsConfiguration.bet);
+				playerSignsConfiguration.depositOwner(playerSignsConfiguration.bet);
+				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_bet_message")
+						.replace("%amount%", NumberFormatter.format(casinoSlotsGUIManager.currentBet, false)));
+			}
+		}
+
+		//remove retry button
+		getInventory().setItem(44, null);
+		if(getInventory().getItem(22).equals(rollButton))
+			getInventory().setItem(22, null);
+
+		rollCount++;
+
+		rollsLeft = (int)Math.round((rnd.nextDouble() * rolls[1] + rolls[0]) / (double)(animationCooldown));
+		bukkitID = Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(),
+				animation, animationCooldown, animationCooldown);
+	}
+
+	private Runnable animation = new Runnable()
+	{
+		@Override
+		public void run()
+		{
+			if(rollsLeft > 0)
+			{
+				moveItemsOneTime();
+				generateNewRow();
+				rollsLeft--;
+			}
+			else
+			{
+				finish();
+			}
+		}
+	};
+
+	private void moveItemsOneTime()
+	{
+		for(int column = 0; column < 3; column++)
+		{
+			for(int row = 3; row >= 0; row--)
+			{
+				//set the block one row underneath
+				getInventory().setItem(column + 3 + 9 * (row + 1), getInventory().getItem(column + 3 + 9 * row));
+			}
+		}
+	}
+
+	private void generateNewRow()
+	{
+		for(int i = 0; i < 3; i++)
+		{
+			double chosenWeight = rnd.nextDouble() * SlotsGUIElement.getTotalWeight(elements);
+			double currentWeight = 0.0;
+			SlotsGUIElement currentElement = null;
+			int index = 0;
+
+			while(currentWeight < chosenWeight && index < elements.size())
+			{
+				currentElement = elements.get(index);
+				currentWeight += currentElement.weight;
+				index++;
+			}
+
+			getInventory().setItem(i + 3, new ItemStack(currentElement.material));
+		}
+	}
+
+	private void finish()
+	{
+		Main.getInstance().getServer().getScheduler().cancelTask(bukkitID);
+		bukkitID = 0;
+
+		if(getInventory().getItem(21).getType().equals(getInventory().getItem(22).getType()) &&
+			getInventory().getItem(21).getType().equals(getInventory().getItem(23).getType()))
+		{
+			SlotsGUIElement element = SlotsGUIElement.getSlotsElementBy(elements, getInventory().getItem(21).getType());
+			if(element == null)
+			{
+				lost();
+				return;
+			}
+
+			won(element.winMultiplicand);
+		}
+		else
+			lost();
+	}
+
+	private void lost()
+	{
+		player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("casinogui-player_won_nothing")
+				.replace("%balance%", Main.econ.format(Main.econ.getBalance(player))));
+		initialize();
+	}
+
+	private void won(double winMultiplicand)
+	{
+		if(casinoSlotsGUIManager != null)
+		{
+			double wonAmount = casinoSlotsGUIManager.currentBet * winMultiplicand;
+			Main.econ.depositPlayer(player, wonAmount);
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won")
+					.replace("%amount%", NumberFormatter.format(wonAmount, false)));
+		}
+		else if(playerSignsConfiguration != null)
+		{
+			double wonAmount = playerSignsConfiguration.bet * winMultiplicand;
+			Main.econ.depositPlayer(player, wonAmount);
+			playerSignsConfiguration.withdrawOwner(wonAmount);
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won")
+					.replace("%amount%", NumberFormatter.format(wonAmount, false)));
+		}
+
+		initialize();
+	}
+
+	/*
 	public void startRoll() { //get called when the slot start
 		rollCount++;
 		
@@ -252,5 +471,5 @@ public class CasinoAnimation {
 			return null;
 		}
 	}
-	
+	*/
 }
