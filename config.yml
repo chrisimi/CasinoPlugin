@@ -46,6 +46,15 @@ currency-at-the-begin: false
 # enable hover-messages and the click event in the help command
 enable-hover-and-click: true
 
+# which connection type you want to have for the roll data mysql or file
+connectiontype: file
+
+mysql-ip: localhost
+mysql-port: 3306
+mysql-database: test
+mysql-user: root
+mysql-password: ''
+
 # ----------
 # CASINO-GUI
 # ----------
