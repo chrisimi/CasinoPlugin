@@ -95,7 +95,7 @@ public class SlotsAnimation implements Runnable
 			if(rollsLeft < 0)
 			{
 				int line = random.nextInt(4);
-				String editedLine = "> " + lines[line] + " §0<";
+				String editedLine = " >" + lines[line] + " §0<";
 				sign.setLine(line, editedLine);
 				sign.update(true);
 				Main.getInstance().getServer().getScheduler().cancelTask(bukkitTaskId);
