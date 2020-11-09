@@ -11,6 +11,8 @@ import java.io.File;
 
 public class DataManager
 {
+    //TODO Add method /casino exportdata <location(mysql, file> moves all the data to the given database type and overwrite it
+
     public enum DBMode
     {
         MYSQL,
@@ -56,9 +58,8 @@ public class DataManager
         dataBase.init();
     }
 
-    public void resetData(Player player)
+    public void resetData()
     {
         dataBase.reset();
-        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reset_data"));
     }
 }

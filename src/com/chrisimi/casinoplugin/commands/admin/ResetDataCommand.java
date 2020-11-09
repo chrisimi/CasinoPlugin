@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.commands.admin;
 
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.DataManager;
 import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
@@ -21,7 +22,7 @@ public class ResetDataCommand extends Command
     @Override
     public void execute(Event event)
     {
-        LeaderboardsignsManager.resetData();
+        DataManager.getInstance().resetData();
         event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reset_data"));
     }
 }
