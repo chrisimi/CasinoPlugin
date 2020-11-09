@@ -45,6 +45,8 @@ public class MySQLDataBase implements IDataBase
 
             ExecuteNonQuery(createTableIfNotExists, null);
 
+            CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully connected to the mysql database");
+
         } catch(Exception e)
         {
             CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to establish connection to mysql database: " + e.getMessage());
