@@ -21,6 +21,11 @@ public interface IDataBase
      */
     boolean isOnline();
 
+    /**
+     * reset all data!!!
+     */
+    void reset();
+
     //region player managed signs
     List<PlayData> getPlayData(OfflinePlayer player);
 

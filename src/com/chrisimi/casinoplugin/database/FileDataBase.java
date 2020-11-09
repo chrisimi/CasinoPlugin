@@ -117,6 +117,13 @@ public class FileDataBase implements IDataBase
     }
 
     @Override
+    public void reset()
+    {
+        playdatas.clear();
+        exportData();
+    }
+
+    @Override
     public List<PlayData> getPlayData(OfflinePlayer player)
     {
         List<PlayData> dataList = new ArrayList<>();

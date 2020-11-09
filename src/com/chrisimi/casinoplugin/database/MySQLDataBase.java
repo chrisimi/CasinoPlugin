@@ -69,6 +69,13 @@ public class MySQLDataBase implements IDataBase
     }
 
     @Override
+    public void reset()
+    {
+        String sql = "DELETE FROM playdatas";
+        ExecuteNonQuery(sql, null);
+    }
+
+    @Override
     public List<PlayData> getPlayData(OfflinePlayer player)
     {
         return getPlayData(player, 0, new GregorianCalendar(2100, 1, 1).getTimeInMillis());

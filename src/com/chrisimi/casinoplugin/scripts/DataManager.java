@@ -3,7 +3,9 @@ package com.chrisimi.casinoplugin.scripts;
 import com.chrisimi.casinoplugin.database.FileDataBase;
 import com.chrisimi.casinoplugin.database.IDataBase;
 import com.chrisimi.casinoplugin.database.MySQLDataBase;
+import com.chrisimi.casinoplugin.main.MessageManager;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 
@@ -52,5 +54,11 @@ public class DataManager
         }
 
         dataBase.init();
+    }
+
+    public void resetData(Player player)
+    {
+        dataBase.reset();
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reset_data"));
     }
 }
