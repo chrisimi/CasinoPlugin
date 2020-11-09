@@ -1,4 +1,4 @@
-# Casino Plugin Version 3.7.1 by chrisimi
+# Casino Plugin Version 4.0-pre by chrisimi
 # Copyright: chrisi050403@gmail.com
 # 
 # this plugin is using bStats!!!
@@ -7,7 +7,7 @@
 #
 
 # please don't change the version!!!
-version: 3.7.1
+version: 4.0-pre
 
 # enable debugging
 # before you report a bug, enable this and try it again. 
@@ -45,6 +45,15 @@ currency-at-the-begin: false
 
 # enable hover-messages and the click event in the help command
 enable-hover-and-click: true
+
+# which connection type you want to have for the roll data mysql or file
+connectiontype: file
+
+mysql-ip: localhost
+mysql-port: 3306
+mysql-database: test
+mysql-user: root
+mysql-password: ''
 
 # ----------
 # CASINO-GUI

@@ -65,6 +65,8 @@ public class Main extends JavaPlugin {
 
 		msgManager = new MessageManager();
 
+		DataManager.getInstance(); //init datamanager
+
 		casinoManager.prefixYml();
 		casinoManager.initialize();
 

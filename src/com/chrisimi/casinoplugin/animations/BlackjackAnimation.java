@@ -302,7 +302,7 @@ public class BlackjackAnimation implements Runnable
     {
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("blackjack-draw"));
         contactOwner(MessageManager.get("blackjack-owner-draw").replace("%playername%", player.getDisplayName()));
-        LeaderboardsignsManager.addData(player, thisSign, this.playerBet, this.playerBet);
+        DataManager.dataBase.addData(player, thisSign, this.playerBet, this.playerBet);
 
         CasinoManager.Debug(this.getClass(), "Draw!");
 
@@ -326,7 +326,7 @@ public class BlackjackAnimation implements Runnable
 
         contactOwner(MessageManager.get("blackjack-owner-player_lost").replace("%playername%", player.getPlayerListName()));
 
-        LeaderboardsignsManager.addData(player, thisSign, this.playerBet, 0);
+        DataManager.dataBase.addData(player, thisSign, this.playerBet, 0);
         CasinoManager.Debug(this.getClass(), player.getName() + " lost!");
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 4f, 2.5f);
         finish();
@@ -353,7 +353,7 @@ public class BlackjackAnimation implements Runnable
         //contactOwner(String.format("§4%s won at your blackjack sign, you lost: %s", player.getPlayerListName(), Main.econ.format(winamount)));
         contactOwner(MessageManager.get("blackjack-owner-player_won").replace("%playername%", player.getPlayerListName()).replace("%amount%", Main.econ.format(winamount)));
 
-        LeaderboardsignsManager.addData(player, thisSign, this.playerBet, winamount);
+        DataManager.dataBase.addData(player, thisSign, this.playerBet, winamount);
         Main.econ.depositPlayer(player, winamount);
         CasinoManager.Debug(this.getClass(), player.getName() + " +" + Main.econ.format(winamount) + " because of win!");
 

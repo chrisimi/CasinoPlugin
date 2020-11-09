@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.chrisimi.casinoplugin.scripts.*;
 import com.chrisimi.casinoplugin.utils.Validator;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
@@ -25,12 +26,6 @@ import com.chrisimi.casinoplugin.hologramsystem.HologramSystem;
 import com.chrisimi.casinoplugin.hologramsystem.LBHologram;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
-import com.chrisimi.casinoplugin.scripts.CasinoSlotsGUIManager;
-import com.chrisimi.casinoplugin.scripts.CasinoManager;
-import com.chrisimi.casinoplugin.scripts.LeaderboardsignsManager;
-import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
-import com.chrisimi.casinoplugin.scripts.RollCommand;
-import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.serializables.Leaderboardsign.Mode;
@@ -645,7 +640,7 @@ public class CasinoCommandsListener implements Listener, CommandExecutor
     {
         if (Main.perm.has(player, "casino.admin"))
         {
-            LeaderboardsignsManager.resetData();
+            DataManager.getInstance().resetData();
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_reset_data"));
         } else
         {

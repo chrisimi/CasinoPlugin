@@ -17,4 +17,10 @@ public class PlayData {
 	public double PlayAmount;
 	public double WonAmount;
 	public long Timestamp;
+
+	public Location getLocation()
+	{
+		Location.setWorld(World);
+		return Location;
+	}
 }

@@ -105,7 +105,7 @@ public class DiceAnimation implements Runnable
             //player.sendMessage(CasinoManager.getPrefix() + "§aYou won " + Main.econ.format(wonamount));
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_won").replace("%amount%", Main.econ.format(wonamount)));
 
-            LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, wonamount);
+            DataManager.dataBase.addData(player, thisSign, thisSign.bet, wonamount);
             Main.econ.depositPlayer(player, wonamount);
             //Main.econ.withdrawPlayer(owner, wonamount);
             thisSign.withdrawOwner(wonamount);
@@ -123,7 +123,7 @@ public class DiceAnimation implements Runnable
             //player.sendMessage(CasinoManager.getPrefix() + "§4You lost " + Main.econ.format(thisSign.bet));
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("dice-player_lost").replace("%amount%", Main.econ.format(thisSign.bet)));
 
-            LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0);
+            DataManager.dataBase.addData(player, thisSign, thisSign.bet, 0);
             if (!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
             {
                 //owner.getPlayer().sendMessage(CasinoManager.getPrefix() + String.format("§a%s lost %s at your Dice sign.", player.getName(), Main.econ.format(thisSign.bet)));

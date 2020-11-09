@@ -62,11 +62,11 @@ public class DataQueryManager
 //			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
 			if(post.isServerSign)
 			{
-				currentData = LeaderboardsignsManager.getPlayData(post.lastManualReset, System.currentTimeMillis());
+				currentData = DataManager.dataBase.getPlayData(post.lastManualReset, System.currentTimeMillis());
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(post.player, post.lastManualReset, System.currentTimeMillis());				
+				currentData = DataManager.dataBase.getPlayData(post.player, post.lastManualReset, System.currentTimeMillis());
 			}
 			//System.out.println("get a" + calendar.getTime().toString());
 			
@@ -74,22 +74,22 @@ public class DataQueryManager
 		{
 			if(post.isServerSign)
 			{
-				currentData = LeaderboardsignsManager.getPlayData(0, post.validUntil);
+				currentData = DataManager.dataBase.getPlayData(0, post.validUntil);
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(post.player, 0, post.validUntil);
+				currentData = DataManager.dataBase.getPlayData(post.player, 0, post.validUntil);
 			}
 		}
 		else
 		{
 			if(post.isServerSign)
 			{
-				currentData = LeaderboardsignsManager.getPlayData(post.startDate, post.endDate);
+				currentData = DataManager.dataBase.getPlayData(post.startDate, post.endDate);
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(post.player, post.startDate, post.endDate);				
+				currentData = DataManager.dataBase.getPlayData(post.player, post.startDate, post.endDate);
 			}
 		}
 		return currentData;

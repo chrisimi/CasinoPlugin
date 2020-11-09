@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.chrisimi.casinoplugin.scripts.DataManager;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
@@ -69,11 +70,11 @@ public class LeaderboardsignAnimation implements Runnable
 //			calendar.set(Calendar.MILLISECOND, (int) this.sign.lastManualReset);
 			if(sign.isServerSign())
 			{
-				currentData = LeaderboardsignsManager.getPlayData(this.sign.lastManualReset, System.currentTimeMillis());
+				currentData = DataManager.dataBase.getPlayData(this.sign.lastManualReset, System.currentTimeMillis());
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());				
+				currentData = DataManager.dataBase.getPlayData(sign.getPlayer(), this.sign.lastManualReset, System.currentTimeMillis());
 			}
 			//System.out.println("get a" + calendar.getTime().toString());
 			
@@ -81,22 +82,22 @@ public class LeaderboardsignAnimation implements Runnable
 		{
 			if(sign.isServerSign())
 			{
-				currentData = LeaderboardsignsManager.getPlayData(0, this.sign.validUntil);
+				currentData = DataManager.dataBase.getPlayData(0, this.sign.validUntil);
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(this.sign.getPlayer(), 0, this.sign.validUntil);
+				currentData = DataManager.dataBase.getPlayData(this.sign.getPlayer(), 0, this.sign.validUntil);
 			}
 		}
 		else
 		{
 			if(sign.isServerSign())
 			{
-				currentData = LeaderboardsignsManager.getPlayData(CycleHelper.getStartDateOfSign(this.sign.cycleMode), CycleHelper.getEndDateOfSign(this.sign.cycleMode));
+				currentData = DataManager.dataBase.getPlayData(CycleHelper.getStartDateOfSign(this.sign.cycleMode), CycleHelper.getEndDateOfSign(this.sign.cycleMode));
 			}
 			else
 			{
-				currentData = LeaderboardsignsManager.getPlayData(sign.getPlayer(), CycleHelper.getStartDateOfSign(this.sign.cycleMode), CycleHelper.getEndDateOfSign(this.sign.cycleMode));				
+				currentData = DataManager.dataBase.getPlayData(sign.getPlayer(), CycleHelper.getStartDateOfSign(this.sign.cycleMode), CycleHelper.getEndDateOfSign(this.sign.cycleMode));
 			}
 		}
 			
@@ -108,7 +109,7 @@ public class LeaderboardsignAnimation implements Runnable
 			int range = sign.getRange();
 			ArrayList<PlayData> dataToRemove = new ArrayList<>();
 			for(PlayData data : currentData) {
-				if(data.Location.distance(signBlock.getLocation()) > range) {
+				if(data.getLocation().distance(signBlock.getLocation()) > range) {
 					dataToRemove.add(data);
 				}
 			}

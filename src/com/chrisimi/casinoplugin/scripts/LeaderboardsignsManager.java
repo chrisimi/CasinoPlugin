@@ -45,8 +45,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class LeaderboardsignsManager implements Listener {
 		
-	private static ArrayList<PlayData> playdatas = new ArrayList<>();
-	
+
 	private static HashMap<Location, Leaderboardsign> leaderboardsigns = new HashMap<>();
 	public static HashMap<Leaderboardsign, Integer> leaderboardsignRunnableTaskID = new HashMap<>();
 	
@@ -87,7 +86,6 @@ public class LeaderboardsignsManager implements Listener {
 		if(signsenable)
 		{
 			importLeaderboardsigns();
-			importData();
 		} else 
 			CasinoManager.LogWithColor(ChatColor.DARK_RED + "Leaderboard signs are disabled!");
 		Main.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), new Runnable()
@@ -96,7 +94,6 @@ public class LeaderboardsignsManager implements Listener {
 			@Override
 			public void run()
 			{
-				exportData();
 				exportLeaderboardsigns();
 			}
 		}, 20*60*5, 20*60*15);
@@ -105,102 +102,6 @@ public class LeaderboardsignsManager implements Listener {
 	//
 	// export / import
 	//
-	
-	
-	
-	private synchronized void importData() {
-		
-		BufferedReader reader = null;
-		int row = 0;
-		try {
-			reader = new BufferedReader(new FileReader(Main.dataYml));
-			String line = "";
-			while((line = reader.readLine()) != null) {
-				row++;
-				
-				String[] splited = line.split(";");
-				if(splited.length != 6) {
-					CasinoManager.LogWithColor(ChatColor.RED + "data value is invalid! length is not 6! line will be deleted! Row: " + row);
-					continue;
-				} else if(splited[2].split(",").length != 3) {
-					CasinoManager.LogWithColor(ChatColor.RED + "location is invalid!");
-					continue;
-				} else if(Bukkit.getWorld(splited[1]) == null) {
-					CasinoManager.LogWithColor(ChatColor.RED + "worldname is invalid!");
-					continue;
-				}
-				PlayData data = getPlayData(splited);
-				if(data != null && !playdatas.contains(data)) {
-					playdatas.add(data);
-				}
-				
-			}
-			
-			if(CasinoManager.configEnableConsoleMessages)
-				CasinoManager.LogWithColor(ChatColor.GREEN + "Successfully imported " + playdatas.size() + " data-packets!");
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				reader.close();
-		
-			} catch(Exception e) {
-				//nothing
-			}
-		}
-	}
-	private synchronized void exportData() {
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(Main.dataYml));
-			writer.write("");
-			for(PlayData data : playdatas) {
-				writer.append(getStringFromPlayData(data) + "\n");
-			}
-			
-		} catch(Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				writer.close();
-			} catch(Exception e) {
-				//nothing
-			}
-		}
-	}
-	
-	private PlayData getPlayData(String[] data) {
-		
-		PlayData playData = new PlayData();
-		try {
-			playData.Player = Bukkit.getOfflinePlayer(UUID.fromString(data[0]));
-			playData.World = Bukkit.getWorld(data[1]);
-			String[] locationSplit = data[2].split(",");
-			playData.Location = new Location(playData.World, Integer.valueOf(locationSplit[0]), Integer.valueOf(locationSplit[1]), Integer.valueOf(locationSplit[2]));
-			playData.PlayAmount = Double.valueOf(data[3]);
-			playData.WonAmount = Double.valueOf(data[4]);
-			playData.Timestamp = Long.valueOf(data[5]);
-		} catch(NumberFormatException e) {
-			CasinoManager.LogWithColor(ChatColor.RED + "error at converting data!");
-			playData = null;
-		} 
-		return playData;
-	}
-	private String getStringFromPlayData(PlayData data) {
-		String[] splited = new String[6];
-		splited[0] = data.Player.getUniqueId().toString();
-		splited[1] = data.World.getName();
-		String[] locationSplit = new String[3];
-		locationSplit[0] = String.valueOf(data.Location.getBlockX());
-		locationSplit[1] = String.valueOf(data.Location.getBlockY());
-		locationSplit[2] = String.valueOf(data.Location.getBlockZ());
-		splited[2] = String.join(",", locationSplit);
-		splited[3] = String.valueOf(data.PlayAmount);
-		splited[4] = String.valueOf(data.WonAmount);
-		splited[5] = String.valueOf(data.Timestamp);
-		return String.join(";", splited);
-	}
 	
 	//leaderboard signs
 	public class LeaderboardList {
@@ -506,110 +407,9 @@ public class LeaderboardsignsManager implements Listener {
 	public static void save()
 	{
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();
-		CasinoManager.leaderboardManager.exportData();
 		CasinoManager.leaderboardManager.reload();
 	}
-	public static void addData(Player player, PlayerSignsConfiguration manager, double playAmount, double winAmount)
-	{
-		PlayData data = new PlayData();
-		data.Player = player;
-		data.World = manager.getLocation().getWorld();
-		data.Location = manager.getLocation();
-		data.PlayAmount = playAmount;
-		data.WonAmount = winAmount;
-		data.Timestamp = System.currentTimeMillis();
-		
-		playdatas.add(data);
-		CasinoManager.leaderboardManager.exportData();
-	}
-	/**
-	 * Get all PlayData with 
-	 * @param player OfflinePlayer instance
-	 * @return ArrayList containing all playdata where uuid Player is owner
-	 */
-	public static List<PlayData> getPlayData(OfflinePlayer player) {
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationOfSignsFromPlayer.contains(a.Location))
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
-	public static List<PlayData> getPlayData(OfflinePlayer player, Calendar fromDate, Calendar toDate)
-	{
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromDate.getTimeInMillis() && a.Timestamp < toDate.getTimeInMillis())
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
-	public static List<PlayData> getPlayData(OfflinePlayer player, long fromMilis, long toMilis)
-	{
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromMilis && a.Timestamp < toMilis)
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
-	
-	//--server side
-	public static List<PlayData> getPlayData() {
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationOfSignsFromPlayer.contains(a.Location))
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
-	public static List<PlayData> getPlayData(Calendar fromDate, Calendar toDate)
-	{
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromDate.getTimeInMillis() && a.Timestamp < toDate.getTimeInMillis())
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
-	public static List<PlayData> getPlayData(long fromMilis, long toMilis)
-	{
-		List<PlayData> dataList = new ArrayList<>();
-		ArrayList<Location> locationsOfSignsFromPlayer = PlayerSignsManager.getLocationsFromAllServerSigns();
-		CasinoManager.Debug(LeaderboardsignsManager.class, "total datasets: " + playdatas.size());
-		
-		synchronized (playdatas)
-		{
-			dataList = playdatas.stream()
-					.filter(a -> locationsOfSignsFromPlayer.contains(a.Location) && a.Timestamp > fromMilis && a.Timestamp < toMilis)
-					.collect(Collectors.toList());
-		}
-		return dataList;
-	}
+
 
 	public static void addLeaderboardSign(Leaderboardsign lb)
 	{
@@ -619,13 +419,7 @@ public class LeaderboardsignsManager implements Listener {
 		CasinoManager.leaderboardManager.addSignAnimation(lb);
 		CasinoManager.leaderboardManager.exportLeaderboardsigns();
 	}
-	
-	public static void resetData() 
-	{
-		LeaderboardsignsManager.playdatas = new ArrayList<>();
-		CasinoManager.leaderboardManager.exportData();
-		CasinoManager.LogWithColor(ChatColor.GREEN + "You successfully reset data.yml!");
-	}
+
 	public static void reloadData()
 	{
 		//1. stop all runnables
@@ -640,12 +434,8 @@ public class LeaderboardsignsManager implements Listener {
 		leaderboardsignRunnableTaskID.clear();
 		
 		//2. reload data
-		playdatas.clear();
 		leaderboardsigns.clear();
 		CasinoManager.leaderboardManager.importLeaderboardsigns();
-		CasinoManager.leaderboardManager.importData();
-		
-		
 	}
 	public static void resetLeaderboard(Player player, Boolean allSigns, int range, Boolean allModes, Mode mode)
 	{

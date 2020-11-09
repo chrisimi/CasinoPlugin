@@ -82,6 +82,8 @@
                             <include>com.chrisimi:versionchecker</include>
                             <include>com.chrisimi:numberformatter</include>
                             <include>com.chrisimi:commands</include>
+                            <include>mysql:mysql-connector-java</include>
+                            <include>com.google.protobuf:protobuf-java</include>
                         </includes>
                     </artifactSet>
                 </configuration>
@@ -219,6 +221,12 @@
             <artifactId>commands</artifactId>
             <version>1.3</version>
             <classifier>sources</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.22</version>
         </dependency>
     </dependencies>
 </project>
