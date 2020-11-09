@@ -5,6 +5,7 @@ import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.PlayData;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -41,7 +42,7 @@ public class MySQLDataBase implements IDataBase
                     "location text, " +
                     "playamount int, " +
                     "wonamount int, " +
-                    "timestamp SIGNED BIGINT);";
+                    "timestamp BIGINT);";
 
             ExecuteNonQuery(createTableIfNotExists, null);
 
@@ -169,14 +170,16 @@ public class MySQLDataBase implements IDataBase
                     index++;
                 }
             }
-            //BankManager.Debug(this.getClass(), statement.toString());
+            CasinoManager.Debug(this.getClass(), statement.toString());
             //log(statement.toString());
 
 
             return statement.executeUpdate();
 
         } catch (SQLException e) {
-            //BankManager.Debug(this.getClass(), e.getMessage());
+            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to execute sql: " + e.getMessage());
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+            e.printStackTrace();
             return 0;
         }
     }
@@ -195,6 +198,7 @@ public class MySQLDataBase implements IDataBase
                 int index = 1;
                 for(Object object : mapping) {
                     statement.setString(index, object.toString());
+                    index++;
                 }
             }
 
@@ -225,6 +229,17 @@ public class MySQLDataBase implements IDataBase
                     {
                         fields[i].set(object, (double) Integer.parseInt(resultSet.getObject(i + 1).toString()) / 100.0);
                     }
+                    else if(fields[i].getName().equals("Player"))
+                    {
+                        fields[i].set(object, Bukkit.getOfflinePlayer(UUID.fromString(resultSet.getString(i + 1))));
+                    } else if(fields[i].getName().equals("World"))
+                    {
+                        fields[i].set(object, Bukkit.getWorld(resultSet.getString(i + 1)));
+                    } else if(fields[i].getName().equals("Location"))
+                    {
+                        String[] locations = resultSet.getString(i + 1).split(",");
+                        fields[i].set(object, new Location(null, Double.parseDouble(locations[0]), Double.parseDouble(locations[2]), Double.parseDouble(locations[2])));
+                    }
                     else
                     {
                         fields[i].set(object, resultSet.getObject(i+1));
@@ -239,7 +254,9 @@ public class MySQLDataBase implements IDataBase
 
         } catch(Exception e)
         {
-            //BankManager.Debug(this.getClass(), e.getMessage());
+            CasinoManager.LogWithColor(ChatColor.RED + "ERROR while trying to execute sql: " + e.getMessage());
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+            e.printStackTrace();
             return returnValue;
         }
     }

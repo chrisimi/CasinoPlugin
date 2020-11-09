@@ -109,7 +109,7 @@ public class LeaderboardsignAnimation implements Runnable
 			int range = sign.getRange();
 			ArrayList<PlayData> dataToRemove = new ArrayList<>();
 			for(PlayData data : currentData) {
-				if(data.Location.distance(signBlock.getLocation()) > range) {
+				if(data.getLocation().distance(signBlock.getLocation()) > range) {
 					dataToRemove.add(data);
 				}
 			}
