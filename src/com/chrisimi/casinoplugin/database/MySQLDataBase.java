@@ -1,20 +1,19 @@
 package com.chrisimi.casinoplugin.database;
 
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.PlayerSignsManager;
 import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.PlayData;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class MySQLDataBase implements IDataBase
 {
@@ -42,7 +41,7 @@ public class MySQLDataBase implements IDataBase
                     "location text, " +
                     "playamount int, " +
                     "wonamount int, " +
-                    "timestamp text);";
+                    "timestamp SIGNED BIGINT);";
 
             ExecuteNonQuery(createTableIfNotExists, null);
 
@@ -70,37 +69,80 @@ public class MySQLDataBase implements IDataBase
     @Override
     public List<PlayData> getPlayData(OfflinePlayer player)
     {
-        return null;
+        return getPlayData(player, 0, new GregorianCalendar(2100, 1, 1).getTimeInMillis());
     }
 
     @Override
     public List<PlayData> getPlayData(OfflinePlayer player, Calendar fromDate, Calendar toDate)
     {
-        return null;
+        return getPlayData(player, fromDate.getTimeInMillis(), toDate.getTimeInMillis());
     }
 
     @Override
     public List<PlayData> getPlayData(OfflinePlayer player, long fromMillis, long toMillis)
     {
-        return null;
+        List<Map.Entry<String, String>> signs = getLocationsFromPlayerSigns(player);
+
+        List<PlayData> result = new ArrayList<>();
+
+        for(Map.Entry<String, String> entry : signs)
+        {
+            String sql = "SELECT * FROM playdatas " +
+                    "WHERE world = ? AND location = ? AND timestamp >= ? AND timestamp <= ?";
+            List<Object> mapping = new ArrayList<>();
+            mapping.add(entry.getKey());
+            mapping.add(entry.getValue());
+            mapping.add(fromMillis);
+            mapping.add(toMillis);
+
+            result.addAll(ExecuteQuery(sql, mapping, PlayData.class));
+        }
+
+        return result;
     }
 
     @Override
     public List<PlayData> getPlayData(Calendar fromDate, Calendar toDate)
     {
-        return null;
+        return getPlayData(fromDate.getTimeInMillis(), toDate.getTimeInMillis());
     }
 
     @Override
     public List<PlayData> getPlayData(long fromMillis, long toMillis)
     {
-        return null;
+        List<PlayData> result = new ArrayList<>();
+        List<Map.Entry<String, String>> locations = getLocationsFromServerSigns();
+
+        for(Map.Entry<String, String> entry : locations)
+        {
+            String sql = "SELECT * FROM playdatas " +
+                    "WHERE world = ? AND location = ? AND timestamp >= ? AND timestamp <= ?";
+            List<Object> mapping = new ArrayList<>();
+            mapping.add(entry.getKey());
+            mapping.add(entry.getValue());
+            mapping.add(fromMillis);
+            mapping.add(toMillis);
+
+            result.addAll(ExecuteQuery(sql, mapping, PlayData.class));
+        }
+
+        return result;
     }
 
     @Override
     public void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount)
     {
+        String sql = "INSERT INTO playdatas(player, world, location, playamount, wonamount, timestamp) " +
+                "VALUES(?, ?, ?, ?, ?, ?)";
+        List<Object> mapping = new ArrayList<>();
+        mapping.add(player.getUniqueId().toString());
+        mapping.add(psc.getLocation().getWorld().getName());
+        mapping.add(String.format("%s,%s,%s", psc.getLocation().getBlockX(), psc.getLocation().getBlockY(), psc.getLocation().getBlockZ()));
+        mapping.add(playAmount);
+        mapping.add(winAmount);
+        mapping.add(new GregorianCalendar().getTimeInMillis());
 
+        ExecuteNonQuery(sql, mapping);
     }
 
     public synchronized int ExecuteNonQuery(String sql, List<Object> mapping) {
@@ -191,5 +233,35 @@ public class MySQLDataBase implements IDataBase
             //BankManager.Debug(this.getClass(), e.getMessage());
             return returnValue;
         }
+    }
+
+    /**
+     *
+     * @param player
+     * @return a list of all locations where the key is the worldname and the value is the location splited by ',' x,y,z
+     */
+    private List<Map.Entry<String, String>> getLocationsFromPlayerSigns(OfflinePlayer player)
+    {
+        ArrayList<Location> locations = PlayerSignsManager.getLocationsFromAllPlayerSigns(player);
+
+        return serialize(locations);
+    }
+
+    private List<Map.Entry<String, String>> getLocationsFromServerSigns()
+    {
+        ArrayList<Location> locations = PlayerSignsManager.getLocationsFromAllServerSigns();
+
+        return serialize(locations);
+    }
+
+    private List<Map.Entry<String, String>> serialize(ArrayList<Location> locations)
+    {
+        List<Map.Entry<String, String>> result = new ArrayList<>();
+        for(Location location : locations)
+        {
+            result.add(new AbstractMap.SimpleEntry<String, String>(location.getWorld().getName(), String.format("%s,%s,%s", location.getBlockX(), location.getBlockY(), location.getBlockZ())));
+        }
+
+        return result;
     }
 }
