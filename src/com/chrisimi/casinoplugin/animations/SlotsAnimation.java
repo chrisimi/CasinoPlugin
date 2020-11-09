@@ -219,7 +219,7 @@ public class SlotsAnimation implements Runnable
 	
 	private void playerLost()
 	{
-		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, 0.0);
+		DataManager.dataBase.addData(player, thisSign, thisSign.bet, 0.0);
 		if(!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_lost").replace("%playername%", player.getDisplayName()));
 		if(!thisSign.isServerOwner() && !owner.isOnline())
@@ -232,7 +232,7 @@ public class SlotsAnimation implements Runnable
 	}
 	private void playerWon()
 	{
-		LeaderboardsignsManager.addData(player, thisSign, thisSign.bet, winAmount);
+		DataManager.dataBase.addData(player, thisSign, thisSign.bet, winAmount);
 		if(!thisSign.isServerOwner() && owner.isOnline() && !NotificationManager.hasNotificationsDisabled(owner))
 			owner.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-slots-player_won").replace("%playername%", player.getDisplayName()));
 		Main.econ.depositPlayer(player, winAmount + thisSign.bet);
