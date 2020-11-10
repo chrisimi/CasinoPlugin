@@ -136,6 +136,21 @@ commands:
     usage: /casino holograms
     permission: casino.command.hologram
 
+  casino createjackpot:
+    description: create a jackpot
+    usage: /casino createjackpot
+    permission: casion.create.jackpot
+
+  casino.editjackpot:
+    description: edit a jackpot
+    usage: /casino editjackpot <name>
+    permission: casino.command.jackpot
+
+  casino.runjackpot:
+    description: run a jackpot
+    usage: /casino runjackpot <name>
+    permission: casino.use.jackpot
+
 permissions:
   casino.*:
     description: User can do everything.
