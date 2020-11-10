@@ -21,7 +21,7 @@ public class EditJackpotCommand extends Command
         this.command = "editjackpot";
         this.description = "Edits an existing jackpot by using it's unique name";
         this.argumentsDescription = "[name]";
-        this.permissions = new String[] {"casino.jackpot.create", "casino.jackpot.server", "casino.admin"};
+        this.permissions = new String[] {"casino.jackpot.create"};
         this.enableArguments = true;
         this.usageType = UsageType.PLAYER;
     }
@@ -56,7 +56,7 @@ public class EditJackpotCommand extends Command
 
         if(jackpot.isServerOwner())
         {
-            if(!(Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.jackpot.server")))
+            if(!Main.perm.has(event.getPlayer(), "casino.create.serverjackpot"))
             {
                 event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
                 return;

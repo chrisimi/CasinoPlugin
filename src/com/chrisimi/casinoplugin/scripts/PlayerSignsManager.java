@@ -275,7 +275,7 @@ public class PlayerSignsManager implements Listener {
 		//check if player has permission to break the sign
 		if (!(Main.perm.has(event.getPlayer(), "casino.admin")))
 		{
-			if (thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+			if (thisSign.isServerOwner() && !(Main.perm.has(event.getPlayer(), "casino.create.serversign")))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-player-is_not_owner"));
 				event.setCancelled(true);
@@ -332,7 +332,7 @@ public class PlayerSignsManager implements Listener {
 		//check if player is sneaking and has permission for this sign (check if it's a server sign and he has server sign permission or if it's his sign)
 		if(event.getPlayer().isSneaking() &&
 				((!thisSign.isServerOwner() && thisSign.getOwner().getUniqueId().equals(event.getPlayer().getUniqueId())) ||
-				(thisSign.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player,"casino.serversigns")))))
+				(thisSign.isServerOwner() && Main.perm.has(player,"casino.create.serversign"))))
 		{
 			switch(thisSign.gamemode)
 			{
@@ -376,7 +376,7 @@ public class PlayerSignsManager implements Listener {
 	//check some cases for dice signs
 	private boolean onDiceSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
-		if(!(Main.perm.has(player, "casino.dice.use") || Main.perm.has(player, "casino.admin")))
+		if(!Main.perm.has(player, "casino.use.dice"))
 		{
 			
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-dicesigns"));
@@ -389,7 +389,7 @@ public class PlayerSignsManager implements Listener {
 	//check some cases for blackjack signs
 	private boolean onBlackjackSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
-		if(!(Main.perm.has(player, "casino.blackjack.use") || Main.perm.has(player, "casino.admin")))
+		if(!Main.perm.has(player, "casino.use.blackjack"))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-blackjacksigns"));
 			return false;
@@ -401,7 +401,7 @@ public class PlayerSignsManager implements Listener {
 	//check some cases for slots signs
 	private boolean onSlotsSignClick(Sign sign, PlayerSignsConfiguration thisSign, Player player)
 	{
-		if(!(Main.perm.has(player, "casino.slots.use") || Main.perm.has(player, "casino.admin")))
+		if(!Main.perm.has(player, "casino.use.slots"))
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-using-slotssigns"));
 			return false;

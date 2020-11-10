@@ -220,7 +220,7 @@ public class SlotChestsManager implements Listener{
 
 	private boolean isPermitted(Player player, SlotChest slotChest)
 	{
-		return (slotChest.isServerOwner() && (Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.slotchest.server"))) ||
+		return (slotChest.isServerOwner() && Main.perm.has(player, "casino.create.serverslotchest")) ||
 				(!slotChest.isServerOwner() && player.getUniqueId().equals(slotChest.getOwner().getUniqueId()));
 	}
 

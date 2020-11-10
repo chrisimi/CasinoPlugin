@@ -20,7 +20,7 @@ public class SignCommand extends Command
     {
         this.command = "sign";
         this.description = "display information about the sign you are looking at";
-        this.permissions = new String[] {"casino.dice.use", "casino.blackjack.use", "casino.slots.use"};
+        this.permissions = new String[] {"casino.command.sign"};
         this.permissionType = PermissionType.OR;
         this.subCommands = new Command[] {new SignEnableCommand(), new SignDisableCommand()};
     }

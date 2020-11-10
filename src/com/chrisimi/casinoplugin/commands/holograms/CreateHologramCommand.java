@@ -15,7 +15,7 @@ public class CreateHologramCommand extends Command
     {
         this.command = "createhologram";
         this.description = "open the GUI for creating a hologram";
-        this.permissions = new String[] {"casino.admin", "casino.hologram.server", "casino.hologram.create"};
+        this.permissions = new String[] {"casino.create.hologram"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
     }

@@ -199,7 +199,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         bukkitInventory.setItem(51, (isDisabled) ? enableSign : disableSign);
 
         //check if player has permissions for making a server sign
-        if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
+        if(Main.perm.has(player, "casino.create.serversign"))
         {
             ItemAPI.changeName(setServerSign, (isServerSign) ? "§6to player sign" : "§6to server sign");
             bukkitInventory.setItem(47, setServerSign);

@@ -22,7 +22,7 @@ public class MyHologramsCommand extends Command
         this.command = "myholograms";
         this.description = "Displays the coordinates and names of all your holograms.";
         this.aliases = new String[] {"holograms"};
-        this.permissions = new String[] {"casino.admin", "casino.hologram.server", "casino.hologram.create"};
+        this.permissions = new String[] {"casino.create.hologram"};
         this.permissionType = PermissionType.OR;
     }
 

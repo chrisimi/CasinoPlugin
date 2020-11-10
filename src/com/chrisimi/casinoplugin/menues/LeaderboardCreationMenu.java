@@ -338,6 +338,6 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
     }
     private boolean playerIsAllowedForServersign(Player player)
     {
-        return Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns");
+        return Main.perm.has(player, "casino.create.serverleaderboard");
     }
 }

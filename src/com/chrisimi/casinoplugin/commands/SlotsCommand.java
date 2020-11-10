@@ -15,7 +15,7 @@ public class SlotsCommand extends Command
     {
         this.command = "slots";
         this.description = "open the Slots GUI to play slots";
-        this.permissions = new String[] {"casino.admin", "casino.gui", "casino.slots"};
+        this.permissions = new String[] {"casino.gui"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
     }

@@ -19,7 +19,7 @@ public class SignDisableCommand extends Command
     {
         this.command = "disable";
         this.description = "disable your player sign while looking onto it";
-        this.permissions = new String[] {"casino.dice.create", "casino.admin", "casino.serversigns"};
+        this.permissions = new String[] {"casino.command.sign"};
         this.permissionType = PermissionType.OR;
     }
 

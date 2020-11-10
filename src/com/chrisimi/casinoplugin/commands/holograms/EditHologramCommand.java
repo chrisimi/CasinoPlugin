@@ -21,7 +21,7 @@ public class EditHologramCommand extends Command
         this.command = "edithologram";
         this.description = "Edits a existing hologram with the help of the hologram creation menu.";
         this.argumentsDescription = "[name]";
-        this.permissions = new String[] {"casino.admin", "casino.hologram.server", "casino.hologram.create"};
+        this.permissions = new String[] {"casino.create.hologram"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
     }
@@ -42,7 +42,7 @@ public class EditHologramCommand extends Command
         }
 
         //check if it's a server hologram and the player has sufficient permission
-        if (holo.isServerHologram() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server")))
+        if (holo.isServerHologram() && !Main.perm.has(player, "casino.create.serverhologram"))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;

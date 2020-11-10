@@ -21,7 +21,7 @@ public class ChestLocationsCommand extends Command
     {
         this.command = "chestlocations";
         this.description = "Get the locations from your SlotChests";
-        this.permissions = new String[] {"casino.admin", "casino.slotchest.create", "casino.slotchest.server"};
+        this.permissions = new String[] {"casino.create.slotchest"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER_CONSOLE;
     }

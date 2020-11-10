@@ -26,7 +26,7 @@ public class SetDateCommand extends Command
     {
         this.command = "setdate";
         this.description = "set a date until the leaderboard will count data (valid date format in numeric and without pm or am: day-month-year hour:minute) while looking onto it";
-        this.permissions = new String[] {"casino.admin", "casino.serversigns", "casino.leaderboard.create"};
+        this.permissions = new String[] {"casino.create.leaderboard"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
         this.usageType = UsageType.PLAYER;
@@ -65,7 +65,7 @@ public class SetDateCommand extends Command
         if (sign == null) return;
 
         //check permission for different cases
-        if (sign.isServerSign() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))
+        if (sign.isServerSign() && !Main.perm.has(player, "casino.create.serverleaderboard"))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;

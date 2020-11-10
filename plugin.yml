@@ -1,7 +1,7 @@
 name: CasinoPlugin
 author: chrisimi
 main: com.chrisimi.casinoplugin.main.Main
-version: 3.7.1
+version: 4.0-pre
 api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
 depend: [Vault]
@@ -9,102 +9,335 @@ depend: [Vault]
 commands:
   casino:
     description: shows the plugin info
-    usage: /casino 
+    usage: /casino
+
   casino gui:
     description: opens the casino GUI
     usage: /casino
-    permission: casino.gui
+    permission: casino.use.gui
+
   casino updateconfig:
     description: updates the config
     usage: /casino updateconfig
     permission: casino.admin
+
   casino reloadconfig:
     description: reloads the config
     usage: /casino reloadconfig
     permission: casino.admin
+
   casino help:
     description: get help for this plugin
     usage: /casino help
+
   casino admin: 
     description: get help as an admin for this plugin
     usage: /casino admin
     permission: casino.admin
+
   casino help slots:
     description: get the help for slots signs
     usage: /casion help slot
+
   casino help dice:
     description: get the help for dice signs
     usage: /casino help dice
+
   casino help blackjack:
     description: get help for blackjack signs
     usage: /casino help blackjack
+
   casino help leaderboard:
     description: get help for leaderboard signs
     usage: /casino help leaderboard
+
   casino sign enable:
     description: enable your playersign
     usage: /casino sign enable
-    permission: [casino.dice.create, casino.blackjack.create]
+    permission: casino.command.sign
+
   casino sign disable:
     description: disable your playersign
     usage: /casino sign disable
-    permission: [casino.dice.create, casino.blackjack.create]
+    permission: casino.command.sign
+
   casino roll:
     description: roll a random number
     usage: /casino roll [minimum] [maximum] [player (not needed)]
     permission: casino.roll
+
   casino createchest:
     description: create a new SlotChest while looking onto it
     usage: /casino createchest
-    permission: casino.slotchest.create
+    permission: casino.create.slotchest
+
   casino createserverchest:
     description: create a new server slot chest while looking onto it
     usage: /casino createserverchest
-    permission: casino.slotchest.server
+    permission: casino.create.serverslotchest
+
   casino chestlocations:
     description: get the locations from all SlotChest you made
     usage: /casino chestlocations
-    permission: casino.slotchest.create
+    permission: casino.command.slotchest
+
   casino resetdata:
     description: reset the data file
     usage: /casino resetdata
     permission: casino.admin
+
   casino reloaddata:
     description: reload all datas and leaderboardsigns
     usage: /casino reloaddata
     permission: casino.admin
+
   casino resetleaderboard:
     description: reset leaderboard signs in range
     usage: /casino resetleaderboard
-    permission: [casino.admin, casino.serversigns]
+    permission: casino.command.leaderboard
+
   casino resetserverleaderboard:
     description: reset serverleaderboard signs in range
     usage: /casino resetserverleaderboard
-    permission: [casino.admin, casino.serversigns]
+    permission: casino.create.serverleaderboard
+
   casino reloadmessages:
     description: reload message-system
     usage: /casino reloadmessages
     permission: casino.admin
+
   casino resetsign:
     description: reset the sign when it bugs
     usage: /casino resetsign
     permission: casino.admin
+
   casino deletereset:
     description: deletes the manual reset from the sign 
     usage: /casino deletereset
-    permission: [casino.admin, casino.leaderboard.create, casino.serversigns]
+    permission: casino.create.leaderboard
+
   casino setdate:
     description: set a date for a leaderboardsign
     usage: /casino setdate
-    permission: [casino.admin, casino.leaderboard.create, casino.serversigns]
+    permission: casino.create.leaderboard
+
   casino edithologram:
     description: edit a created hologram
     usage: /casino edithologram <name>
-    permission: [casino.admin, casino.hologram.create, casino.hologram.server]
+    permission: casino.create.hologram
+
   casino createhologram:
     description: create a hologram
     usage: /casino createhologram
-    permission: [casino.admin, casino.hologram.create, casino.hologram.server]
+    permission: casino.create.hologram
+
   casino holograms:
     description: show all holograms from the user
     usage: /casino holograms
+    permission: casino.command.hologram
+
+  casino createjackpot:
+    description: create a jackpot
+    usage: /casino createjackpot
+    permission: casion.create.jackpot
+
+  casino.editjackpot:
+    description: edit a jackpot
+    usage: /casino editjackpot <name>
+    permission: casino.command.jackpot
+
+  casino.runjackpot:
+    description: run a jackpot
+    usage: /casino runjackpot <name>
+    permission: casino.use.jackpot
+
+permissions:
+  casino.*:
+    description: User can do everything.
+    default: op
+    children:
+      casino.admin: true
+
+  casino.admin:
+    description: User can do everything.
+    default: false
+    children:
+      casino.create.*: true
+      casino.unlimited: true
+
+  casino.unlimited:
+    description: User ingores the limits of max bets or max signs etc.
+    default: false
+
+  casino.create.*:
+    description: User can create anything player-managed and server-managed things
+    default: false
+    children:
+      casino.create-player.*: true
+      casino.create-server.*: true
+
+  casino.create-player.*:
+    description: User can create anything player-managed
+    default: false
+    children:
+      casino.create.slots: true
+      casino.create.blackjack: true
+      casino.create.dice: true
+      casino.create.jackpot: true
+      casino.create.leaderboard: true
+      casino.create.hologram: true
+      casino.create.slotchest: true
+
+  casino.create.slots:
+    description: User can create player-managed slots signs
+    default: false
+    children:
+      casino.command.sign: true
+
+  casino.create.blackjack:
+    description: User can create player-managed blackjack signs
+    default: false
+    children:
+      casino.command.sign: true
+
+  casino.create.dice:
+    description: User can create player-managed dice signs
+    default: false
+    children:
+      casino.command.sign: true
+
+  casino.create.jackpot:
+    description: User can create player-managed jackpots
+    default: false
+    children:
+      casino.command.jackpot: true
+
+  casino.create.leaderboard:
+    description: User can create player-managed leaderboards
+    default: false
+    children:
+      casino.command.leaderboard: true
+
+  casino.create.hologram:
+    description: User can create player-managed holograms
+    default: false
+    children:
+      casino.command.hologram: true
+
+  casino.create.slotchest:
+    description: User can create player-managed slotchests
+    default: false
+    children:
+      casino.command.slotchest: true
+
+  casino.create-server.*:
+    description: User can create anything server-managed
+    default: false
+    children:
+      casino.create.serversign: true
+      casino.create.serverslotchest: true
+      casino.create.serverjackpot: true
+      casino.create.serverhologram: true
+      casino.create.serverleaderboard: true
+
+  casino.create.serversign:
+    description: User can create and manage server-managed signs
+    default: false
+    children:
+      casino.create.slots: true
+      casino.create.blackjack: true
+      casino.create.dice: true
+
+  casino.create.serverslotchest:
+    description: User can create and manage server-managed slotchests
+    default: false
+    children:
+      casino.command.slotchest: true
+
+  casino.create.serverjackpot:
+    description: User can create and manage server-managed jackpots
+    default: false
+    children:
+      casino.create.jackpot: true
+
+  casino.create.serverhologram:
+    description: User can create and manage server-managed holograms
+    default: false
+    children:
+      casino.create.hologram: true
+
+  casino.create.serverleaderboard:
+    description: User can create and manage server-managed leaderboards
+    default: false
+    children:
+      casino.create.leaderboard: true
+
+  casino.use.*:
+    description: User can use everything
+    default: true
+    children:
+      casino.use.dice: true
+      casino.use.blackjack: true
+      casino.use.slots: true
+      casino.use.jackpot: true
+      casino.use.gui: true
+      casino.use.slotchest: true
+      casino.roll: true
+
+  casino.use.dice:
+    description: User can use all dice signs
+    default: true
+    children:
+      casino.command.sign: true
+
+  casino.use.blackjack:
+    description: User can use all blackjack signs
+    default: true
+    children:
+      casino.command.sign: true
+
+  casino.use.slots:
+    description: User can use all slots signs
+    default: true
+    children:
+      casino.command.sign: true
+
+  casino.use.jackpot:
+    description: User can use all jackpots
+    default: true
+    children:
+      casino.command.jackpot: true
+
+  casino.use.gui:
+    description: User can use the slots gui
+    default: true
+
+  casino.use.slotchest:
+    description: USer can use all slotchests
+    default: true
+    children:
+      casino.command.slotchest: true
+
+  casino.roll:
+    description: User can use the roll command to roll numbers
+    default: true
+
+  casino.command.sign:
+    description: User can use sign-related commands
+    default: false
+
+  casino.command.slotchest:
+    description: User can use slotchest-related commands
+    default: false
+
+  casino.command.leaderboard:
+    description: User can use leaderboard-related commands
+    default: false
+
+  casino.command.jackpot:
+    description: User can use jackpot-related commands
+    default: false
+
+  casino.command.hologram:
+    description: User can use hologram-related commmands
+    default: false
