@@ -26,7 +26,7 @@ public class BlackjackHelpCommand extends Command
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("§f§l§lBlackjack help");
-        if (Main.perm.has(player, "casino.blackjack.create")) player.sendMessage("§2permissions: §4true");
+        if (Main.perm.has(player, "casino.create.blackjack")) player.sendMessage("§2permissions: §4true");
         else player.sendMessage("§2permissions: §4false");
 
         player.sendMessage("§6§n§lFormat of a blackjack sign:");

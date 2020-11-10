@@ -26,7 +26,7 @@ public class LeaderboardHelpCommand extends Command
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("§f§lLeaderboardsign help");
-        if (Main.perm.has(player, "casino.leaderboardsign.create")) player.sendMessage("§2permissions: §4true");
+        if (Main.perm.has(player, "casino.create.leaderboard")) player.sendMessage("§2permissions: §4true");
         else player.sendMessage("§2permissions: §4false");
 
         player.sendMessage("");

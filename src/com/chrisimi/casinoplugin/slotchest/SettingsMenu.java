@@ -51,7 +51,7 @@ public class SettingsMenu extends com.chrisimi.inventoryapi.Inventory implements
 		ItemAPI.setLore(changeRollAnimationBlock, getLoreForAnimations());
 		bukkitInventory.setItem(0, changeRollAnimationBlock);
 
-		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.slotchest.server"))
+		if(Main.perm.has(player, "casino.create.serverslotchest"))
 		{
 			bukkitInventory.setItem(2, (slotChest.isServerOwner()) ? changeToPlayerSign : changeToServerSign);
 		}

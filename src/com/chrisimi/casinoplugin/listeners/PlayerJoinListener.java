@@ -23,7 +23,7 @@ public class PlayerJoinListener implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event)
 	{
-		if(event.getPlayer().isOp() || Main.perm.has(event.getPlayer(), "casino.admin"))
+		if(Main.perm.has(event.getPlayer(), "casino.admin"))
 		{
 			switch(Main.result.getStatus())
 			{

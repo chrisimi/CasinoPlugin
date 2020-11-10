@@ -26,7 +26,7 @@ public class DiceHelpCommand extends Command
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("§f§l§nDice help");
-        if (Main.perm.has(player, "casino.dice.create")) player.sendMessage("§2permissions: §4true");
+        if (Main.perm.has(player, "casino.create.dice")) player.sendMessage("§2permissions: §4true");
         else player.sendMessage("§2permissions: §4false");
 
         player.sendMessage("§6§n§lFormat of a dice sign:");

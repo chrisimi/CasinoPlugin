@@ -56,7 +56,7 @@ public class EditJackpotCommand extends Command
 
         if(jackpot.isServerOwner())
         {
-            if(!(Main.perm.has(event.getPlayer(), "casino.admin") || Main.perm.has(event.getPlayer(), "casino.jackpot.server")))
+            if(!Main.perm.has(event.getPlayer(), "casino.create.serverjackpot"))
             {
                 event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
                 return;

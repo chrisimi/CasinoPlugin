@@ -35,7 +35,7 @@ public class DeleteResetCommand extends Command
             return;
 
         //check for enough permission
-        if (sign.isServerSign() && (!Main.perm.has(player, "casino.admin") || !Main.perm.has(player, "casino.serversigns")))
+        if (sign.isServerSign() && !Main.perm.has(player, "casino.create.serversign"))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;

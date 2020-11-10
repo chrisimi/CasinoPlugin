@@ -65,7 +65,7 @@ public class SetDateCommand extends Command
         if (sign == null) return;
 
         //check permission for different cases
-        if (sign.isServerSign() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns")))
+        if (sign.isServerSign() && !Main.perm.has(player, "casino.create.serverleaderboard"))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;

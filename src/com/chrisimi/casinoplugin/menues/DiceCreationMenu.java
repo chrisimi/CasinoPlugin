@@ -274,6 +274,6 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
     }
     private boolean playerIsAllowedForServerSigns()
     {
-        return Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns");
+        return Main.perm.has(player, "casino.create.serversign");
     }
 }

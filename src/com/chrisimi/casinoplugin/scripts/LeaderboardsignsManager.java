@@ -345,7 +345,7 @@ public class LeaderboardsignsManager implements Listener {
 		
 		if(event.getLine(0).contains(";s"))
 		{
-			if(Main.perm.has(event.getPlayer(), "casino.serversigns") || Main.perm.has(event.getPlayer(), "casino.admin"))
+			if(Main.perm.has(event.getPlayer(), "casino.create.serverleaderboard"))
 			{
 				createLeaderboardSign(null, sign, mode, all, count, position, cycle);
 			}
@@ -356,7 +356,7 @@ public class LeaderboardsignsManager implements Listener {
 		}
 		else
 		{
-			if(!(Main.perm.has(event.getPlayer(), "casino.leaderboard.create") || Main.perm.has(event.getPlayer(), "casino.admin")))
+			if(!Main.perm.has(event.getPlayer(), "casino.create.leaderboard"))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("no-permissions-creating-leaderboard"));
 				event.setCancelled(true);
@@ -378,7 +378,7 @@ public class LeaderboardsignsManager implements Listener {
 		
 		if(!(Main.perm.has(event.getPlayer(), "casino.admin")))
 		{
-			if(sign.isServerSign() && !(Main.perm.has(event.getPlayer(), "casino.serversigns")))
+			if(sign.isServerSign() && !(Main.perm.has(event.getPlayer(), "casino.create.serverleaderboard")))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				event.setCancelled(true);

@@ -90,7 +90,7 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
     private void updateInventory()
     {
         //manage server sign
-        if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.serversigns"))
+        if(Main.perm.has(player, "casino.create.serversign"))
         {
             ItemAPI.changeName(setServerSign, (isServerSign) ? "§6change to player sign" : "§6change to server sign");
             bukkitInventory.setItem(4, setServerSign);

@@ -496,7 +496,7 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 			meta.setDisplayName("§6Change it to a serversign!");
 		}
 		changeServerSign.setItemMeta(meta);
-		if(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server"))
+		if(Main.perm.has(player, "casino.create.serverhologram"))
 		{
 			//check when the hologram is getting edited or  if the player is admin
 			// because a player shouldn't be able to make a server sign back to a player sign

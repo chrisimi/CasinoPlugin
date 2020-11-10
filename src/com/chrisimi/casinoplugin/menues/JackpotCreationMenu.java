@@ -289,7 +289,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
     private void updateInventory()
     {
-        if(Main.perm.has(player, "casino.jackpot.server") || Main.perm.has(player, "casino.admin"))
+        if(Main.perm.has(player, "casino.create.serverjackpot"))
         {
             getInventory().setItem(7, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
         }

@@ -42,7 +42,7 @@ public class EditHologramCommand extends Command
         }
 
         //check if it's a server hologram and the player has sufficient permission
-        if (holo.isServerHologram() && !(Main.perm.has(player, "casino.admin") || Main.perm.has(player, "casino.hologram.server")))
+        if (holo.isServerHologram() && !Main.perm.has(player, "casino.create.serverhologram"))
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
             return;
