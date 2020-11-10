@@ -566,7 +566,7 @@ public class PlayerSignsManager implements Listener {
 	 * @param gameMode which mode should be checked
 	 * @return true if it is allowed, false if not
 	 */
-	public static boolean betIsAllowed(double amount, GameMode gameMode)
+	public static boolean isBetAllowed(double amount, GameMode gameMode)
 	{
 		switch(gameMode)
 		{

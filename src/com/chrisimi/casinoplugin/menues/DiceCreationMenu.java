@@ -260,7 +260,7 @@ public class DiceCreationMenu extends Inventory implements IInventoryAPI
             allValuesValid = false;
         }
 
-        if(!PlayerSignsManager.betIsAllowed(bet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+        if(!PlayerSignsManager.isBetAllowed(bet, PlayerSignsConfiguration.GameMode.BLACKJACK))
         {
             lore.add("- §4bet is too high for this server");
             allValuesValid = false;

@@ -261,7 +261,7 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
 
         lore.add((isSignDisabled) ? "-§6 sign is disabled" : "-§a sign is enabled");
 
-        if(!PlayerSignsManager.betIsAllowed(maxBet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+        if(!PlayerSignsManager.isBetAllowed(maxBet, PlayerSignsConfiguration.GameMode.BLACKJACK))
         {
             lore.add("- §4bet is too high for this server");
             valuesValid = false;
