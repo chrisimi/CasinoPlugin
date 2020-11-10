@@ -61,12 +61,10 @@ public class MySQLDataBase implements IDataBase
         try
         {
             return connection.isValid(3000);
-        } catch (SQLException throwables)
+        } catch (Exception e)
         {
-            throwables.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
     @Override
