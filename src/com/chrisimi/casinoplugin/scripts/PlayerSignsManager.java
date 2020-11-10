@@ -245,12 +245,33 @@ public class PlayerSignsManager implements Listener {
 
 		if(Validator.is(lines[1], "dice"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.DICE))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		} else if(Validator.is(lines[1], "blackjack"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.BLACKJACK))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		} else if(Validator.is(lines[1], "slots"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), PlayerSignsConfiguration.GameMode.SLOTS))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		}
 	}
