@@ -243,7 +243,7 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
         } else
             lore.add("-§a min bet set to §6" + Main.econ.format(minBet));
 
-        if(maxBet == Double.MIN_VALUE)
+        if(maxBet == Double.MIN_VALUE || maxBet < minBet)
         {
             lore.add("-§4 max bet not set");
             valuesValid = false;
@@ -260,6 +260,12 @@ public class BlackjackCreationMenu extends Inventory implements IInventoryAPI
         lore.add((isServerSign) ? "-§6 sign is a server sign" : "-§6 sign is a player sign");
 
         lore.add((isSignDisabled) ? "-§6 sign is disabled" : "-§a sign is enabled");
+
+        if(!PlayerSignsManager.betIsAllowed(maxBet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+        {
+            lore.add("- §4bet is too high for this server");
+            valuesValid = false;
+        }
 
         if(valuesValid)
         {

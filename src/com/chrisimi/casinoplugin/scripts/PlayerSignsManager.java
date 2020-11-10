@@ -561,6 +561,32 @@ public class PlayerSignsManager implements Listener {
 	}
 
 	/**
+	 * check if the bet is allowed on this server
+	 * @param amount the amount to check
+	 * @param gameMode which mode should be checked
+	 * @return true if it is allowed, false if not
+	 */
+	public static boolean betIsAllowed(double amount, GameMode gameMode)
+	{
+		switch(gameMode)
+		{
+			case BLACKJACK:
+				if(maxBetBlackjack == -1.0) return true;
+				return amount < maxBetBlackjack;
+
+			case DICE:
+				if(maxBetDice == -1.0) return true;
+				return amount < maxBetDice;
+
+			case SLOTS:
+				if(maxBetSlots == -1.0) return true;
+				return amount < maxBetSlots;
+		}
+
+		return false;
+	}
+
+	/**
 	 * get the total amount of signs for gamemode x
 	 * @param gameMode game mode
 	 * @return {@link Integer} value representing the total amount of signs with {@link GameMode} game mode

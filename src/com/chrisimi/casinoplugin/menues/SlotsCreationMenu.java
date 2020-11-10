@@ -296,6 +296,12 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         lore.add((isServerSign) ? "-§e sign is a server sign" : "-§e sign is a player sign");
         lore.add((isDisabled) ? "-§e sign is disabled" : "-§e sign is enabled");
 
+        if(!PlayerSignsManager.betIsAllowed(bet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+        {
+            lore.add("- §4bet is too high for this server");
+            valuesValid = false;
+        }
+
         if(amountValidElements() < 3)
         {
             lore.add("-§4 sign doesn't have enough elements, minimum is 3");
