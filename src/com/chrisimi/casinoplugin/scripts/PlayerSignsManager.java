@@ -245,12 +245,33 @@ public class PlayerSignsManager implements Listener {
 
 		if(Validator.is(lines[1], "dice"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.DICE))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		} else if(Validator.is(lines[1], "blackjack"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.BLACKJACK))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		} else if(Validator.is(lines[1], "slots"))
 		{
+			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), PlayerSignsConfiguration.GameMode.SLOTS))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+
 			new SlotsCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		}
 	}
@@ -522,6 +543,8 @@ public class PlayerSignsManager implements Listener {
 	 */
 	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
+		if(player.isOnline() && Main.perm.has(player.getPlayer(), "casino.unlimited")) return true;
+
 		switch (gamemode)
 		{
 			case BLACKJACK:
@@ -534,6 +557,32 @@ public class PlayerSignsManager implements Listener {
 				if(maxSignsSlots == -1) return true;
 				return getAmountOfPlayerSigns(player, gamemode) <= maxSignsSlots;
 		}
+		return false;
+	}
+
+	/**
+	 * check if the bet is allowed on this server
+	 * @param amount the amount to check
+	 * @param gameMode which mode should be checked
+	 * @return true if it is allowed, false if not
+	 */
+	public static boolean isBetAllowed(double amount, GameMode gameMode)
+	{
+		switch(gameMode)
+		{
+			case BLACKJACK:
+				if(maxBetBlackjack == -1.0) return true;
+				return amount < maxBetBlackjack;
+
+			case DICE:
+				if(maxBetDice == -1.0) return true;
+				return amount < maxBetDice;
+
+			case SLOTS:
+				if(maxBetSlots == -1.0) return true;
+				return amount < maxBetSlots;
+		}
+
 		return false;
 	}
 

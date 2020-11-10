@@ -63,7 +63,7 @@ public class Validator
 
         return conf.plusinformations.contains("-") && conf.plusinformations.contains(";")
         && conf.plusinformations.split("-").length == 2 && conf.plusinformations.split(";").length == 2
-        && conf.bet <= PlayerSignsManager.getMaxBetDice();
+        && PlayerSignsManager.isBetAllowed(conf.bet, PlayerSignsConfiguration.GameMode.DICE);
     }
     private static boolean validateBlackjack(PlayerSignsConfiguration conf)
     {
@@ -80,7 +80,7 @@ public class Validator
                 return false;
 
         return conf.plusinformations.contains(";") && conf.plusinformations.split(";").length == 2
-        && conf.bet <= PlayerSignsManager.getMaxBetBlackjack();
+        && PlayerSignsManager.isBetAllowed(conf.blackjackGetMaxBet(), PlayerSignsConfiguration.GameMode.BLACKJACK);
     }
     private static boolean validateSlots(PlayerSignsConfiguration conf)
     {
@@ -98,7 +98,7 @@ public class Validator
                 return false;
 
         return conf.getSlotsWeight().length >= 3 && conf.getSlotsSymbols().length >= 3
-        && conf.bet <= PlayerSignsManager.getMaxBetSlots();
+        && PlayerSignsManager.isBetAllowed(conf.bet, PlayerSignsConfiguration.GameMode.SLOTS);
     }
 
     /**
