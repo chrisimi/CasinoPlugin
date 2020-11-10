@@ -118,7 +118,7 @@ playersigns-distance: 16
 # ------------------------------
 # dice configurations
 # ------------------------------
-# set the maximum bet for dice signs
+# set the maximum bet for dice signs (-1 = infinite)
 dice-max-bet: 250.0
 
 # set limit for maximum dice signs per player (-1 = infinite)
@@ -130,7 +130,7 @@ dice-animation-speed: 8
 # ------------------------
 # blackjack configurations
 # ------------------------
-# set the maximum bet for blackjack signs
+# set the maximum bet for blackjack signs (-1 = infinite)
 blackjack-max-bet: 250.0
       
 # set limit for maximum blackjack signs per player (-1 = infinite)
@@ -139,7 +139,7 @@ blackjack-max-signs: -1
 # --------------------
 # slots configurations
 # --------------------
-# set the maximum bet for slots signs
+# set the maximum bet for slots signs (-1 = infinite)
 slots-max-bet: 250.0
       
 # set limit for maximum slots signs per player (-1 = infinite)
@@ -158,7 +158,7 @@ leaderboard-signs-reload-time: 1200
 # ------------------------
 # SlotChest configurations
 # ------------------------
-# the maximum amount of chests a player can have 
+# the maximum amount of chests a player can have (-1 = infinite)
 slotchest-max-amount: 5
    
 # does everyone with op can have unlimited 
