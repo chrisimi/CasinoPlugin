@@ -26,7 +26,7 @@ public class SetDateCommand extends Command
     {
         this.command = "setdate";
         this.description = "set a date until the leaderboard will count data (valid date format in numeric and without pm or am: day-month-year hour:minute) while looking onto it";
-        this.permissions = new String[] {"casino.admin", "casino.serversigns", "casino.leaderboard.create"};
+        this.permissions = new String[] {"casino.create.leaderboard"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
         this.usageType = UsageType.PLAYER;

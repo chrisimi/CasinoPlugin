@@ -15,12 +15,7 @@ public class ToggleNotificationsCommand extends Command
     {
         this.command = "togglenotifications";
         this.description = "Enable or disable the notficiations of your player-managed signs, jackpots and SlotChests";
-        this.permissions = new String[] {"casino.blackjack.create",
-                "casino.slots.create",
-                "casino.dice.create",
-                "casino.jackpot.create",
-                "casino.slotchest.create",
-                "casino.admin"};
+        this.permissions = new String[] {"casino.command.signs", "casino.command.jackpot", "casino.command.slotchest"};
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CreateChestCommand extends Command
     {
         this.command = "createchest";
         this.description = "create your own slotchest while looking onto a normal chest. Make sure the inventory is empty";
-        this.permissions = new String[] {"casino.admin", "casino.slotchest.create", "casino.slotchest.server"};
+        this.permissions = new String[] {"casino.create.slotchest"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
     }

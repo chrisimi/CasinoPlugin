@@ -21,7 +21,7 @@ public class CreateServerChestCommand extends Command
     {
         this.command = "createserverchest";
         this.description = "Create a server SlotChest. Make sure the inventory is empty";
-        this.permissions = new String[] {"casino.admin", "casino.slotchest.server"};
+        this.permissions = new String[] {"casino.create.serverslotchest"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
     }

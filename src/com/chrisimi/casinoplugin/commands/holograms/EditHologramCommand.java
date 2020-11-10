@@ -21,7 +21,7 @@ public class EditHologramCommand extends Command
         this.command = "edithologram";
         this.description = "Edits a existing hologram with the help of the hologram creation menu.";
         this.argumentsDescription = "[name]";
-        this.permissions = new String[] {"casino.admin", "casino.hologram.server", "casino.hologram.create"};
+        this.permissions = new String[] {"casino.create.hologram"};
         this.permissionType = PermissionType.OR;
         this.enableArguments = true;
     }

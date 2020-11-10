@@ -21,7 +21,7 @@ public class DeleteResetCommand extends Command
     {
         this.command = "deletereset";
         this.description = "delete the manual reset form a sign you are looking onto it";
-        this.permissions = new String[] {"casino.admin", "casino.serversigns", "casino.dice.create", "casino.slots.create", "casino.blackjack.create"};
+        this.permissions = new String[] {"casino.create.leaderboard"};
         this.permissionType = PermissionType.OR;
         this.usageType = UsageType.PLAYER;
     }

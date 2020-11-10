@@ -1,7 +1,7 @@
 name: CasinoPlugin
 author: chrisimi
 main: com.chrisimi.casinoplugin.main.Main
-version: ${project.version}
+version: 4.0-pre
 api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
 depend: [Vault]
@@ -154,7 +154,7 @@ commands:
 permissions:
   casino.*:
     description: User can do everything.
-    default: false
+    default: op
     children:
       casino.admin: true
 
