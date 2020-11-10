@@ -522,6 +522,8 @@ public class PlayerSignsManager implements Listener {
 	 */
 	public static boolean playerCanCreateSign(OfflinePlayer player, GameMode gamemode)
 	{
+		if(player.isOnline() && Main.perm.has(player.getPlayer(), "casino.unlimited")) return true;
+
 		switch (gamemode)
 		{
 			case BLACKJACK:
