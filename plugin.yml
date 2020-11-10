@@ -1,7 +1,7 @@
 name: CasinoPlugin
 author: chrisimi
 main: com.chrisimi.casinoplugin.main.Main
-version: 3.7.1
+version: ${project.version}
 api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
 depend: [Vault]
@@ -108,3 +108,103 @@ commands:
   casino holograms:
     description: show all holograms from the user
     usage: /casino holograms
+
+permissions:
+  casino.*:
+    description: User can do everything.
+    default: false
+    children:
+      casino.admin: true
+
+  casino.admin:
+    description: User can do everything.
+    default: false
+    children:
+      casino.create.*: true
+
+  casino.create.*:
+    description: User can create anything player-managed and server-managed things
+    default: false
+    children:
+      casino.create-player.*: true
+      casino.create-server.*: true
+
+  casino.create-player.*:
+    description: User can create anything player-managed
+    default: false
+    children:
+      casino.create.slots: true
+      casino.create.blackjack: true
+      casino.create.dice: true
+      casino.create.jackpot: true
+      casino.create.leaderboard: true
+      casino.create.hologram: true
+
+  casino.create.slots:
+    description: User can create player-managed slots signs
+    default: false
+
+  casino.create.blackjack:
+    description: User can create player-managed blackjack signs
+    default: false
+
+  casino.create.dice:
+    description: User can create player-managed dice signs
+    default: false
+
+  casino.create.jackpot:
+    description: User can create player-managed jackpots
+    default: false
+
+  casino.create.leaderboard:
+    description: User can create player-managed leaderboards
+    default: false
+
+  casino.create.hologram:
+    description: User can create player-managed holograms
+    default: false
+
+  casino.create-server.*:
+    description: User can create anything server-managed
+    default: false
+    children:
+      casino.create.serversigns: true
+
+  casino.create.serversigns:
+    description: User can create and manage anything server-managed
+    default: false
+
+  casino.use.*:
+    description: User can use everything
+    default: true
+    children:
+      casino.use.dice: true
+      casino.use.blackjack: true
+      casino.use.slots: true
+      casino.use.jackpot: true
+      casino.use.gui: true
+      casino.roll: true
+
+  casino.use.dice:
+    description: User can use all dice signs
+    default: true
+
+  casino.use.blackjack:
+    description: User can use all blackjack signs
+    default: true
+
+  casino.use.slots:
+    description: User can use all slots signs
+    default: true
+
+  casino.use.jackpot:
+    description: User can use all jackpots
+    default: true
+
+  casino.use.gui:
+    description: User can use the slots gui
+    default: true
+
+  casino.roll:
+    description: User can use the roll command to roll numbers
+    default: true
