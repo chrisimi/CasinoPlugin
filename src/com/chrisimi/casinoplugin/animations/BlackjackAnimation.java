@@ -76,18 +76,30 @@ public class BlackjackAnimation implements Runnable
     private void prepareForGettingBetFromPlayer()
     {
 
-//		if(thisSign.unlimitedBet() && !thisSign.isServerOwner())
-//			maxBet = Main.econ.getBalance(owner) / thisSign.blackjackMultiplicator();
-//		else if(thisSign.unlimitedBet() && thisSign.isServerOwner())
-//			maxBet = (Double.valueOf(UpdateManager.getValue("blackjack-max-bet").toString()) == -1) ? Double.MAX_VALUE : Double.valueOf(UpdateManager.getValue("blackjack-max-bet").toString());
-//		
+		if(thisSign.unlimitedBet() && !thisSign.isServerOwner())
+        {
+            double maxPossibleBet = Main.econ.getBalance(owner) / thisSign.blackjackGetMultiplicand();
+            if(PlayerSignsManager.isBetAllowed(maxPossibleBet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+                maxBet = maxPossibleBet;
+            else
+                maxBet = PlayerSignsManager.getMaxBetBlackjack();
+        }
+		else if(thisSign.unlimitedBet() && thisSign.isServerOwner())
+        {
+            double highestPossibleBet = Main.econ.getBalance(player);
+
+            maxBet = (PlayerSignsManager.isBetAllowed(highestPossibleBet, PlayerSignsConfiguration.GameMode.BLACKJACK)) ? highestPossibleBet : PlayerSignsManager.getMaxBetBlackjack();
+        }
+
 
         minBet = thisSign.blackjackGetMinBet();
-        maxBet = thisSign.blackjackGetMaxBet();
+        //maxBet = thisSign.blackjackGetMaxBet();
 
         waitingForInputs.put(player, this);
 
-        player.sendMessage("\n\n" + CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message").replace("%min_bet%", Main.econ.format(minBet)).replace("%max_bet%", Main.econ.format(maxBet)));
+        player.sendMessage("\n\n" + CasinoManager.getPrefix() + MessageManager.get("blackjack-welcome_message")
+                .replace("%min_bet%", Main.econ.format(minBet))
+                .replace("%max_bet%", Main.econ.format(maxBet)));
 
         this.waitingForBet = true;
         //check after 1 minute if player put nothing in reset sign!

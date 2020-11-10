@@ -296,7 +296,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
         lore.add((isServerSign) ? "-§e sign is a server sign" : "-§e sign is a player sign");
         lore.add((isDisabled) ? "-§e sign is disabled" : "-§e sign is enabled");
 
-        if(!PlayerSignsManager.isBetAllowed(bet, PlayerSignsConfiguration.GameMode.BLACKJACK))
+        if(!PlayerSignsManager.isBetAllowed(bet, PlayerSignsConfiguration.GameMode.SLOTS))
         {
             lore.add("- §4bet is too high for this server");
             valuesValid = false;
@@ -311,6 +311,7 @@ public class SlotsCreationMenu extends Inventory implements IInventoryAPI
 
         allValuesValid = valuesValid;
         ItemAPI.changeName(finishButton, (valuesValid) ? "§6create sign" : "§4can't create sign because values are invalid or missing");
+        ItemAPI.setLore(finishButton, lore);
         bukkitInventory.setItem(53, finishButton);
     }
     @EventMethodAnnotation
