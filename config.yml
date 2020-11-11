@@ -177,6 +177,16 @@ holograms-enabled: true
 
 # set the update cycle for holograms. Unit is Ticks 20 ticks = 1 second
 holograms-updatecycle: 2400
+
+# -----------------------
+# Jackpot configurations
+# -----------------------
+
+# set the max bet for jackpot (-1 = infinite)
+jackpot-max-bet: -1
+
+# set the min/max spins for a jackpot, value will be calculated randomly
+jackpot-spins: [10, 20]
    
 
 
