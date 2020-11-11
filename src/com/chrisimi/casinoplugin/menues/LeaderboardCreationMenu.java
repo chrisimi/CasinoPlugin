@@ -135,12 +135,16 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
             case RANGE:
             {
                 if(event.getMessage().equalsIgnoreCase("all"))
+                {
                     this.rangeAll = true;
+                    this.rangeValue = Integer.MIN_VALUE;
+                }
                 else
                 {
                     try
                     {
                         this.rangeValue = Integer.parseInt(event.getMessage());
+                        this.rangeAll = false;
                     } catch(Exception e)
                     {
                         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-integer_invalid"));
