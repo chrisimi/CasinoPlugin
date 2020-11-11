@@ -36,6 +36,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
     private final ItemStack setServerJackpot = ItemAPI.createItem("§6make jackpot server-managed", Material.GOLD_BLOCK);
     private final ItemStack setPlayerJackpot = ItemAPI.createItem("§6make jackpot player-managed", Material.COAL_BLOCK);
+    private final ItemStack buttonItemStack = ItemAPI.createItem("§6place buttons to play the jackpot without using the command", Material.DIAMOND);
 
     private final ItemStack openElementInventory = ItemAPI.createItem("§6edit elements", Material.BOOK);
 
@@ -72,6 +73,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         getInventory().setItem(3, setName);
         getInventory().setItem(4, setHologramPos);
         getInventory().setItem(5, openElementInventory);
+
 
         updateInventory();
         openInventory();
@@ -119,8 +121,19 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         else if(event.getClicked().equals(finishButton)) finish();
         else if(event.getClicked().equals(setPlayerJackpot)) isServerJackpot = false;
         else if(event.getClicked().equals(setServerJackpot)) isServerJackpot = true;
+        else if(event.getClicked().equals(buttonItemStack)) givePlayerPlayButton();
 
         updateInventory();
+    }
+
+    private void givePlayerPlayButton()
+    {
+        ItemStack button = ItemAPI.createItem("§6place this button so that user can press this button to play this jackpot. This button only works for the the jackpot " + name, Material.DIAMOND);
+        List<String> lore = new ArrayList<>();
+        lore.add("jackpot://" + name);
+        ItemAPI.setLore(button, lore);
+
+        ItemAPI.putItemInInventory(button, player);
     }
 
     private void setHologramPos()
@@ -293,6 +306,11 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         {
             getInventory().setItem(7, (isServerJackpot) ? setPlayerJackpot : setServerJackpot);
         }
+
+        if(name != null &&!name.isEmpty())
+            getInventory().setItem(6, buttonItemStack);
+        else
+            getInventory().setItem(6, null);
 
         //update finish button and set it in the inventory
         setFinishButtonLore();
