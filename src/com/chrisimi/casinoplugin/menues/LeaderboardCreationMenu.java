@@ -86,7 +86,7 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
         this.position = cnf.position;
         this.cycle = cnf.cycleMode;
         this.mode = cnf.getMode();
-        this.shouldSignReset = cnf.lastManualReset == 0;
+        this.shouldSignReset = cnf.lastManualReset != 0;
         this.validUntil = cnf.validUntil;
         this.oldValue = cnf.lastManualReset;
     }
@@ -113,7 +113,7 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
             bukkitInventory.setItem(8, setServerSign);
         }
 
-        ItemAPI.changeName(resetSign, (shouldSignReset) ? "§6reseting sign" : "§6remove reset");
+        ItemAPI.changeName(resetSign, (shouldSignReset) ? "§6remove reset" : "§6reset sign");
         bukkitInventory.setItem(9, resetSign);
 
         //manage the other buttons
@@ -135,12 +135,16 @@ public class LeaderboardCreationMenu extends Inventory implements IInventoryAPI
             case RANGE:
             {
                 if(event.getMessage().equalsIgnoreCase("all"))
+                {
                     this.rangeAll = true;
+                    this.rangeValue = Integer.MIN_VALUE;
+                }
                 else
                 {
                     try
                     {
                         this.rangeValue = Integer.parseInt(event.getMessage());
+                        this.rangeAll = false;
                     } catch(Exception e)
                     {
                         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-input-integer_invalid"));
