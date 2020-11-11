@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.jackpot;
 
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
+import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.Validator;
 import com.google.gson.Gson;
@@ -18,6 +19,9 @@ public class JackpotManager
     private static final HashMap<String, Jackpot> jackpotHashMap = new HashMap<>();
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().serializeNulls().create();
 
+    public static double maxBet = -1.0;
+    public static int[] spins = new int[] {10, 20};
+
     public JackpotManager()
     {
         init();
@@ -26,6 +30,38 @@ public class JackpotManager
     private void init()
     {
         importJackpots();
+        importValues();
+    }
+
+    private void importValues()
+    {
+        try
+        {
+            maxBet = Double.parseDouble(UpdateManager.getValue("jackpot-max-bet", "-1.0").toString());
+        }
+        catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to get jackpot-max-bet: " + e.getMessage()
+                    + ". Set to default value: -1");
+            maxBet = -1.0;
+        }
+
+        try
+        {
+            List<Integer> a = (List<Integer>)UpdateManager.getValue("jackpot-spins");
+            if(a.size() != 2) throw new Exception("There are not 2 symbols");
+
+            spins = new int[2];
+            for(int i = 0; i < 2; i++)
+            {
+                spins[i] = a.get(i);
+            }
+
+        } catch(Exception e)
+        {
+            CasinoManager.LogWithColor(ChatColor.DARK_RED + "ERROR while trying to get jackpot-spins: " + e.getMessage()
+                    + ". Set to default value: [10, 20]");
+        }
     }
 
     private synchronized void importJackpots()
@@ -171,5 +207,13 @@ public class JackpotManager
     public static boolean doesNameExists(String name)
     {
         return jackpotHashMap.get(name) != null;
+    }
+
+    public static boolean validAmount(double amount)
+    {
+        if(maxBet == -1.0)
+            return true;
+
+        return amount < maxBet;
     }
 }

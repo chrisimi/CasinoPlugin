@@ -278,8 +278,12 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         lore.add((elementList.size() >= 3) ? "- §a" + elementList.size() + " elements set" : "- §4not enough elements set");
         lore.add((name != null) ? "- §aname set to §l" + name : "- §4no name set");
         lore.add((isServerJackpot) ? "- §eis a server-managed jackpot" : "- §eis a player-managed jackpot");
+        if(!JackpotManager.validAmount(bet))
+        {
+            lore.add("- §4bet is over the limit of " + NumberFormatter.format(JackpotManager.maxBet));
+        }
 
-        allValuesValid = pos1 != null && pos2 != null && hologramPos != null && bet != 0.0 && elementList.size() >= 3 && name != null;
+        allValuesValid = pos1 != null && pos2 != null && hologramPos != null && bet != 0.0 && elementList.size() >= 3 && name != null && JackpotManager.validAmount(bet);
 
         ItemAPI.changeName(finishButton, (allValuesValid) ? "§acreate or update jackpot" : "§4jackpot not correctly set up");
         ItemAPI.setLore(finishButton, lore);
