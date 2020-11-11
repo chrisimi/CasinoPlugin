@@ -8,7 +8,11 @@ import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.gmail.filoghost.holographicdisplays.api.handler.TouchHandler;
+import com.gmail.filoghost.holographicdisplays.api.line.ItemLine;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,6 +105,21 @@ public class JackpotSystem
             hologram.appendTextLine("§6Try it now with the bet of " + jackpot.bet);
         else
             hologram.appendTextLine("§6Try it now with the bet of " + Main.econ.format(jackpot.bet));
+
+        hologram.appendTextLine("");
+        hologram.appendTextLine("§6press the diamond block to start");
+        ItemLine itemLine = hologram.appendItemLine(new ItemStack(Material.DIAMOND_BLOCK));
+        itemLine.setTouchHandler(new TouchHandler()
+        {
+            @Override
+            public void onTouch(Player player)
+            {
+                if(Main.perm.has(player, "casino.run.jackpot"))
+                {
+                    JackpotSystem.runJackpot(jackpot.name, player);
+                }
+            }
+        });
 
         return hologram;
     }

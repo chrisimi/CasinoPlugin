@@ -10,6 +10,7 @@ import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -59,6 +60,7 @@ public class SimpleJackpotAnimation implements Runnable
             {
                 animateColumn(entry.getValue());
             }
+            player.playSound(jackpot.getLocation1(), Sound.BLOCK_COMPARATOR_CLICK, 2.0f, 2.0f);
         }
 
     };
