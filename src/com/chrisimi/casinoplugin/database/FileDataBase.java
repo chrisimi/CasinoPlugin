@@ -184,6 +184,21 @@ public class FileDataBase implements IDataBase
     }
 
     @Override
+    public List<PlayData> getPlayData(Location signLrc)
+    {
+        List<PlayData> dataList = new ArrayList<>();
+
+        synchronized (playdatas)
+        {
+            dataList = playdatas.stream()
+                    .filter(a -> a.Location.equals(signLrc))
+                    .collect(Collectors.toList());
+        }
+
+        return dataList;
+    }
+
+    @Override
     public void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount)
     {
         PlayData data = new PlayData();

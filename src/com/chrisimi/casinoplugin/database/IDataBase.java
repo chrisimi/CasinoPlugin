@@ -2,6 +2,7 @@ package com.chrisimi.casinoplugin.database;
 
 import com.chrisimi.casinoplugin.serializables.PlayData;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
@@ -42,6 +43,8 @@ public interface IDataBase
     List<PlayData> getPlayData(long fromMillis, long toMillis);
 
     //endregion
+    List<PlayData> getPlayData(Location signLrc);
+
 
     void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount);
 }

@@ -138,6 +138,17 @@ public class MySQLDataBase implements IDataBase
     }
 
     @Override
+    public List<PlayData> getPlayData(Location signLrc)
+    {
+        String lrc = String.format("%s,%s,%s", signLrc.getBlockX(), signLrc.getBlockY(), signLrc.getBlockZ());
+
+        String sql = "SELECT * FROM playdatas " +
+                "WHERE location = " + lrc;
+
+        return ExecuteQuery(sql, null, PlayData.class);
+    }
+
+    @Override
     public void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount)
     {
         String sql = "INSERT INTO playdatas(player, world, location, playamount, wonamount, timestamp) " +
