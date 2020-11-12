@@ -145,7 +145,7 @@ public class MySQLDataBase implements IDataBase
         String lrc = String.format("%s,%s,%s", signLrc.getBlockX(), signLrc.getBlockY(), signLrc.getBlockZ());
 
         String sql = "SELECT * FROM playdatas " +
-                "WHERE location = " + lrc;
+                "WHERE location = \'" + lrc + "\'";
 
         return ExecuteQuery(sql, null, PlayData.class);
     }
