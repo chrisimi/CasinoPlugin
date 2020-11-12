@@ -92,7 +92,10 @@ public class DataManager
         else if(toDatabase == dbMode)
             toDB = dataBase;
 
-        fromDB.init();
+        if(!fromDB.isOnline())
+            fromDB.init();
+
+        if(!toDB.isOnline())
         toDB.init();
 
         if(fromDB.isOnline() && toDB.isOnline())
@@ -108,7 +111,7 @@ public class DataManager
 
         List<Location> locationList = PlayerSignsManager.getLocationsOfAllSigns();
 
-        CasinoManager.LogWithColor(ChatColor.BLUE + "Initialize datatransfer of " + locationList + " signs");
+        CasinoManager.LogWithColor(ChatColor.BLUE + "Initialize datatransfer of " + locationList.size() + " signs");
 
         int index = 0;
         int maxIndex = locationList.size();
