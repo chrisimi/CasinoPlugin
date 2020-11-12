@@ -143,7 +143,9 @@ public class Main extends JavaPlugin {
 	{
 		LeaderboardsignsManager.clearAllTasks();
 		CasinoManager.playerSignsManager.serverClose();
-		HologramSystem.getInstance().stopSystem();
+
+		if(checkCompatibility())
+			HologramSystem.getInstance().stopSystem();
 	}
 
 	private void getPathToFolderOfPlugin()
