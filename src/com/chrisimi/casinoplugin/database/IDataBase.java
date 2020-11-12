@@ -47,4 +47,5 @@ public interface IDataBase
 
 
     void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount);
+    void addData(PlayData playData);
 }

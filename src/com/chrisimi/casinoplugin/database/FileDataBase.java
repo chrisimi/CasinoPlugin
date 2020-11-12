@@ -213,6 +213,19 @@ public class FileDataBase implements IDataBase
         exportData();
     }
 
+    @Override
+    public void addData(PlayData playData)
+    {
+        synchronized (playdatas)
+        {
+            if(!playdatas.contains(playData))
+            {
+                playdatas.add(playData);
+                exportData();
+            }
+        }
+    }
+
     private PlayData getPlayData(String[] data)
     {
         PlayData playData = new PlayData();
