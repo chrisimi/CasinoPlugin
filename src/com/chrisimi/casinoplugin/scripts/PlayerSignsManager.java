@@ -336,20 +336,7 @@ public class PlayerSignsManager implements Listener {
 		{
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-sign_is_ingame"));
 			return;
-		} else if(thisSign.isSignDisabled())
-		{
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
-			return;
-		} else if(!thisSign.hasOwnerEnoughMoney())
-		{
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
-			return;
-		} else if(!(Main.econ.has(player, thisSign.bet)))
-		{
-			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-player_lacks_money"));
-			return;
 		}
-
 
 		//check if player is sneaking and has permission for this sign (check if it's a server sign and he has server sign permission or if it's his sign)
 		if(event.getPlayer().isSneaking() &&
@@ -370,8 +357,25 @@ public class PlayerSignsManager implements Listener {
 				case Slots:
 					new SlotsCreationMenu(thisSign, event.getPlayer());
 			}
+
+			return;
 		}
-		else
+
+		//check import things afterwards
+		if(thisSign.isSignDisabled())
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-sign_is_disabled"));
+			return;
+		} else if(!thisSign.hasOwnerEnoughMoney())
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
+			return;
+		} else if(!(Main.econ.has(player, thisSign.bet)))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-dice-player_lacks_money"));
+			return;
+		}
+
 		{
 			switch(thisSign.gamemode)
 			{
