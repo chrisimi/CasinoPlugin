@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.animations.jackpot;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
@@ -20,11 +21,12 @@ import java.util.*;
  */
 public class SimpleJackpotAnimation implements Runnable
 {
+    private static Random rnd = new Random();
     private final Jackpot jackpot;
     private final Player player;
 
     private int bukkitTaskID = 0;
-    private int rolls = 100;
+    private int rolls = (int) (Math.round(rnd.nextDouble() * (JackpotManager.spins[1] - JackpotManager.spins[0])) + JackpotManager.spins[0]);
 
     private int xDirection = 0;
     private int zDirection = 0;
