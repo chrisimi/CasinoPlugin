@@ -107,7 +107,7 @@ public class JackpotSystem
             hologram.appendTextLine("§6Try it now with the bet of " + Main.econ.format(jackpot.bet));
 
         hologram.appendTextLine("");
-        hologram.appendTextLine("§6press the diamond block to start");
+        hologram.appendTextLine("§6Press the diamond block to start!");
         ItemLine itemLine = hologram.appendItemLine(new ItemStack(Material.DIAMOND_BLOCK));
         itemLine.setTouchHandler(new TouchHandler()
         {
