@@ -16,7 +16,7 @@ public class ExportDataCommand extends Command
     {
         this.command = "exportdata";
         this.description = "Exports the data from one database to another database. Use -overwrite to overwrite the data (CAUTION! data loss). Valid databases: file, mysql";
-        this.argumentsDescription = "[from database] [to database] [(optinal) -overwrite]";
+        this.argumentsDescription = "[from database] [to database] [(optional) -overwrite]";
         this.enableArguments = true;
         this.permissions = new String[] {"casino.admin"};
         this.usageType = UsageType.PLAYER;
