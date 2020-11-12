@@ -3,6 +3,7 @@ package com.chrisimi.casinoplugin.scripts;
 import com.chrisimi.casinoplugin.database.FileDataBase;
 import com.chrisimi.casinoplugin.database.IDataBase;
 import com.chrisimi.casinoplugin.database.MySQLDataBase;
+import com.chrisimi.casinoplugin.serializables.PlayData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
@@ -109,7 +110,41 @@ public class DataManager
 
         CasinoManager.LogWithColor(ChatColor.BLUE + "Initialize datatransfer of " + locationList + " signs");
 
-        return false;
+        int index = 0;
+        int maxIndex = locationList.size();
+        int dataTotal = 0;
+
+        try
+        {
+            for(Location lrc : locationList)
+            {
+                index++;
+                int dataCount = 0;
+
+                List<PlayData> playData = fromDB.getPlayData(lrc);
+                if(playData != null && playData.size() != 0)
+                {
+                    for (PlayData data : playData)
+                    {
+                        if (data != null)
+                        {
+                            toDB.addData(data);
+                            dataCount++;
+                        }
+                    }
+
+                }
+
+                CasinoManager.LogWithColor(ChatColor.BLUE + String.format("%s/%s - transfered %s datas, total amount: %s", index, maxIndex, dataCount, dataTotal));
+                dataTotal += dataCount;
+            }
+        } catch(Exception e)
+        {
+            e.printStackTrace(CasinoManager.getPrintWriterForDebug());
+            return false;
+        }
+
+        return true;
     }
 
     public void resetData()
