@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -597,6 +598,12 @@ public class PlayerSignsManager implements Listener {
 				.filter(a -> a.gamemode == gameMode)
 				.count();
 	}
+
+	public static List<Location> getLocationsOfAllSigns()
+	{
+		return new ArrayList<Location>(playerSigns.keySet());
+	}
+
 	private static class Manager 
 	{
 		private static int currentID = 0;

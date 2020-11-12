@@ -23,6 +23,8 @@ public class MySQLDataBase implements IDataBase
     @Override
     public void init()
     {
+        if(connection != null) return;
+
         try
         {
             String ip = UpdateManager.getValue("mysql-ip", "localhost").toString();

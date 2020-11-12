@@ -4,6 +4,9 @@ import com.chrisimi.casinoplugin.database.FileDataBase;
 import com.chrisimi.casinoplugin.database.IDataBase;
 import com.chrisimi.casinoplugin.database.MySQLDataBase;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+
+import java.util.List;
 
 public class DataManager
 {
@@ -70,20 +73,42 @@ public class DataManager
      */
     public boolean exportData(DBMode fromDatabase, DBMode toDatabase, boolean overwrite)
     {
-        if(fromDatabase == DBMode.FILE && toDatabase == DBMode.MYSQL)
-            return exportFromFileToMySQL(overwrite);
-        else if(fromDatabase == DBMode.MYSQL && toDatabase == DBMode.FILE)
-            return exportFromMySQLToFile(overwrite);
-        return false;
+        //check if both databases are online and correct setup
+        IDataBase fromDB = null;
+        IDataBase toDB = null;
+
+        if(fromDatabase != dbMode && fromDatabase == DBMode.MYSQL)
+            fromDB = new MySQLDataBase();
+        else if(fromDatabase != dbMode && fromDatabase == DBMode.FILE)
+            fromDB = new FileDataBase();
+        else if(fromDatabase == dbMode)
+            fromDB = dataBase;
+
+        if(toDatabase != dbMode && toDatabase == DBMode.MYSQL)
+            toDB = new MySQLDataBase();
+        else if(toDatabase != dbMode && toDatabase == DBMode.FILE)
+            toDB = new FileDataBase();
+        else if(toDatabase == dbMode)
+            toDB = dataBase;
+
+        fromDB.init();
+        toDB.init();
+
+        if(fromDB.isOnline() && toDB.isOnline())
+            return exportData(fromDB, toDB, overwrite);
+        else
+            return false;
     }
 
-    private boolean exportFromMySQLToFile(boolean overwrite)
+    private boolean exportData(IDataBase fromDB, IDataBase toDB, boolean overwrite)
     {
-        return false;
-    }
+        if(overwrite)
+            toDB.reset();
 
-    private boolean exportFromFileToMySQL(boolean overwrite)
-    {
+        List<Location> locationList = PlayerSignsManager.getLocationsOfAllSigns();
+
+        CasinoManager.LogWithColor(ChatColor.BLUE + "Initialize datatransfer of " + locationList + " signs");
+
         return false;
     }
 
