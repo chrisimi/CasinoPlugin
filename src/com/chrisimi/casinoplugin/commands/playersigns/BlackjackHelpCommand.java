@@ -29,11 +29,9 @@ public class BlackjackHelpCommand extends Command
         if (Main.perm.has(player, "casino.create.blackjack")) player.sendMessage("§2permissions: §4true");
         else player.sendMessage("§2permissions: §4false");
 
-        player.sendMessage("§6§n§lFormat of a blackjack sign:");
         player.sendMessage("");
-        player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for creating a server blackjack sign)");
-        player.sendMessage("     §6line 2: §eblackjack");
-        player.sendMessage("     §6line 3: §eminbet§6;§emaxbet §6like 20;30");
-        player.sendMessage("     §6line 4: §emultiplicator §6if players draws a blackjack (21) in §eto-writing §6like 3 to 2");
+        player.sendMessage("§4NEW! §6try using the blackjack creation menu by only writing:");
+        player.sendMessage("     §6line 1: §ecasino");
+        player.sendMessage("     §6line 2: §eblackjack\n");
     }
 }

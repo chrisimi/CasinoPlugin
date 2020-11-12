@@ -30,11 +30,8 @@ public class LeaderboardHelpCommand extends Command
         else player.sendMessage("§2permissions: §4false");
 
         player.sendMessage("");
-        player.sendMessage("§6§n§lFormat of a leaderboard sign:");
-        player.sendMessage("");
-        player.sendMessage("     §6line 1: §eleaderboard §6(§eleaderboard;s §6for using it as a server leaderboardsign§6) ");
-        player.sendMessage("     §6line 2: §eposition§6;§ecycle §eposition §6like 1 for first place, §ecycle §6is optional like month data will be only taken from this month, (§eyear, month, week, day, hour§6)");
-        player.sendMessage("     §6line 3: §emode §6(§ecount, sumamount, highestamount, highestloss, sumloss§6)");
-        player.sendMessage("     §6line 4: §erange §6(§eall §6for all your signs, §enumber of blocks §6(3 as example) for using signs in this block range");
+        player.sendMessage("§4NEW! §6try using the leaderboard creation menu by only writing:");
+        player.sendMessage("     §6line 1: §ecasino");
+        player.sendMessage("     §6line 2: §eleaderboard\n");
     }
 }

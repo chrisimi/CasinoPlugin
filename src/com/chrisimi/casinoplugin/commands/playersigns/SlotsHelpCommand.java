@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.commands.playersigns;
 
+import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
 import com.chrisimi.commands.UsageType;
@@ -22,15 +23,12 @@ public class SlotsHelpCommand extends Command
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("§f§lCasino-Slots sign help");
+        if (Main.perm.has(player, "casino.create.slots")) player.sendMessage("§2permissions: §4true");
+        else player.sendMessage("§2permissions: §4false");
 
         player.sendMessage("");
-        player.sendMessage("§6§n§lFormat of a Slots sign:");
-        player.sendMessage("");
-        player.sendMessage("    §6line 1: §eslots §6or §eslots;server §6for server sign");
-        player.sendMessage("    §6line 2: §ebet §6in decimal like §e10.0");
-        player.sendMessage("    §6line 3: 3 symbols splited by ';' a semicolon like §eA;B;C");
-        player.sendMessage("    §6line 4: §echances and multiplicators §6in that format: ");
-        player.sendMessage("    §6        §echance1-chance2-chance3;multiplicator1-multiplicator2-multiplicator3 §6(1 is for A, 2 is for B and 3 is for C in that example)");
-        player.sendMessage("    §6example:   50-30-20;2-3-5");
+        player.sendMessage("§4NEW! §6try using the slots creation menu by only writing:");
+        player.sendMessage("     §6line 1: §ecasino");
+        player.sendMessage("     §6line 2: §eslots\n");
     }
 }
