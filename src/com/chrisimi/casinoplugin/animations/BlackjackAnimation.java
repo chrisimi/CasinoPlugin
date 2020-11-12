@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotManager;
 import com.chrisimi.casinoplugin.scripts.*;
+import com.chrisimi.numberformatter.NumberFormatter;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
@@ -87,6 +89,12 @@ public class BlackjackAnimation implements Runnable
 		else if(thisSign.unlimitedBet() && thisSign.isServerOwner())
         {
             double highestPossibleBet = Main.econ.getBalance(player);
+
+            maxBet = (PlayerSignsManager.isBetAllowed(highestPossibleBet, PlayerSignsConfiguration.GameMode.BLACKJACK)) ? highestPossibleBet : PlayerSignsManager.getMaxBetBlackjack();
+        }
+		else if(!thisSign.unlimitedBet())
+        {
+            double highestPossibleBet = thisSign.blackjackGetMaxBet();
 
             maxBet = (PlayerSignsManager.isBetAllowed(highestPossibleBet, PlayerSignsConfiguration.GameMode.BLACKJACK)) ? highestPossibleBet : PlayerSignsManager.getMaxBetBlackjack();
         }
@@ -390,7 +398,7 @@ public class BlackjackAnimation implements Runnable
             a += card.toString() + ", ";
 
         this.sign.setLine(0, "§4§ldealer: " + Card.getValue(dealer));
-        this.sign.setLine(1, "§6§lbet: " + Main.econ.format(this.playerBet));
+        this.sign.setLine(1, "§6§lbet: " + NumberFormatter.format(this.playerBet));
         this.sign.setLine(2, a);
         this.sign.setLine(3, String.valueOf(Card.getValue(cards)));
 
