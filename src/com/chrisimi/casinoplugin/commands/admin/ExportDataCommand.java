@@ -1,5 +1,7 @@
 package com.chrisimi.casinoplugin.commands.admin;
 
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.DataManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
@@ -17,7 +19,7 @@ public class ExportDataCommand extends Command
         this.argumentsDescription = "[from database] [to database] [(optinal) -overwrite]";
         this.enableArguments = true;
         this.permissions = new String[] {"casino.admin"};
-        this.usageType = UsageType.PLAYER_CONSOLE;
+        this.usageType = UsageType.PLAYER;
     }
     @Override
     public void execute(Event event)
@@ -31,6 +33,10 @@ public class ExportDataCommand extends Command
             return;
 
         boolean success = DataManager.getInstance().exportData(fromDatabase, toDatabase, String.join(" ", event.getArgs()).contains("-overwrite"));
+        if(success)
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + "Successfully exported data");
+        else
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4An error occurred while trying to export data. Check your database connection or the debug.log");
     }
 
     private DataManager.DBMode parseDb(String string)
