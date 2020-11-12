@@ -29,11 +29,9 @@ public class DiceHelpCommand extends Command
         if (Main.perm.has(player, "casino.create.dice")) player.sendMessage("§2permissions: §4true");
         else player.sendMessage("§2permissions: §4false");
 
-        player.sendMessage("§6§n§lFormat of a dice sign:");
         player.sendMessage("");
-        player.sendMessage("     §6line 1: §ecasino §6(§ecasino;server §6for creating a server dice sign)");
-        player.sendMessage("     §6line 2: §edice");
-        player.sendMessage("     §6line 3: §ebet §6like 30 or 20.5");
-        player.sendMessage("     §6line 4: §ewin chance §6and §emultiplicator §6like 1-40;3 (the player wins if he draws between 1-40 and get bet*3)");
+        player.sendMessage("§4NEW! §6try using the dice creation menu by only writing:");
+        player.sendMessage("     §6line 1: §ecasino");
+        player.sendMessage("     §6line 2: §edice\n");
     }
 }
