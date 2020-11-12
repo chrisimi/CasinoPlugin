@@ -141,15 +141,20 @@ commands:
     usage: /casino createjackpot
     permission: casion.create.jackpot
 
-  casino.editjackpot:
+  casino editjackpot:
     description: edit a jackpot
     usage: /casino editjackpot <name>
     permission: casino.command.jackpot
 
-  casino.runjackpot:
+  casino runjackpot:
     description: run a jackpot
     usage: /casino runjackpot <name>
     permission: casino.use.jackpot
+
+  casino exportdata:
+    description: export data from database to database
+    usage: /casino exportdata <fromdb> <todb> <-overwrite>
+    permission: casino.admin
 
 permissions:
   casino.*:
