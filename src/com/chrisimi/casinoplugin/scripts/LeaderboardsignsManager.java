@@ -186,6 +186,8 @@ public class LeaderboardsignsManager implements Listener {
 //
 	public Boolean deleteLeaderbordsign(Leaderboardsign sign) 
 	{
+		if(sign == null)
+			return true;
 		synchronized (leaderboardsigns)
 		{
 			Main.getInstance().getServer().getScheduler().cancelTask(leaderboardsignRunnableTaskID.remove(sign));
