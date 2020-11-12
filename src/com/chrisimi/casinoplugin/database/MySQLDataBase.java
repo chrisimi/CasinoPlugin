@@ -23,6 +23,8 @@ public class MySQLDataBase implements IDataBase
     @Override
     public void init()
     {
+        if(connection != null) return;
+
         try
         {
             String ip = UpdateManager.getValue("mysql-ip", "localhost").toString();
@@ -138,6 +140,17 @@ public class MySQLDataBase implements IDataBase
     }
 
     @Override
+    public List<PlayData> getPlayData(Location signLrc)
+    {
+        String lrc = String.format("%s,%s,%s", signLrc.getBlockX(), signLrc.getBlockY(), signLrc.getBlockZ());
+
+        String sql = "SELECT * FROM playdatas " +
+                "WHERE location = \'" + lrc + "\'";
+
+        return ExecuteQuery(sql, null, PlayData.class);
+    }
+
+    @Override
     public void addData(Player player, PlayerSignsConfiguration psc, double playAmount, double winAmount)
     {
         String sql = "INSERT INTO playdatas(player, world, location, playamount, wonamount, timestamp) " +
@@ -149,6 +162,22 @@ public class MySQLDataBase implements IDataBase
         mapping.add(playAmount);
         mapping.add(winAmount);
         mapping.add(new GregorianCalendar().getTimeInMillis());
+
+        ExecuteNonQuery(sql, mapping);
+    }
+
+    @Override
+    public void addData(PlayData playData)
+    {
+        String sql = "INSERT INTO playdatas(player, world, location, playamount, wonamount, timestamp) " +
+                "VALUES(?, ?, ?, ?, ?, ?)";
+        List<Object> mapping = new ArrayList<>();
+        mapping.add(playData.Player.getUniqueId().toString());
+        mapping.add(playData.getLocation().getWorld().getName());
+        mapping.add(String.format("%s,%s,%s", playData.getLocation().getBlockX(), playData.getLocation().getBlockY(), playData.getLocation().getBlockZ()));
+        mapping.add(playData.PlayAmount);
+        mapping.add(playData.WonAmount);
+        mapping.add(playData.Timestamp);
 
         ExecuteNonQuery(sql, mapping);
     }

@@ -55,6 +55,7 @@ public class CommandsControl
                 .addCommand(new ResetDataCommand())
                 .addCommand(new ResetSignCommand())
                 .addCommand(new UpdateConfigCommand())
+                .addCommand(new ExportDataCommand())
 
                 //holograms package
                 .addCommand(new CreateHologramCommand())
