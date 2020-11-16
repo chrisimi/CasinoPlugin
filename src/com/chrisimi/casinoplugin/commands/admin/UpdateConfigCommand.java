@@ -1,5 +1,7 @@
 package com.chrisimi.casinoplugin.commands.admin;
 
+import com.chrisimi.casinoplugin.main.MessageManager;
+import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.scripts.UpdateManager;
 import com.chrisimi.commands.Command;
 import com.chrisimi.commands.Event;
@@ -20,5 +22,6 @@ public class UpdateConfigCommand extends Command
     public void execute(Event event)
     {
         UpdateManager.updateConfigYml();
+        event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-admin_successfully_updated_config"));
     }
 }

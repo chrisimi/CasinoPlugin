@@ -37,7 +37,7 @@ public class PlayerJoinListener implements Listener {
 					break;
 			}
 
-			if(!Main.result.getSpigotPluginVersion().equals(UpdateManager.getValue("version", Main.result.getLocalPluginVersion())))
+			if(!Main.result.getLocalPluginVersion().equals(UpdateManager.getValue("version", Main.result.getLocalPluginVersion())))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + "§4There is a new version for the config.yml... please backup your config.yml and use §6/casino updateconfig");
 			}

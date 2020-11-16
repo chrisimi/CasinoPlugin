@@ -53,6 +53,8 @@ public class OfflineEarnManager
 	 */
 	public void addEarning(OfflinePlayer player, double amount)
 	{
+		if(player.isOnline()) return;
+
 		synchronized (offlineDataYml)
 		{
 			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(offlineDataYml);
@@ -92,6 +94,8 @@ public class OfflineEarnManager
 	 */
 	public void addLoss(OfflinePlayer player, double amount)
 	{
+		if(player.isOnline()) return;
+
 		synchronized (offlineDataYml)
 		{
 			YamlConfiguration yaml = YamlConfiguration.loadConfiguration(offlineDataYml);
