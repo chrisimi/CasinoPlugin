@@ -92,7 +92,7 @@ public class CommandsControl
                 .setCustomMessage(MessageType.PREFIX, CasinoManager.getPrefix())
                 .setCustomMessage(MessageType.NOT_ENOUGH_PERMISSION, "§4You don't have enough permission to use this command")
                 .setCustomMessage(MessageType.HELP_COMMAND_FORMAT, "§6%command% %param-description%")
-                .setCustomMessage(MessageType.HELP_COMMAND_HEADER, "§6%plugin-name% by %author%, version %plugin-version%")
+                .setCustomMessage(MessageType.HELP_COMMAND_HEADER, "§a%plugin-name% by %author%, version %plugin-version%")
                 .setChatClickEvent(enableEvents)
                 .setDisplayCommandsWherePlayerHasPermission(true)
                 .build(plugin, "casino");
