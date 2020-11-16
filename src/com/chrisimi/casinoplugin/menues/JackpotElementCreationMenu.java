@@ -42,6 +42,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
     private Map<Jackpot.JackpotElement, ItemStack> itemStacks = new HashMap<>();
     private final ItemStack backButton = ItemAPI.createItem("§2back", Material.STONE_BUTTON);
     private final ItemStack fillMaterial = ItemAPI.createItem("", Material.PINK_STAINED_GLASS_PANE);
+    private static final ItemStack informationSign = ItemAPI.createItem("§6INFORMATION", Material.SIGN);
 
     public JackpotElementCreationMenu(Player player, JackpotCreationMenu jackpotCreationMenu)
     {
@@ -52,6 +53,12 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         updateInventory();
 
         getInventory().setItem(45, backButton);
+
+        List<String> lore = new ArrayList<>();
+        lore.add("click on an element in your inventory - must be a solid block to add it to the jackpot");
+        lore.add("click on an element in this inventory to remove it from the jackpot");
+        ItemAPI.setLore(informationSign, lore);
+        getInventory().setItem(53, informationSign);
     }
 
     //runnable which checks the 49th slot because of the input
@@ -62,9 +69,14 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         {
             if(itemStacks.size() <= LIMIT && getInventory().getItem(49) != null && !containsMaterial(jackpotCreationMenu.elementList, getInventory().getItem(49).getType()))
             {
-                //add item as element
-                startNewItemEvent();
-                newElementMaterial = getInventory().getItem(49).getType();
+                if(getInventory().getItem(49).getType().isBlock())
+                {
+                    //add item as element
+                    startNewItemEvent();
+                    newElementMaterial = getInventory().getItem(49).getType();
+                }
+                else
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-not_block"));
             }
         }
     };
@@ -170,8 +182,16 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         {
             if(itemStacks.size() <= LIMIT && !containsMaterial(jackpotCreationMenu.elementList, event.getClicked().getType()))
             {
-                startNewItemEvent();
-                newElementMaterial = event.getClicked().getType();
+                if(event.getClicked().getType().isBlock())
+                {
+                    startNewItemEvent();
+                    newElementMaterial = event.getClicked().getType();
+                }
+                else
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-not_block"));
+                }
+
             }
         }
     }
@@ -182,7 +202,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         waitingFor = WaitingFor.WEIGHT;
         closeInventory();
         player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-element-weight")
-                .replace("%total_weight%", NumberFormatter.format(totalWeight(jackpotCreationMenu.elementList))));
+                .replace("%total_weight%", String.valueOf(totalWeight(jackpotCreationMenu.elementList))));
     }
 
     private void addNewItem()
