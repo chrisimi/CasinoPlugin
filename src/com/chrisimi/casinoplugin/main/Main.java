@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
 				CasinoManager.LogWithColor(ChatColor.GREEN + "Plugin is up to date.");
 				break;
 			case DEVELOPMENT:
-				CasinoManager.LogWithColor(ChatColor.BOLD + "This is a development version of the plugin and can containing errors and bugs. Please report them to the plugin developer! Discord: Chrisi#5409 or e-mail: chrisi050403@gmail.com");
+				CasinoManager.LogWithColor(ChatColor.YELLOW + "This is a development version of the plugin and can containing errors and bugs. Please report them to the plugin developer! Discord: Chrisi#5409 or e-mail: chrisi050403@gmail.com");
 				break;
 			case ERROR:
 			default:
