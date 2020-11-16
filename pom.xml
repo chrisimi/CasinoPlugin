@@ -182,13 +182,13 @@
         <dependency>
             <groupId>com.chrisimi</groupId>
             <artifactId>versionchecker</artifactId>
-            <version>1.0</version>
+            <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.chrisimi</groupId>
             <artifactId>versionchecker</artifactId>
-            <version>1.0</version>
+            <version>RELEASE</version>
             <classifier>javadoc</classifier>
         </dependency>
 
