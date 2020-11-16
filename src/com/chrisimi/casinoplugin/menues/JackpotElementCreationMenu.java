@@ -154,18 +154,9 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         {
             if(event.getClicked().equals(elementItemStackEntry.getValue()))
             {
-                if(player.isSneaking())
-                {
-                    //delete element
-                    jackpotCreationMenu.elementList.remove(elementItemStackEntry.getKey());
-                    updateInventory();
-                }
-                else
-                {
-                    //edit block
-                    elementToEdit = elementItemStackEntry.getKey();
-                    startNewItemEvent();
-                }
+                //delete element
+                jackpotCreationMenu.elementList.remove(elementItemStackEntry.getKey());
+                updateInventory();
                 return;
             }
         }
