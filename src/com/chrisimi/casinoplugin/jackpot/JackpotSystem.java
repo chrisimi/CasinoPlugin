@@ -5,6 +5,7 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.casinoplugin.utils.Validator;
 import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -137,6 +138,12 @@ public class JackpotSystem
         if(!jackpot.isServerOwner() && Main.econ.getBalance(jackpot.getOwner()) < jackpot.jackpotValue)
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
+            return;
+        }
+
+        if(!Validator.validateJackpot(jackpot))
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "invalid jackpot"));
             return;
         }
 

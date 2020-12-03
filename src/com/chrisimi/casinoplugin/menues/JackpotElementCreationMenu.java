@@ -264,7 +264,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
                 itemStack = ItemAPI.createItem("§6" + element.winMultiplicator + "x the bet", element.material);
 
             List<String> lore = new ArrayList<>();
-            lore.add("chance: " + Math.round((element.weight / totalWeight(jackpotCreationMenu.elementList)) * 100) / 100);
+            lore.add("chance: " + Math.round((element.weight / totalWeight(jackpotCreationMenu.elementList)) * 10000.0) / 100.0 + " %");
             ItemAPI.setLore(itemStack, lore);
 
             itemStacks.put(element, itemStack);
