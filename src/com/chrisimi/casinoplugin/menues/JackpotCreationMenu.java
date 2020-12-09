@@ -128,7 +128,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.HOLOGRAM_POS;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-location_hologram"));
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-location_hologram"));
     }
 
     private void setBet()
