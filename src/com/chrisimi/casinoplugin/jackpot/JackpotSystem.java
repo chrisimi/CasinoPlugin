@@ -5,6 +5,7 @@ import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
 import com.chrisimi.casinoplugin.serializables.Jackpot;
+import com.chrisimi.casinoplugin.utils.Validator;
 import com.chrisimi.numberformatter.NumberFormatter;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -96,18 +97,11 @@ public class JackpotSystem
     {
         Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), jackpot.getLocationHologram());
 
-        if(Main.econ == null)
-            hologram.appendTextLine("§l§6§nJACKPOT: " + jackpot.jackpotValue);
-        else
-            hologram.appendTextLine("§l§6§nJACKPOT: " + Main.econ.format(jackpot.jackpotValue));
+        hologram.appendTextLine(MessageManager.get("jackpot-hologram-title").replace("%jackpot%", NumberFormatter.format(jackpot.jackpotValue)));
         hologram.appendTextLine("");
-        if(Main.econ == null)
-            hologram.appendTextLine("§6Try it now with the bet of " + jackpot.bet);
-        else
-            hologram.appendTextLine("§6Try it now with the bet of " + Main.econ.format(jackpot.bet));
-
+        hologram.appendTextLine(MessageManager.get("jackpot-hologram-body1").replace("%bet%", NumberFormatter.format(jackpot.bet)));
         hologram.appendTextLine("");
-        hologram.appendTextLine("§6Press the diamond block to start!");
+        hologram.appendTextLine(MessageManager.get("jackpot-hologram-body2").replace("%bet%", NumberFormatter.format(jackpot.bet)));
         ItemLine itemLine = hologram.appendItemLine(new ItemStack(Material.DIAMOND_BLOCK));
         itemLine.setTouchHandler(new TouchHandler()
         {
@@ -144,6 +138,12 @@ public class JackpotSystem
         if(!jackpot.isServerOwner() && Main.econ.getBalance(jackpot.getOwner()) < jackpot.jackpotValue)
         {
             player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("playersigns-owner_lacks_money"));
+            return;
+        }
+
+        if(!Validator.validateJackpot(jackpot))
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "invalid jackpot"));
             return;
         }
 

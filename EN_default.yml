@@ -246,4 +246,8 @@ messages:
    jackpot-edit-error2: "&4This is not an existing Jackpot!"
    jackpot-disabled: "Jackpots are disabled. Please enable holograms on your server."
 
+   jackpot-hologram-title: "&6&lJACKPOT: %jackpot%"
+   jackpot-hologram-body1: "&6Try it now with the bet of %bet%"
+   jackpot-hologram-body2: "&6Press the diamond block to start"
+
    reached-limit: "&4You can't create no more - you have reached the limit."
