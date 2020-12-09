@@ -1,6 +1,6 @@
 # CasinoPlugin
 
-A Minecraft plugin which adds the elements of a real casino
+A Minecraft plugin which adds elements of a real casino
 
 ## Features
 - editable config

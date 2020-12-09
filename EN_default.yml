@@ -6,7 +6,7 @@
 # How to create a new language file?
 # Simply, duplicate this file and rename it to your language like JP.yml or jp.yml (you'll use the name in the config to determine which language file the plugin should use)
 author: Chrisi
-plugin-version: 3.7
+plugin-version: 4-0
 messages:
    no-permissions-creating-dicesign: "&4You don't have permission to create a dice sign!"
    no-permissions-using-dicesigns: "&4You don't have permission to use dice signs!"
@@ -190,7 +190,7 @@ messages:
    hologrammenu-name: "&6Write the name of the hologram in the chat. The name must be unique."
    hologrammenu-name_exists: "&4This name exists! Use another name."
    hologrammneu-name_successful: "&6You successfully set the name of the hologram."
-   hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\n' &6 to move to the next line or use color codes with &e'&'"
+   hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\ n' &6 to move to the next line or use color codes with &e'&&'"
    hologrammenu-description_successful: "&6You successfully set the description of the hologram."
    
    hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
