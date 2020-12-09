@@ -82,8 +82,6 @@
                             <include>com.chrisimi:versionchecker</include>
                             <include>com.chrisimi:numberformatter</include>
                             <include>com.chrisimi:commands</include>
-                            <include>mysql:mysql-connector-java</include>
-                            <include>com.google.protobuf:protobuf-java</include>
                         </includes>
                     </artifactSet>
                 </configuration>

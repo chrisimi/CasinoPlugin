@@ -18,7 +18,7 @@ A Minecraft plugin which adds elements of a real casino
 - fully customizable leaderboard 
 - holograms
 
-This plugin needs Vault and an Economy plugin to work correctly. You can download Vault or an Economy plugin - I prefer GMoney when you don't have them on your server.
+This plugin needs Vault and an Economy plugin to work correctly. You must download Vault or an Economy plugin - I prefer GMoney when you don't have them on your server.
 
 use /help casino to get detailed information about every command and click on it to invoke them
 
