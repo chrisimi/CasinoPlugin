@@ -137,7 +137,7 @@ messages:
    roll-min_max_diff: "&4The maximum value must be higher than the minimum value!"
    roll-rolled_message: "%playername% rolled from %min% to %max% and got &f%result%"
    roll-player_doesnt_exist: "&4This player has never joined this server or he is not online!"
-   roll-player_roll: "You rolled &e%l %result%"
+   roll-player_roll: "You rolled&e&l %result%"
    
    slotchest-is_currently_running: "&4This SlotChest is currently running!"
    slotchest_is_disabled: "&4This SlotChest is currently disabled!"

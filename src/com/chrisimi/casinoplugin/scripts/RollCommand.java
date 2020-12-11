@@ -31,13 +31,13 @@ public class RollCommand {
 		int minimum = 0;
 		int maximum = 0;
 		try {
-			minimum = Integer.parseInt(args[1]);
+			minimum = Integer.parseInt(args[0]);
 		} catch(NumberFormatException e) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-min_value_invalid"));
 			return;
 		}
 		try {
-			maximum = Integer.parseInt(args[2]);
+			maximum = Integer.parseInt(args[1]);
 		} catch(NumberFormatException e) {
 			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-max_value_invalid"));
 			return;
@@ -47,11 +47,16 @@ public class RollCommand {
 			return;
 		}
 		Random rnd = new Random();
-		int randomZahl = rnd.nextInt(maximum-minimum+1) + minimum;
+		int randomZahl = rnd.nextInt(maximum - minimum + 1) + minimum;
 		
-		if(args.length == 3) { //er hat keinen Spieler angegeben!
-			Collection<? extends Player> currentPlayer = Bukkit.getServer().getOnlinePlayers();
-			for(Player p : currentPlayer) {
+		if(args.length < 3) { //er hat keinen Spieler angegeben!
+			Collection<? extends Player> currentPlayers = Bukkit.getServer().getOnlinePlayers();
+			for(Player p : currentPlayers) {
+
+				//ignore commanding player
+				if(p.equals(player))
+					continue;
+
 				if(p.getWorld().equals(player.getWorld())) {
 					if(p.getLocation().distance(player.getLocation()) < (double)playerRange) {
 						p.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-rolled_message").replace("%playername%", player.getName()).replace("%min%", String.valueOf(minimum)).replace("%max%", String.valueOf(maximum)).replace("%result%", String.valueOf(randomZahl)));
@@ -60,7 +65,7 @@ public class RollCommand {
 			}
 			
 		} else { //er hat einen Spieler angegeben
-			Player angegebenerSpieler = Bukkit.getPlayer(args[3]);
+			Player angegebenerSpieler = Bukkit.getPlayer(args[2]);
 			if(angegebenerSpieler == null) {
 				player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("roll-player_doesnt_exist"));
 				return;
