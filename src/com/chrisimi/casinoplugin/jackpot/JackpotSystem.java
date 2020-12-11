@@ -93,7 +93,7 @@ public class JackpotSystem
         return true;
     }
 
-    private static Hologram createHologram(Jackpot jackpot)
+    public static Hologram createHologram(Jackpot jackpot)
     {
         Hologram hologram = HologramsAPI.createHologram(Main.getInstance(), jackpot.getLocationHologram());
 
