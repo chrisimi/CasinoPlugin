@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class JackpotSystem
 {
+    public static int rolls = 0;
     private static Map<String, Jackpot> activeJackpots = new HashMap<String, Jackpot>();
 
     private static int bukkitTaskID = 0;
@@ -153,6 +154,11 @@ public class JackpotSystem
         jackpot.isRunning = true;
         updateJackpot(jackpot);
         new SimpleJackpotAnimation(jackpot, player).run();
+        rolls++;
+    }
 
+    public static int getTotalRunningJackpots()
+    {
+        return activeJackpots.size();
     }
 }
