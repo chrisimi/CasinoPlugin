@@ -37,7 +37,7 @@ public class EditHologramCommand extends Command
         LBHologram holo = HologramSystem.getHologramByName(event.getArgs()[0]);
         if(holo == null)
         {
-            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands_invalid_hologramname"));
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-invalid_hologramname"));
             return;
         }
 
