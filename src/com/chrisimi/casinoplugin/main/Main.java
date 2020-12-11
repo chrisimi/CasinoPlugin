@@ -78,7 +78,9 @@ public class Main extends JavaPlugin {
 		//configure bstats
 		Metrics metric = new Metrics(this); //Stats plugin
 		BStatsManager.configureMetrics(metric);
-		
+
+		setUpNumberFormatter();
+
 		//check if the hologram system can be started
 		if(hologramSystemUp = checkCompatibility())
 		{
@@ -88,7 +90,7 @@ public class Main extends JavaPlugin {
 		
 		InventoryAPI.initiate(this);
 
-		setUpNumberFormatter();
+
 	}
 
 	private void setUpNumberFormatter()

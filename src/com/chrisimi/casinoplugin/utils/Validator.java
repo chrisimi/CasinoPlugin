@@ -113,6 +113,9 @@ public class Validator
             if(jackpot.getLocation1() == null || jackpot.getLocation2() == null)
                 throw new Exception();
 
+            if(jackpot.elements.size() < 3)
+                throw new Exception();
+
             if(jackpot.name.isEmpty())
                 throw new Exception();
         } catch(Exception e)

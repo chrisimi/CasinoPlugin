@@ -62,6 +62,7 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 	private final ItemStack switchBetweenCycles = ItemAPI.createItem("§6change cycle", Material.CLOCK);
 	private final ItemStack setDescription = ItemAPI.createItem("§6set description - information, which will be shown on the top of the hologram (optional", Material.SIGN);
 	private final ItemStack chooseHighlightTop3 = new ItemStack(Material.GLOWSTONE);
+	private final ItemStack deleteJackpot = ItemAPI.createItem("§0DELETE JACKPOT", Material.BEDROCK);
 
 	/**
 	 * start in a new inventory to create a new hologram
@@ -92,6 +93,7 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 		 * 
 		 */
 		loadFromHologram(hologram);
+		getInventory().setItem(17, deleteJackpot);
 	}
 	
 	private void loadFromHologram(LBHologram hologram)
@@ -121,6 +123,8 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 
 		ItemAPI.changeName(setLocation, "§6set location (optional), your current position will be used");
 		bukkitInventory.setItem(2, setLocation);
+		//setLocation.setAmount(1);
+		//set location x0
 
 		bukkitInventory.setItem(3, setRange);
 
@@ -157,17 +161,33 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 		if(event.getClicked().equals(switchBetweenModes)) clickSwitchMode();
 		else if(event.getClicked().equals(switchBetweenCycles)) clickSwitchCycle();
 		else if(event.getClicked().equals(choosePosition)) choosePosition();
-		else if(event.getClicked().equals(setLocation)) setLocation();
+		//else if(event.getClicked().equals(setLocation)) setLocation();
+		else if(event.getClicked().getType() == Material.PLAYER_HEAD) setLocation();
+
 		else if(event.getClicked().equals(setRange)) setRange();
 		else if(event.getClicked().equals(createHologram)) createHologram();
 		else if(event.getClicked().equals(setHologramName)) setHologramName();
 		else if(event.getClicked().equals(changeServerSign)) changeServerSign();
 		else if(event.getClicked().equals(setDescription)) setDescription();
 		else if(event.getClicked().equals(chooseHighlightTop3)) chooseHighlightTop3();
-		
+		else if(event.getClicked().equals(deleteJackpot)) deleteJackpot();
+
 		updateInventory();
 	}
-	
+
+	private void deleteJackpot()
+	{
+		if(HologramSystem.deleteHologram(oldLocation))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-deletion"));
+			closeInventory();
+		}
+		else
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "can't delete hologram"));
+		}
+	}
+
 	private void chooseHighlightTop3()
 	{
 		highlightTop3 = !highlightTop3;
@@ -415,9 +435,14 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 			lore.add("§4- positions not set!");
 			allCorrect = false;
 		}
-		Location lrc = player.getLocation();
-		lore.add("§a- using your current position: X: " + lrc.getBlockX() + " Y: " + lrc.getBlockY() + " Z: " + lrc.getBlockZ());
-		
+		Location lrc = this.location;
+		if(lrc != null)
+			lore.add("§a- using position: X: " + lrc.getBlockX() + " Y: " + lrc.getBlockY() + " Z: " + lrc.getBlockZ());
+		else
+		{
+			lore.add("§4- location not set");
+			allCorrect = false;
+		}
 		if(range == 0 && !useAllMode)
 		{
 			lore.add("§4- range not set");

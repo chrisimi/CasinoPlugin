@@ -396,6 +396,7 @@ public class HologramSystem
 		HologramSystem.getInstance().exportData();
 		
 	}
+
 	public static LBHologram getHologramByName(String name)
 	{
 		for(LBHologram holo : datas.values())
@@ -404,5 +405,18 @@ public class HologramSystem
 				return holo;
 		}
 		return null;
+	}
+
+	public static boolean deleteHologram(Location lrc)
+	{
+		Hologram deletedHologram = holograms.remove(lrc);
+		if(datas.remove(lrc) != null && deletedHologram != null)
+		{
+			deletedHologram.delete();
+			HologramSystem.getInstance().exportData();
+			return true;
+		}
+
+		return false;
 	}
 }

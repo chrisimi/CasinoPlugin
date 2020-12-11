@@ -177,6 +177,12 @@ public class JackpotManager
 
         CasinoManager.jackpotManager.exportJackpots();
 
+        //delete old hologram and create new
+        if(jackpot.hologramInstance != null)
+            jackpot.hologramInstance.delete();
+
+        jackpot.hologramInstance = JackpotSystem.createHologram(jackpot);
+
         return true;
     }
 
