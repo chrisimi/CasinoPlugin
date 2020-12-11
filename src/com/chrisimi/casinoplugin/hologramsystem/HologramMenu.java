@@ -62,6 +62,7 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 	private final ItemStack switchBetweenCycles = ItemAPI.createItem("§6change cycle", Material.CLOCK);
 	private final ItemStack setDescription = ItemAPI.createItem("§6set description - information, which will be shown on the top of the hologram (optional", Material.SIGN);
 	private final ItemStack chooseHighlightTop3 = new ItemStack(Material.GLOWSTONE);
+	private final ItemStack deleteJackpot = ItemAPI.createItem("§0DELETE JACKPOT", Material.BEDROCK);
 
 	/**
 	 * start in a new inventory to create a new hologram
@@ -92,6 +93,7 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 		 * 
 		 */
 		loadFromHologram(hologram);
+		getInventory().setItem(17, deleteJackpot);
 	}
 	
 	private void loadFromHologram(LBHologram hologram)
@@ -168,10 +170,24 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 		else if(event.getClicked().equals(changeServerSign)) changeServerSign();
 		else if(event.getClicked().equals(setDescription)) setDescription();
 		else if(event.getClicked().equals(chooseHighlightTop3)) chooseHighlightTop3();
-		
+		else if(event.getClicked().equals(deleteJackpot)) deleteJackpot();
+
 		updateInventory();
 	}
-	
+
+	private void deleteJackpot()
+	{
+		if(HologramSystem.deleteHologram(oldLocation))
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-deletion"));
+			closeInventory();
+		}
+		else
+		{
+			player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "can't delete hologram"));
+		}
+	}
+
 	private void chooseHighlightTop3()
 	{
 		highlightTop3 = !highlightTop3;

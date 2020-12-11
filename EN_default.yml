@@ -192,9 +192,10 @@ messages:
    hologrammneu-name_successful: "&6You successfully set the name of the hologram."
    hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\ n' &6 to move to the next line or use color codes with &e'&&'"
    hologrammenu-description_successful: "&6You successfully set the description of the hologram."
-   
+
    hologrammenu-creation: "You successfully created a hologram. In a few seconds you'll see it."
    hologrammenu-update: "You successfully updated the hologram."
+   hologrammenu-deletion: "You successfully deleted a hologram."
    
    creationmenu-dice-set_win_range: "Write in the chat the range when the player should win between 1 and 100 in the format &efrom&6-&eto&6 like 1-20."
    creationmenu-dice-set_win_multiplicand: "Write in the chat the number, the bet of the player should be multiplied with when he wins like 2 or 1.5."
