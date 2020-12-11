@@ -245,6 +245,7 @@ messages:
    jackpot-edit-error: "&4You need to write the name of jackpot in the chat!"
    jackpot-edit-error2: "&4This is not an existing Jackpot!"
    jackpot-disabled: "Jackpots are disabled. Please enable holograms on your server."
+   jackpot-delete-successful: "You successfully deleted this jackpot"
 
    jackpot-hologram-title: "&6&lJACKPOT: %jackpot%"
    jackpot-hologram-body1: "&6Try it now with the bet of %bet%"
