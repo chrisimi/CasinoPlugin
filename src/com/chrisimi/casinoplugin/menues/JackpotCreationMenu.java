@@ -1,6 +1,7 @@
 package com.chrisimi.casinoplugin.menues;
 
 import com.chrisimi.casinoplugin.jackpot.JackpotManager;
+import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
 import com.chrisimi.casinoplugin.main.Main;
 import com.chrisimi.casinoplugin.main.MessageManager;
 import com.chrisimi.casinoplugin.scripts.CasinoManager;
@@ -8,6 +9,7 @@ import com.chrisimi.casinoplugin.serializables.Jackpot;
 import com.chrisimi.casinoplugin.utils.ItemAPI;
 import com.chrisimi.inventoryapi.*;
 import com.chrisimi.numberformatter.NumberFormatter;
+import com.sun.org.apache.bcel.internal.generic.CASTORE;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,6 +38,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
     private final ItemStack setServerJackpot = ItemAPI.createItem("§6make jackpot server-managed", Material.GOLD_BLOCK);
     private final ItemStack setPlayerJackpot = ItemAPI.createItem("§6make jackpot player-managed", Material.COAL_BLOCK);
+    private final ItemStack deleteJackpot = ItemAPI.createItem("§0DELETE JACKPOT", Material.BEDROCK);
 
     private final ItemStack openElementInventory = ItemAPI.createItem("§6edit elements", Material.BOOK);
 
@@ -97,6 +100,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
 
         //the player is not allowed to change the name
         getInventory().setItem(3, null);
+        getInventory().setItem(6, deleteJackpot);
         updateInventory();
     }
 
@@ -119,8 +123,23 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         else if(event.getClicked().equals(finishButton)) finish();
         else if(event.getClicked().equals(setPlayerJackpot)) isServerJackpot = false;
         else if(event.getClicked().equals(setServerJackpot)) isServerJackpot = true;
+        else if(event.getClicked().equals(deleteJackpot)) deleteJackpot();
 
         updateInventory();
+    }
+
+    private void deleteJackpot()
+    {
+        if(JackpotSystem.deleteJackpot(name))
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-delete-successful"));
+            closeInventory();
+            JackpotManager.save();
+        }
+        else
+        {
+            player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("creationmenu-error-message").replace("{error}", "can't delete jackpot"));
+        }
     }
 
     private void setHologramPos()
@@ -128,7 +147,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         waitingFor = WaitingFor.HOLOGRAM_POS;
         closeInventory();
         waitforChatInput(player);
-        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-location_hologram"));
+        player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-location_hologram"));
     }
 
     private void setBet()

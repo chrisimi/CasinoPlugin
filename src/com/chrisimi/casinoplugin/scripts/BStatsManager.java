@@ -1,5 +1,6 @@
 package com.chrisimi.casinoplugin.scripts;
 
+import com.chrisimi.casinoplugin.jackpot.JackpotSystem;
 import com.chrisimi.casinoplugin.main.Metrics;
 import com.chrisimi.casinoplugin.serializables.PlayerSignsConfiguration;
 import com.chrisimi.casinoplugin.slotchest.animations.RollAnimationManager;
@@ -105,6 +106,33 @@ public class BStatsManager
             {
                 int amount = PlayerSignsManager.getTotalAmountSigns(PlayerSignsConfiguration.GameMode.SLOTS);
                 CasinoManager.Debug(this.getClass(), "sent currently_running_slots_signs with value " + amount);
+                return amount;
+            }
+        }));
+
+        //using of jackpots
+        metric.addCustomChart(new Metrics.SingleLineChart("use_of_jackpot", new Callable<Integer>()
+        {
+            @Override
+            public Integer call() throws Exception
+            {
+                int amount = JackpotSystem.rolls;
+                JackpotSystem.rolls = 0;
+                CasinoManager.Debug(this.getClass(), "sent use_of_jackpot with value " + amount);
+
+                return amount;
+            }
+        }));
+
+        //currently running jackpots
+        metric.addCustomChart(new Metrics.SingleLineChart("currently_running_jackpots", new Callable<Integer>()
+        {
+            @Override
+            public Integer call() throws Exception
+            {
+                int amount = JackpotSystem.getTotalRunningJackpots();
+                CasinoManager.Debug(this.getClass(), "sent currently_running_jackpots with value " + amount);
+
                 return amount;
             }
         }));
