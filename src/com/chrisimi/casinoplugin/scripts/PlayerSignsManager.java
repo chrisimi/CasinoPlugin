@@ -242,9 +242,9 @@ public class PlayerSignsManager implements Listener {
 		String[] lines = event.getLines();
 
 		//check if the first line contains casino
-		if(!Validator.is(lines[0], "casino")) return;
+		if(!Validator.is("casino", lines[0])) return;
 
-		if(Validator.is(lines[1], "dice"))
+		if(Validator.is("dice", lines[1]))
 		{
 			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.DICE))
 			{
@@ -254,7 +254,7 @@ public class PlayerSignsManager implements Listener {
 			}
 
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-		} else if(Validator.is(lines[1], "blackjack"))
+		} else if(Validator.is("blackjack", lines[1]))
 		{
 			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), GameMode.BLACKJACK))
 			{
@@ -264,7 +264,7 @@ public class PlayerSignsManager implements Listener {
 			}
 
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
-		} else if(Validator.is(lines[1], "slots"))
+		} else if(Validator.is("slots", lines[1]))
 		{
 			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), PlayerSignsConfiguration.GameMode.SLOTS))
 			{

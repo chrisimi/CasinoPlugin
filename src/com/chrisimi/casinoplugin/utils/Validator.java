@@ -28,7 +28,7 @@ public class Validator
      */
     public static boolean is(String check, String with)
     {
-        return check.equals(with) || check.equalsIgnoreCase(with) || check.toLowerCase().equals(with.toLowerCase()) || check.contains(with) || with.contains(check);
+        return check.equals(with) || check.equalsIgnoreCase(with) || check.toLowerCase().equals(with.toLowerCase());
     }
 
     public static boolean validate(PlayerSignsConfiguration conf)
