@@ -310,7 +310,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
         allValuesCorrect = allValuesValid;
     }
 
-    private void updateInventory()
+    public void updateInventory()
     {
         if(Main.perm.has(player, "casino.create.serverjackpot"))
         {
