@@ -188,6 +188,7 @@ messages:
    hologrammenu-invalid_format_range: "&4Invalid format. Try to use a number for indicating the range of blocks from where the hologram should use the data or use &eall&6 for all signs you created."
    hologrammenu-range_successful: "&6You successfully set the range for the hologram."
    hologrammenu-name: "&6Write the name of the hologram in the chat. The name must be unique."
+   hologrammenu-name_one_word: "&4The name of a hologram can only be on word."
    hologrammenu-name_exists: "&4This name exists! Use another name."
    hologrammneu-name_successful: "&6You successfully set the name of the hologram."
    hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\ n' &6 to move to the next line or use color codes with &e'&&'"
