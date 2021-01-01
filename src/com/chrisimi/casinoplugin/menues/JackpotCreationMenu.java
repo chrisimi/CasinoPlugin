@@ -249,6 +249,13 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
                     openInventory();
                 }
 
+                if(event.getMessage().contains(" "))
+                {
+                    player.sendMessage(CasinoManager.getPrefix() + MessageManager.get("jackpot-creation-name_one_word"));
+                    waitforChatInput(player);
+                    return;
+                }
+
                 if(!JackpotManager.doesNameExists(event.getMessage()))
                 {
                     name = event.getMessage();

@@ -286,14 +286,21 @@ public class HologramMenu extends Inventory implements IInventoryAPI
 			openInventory();
 			break;
 		case NAME:
-			
-			if(!hologramNameExists(event.getMessage()))
+
+			if(event.getMessage().contains(" "))
 			{
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
-				this.nameOfHologram = event.getMessage();
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name_one_word"));
 			}
 			else
-				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name_exists"));
+			{
+				if(!hologramNameExists(event.getMessage()))
+				{
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammneu-name_successful"));
+					this.nameOfHologram = event.getMessage();
+				}
+				else
+					event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("hologrammenu-name_exists"));
+			}
 			openInventory();
 			break;
 		case DESCRIPTION:
