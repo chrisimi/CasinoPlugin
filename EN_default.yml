@@ -231,6 +231,7 @@ messages:
    jackpot-creation-bet: "Type the bet to roll for jackpot in the chat!"
    jackpot-creation-name: "Type the name of the jackpot in the chat! It must be unique!"
    jackpot-creation-name_exists: "&4Name does exists! Try again or exit with 'exit'!"
+   jackpot-creation-name_one_word: "&4The name of a jackpot can only be one word. Try again."
    jackpot-creation-location_hologram: "Go to the position where you want to have your hologram and type anything in the chat."
    jackpot-creation-location1: "Go to the top left block of your Jackpot display. When you look at the block type anything in the chat."
    jackpot-creation-location2: "Go to the bottom right block of your Jackpot display. When you look at the block type anything in the chat."
