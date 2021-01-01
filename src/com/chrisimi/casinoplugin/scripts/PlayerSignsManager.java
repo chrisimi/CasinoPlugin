@@ -251,6 +251,11 @@ public class PlayerSignsManager implements Listener {
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
 				event.setCancelled(true);
 				return;
+			} else if(!Main.perm.has(event.getPlayer(), "casino.create.dice"))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+				event.setCancelled(true);
+				return;
 			}
 
 			new DiceCreationMenu(event.getBlock().getLocation(), event.getPlayer());
@@ -262,6 +267,12 @@ public class PlayerSignsManager implements Listener {
 				event.setCancelled(true);
 				return;
 			}
+			else if(!Main.perm.has(event.getPlayer(), "casino.create.blackjack"))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+				event.setCancelled(true);
+				return;
+			}
 
 			new BlackjackCreationMenu(event.getBlock().getLocation(), event.getPlayer());
 		} else if(Validator.is("slots", lines[1]))
@@ -269,6 +280,12 @@ public class PlayerSignsManager implements Listener {
 			if(!PlayerSignsManager.playerCanCreateSign(event.getPlayer(), PlayerSignsConfiguration.GameMode.SLOTS))
 			{
 				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("reached-limit"));
+				event.setCancelled(true);
+				return;
+			}
+			else if(!Main.perm.has(event.getPlayer(), "casino.create.slots"))
+			{
+				event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
 				event.setCancelled(true);
 				return;
 			}

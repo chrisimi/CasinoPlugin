@@ -318,7 +318,7 @@ permissions:
     default: true
 
   casino.use.slotchest:
-    description: USer can use all slotchests
+    description: User can use all slotchests
     default: true
     children:
       casino.command.slotchest: true
