@@ -305,7 +305,18 @@ public class LeaderboardsignsManager implements Listener
         Leaderboardsign lb = getLeaderboardsign(event.getClickedBlock().getLocation());
         if (lb == null) return;
 
-        new LeaderboardCreationMenu(lb, event.getPlayer());
+        if(lb.isServerSign() && Main.perm.has(event.getPlayer(), "casino.create.serverleaderboard"))
+        {
+            new LeaderboardCreationMenu(lb, event.getPlayer());
+        } else if(!lb.isServerSign() && lb.getPlayer().getUniqueId().equals(event.getPlayer().getUniqueId()) && Main.perm.has(event.getPlayer(), "casino.create.leaderboard"))
+        {
+            new LeaderboardCreationMenu(lb, event.getPlayer());
+        } else
+        {
+            event.getPlayer().sendMessage(CasinoManager.getPrefix() + MessageManager.get("commands-player_no_permission"));
+        }
+
+
     }
 
     private void checkIfSignIsLeaderboardSign(BlockBreakEvent event)
