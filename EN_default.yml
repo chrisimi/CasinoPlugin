@@ -6,7 +6,7 @@
 # How to create a new language file?
 # Simply, duplicate this file and rename it to your language like JP.yml or jp.yml (you'll use the name in the config to determine which language file the plugin should use)
 author: Chrisi
-plugin-version: 4.0.1
+plugin-version: 4.0.2
 messages:
    no-permissions-creating-dicesign: "&4You don't have permission to create a dice sign!"
    no-permissions-using-dicesigns: "&4You don't have permission to use dice signs!"
@@ -188,6 +188,7 @@ messages:
    hologrammenu-invalid_format_range: "&4Invalid format. Try to use a number for indicating the range of blocks from where the hologram should use the data or use &eall&6 for all signs you created."
    hologrammenu-range_successful: "&6You successfully set the range for the hologram."
    hologrammenu-name: "&6Write the name of the hologram in the chat. The name must be unique."
+   hologrammenu-name_one_word: "&4The name of a hologram can only be on word."
    hologrammenu-name_exists: "&4This name exists! Use another name."
    hologrammneu-name_successful: "&6You successfully set the name of the hologram."
    hologrammenu-description: "&6Set the description for the hologram. This information will be printed on top of the Hologram. You can use &e'\ n' &6 to move to the next line or use color codes with &e'&&'"
@@ -230,6 +231,7 @@ messages:
    jackpot-creation-bet: "Type the bet to roll for jackpot in the chat!"
    jackpot-creation-name: "Type the name of the jackpot in the chat! It must be unique!"
    jackpot-creation-name_exists: "&4Name does exists! Try again or exit with 'exit'!"
+   jackpot-creation-name_one_word: "&4The name of a jackpot can only be one word. Try again."
    jackpot-creation-location_hologram: "Go to the position where you want to have your hologram and type anything in the chat."
    jackpot-creation-location1: "Go to the top left block of your Jackpot display. When you look at the block type anything in the chat."
    jackpot-creation-location2: "Go to the bottom right block of your Jackpot display. When you look at the block type anything in the chat."

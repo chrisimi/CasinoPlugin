@@ -1,7 +1,7 @@
 name: CasinoPlugin
 author: chrisimi
 main: com.chrisimi.casinoplugin.main.Main
-version: 4.0.1
+version: 4.0.2
 api-version: 1.13
 softdepend: [Multiverse-Core, Ultimate_Economy, HolographicDisplays]
 depend: [Vault]
@@ -318,7 +318,7 @@ permissions:
     default: true
 
   casino.use.slotchest:
-    description: USer can use all slotchests
+    description: User can use all slotchests
     default: true
     children:
       casino.command.slotchest: true

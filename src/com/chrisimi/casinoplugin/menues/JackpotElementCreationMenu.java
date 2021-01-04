@@ -164,6 +164,7 @@ public class JackpotElementCreationMenu extends Inventory implements IInventoryA
         if(event.getClicked().equals(backButton))
         {
             closeInventory();
+            jackpotCreationMenu.updateInventory();
             jackpotCreationMenu.openInventory();
             return;
         }
