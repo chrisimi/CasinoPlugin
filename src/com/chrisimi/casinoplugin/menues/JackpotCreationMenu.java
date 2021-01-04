@@ -38,7 +38,7 @@ public class JackpotCreationMenu extends Inventory implements IInventoryAPI
     private final ItemStack finishButton = ItemAPI.createItem("§6finish creation or update", Material.STONE_BUTTON);
     private final ItemStack setServerJackpot = ItemAPI.createItem("§6make jackpot server-managed", Material.GOLD_BLOCK);
     private final ItemStack setPlayerJackpot = ItemAPI.createItem("§6make jackpot player-managed", Material.COAL_BLOCK);
-    private final ItemStack deleteJackpot = ItemAPI.createItem("§0DELETE JACKPOT", Material.BEDROCK);
+    private final ItemStack deleteJackpot = ItemAPI.createItem("§cDELETE JACKPOT", Material.BEDROCK);
 
     private final ItemStack openElementInventory = ItemAPI.createItem("§6edit elements", Material.BOOK);
 
