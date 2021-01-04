@@ -6,7 +6,7 @@
 # How to create a new language file?
 # Simply, duplicate this file and rename it to your language like JP.yml or jp.yml (you'll use the name in the config to determine which language file the plugin should use)
 author: Chrisi
-plugin-version: 4.0.1
+plugin-version: 4.0.2
 messages:
    no-permissions-creating-dicesign: "&4You don't have permission to create a dice sign!"
    no-permissions-using-dicesigns: "&4You don't have permission to use dice signs!"

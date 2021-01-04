@@ -1,4 +1,4 @@
-# Casino Plugin Version 4.0.2-pre by chrisimi
+# Casino Plugin Version 4.0.2 by chrisimi
 # Copyright: chrisi050403@gmail.com
 # 
 # this plugin is using bStats!!!
@@ -7,7 +7,7 @@
 #
 
 # please don't change the version!!!
-version: 4.0.2-pre
+version: 4.0.2
 
 # enable debugging
 # before you report a bug, enable this and try it again. 
